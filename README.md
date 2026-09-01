@@ -58,6 +58,7 @@ Zsh remains the shell engine. Applications remain authoritative for their comman
 - [MOTIVATION.md](MOTIVATION.md) explains the benchmark results and product direction.
 - [DESIGN.md](DESIGN.md) defines the Git provider, snapshot, renderer, and distribution contracts.
 - [SECURITY.md](SECURITY.md) defines non-executable themes, open directory admission, and the signed reproducible update policy.
+- [DEVELOPMENT.md](DEVELOPMENT.md) defines the vertical-slice, testing, benchmarking, and evidence-retention workflow.
 - [FEATURES.md](FEATURES.md) defines how later capabilities enter the roadmap.
 - [COMPLETION.md](COMPLETION.md) specifies the Wakterm dynamic-completion experiment.
 - [FOREGROUND.md](FOREGROUND.md) specifies the foreground-child counterfactual and job-control tests.

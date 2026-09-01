@@ -1,0 +1,15 @@
+# wsh repository instructions
+
+Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmarks, release tooling, bundle layout, providers, renderers, themes, or performance-sensitive integration code.
+
+- Build the smallest runnable local vertical slice before adding remote distribution, registry, or compatibility machinery.
+- Record a reproducible baseline, an observable failure or cost, the cheapest counterfactual, and the passing threshold before implementing an intervention.
+- Change one causal factor per experiment unless an interaction is the stated hypothesis.
+- Run correctness and adversarial tests before comparing performance.
+- Identify every result by source revision, wsh bundle identity, Zsh source and binary identity, target, build configuration, enabled components, workload, fixture, trace mode, and benchmark command.
+- Compare the same workload under the same instrumentation mode before and after a change, and measure instrumentation overhead separately.
+- Mark local development bundles as unsigned development artifacts. Never describe them as official, verified, reproducible, or release-ready until they pass the corresponding documented gates.
+- Do not add a resident provider, native module, generic broker, database, remote updater, public directory backend, or compatibility framework without the evidence required by [`FEATURES.md`](FEATURES.md).
+- When evidence invalidates a premise, replace the old design or plan instead of preserving contradictory paths.
+- Preserve benchmark inputs, raw results, summaries, exact commands, and relevant hashes needed to reproduce an accepted claim.
+- Before committing, run the relevant tests and benchmarks, run `git diff --check`, and report what was and was not exercised.
