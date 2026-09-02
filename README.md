@@ -2,8 +2,6 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
-The first local vertical slice passes its fixed correctness and performance gates with both bundled theme presentations at the glibc 2.28 compatibility floor. The repository builds the pinned Zsh, Rust manager and runtime, strict bundle schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
-
 ## Motivation
 
 Zsh is a capable shell, but building a polished interactive environment usually means assembling a framework, themes, plugins, completion files, and terminal integration. Those pieces often own overlapping machinery for Git state, hooks, caching, background work, and prompt repainting. Choosing a visual theme can therefore also choose its performance and correctness behavior.
@@ -36,7 +34,7 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 ## Development slice
 
-The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. It does not download updates, verify GitHub attestations, publish official bundles, or operate the public theme directory yet.
+The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. It does not download updates, verify GitHub attestations, publish official bundles, or operate the public theme directory yet.
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
