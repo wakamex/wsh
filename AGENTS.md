@@ -5,6 +5,7 @@ Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmar
 - Build the smallest runnable local vertical slice before adding remote distribution, registry, or compatibility machinery.
 - Record a reproducible baseline, an observable failure or cost, the cheapest counterfactual, and the passing threshold before implementing an intervention.
 - Change one causal factor per experiment unless an interaction is the stated hypothesis.
+- Keep Zsh integration as thin glue. Avoid per-byte or per-item interpreted shell loops when a whole-value Zsh builtin can perform the same transformation. Move repeated computation to Rust when doing so simplifies the boundary and preserves semantics, but test the smaller builtin counterfactual before adding a new native interface.
 - Run correctness and adversarial tests before comparing performance.
 - Identify every result by source revision, wsh bundle identity, Zsh source and binary identity, target, build configuration, enabled components, workload, fixture, trace mode, and benchmark command.
 - Compare the same workload under the same instrumentation mode before and after a change, and measure instrumentation overhead separately.
