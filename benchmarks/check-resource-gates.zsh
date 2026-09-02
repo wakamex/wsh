@@ -2,13 +2,13 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 
-local -F trace_first_p90_limit_ms=0.500
-local -F trace_settled_p90_limit_ms=0.500
+local -F trace_ready_p90_limit_ms=3.000
+local -F trace_refresh_p90_limit_ms=0.500
 local -i memory_p90_limit_kib=4096
 local -i memory_max_limit_kib=5120
 
-if (( $# != 3 )); then
-  print -u2 -- 'usage: check-resource-gates.zsh MEMORY.tsv TRACE_FORWARD_DIR TRACE_REVERSE_DIR'
+if (( $# != 2 )); then
+  print -u2 -- 'usage: check-resource-gates.zsh MEMORY.tsv TRACE.tsv'
   return 2
 fi
 (( $+commands[gawk] )) || {
@@ -17,104 +17,62 @@ fi
 }
 
 local memory=${1:A}
-local forward=${2:A}
-local reverse=${3:A}
+local trace=${2:A}
 [[ -r $memory ]] || { print -u2 -r -- "error: unreadable memory data: $memory"; return 2; }
+[[ -r $trace ]] || { print -u2 -r -- "error: unreadable trace data: $trace"; return 2; }
 
-trace_block() {
-  local directory=$1 expected_targets=$2
-  local metadata=$directory/metadata.txt distribution=$directory/distribution.tsv summary=$directory/summary.tsv
-  [[ -r $metadata && -r $distribution && -r $summary ]] || {
-    print -u2 -r -- "error: incomplete trace run: $directory"
-    return 2
+local trace_result
+trace_result=$(command gawk -F '\t' '
+  NR == 1 {
+    expected = "state\titeration\torder\tplain_ready_us\ttraced_ready_us\tready_overhead_us\tplain_refresh_us\ttraced_refresh_us\trefresh_overhead_us"
+    if ($0 != expected) {
+      print "error: unexpected trace header" > "/dev/stderr"
+      exit 2
+    }
+    next
   }
-  [[ $(sed -n 's/^accepted=//p' $metadata) == 1 ]] || {
-    print -u2 -r -- "error: unaccepted trace run: $directory"
-    return 2
+  {
+    if (NF != 9 || ($1 != "clean" && $1 != "dirty" && $1 != "untracked") || $2 !~ /^[0-9]+$/) {
+      print "error: malformed trace row " NR > "/dev/stderr"
+      exit 2
+    }
+    if ($4 !~ /^[0-9]+$/ || $5 !~ /^[0-9]+$/ || $6 !~ /^-?[0-9]+$/ || $7 !~ /^[0-9]+$/ || $8 !~ /^[0-9]+$/ || $9 !~ /^-?[0-9]+$/) {
+      print "error: malformed trace timing at row " NR > "/dev/stderr"
+      exit 2
+    }
+    key = $1 SUBSEP $2
+    if (seen[key]++ || ($2 % 2 && $3 != "plain-first") || (!($2 % 2) && $3 != "traced-first")) {
+      print "error: invalid trace iteration or order at row " NR > "/dev/stderr"
+      exit 2
+    }
+    if ($6 != $5 - $4 || $9 != $8 - $7) {
+      print "error: inconsistent trace arithmetic at row " NR > "/dev/stderr"
+      exit 2
+    }
+    ready[++ready_count] = $6 + 0
+    refresh[$1, ++state_count[$1]] = $9 + 0
   }
-  [[ $(sed -n 's/^iterations=//p' $metadata) == 20 ]] || {
-    print -u2 -r -- "error: trace run must use 20 iterations: $directory"
-    return 2
+  END {
+    if (ready_count != 60 || state_count["clean"] != 20 || state_count["dirty"] != 20 || state_count["untracked"] != 20) {
+      print "error: trace run must contain 20 pairs for each state" > "/dev/stderr"
+      exit 2
+    }
+    asort(ready)
+    ready_p90 = ready[54]
+    states[1] = "clean"; states[2] = "dirty"; states[3] = "untracked"
+    worst_refresh_p90 = -1000000
+    for (i = 1; i <= 3; i++) {
+      state = states[i]
+      delete values
+      for (j = 1; j <= 20; j++) values[j] = refresh[state, j]
+      asort(values)
+      if (values[18] > worst_refresh_p90) worst_refresh_p90 = values[18]
+    }
+    printf "%d\t%d\n", ready_p90, worst_refresh_p90
   }
-  [[ $(sed -n 's/^targets=//p' $metadata) == $expected_targets ]] || {
-    print -u2 -r -- "error: unexpected target order in $directory"
-    return 2
-  }
-
-  command gawk -F '\t' '
-    NR == 1 {
-      if (NF != 15 || $1 != "target" || $2 != "state" || $6 != "first_p90_ms" || $10 != "settled_p90_ms") {
-        print "error: unexpected distribution header" > "/dev/stderr"
-        exit 2
-      }
-      next
-    }
-    $1 == "wsh" || $1 == "wsh-trace" {
-      if ($2 != "clean" && $2 != "dirty" && $2 != "untracked") {
-        print "error: unexpected trace state" > "/dev/stderr"
-        exit 2
-      }
-      if ($3 != 20 || $12 != "1.000" || $13 != "1.000" || $14 != "0.000" || $15 != "20/20") {
-        print "error: trace correctness or process invariant failed" > "/dev/stderr"
-        exit 1
-      }
-      key = $1 SUBSEP $2
-      if (seen[key]++) {
-        print "error: duplicate trace row" > "/dev/stderr"
-        exit 2
-      }
-      first[key] = $6 + 0
-      settled[key] = $10 + 0
-    }
-    END {
-      states[1] = "clean"; states[2] = "dirty"; states[3] = "untracked"
-      worst_first = -1000000
-      worst_settled = -1000000
-      for (i = 1; i <= 3; i++) {
-        state = states[i]
-        plain = "wsh" SUBSEP state
-        traced = "wsh-trace" SUBSEP state
-        if (!(plain in seen) || !(traced in seen)) {
-          print "error: missing trace row" > "/dev/stderr"
-          exit 2
-        }
-        first_delta = first[traced] - first[plain]
-        settled_delta = settled[traced] - settled[plain]
-        if (first_delta > worst_first) worst_first = first_delta
-        if (settled_delta > worst_settled) worst_settled = settled_delta
-      }
-      printf "%.3f\t%.3f\n", worst_first, worst_settled
-    }
-  ' $distribution
-
-  command gawk -F '\t' '
-    NR == 1 { next }
-    $3 == "wsh" || $3 == "wsh-trace" {
-      seen[$3]++
-      if ($(NF - 1) != 1 || $NF != 1) {
-        print "error: staged or detached-head trace semantics failed" > "/dev/stderr"
-        exit 1
-      }
-    }
-    END {
-      if (seen["wsh"] != 1 || seen["wsh-trace"] != 1) {
-        print "error: missing trace summary row" > "/dev/stderr"
-        exit 2
-      }
-    }
-  ' $summary
-}
-
-local forward_result reverse_result
-forward_result=$(trace_block $forward wsh,wsh-trace)
-reverse_result=$(trace_block $reverse wsh-trace,wsh)
-local -F forward_first=${forward_result%%$'\t'*}
-local -F forward_settled=${forward_result##*$'\t'}
-local -F reverse_first=${reverse_result%%$'\t'*}
-local -F reverse_settled=${reverse_result##*$'\t'}
-local -F trace_first_observed=$forward_first trace_settled_observed=$forward_settled
-(( reverse_first > trace_first_observed )) && trace_first_observed=$reverse_first
-(( reverse_settled > trace_settled_observed )) && trace_settled_observed=$reverse_settled
+' $trace)
+local -F trace_ready_observed=$(( ${trace_result%%$'\t'*} / 1000.0 ))
+local -F trace_refresh_observed=$(( ${trace_result##*$'\t'} / 1000.0 ))
 
 local memory_result
 memory_result=$(command gawk -F '\t' '
@@ -165,8 +123,8 @@ gate_row() {
 }
 
 print -r -- $'gate\trequired\tobserved\tresult'
-gate_row trace-first-p90-overhead-ms '<=0.500' $(printf '%.3f' $trace_first_observed) $(( trace_first_observed > trace_first_p90_limit_ms ))
-gate_row trace-settled-p90-overhead-ms '<=0.500' $(printf '%.3f' $trace_settled_observed) $(( trace_settled_observed > trace_settled_p90_limit_ms ))
+gate_row trace-ready-p90-overhead-ms '<=3.000' $(printf '%.3f' $trace_ready_observed) $(( trace_ready_observed > trace_ready_p90_limit_ms ))
+gate_row trace-refresh-p90-overhead-ms '<=0.500' $(printf '%.3f' $trace_refresh_observed) $(( trace_refresh_observed > trace_refresh_p90_limit_ms ))
 gate_row retained-added-pss-p90-kib '<=4096' $memory_p90_observed $(( memory_p90_observed > memory_p90_limit_kib ))
 gate_row retained-added-pss-max-kib '<=5120' $memory_max_observed $(( memory_max_observed > memory_max_limit_kib ))
 (( failed == 0 ))

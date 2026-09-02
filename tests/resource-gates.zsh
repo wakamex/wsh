@@ -7,19 +7,17 @@ local scratch
 scratch=$(mktemp -d /var/tmp/wsh-resource-gates.XXXXXX)
 trap 'command rm -rf -- $scratch' EXIT INT TERM
 
-write_trace_run() {
-  local directory=$1 targets=$2 first_delta=$3 settled_delta=$4
-  command mkdir -p $directory
-  print -r -- $'accepted=1\niterations=20\ntargets='${targets} > $directory/metadata.txt
-  print -r -- $'target\tstate\tsamples\tfirst_median_ms\tfirst_p10_ms\tfirst_p90_ms\tfirst_max_ms\tsettled_median_ms\tsettled_p10_ms\tsettled_p90_ms\tsettled_max_ms\trepaints_median\tgit_calls_median\tunlocked_calls_median\tsemantic_passes' > $directory/distribution.tsv
-  local state
+write_trace() {
+  local file=$1 overhead=$2
+  print -r -- $'state\titeration\torder\tplain_ready_us\ttraced_ready_us\tready_overhead_us\tplain_refresh_us\ttraced_refresh_us\trefresh_overhead_us' > $file
+  local state order
+  local -i iteration
   for state in clean dirty untracked; do
-    printf '%s\t%s\t20\t1.0\t0.9\t1.0\t1.1\t7.0\t6.8\t7.0\t7.2\t1.000\t1.000\t0.000\t20/20\n' wsh $state >> $directory/distribution.tsv
-    printf '%s\t%s\t20\t1.0\t0.9\t%.3f\t1.1\t7.0\t6.8\t%.3f\t7.2\t1.000\t1.000\t0.000\t20/20\n' wsh-trace $state $(( 1.0 + first_delta )) $(( 7.0 + settled_delta )) >> $directory/distribution.tsv
+    for (( iteration = 1; iteration <= 20; ++iteration )); do
+      (( iteration % 2 )) && order=plain-first || order=traced-first
+      printf '%s\t%d\t%s\t1000\t%d\t%d\t7000\t%d\t%d\n' $state $iteration $order $(( 1000 + overhead )) $overhead $(( 7000 + overhead )) $overhead >> $file
+    done
   done
-  print -r -- $'a\tb\ttarget\tstaged\tdetached' > $directory/summary.tsv
-  print -r -- $'x\tx\twsh\t1\t1' >> $directory/summary.tsv
-  print -r -- $'x\tx\twsh-trace\t1\t1' >> $directory/summary.tsv
 }
 
 write_memory() {
@@ -33,17 +31,24 @@ write_memory() {
   done
 }
 
-write_trace_run $scratch/forward wsh,wsh-trace 0.400 0.400
-write_trace_run $scratch/reverse wsh-trace,wsh 0.400 0.400
+write_trace $scratch/trace.tsv 400
 write_memory $scratch/memory.tsv 4000
-$root/benchmarks/check-resource-gates.zsh $scratch/memory.tsv $scratch/forward $scratch/reverse > $scratch/pass.tsv
+$root/benchmarks/check-resource-gates.zsh $scratch/memory.tsv $scratch/trace.tsv > $scratch/pass.tsv
 [[ $(tail -n +2 $scratch/pass.tsv | cut -f4 | sort -u) == pass ]] || return 1
 
 write_memory $scratch/memory.tsv 6000
-if $root/benchmarks/check-resource-gates.zsh $scratch/memory.tsv $scratch/forward $scratch/reverse > $scratch/fail.tsv; then
+if $root/benchmarks/check-resource-gates.zsh $scratch/memory.tsv $scratch/trace.tsv > $scratch/fail.tsv; then
   print -u2 -- 'resource gate checker accepted excessive memory'
   return 1
 fi
 [[ $(command awk -F '\t' '$1 == "retained-added-pss-max-kib" { print $4 }' $scratch/fail.tsv) == fail ]] || return 1
+
+write_memory $scratch/memory.tsv 4000
+write_trace $scratch/trace.tsv 600
+if $root/benchmarks/check-resource-gates.zsh $scratch/memory.tsv $scratch/trace.tsv > $scratch/fail.tsv; then
+  print -u2 -- 'resource gate checker accepted excessive trace overhead'
+  return 1
+fi
+[[ $(command awk -F '\t' '$1 == "trace-refresh-p90-overhead-ms" { print $4 }' $scratch/fail.tsv) == fail ]] || return 1
 
 print -r -- 'PASS: resource gate checker accepts bounded measurements and rejects an exceeded threshold'
