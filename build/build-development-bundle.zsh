@@ -61,9 +61,12 @@ while IFS= read -r -d '' payload; do
     '{path:$path,kind:"file",mode:$mode,size:$size,sha256:$sha256}' >> "$file_records"
 done < <(find "$stage" -type f -print0 | sort -z)
 
-source_revision=$(git rev-parse HEAD)
-if [[ -n $(git status --short --untracked-files=all) ]]; then
-  source_revision="${source_revision}+dirty"
+source_revision=${WSH_SOURCE_REVISION:-}
+if [[ -z $source_revision ]]; then
+  source_revision=$(git rev-parse HEAD)
+  if [[ -n $(git status --short --untracked-files=all) ]]; then
+    source_revision="${source_revision}+dirty"
+  fi
 fi
 lockfile_sha256=$(sha256sum Cargo.lock)
 lockfile_sha256=${lockfile_sha256%% *}
@@ -78,7 +81,7 @@ source_date_epoch=${SOURCE_DATE_EPOCH:-}
 build_lang=${LANG:-C}
 build_lc_all=${LC_ALL:-${LANG:-C}}
 build_timezone=${TZ:-UTC}
-build_jobs=${CARGO_BUILD_JOBS:-auto}
+build_jobs=${WSH_BUILD_JOBS:-${CARGO_BUILD_JOBS:-auto}}
 dynamic_libraries=$(find "$stage" -type f -exec readelf -d {} \; 2>/dev/null \
   | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' \
   | sort -u \

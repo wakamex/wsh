@@ -26,6 +26,11 @@ readonly rust_toolchain_sha256=${rust_toolchain_identity##* }
 package_lock_record=$(sha256sum ${script_dir}/rocky-8.10-packages.lock)
 readonly package_lock_sha256=${package_lock_record%% *}
 readonly source_date_epoch=$(git -C $repository_root show -s --format=%ct HEAD)
+source_revision=$(git -C $repository_root rev-parse HEAD)
+if [[ -n $(git -C $repository_root status --short --untracked-files=all) ]]; then
+  source_revision="${source_revision}+dirty"
+fi
+readonly source_revision
 
 mkdir -p -- $portable_root
 podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.28 $repository_root
@@ -50,7 +55,9 @@ podman run --rm --userns=keep-id --network=host \
   --env WSH_BUNDLE_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/bundles \
   --env WSH_KEEP_FAILED_BUILD=1 \
   --env WSH_MINIMUM_GLIBC=2.28 \
+  --env WSH_BUILD_JOBS=1 \
   --env WSH_RUST_TOOLCHAIN_SHA256=$rust_toolchain_sha256 \
+  --env WSH_SOURCE_REVISION=$source_revision \
   --workdir /workspace \
   $image \
   zsh /workspace/build/test-development-bundle.zsh
