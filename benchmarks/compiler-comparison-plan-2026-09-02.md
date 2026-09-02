@@ -1,5 +1,7 @@
 # GCC 16.2 and Clang 23.1 compiler comparison
 
+The completed result is retained in [`compiler-comparison-2026-09-02/report.md`](compiler-comparison-2026-09-02/report.md). Neither modern compiler produced a consistent improvement across the reversed-order blocks, so GCC 8.5 remains the default.
+
 The experiment asks whether a current stable C compiler materially improves the bundled Zsh path while preserving the glibc 2.28 runtime floor. It compares the existing Rocky GCC 8.5 build, upstream GCC 16.2.0, and upstream Clang 23.1.0. No compiler becomes the default from version recency alone.
 
 ## Fixed inputs

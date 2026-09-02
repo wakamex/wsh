@@ -129,6 +129,8 @@ The glibc 2.35 development result passed the fixed gates with a 6.893 ms worst a
 
 The clean glibc 2.28 rebuild passed all fixed Wakamex gates and all correctness gates for both renderers. The minimal renderer's untracked state added 7.170 ms at p90 and 8.098 ms at maximum, missing the corresponding gates by 0.070 ms and 0.098 ms. This result remains a failed baseline, and the thresholds remain fixed. Exact identities and raw samples are retained in [`benchmarks/phase-one-glibc-2.28-result-2026-09-02.md`](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md).
 
+The controlled [GCC 16.2 and Clang 23.1 comparison](benchmarks/compiler-comparison-2026-09-02/report.md) kept the glibc 2.28 target recipe fixed and reversed compiler order. Neither modern compiler improved raw Zsh or repeated startup consistently across both blocks, so the locked Rocky GCC 8.5 compiler remains the default. A new compiler comparison requires a measured hypothesis beyond version recency.
+
 Every comparison identifies the wsh revision and manifest digest, Zsh source and binary identities, Rust and C toolchains, target, build configuration, enabled components, theme definition digest, fixture, command, trace mode, host, raw samples, and exclusions.
 
 ## The local slice has fixed contracts

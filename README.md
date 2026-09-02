@@ -55,6 +55,8 @@ The glibc 2.28 builder verifies the complete Rocky package lock and Rust 1.95.0 
 
 The retained [two-build result](benchmarks/reproducible-build-947d812-2026-09-02/report.md) produced identical manifests and archives from two isolated local builds. This satisfies the local reproducibility experiment; official releases still require the publication, attestation, immutable-release, and updater-verification gates.
 
+The retained [compiler comparison](benchmarks/compiler-comparison-2026-09-02/report.md) found no consistent performance improvement from GCC 16.2 or Clang 23.1 over the locked Rocky GCC 8.5 build when the target recipe was otherwise fixed. GCC 8.5 remains the development bundle default.
+
 ## Later capabilities require evidence
 
 Several useful capabilities are being investigated, but they are not release promises:

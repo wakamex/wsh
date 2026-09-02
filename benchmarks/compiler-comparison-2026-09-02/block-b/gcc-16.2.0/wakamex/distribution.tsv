@@ -1,0 +1,7 @@
+target	state	samples	first_median_ms	first_p10_ms	first_p90_ms	first_max_ms	settled_median_ms	settled_p10_ms	settled_p90_ms	settled_max_ms	repaints_median	git_calls_median	unlocked_calls_median	semantic_passes
+raw	clean	20	0.426	0.392	0.483	0.515	0.426	0.392	0.483	0.515	0.000	0.000	0.000	na
+raw	dirty	20	0.357	0.339	0.389	0.396	0.357	0.339	0.389	0.396	0.000	0.000	0.000	na
+raw	untracked	20	0.411	0.378	0.427	0.470	0.411	0.378	0.427	0.470	0.000	0.000	0.000	na
+wsh-wakamex	clean	20	0.892	0.826	1.028	1.133	6.746	6.346	7.088	7.181	1.000	1.000	0.000	20/20
+wsh-wakamex	dirty	20	0.915	0.782	1.005	1.034	6.691	6.327	7.004	7.822	1.000	1.000	0.000	20/20
+wsh-wakamex	untracked	20	0.982	0.819	1.065	1.437	6.782	6.330	7.033	7.786	1.000	1.000	0.000	20/20
