@@ -76,25 +76,26 @@ mkdir -p -- $portable_root
 podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.28 $repository_root
 podman run --rm --userns=keep-id --network=host \
   --volume ${repository_root}:/workspace:Z \
+  --volume ${portable_root}:/comparison:Z \
   --volume ${rust_toolchain_root}:/toolchain:ro,Z \
   $compiler_mount \
   $compiler_environment \
   --env WSH_RUST_TOOLCHAIN_ROOT=/toolchain \
-  --env CARGO_HOME=/workspace/build/portable/compiler-comparison/${variant}/cargo-home \
+  --env CARGO_HOME=/workspace/build/portable/compiler-comparison/shared-cargo-home \
   --env CARGO_BUILD_JOBS=1 \
   --env CARGO_NET_OFFLINE=${WSH_CARGO_NET_OFFLINE:-false} \
   --env PATH=/toolchain/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
-  --env CARGO_TARGET_DIR=/workspace/build/portable/compiler-comparison/${variant}/target \
+  --env CARGO_TARGET_DIR=/workspace/build/portable/compiler-comparison/shared-target \
   --env LANG=C \
   --env LC_ALL=C \
   --env SOURCE_DATE_EPOCH=$source_date_epoch \
   --env TZ=UTC \
-  --env WSH_ARCHIVE_OUTPUT_ROOT=/workspace/build/portable/compiler-comparison/${variant}/archives \
+  --env WSH_ARCHIVE_OUTPUT_ROOT=/comparison/archives \
   --env WSH_BUILDER_BASE_IMAGE=quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e \
   --env WSH_BUILDER_PACKAGE_LOCK_SHA256=$package_lock_sha256 \
-  --env WSH_ZSH_OUTPUT_ROOT=/workspace/build/portable/compiler-comparison/${variant}/zsh \
-  --env WSH_ZSH_ROOT=/workspace/build/portable/compiler-comparison/${variant}/zsh/zsh-5.9.2 \
-  --env WSH_BUNDLE_OUTPUT_ROOT=/workspace/build/portable/compiler-comparison/${variant}/bundles \
+  --env WSH_ZSH_OUTPUT_ROOT=/comparison/zsh \
+  --env WSH_ZSH_ROOT=/comparison/zsh/zsh-5.9.2 \
+  --env WSH_BUNDLE_OUTPUT_ROOT=/comparison/bundles \
   --env WSH_KEEP_FAILED_BUILD=1 \
   --env WSH_MINIMUM_GLIBC=2.28 \
   --env WSH_BUILD_JOBS=1 \
