@@ -1,0 +1,57 @@
+schema-version = 1
+id = "minimal"
+name = "Minimal"
+left = ["cwd", "git", "prompt-character"]
+right = ["duration"]
+
+[context]
+enabled = false
+show-local = false
+show-ssh = true
+separator = "@"
+suffix = " "
+color = "default"
+
+[cwd]
+enabled = true
+style = "short"
+home-symbol = "~"
+color = "blue"
+
+[git]
+enabled = true
+hide-branches = []
+prefix = " "
+separator = " "
+color = "magenta"
+
+[git.symbols]
+branch = "git:"
+detached = "detached:"
+staged = "+"
+modified = "!"
+untracked = "?"
+ahead = "ahead"
+behind = "behind"
+diverged = "diverged"
+rebase = "rebase"
+merge = "merge"
+cherry-pick = "cherry-pick"
+revert = "revert"
+bisect = "bisect"
+
+[duration]
+enabled = true
+threshold-ms = 2000
+prefix = "took "
+suffix = " "
+color = "yellow"
+
+[prompt-character]
+enabled = true
+success = "%"
+failure = "%"
+privileged = "#"
+success-color = "green"
+failure-color = "red"
+privileged-color = "yellow"

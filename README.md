@@ -2,7 +2,7 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
-The project is currently in its design and benchmark stage. There is no installable release yet.
+The project is now building its first local vertical slice. The repository can build the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable release yet.
 
 ## Motivation
 
@@ -33,6 +33,20 @@ The wsh release pipeline builds and tests Zsh from signed upstream source. Users
 That milestone must demonstrate that switching themes changes formatting without granting shell authority or duplicating collection work. It must also pass the benchmarked clean, staged, modified, untracked, detached-HEAD, hostile-value, update-integrity, interrupted-update, and rollback scenarios while meeting documented latency, process, repaint, and optional-lock limits.
 
 An installed bundle never updates only Zsh or only the wsh runtime. Any component change produces a new complete bundle and reruns the full compatibility, correctness, performance, provenance, and rollback gates. Several wsh releases may reuse the same Zsh build, but every wsh release identifies exactly one Zsh source and build identity for each supported target.
+
+## Development slice
+
+The current code is intentionally smaller than the first release. It verifies exact development-bundle payloads, launches the bundle's Zsh 5.9.2 and matching session runtime, validates a bounded non-executable theme, and cleans up the runtime when the shell exits. It does not render the theme or collect Git state yet.
+
+Build and test the local slice with:
+
+```sh
+cargo test --workspace
+./build/build-zsh.zsh
+./build/build-development-bundle.zsh
+```
+
+The final command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. Every generated manifest says `development`; this path does not create or emulate a signed release.
 
 ## Later capabilities require evidence
 

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wsh.dev/schemas/bundle-v1.schema.json",
+  "title": "wsh development bundle manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "release_id",
+    "target",
+    "minimum_manager_version",
+    "zsh",
+    "rust",
+    "api_versions",
+    "entrypoints",
+    "requirements",
+    "files"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "status": { "const": "development" },
+    "release_id": { "$ref": "#/$defs/nonempty" },
+    "target": { "const": "x86_64-unknown-linux-gnu" },
+    "minimum_manager_version": { "$ref": "#/$defs/nonempty" },
+    "zsh": { "$ref": "#/$defs/zsh" },
+    "rust": { "$ref": "#/$defs/rust" },
+    "api_versions": { "$ref": "#/$defs/api_versions" },
+    "entrypoints": { "$ref": "#/$defs/entrypoints" },
+    "requirements": { "$ref": "#/$defs/requirements" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/file" }
+    }
+  },
+  "$defs": {
+    "nonempty": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^/]+(?:/[^/]+)*$"
+    },
+    "zsh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "source_archive", "source_sha256", "signer_fingerprint", "source_revision", "patches", "configure_args", "compiler", "linker"],
+      "properties": {
+        "version": { "$ref": "#/$defs/nonempty" },
+        "source_archive": { "$ref": "#/$defs/nonempty" },
+        "source_sha256": { "$ref": "#/$defs/sha256" },
+        "signer_fingerprint": { "type": "string", "pattern": "^[0-9A-F]{40}$" },
+        "source_revision": { "$ref": "#/$defs/nonempty" },
+        "patches": { "type": "array", "items": { "$ref": "#/$defs/sha256" }, "maxItems": 64 },
+        "configure_args": { "type": "array", "items": { "$ref": "#/$defs/nonempty" }, "maxItems": 128 },
+        "compiler": { "$ref": "#/$defs/nonempty" },
+        "linker": { "$ref": "#/$defs/nonempty" }
+      }
+    },
+    "rust": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_revision", "lockfile_sha256", "target", "compiler", "profile"],
+      "properties": {
+        "source_revision": { "$ref": "#/$defs/nonempty" },
+        "lockfile_sha256": { "$ref": "#/$defs/sha256" },
+        "target": { "const": "x86_64-unknown-linux-gnu" },
+        "compiler": { "$ref": "#/$defs/nonempty" },
+        "profile": { "enum": ["debug", "release"] }
+      }
+    },
+    "api_versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime_protocol", "provider_schema", "theme_schema", "integration_api"],
+      "properties": {
+        "runtime_protocol": { "const": 1 },
+        "provider_schema": { "const": 1 },
+        "theme_schema": { "const": 1 },
+        "integration_api": { "const": 1 }
+      }
+    },
+    "entrypoints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shell", "runtime", "integration", "default_theme"],
+      "properties": {
+        "shell": { "$ref": "#/$defs/relative_path" },
+        "runtime": { "$ref": "#/$defs/relative_path" },
+        "integration": { "$ref": "#/$defs/relative_path" },
+        "default_theme": { "$ref": "#/$defs/relative_path" }
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dynamic_libraries", "minimum_glibc"],
+      "properties": {
+        "dynamic_libraries": { "type": "array", "items": { "$ref": "#/$defs/nonempty" }, "uniqueItems": true },
+        "minimum_glibc": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "kind", "mode", "size", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relative_path" },
+        "kind": { "const": "file" },
+        "mode": { "type": "integer", "minimum": 0, "maximum": 4095 },
+        "size": { "type": "integer", "minimum": 0 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

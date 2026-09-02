@@ -103,7 +103,7 @@ The runtime owns transient presentation state such as whether a context changed 
 
 The cross-theme `zsh-theme-bench` A and B latency bands remain comparative report grades. The 15 ms B ceiling is too loose to serve as the first `wsh` release gate, while the 5 ms A ceiling is initially a stretch target because the accepted precursor's worst updated-state sample added 7.284 ms over the raw control.
 
-The first reference workload is the pinned 1,000-file fixture and clean, tracked-dirty, untracked, staged, and detached-HEAD scenarios from [`core-theme-benchmark-2026-09-02.md`](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md). The harness includes a selectable direct one-scan Git control so results can report both total latency over raw Zsh and wsh overhead beyond equivalent collection work.
+The first reference workload is the pinned 1,000-file fixture and clean, tracked-dirty, untracked, staged, and detached-HEAD scenarios from [`core-theme-benchmark-2026-09-02.md`](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md). That accepted report's raw control uses its pinned Zsh 5.9 and remains the historical cross-theme comparison. Before measuring the wsh provider, the same PTY workload must also produce matched controls from the exact bundled Zsh 5.9.2 binary: raw bundled Zsh without wsh integration, bundled Zsh with the idle integration and runtime, the direct one-scan Git control, and the complete provider and renderer. These outputs distinguish Zsh cost, resident wsh overhead, equivalent collection work, and the complete product path.
 
 | Property | First milestone gate | Accepted precursor reference |
 |---|---:|---:|

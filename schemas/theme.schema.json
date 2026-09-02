@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wsh.dev/schemas/theme-v1.schema.json",
+  "title": "wsh non-executable theme v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema-version", "id", "name", "left", "right", "context", "cwd", "git", "duration", "prompt-character"],
+  "properties": {
+    "schema-version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9-]{1,64}$" },
+    "name": { "$ref": "#/$defs/literal" },
+    "left": { "$ref": "#/$defs/layout" },
+    "right": { "$ref": "#/$defs/layout" },
+    "context": { "$ref": "#/$defs/context" },
+    "cwd": { "$ref": "#/$defs/cwd" },
+    "git": { "$ref": "#/$defs/git" },
+    "duration": { "$ref": "#/$defs/duration" },
+    "prompt-character": { "$ref": "#/$defs/prompt_character" }
+  },
+  "$defs": {
+    "literal": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[^\\u0000-\\u001f\\u007f]*$"
+    },
+    "color": {
+      "enum": ["default", "black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "bright-black", "bright-red", "bright-green", "bright-yellow", "bright-blue", "bright-magenta", "bright-cyan", "bright-white"]
+    },
+    "component": {
+      "enum": ["context", "cwd", "git", "duration", "prompt-character"]
+    },
+    "layout": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/component" },
+      "maxItems": 5,
+      "uniqueItems": true
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "show-local", "show-ssh", "separator", "suffix", "color"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "show-local": { "type": "boolean" },
+        "show-ssh": { "type": "boolean" },
+        "separator": { "$ref": "#/$defs/literal" },
+        "suffix": { "$ref": "#/$defs/literal" },
+        "color": { "$ref": "#/$defs/color" }
+      }
+    },
+    "cwd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "style", "home-symbol", "color"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "style": { "enum": ["full", "short"] },
+        "home-symbol": { "$ref": "#/$defs/literal" },
+        "color": { "$ref": "#/$defs/color" }
+      }
+    },
+    "git_symbols": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["branch", "detached", "staged", "modified", "untracked", "ahead", "behind", "diverged", "rebase", "merge", "cherry-pick", "revert", "bisect"],
+      "properties": {
+        "branch": { "$ref": "#/$defs/literal" },
+        "detached": { "$ref": "#/$defs/literal" },
+        "staged": { "$ref": "#/$defs/literal" },
+        "modified": { "$ref": "#/$defs/literal" },
+        "untracked": { "$ref": "#/$defs/literal" },
+        "ahead": { "$ref": "#/$defs/literal" },
+        "behind": { "$ref": "#/$defs/literal" },
+        "diverged": { "$ref": "#/$defs/literal" },
+        "rebase": { "$ref": "#/$defs/literal" },
+        "merge": { "$ref": "#/$defs/literal" },
+        "cherry-pick": { "$ref": "#/$defs/literal" },
+        "revert": { "$ref": "#/$defs/literal" },
+        "bisect": { "$ref": "#/$defs/literal" }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "hide-branches", "prefix", "separator", "color", "symbols"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "hide-branches": { "type": "array", "items": { "$ref": "#/$defs/literal" }, "maxItems": 16, "uniqueItems": true },
+        "prefix": { "$ref": "#/$defs/literal" },
+        "separator": { "$ref": "#/$defs/literal" },
+        "color": { "$ref": "#/$defs/color" },
+        "symbols": { "$ref": "#/$defs/git_symbols" }
+      }
+    },
+    "duration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "threshold-ms", "prefix", "suffix", "color"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "threshold-ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "prefix": { "$ref": "#/$defs/literal" },
+        "suffix": { "$ref": "#/$defs/literal" },
+        "color": { "$ref": "#/$defs/color" }
+      }
+    },
+    "prompt_character": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "success", "failure", "privileged", "success-color", "failure-color", "privileged-color"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "success": { "$ref": "#/$defs/literal" },
+        "failure": { "$ref": "#/$defs/literal" },
+        "privileged": { "$ref": "#/$defs/literal" },
+        "success-color": { "$ref": "#/$defs/color" },
+        "failure-color": { "$ref": "#/$defs/color" },
+        "privileged-color": { "$ref": "#/$defs/color" }
+      }
+    }
+  }
+}
