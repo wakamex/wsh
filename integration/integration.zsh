@@ -30,14 +30,11 @@ _wsh_hex_encode() {
 
 _wsh_hex_decode() {
   emulate -L zsh
-  local value=$1 output='' byte character
-  while [[ -n $value ]]; do
-    byte=$value[1,2]
-    value=$value[3,-1]
-    printf -v character '%b' "\\x${byte}"
-    output+=$character
-  done
-  REPLY=$output
+  setopt extendedglob
+  local LC_ALL=C value=$1 escaped
+  local -a match mbegin mend
+  escaped=${value//(#b)(??)/\\x${match[1]}}
+  printf -v REPLY '%b' "$escaped"
 }
 
 _wsh_runtime_disable_reader() {

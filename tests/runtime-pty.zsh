@@ -89,6 +89,20 @@ runtime_pid=${state%%:*}
 }
 local initial_repaints=${state##*:}
 
+local hex_payload='' hex_byte
+local -i hex_value
+for (( hex_value = 1; hex_value <= 255; ++hex_value )); do
+  printf -v hex_byte '%02x' $hex_value
+  hex_payload+=$hex_byte
+done
+pty_output=''
+zpty -w $pty_name "_wsh_hex_decode ${(q)hex_payload}; _wsh_hex_encode \"\$REPLY\"; print -r -- $'WSH_\\x48EX_ROUNDTRIP='\$REPLY"
+pty_wait_for WSH_HEX_ROUNDTRIP= 3
+[[ $pty_output == *"WSH_HEX_ROUNDTRIP=${hex_payload}"* ]] || {
+  print -u2 -r -- "hex decoder did not preserve byte values: ${(qqq)pty_output}"
+  return 1
+}
+
 pty_output=''
 zpty -w $pty_name ':'
 pty_wait_for $prompt_marker 3
