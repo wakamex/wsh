@@ -74,7 +74,9 @@ for block in forward reverse; do
         taskset -c $cpu zsh -fc 'repeat $1; do "$2" -f -c exit; done' -- $launches $binaries[$index]
       IFS=$'\t' read -r elapsed user system < $timing
       mean=$(awk -v elapsed=$elapsed -v launches=$launches 'BEGIN { printf "%.3f", elapsed * 1000000 / launches }')
-      print -r -- "$(date -u +%Y-%m-%dT%H:%M:%SZ)\t${block}\t${position}\t${labels[$index]}\t${repetition}\t${launches}\t${elapsed}\t${user}\t${system}\t${mean}" >> $staging
+      printf '%s\t%s\t%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n' \
+        "$(date -u +%Y-%m-%dT%H:%M:%SZ)" $block $position ${labels[$index]} $repetition \
+        $launches $elapsed $user $system $mean >> $staging
     done
   done
 done
