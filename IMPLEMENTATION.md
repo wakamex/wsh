@@ -101,15 +101,15 @@ The runtime owns transient presentation state such as whether a context changed 
 
 ## The first benchmark gates preserve the demonstrated path
 
-The cross-theme `zsh-theme-bench` A and B latency bands remain comparative report grades. The 15 ms B ceiling is too loose to serve as the first `wsh` release gate, while the 5 ms A ceiling is initially a stretch target because the accepted precursor's worst updated-state sample added 6.396 ms over the raw control.
+The cross-theme `zsh-theme-bench` A and B latency bands remain comparative report grades. The 15 ms B ceiling is too loose to serve as the first `wsh` release gate, while the 5 ms A ceiling is initially a stretch target because the accepted precursor's worst updated-state sample added 7.284 ms over the raw control.
 
-The first reference workload is the pinned 1,000-file fixture and clean, tracked-dirty, untracked, staged, and detached-HEAD scenarios from `core-theme-benchmark-2026-09-01.md`. Before implementation comparisons, the harness adds a direct one-scan Git control so results can report both total latency over raw Zsh and wsh overhead beyond equivalent collection work.
+The first reference workload is the pinned 1,000-file fixture and clean, tracked-dirty, untracked, staged, and detached-HEAD scenarios from [`core-theme-benchmark-2026-09-02.md`](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md). The harness includes a selectable direct one-scan Git control so results can report both total latency over raw Zsh and wsh overhead beyond equivalent collection work.
 
 | Property | First milestone gate | Accepted precursor reference |
 |---|---:|---:|
-| First-editable maximum added over raw Zsh | At most 2.0 ms | 0.920 ms |
-| Updated Git p90 added over raw Zsh | At most 7.0 ms | At most 6.291 ms across the measured updated states |
-| Updated Git maximum added over raw Zsh | At most 8.0 ms | 6.396 ms |
+| First-editable maximum added over raw Zsh | At most 2.0 ms | 1.172 ms |
+| Updated Git p90 added over raw Zsh | At most 7.1 ms | 7.005 ms in the highest measured updated state |
+| Updated Git maximum added over raw Zsh | At most 8.0 ms | 7.284 ms |
 | Git processes per transition | At most 1 | 1 |
 | Git processes without `GIT_OPTIONAL_LOCKS=0` | 0 | 0 |
 | Repaints for a changed rendered result | At most 1 | 1 |
@@ -117,7 +117,7 @@ The first reference workload is the pinned 1,000-file fixture and clean, tracked
 | New runtime processes per prompt transition | 0 | Not measured as a separate Rust runtime |
 | Advertised semantic checks | 100 percent | 20/20 clean, dirty, and untracked; 1/1 staged and detached HEAD |
 
-The settled-latency stretch target is the report's A band of at most 5 ms added over the raw maximum. Missing the stretch target does not weaken the fixed 7 ms p90 or 8 ms maximum gates. The runtime also records retained memory, CPU time, direct-control overhead, protocol bytes, theme validation and render cost, and tracing overhead before a release threshold is assigned to those measurements.
+The settled-latency stretch target is the report's A band of at most 5 ms added over the raw maximum. Missing the stretch target does not weaken the fixed 7.1 ms p90 or 8 ms maximum gates. The p90 gate uses 0.1 ms precision because the accepted reference measured 7.005 ms over raw and the benchmark summary reports latency to 0.1 ms; this threshold was fixed before measuring a wsh provider. The runtime also records retained memory, CPU time, direct-control overhead, protocol bytes, theme validation and render cost, and tracing overhead before a release threshold is assigned to those measurements.
 
 Every comparison identifies the wsh revision and manifest digest, Zsh source and binary identities, Rust and C toolchains, target, build configuration, enabled components, theme definition digest, fixture, command, trace mode, host, raw samples, and exclusions.
 
@@ -129,5 +129,5 @@ The product boundary, first platform, implementation languages, Zsh release, bun
 - Fix the runtime transport and message encoding by comparing the smallest pipe-based protocol with the latency, cancellation, malformed-message, restart, and backpressure requirements.
 - Write the exact manifest JSON and theme TOML schemas, including field meanings and resource limits, against hostile and forward-compatibility fixtures.
 - Define runtime startup, crash, and Zsh-exit behavior so a failed provider cannot hang the editor or leave a child process behind.
-- Add the direct one-scan Git control and retain the exact benchmark identity before judging the Rust provider.
+- Retain the direct one-scan Git control and its exact benchmark identity when judging the Rust provider.
 - Choose official signing keys, release hosting, metadata expiration, and key-recovery procedure only after the unsigned local bundle passes. These do not block the first vertical slice.

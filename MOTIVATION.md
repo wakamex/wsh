@@ -8,21 +8,21 @@ This direction came from benchmarking existing themes, not from an assumption th
 
 ## Benchmarking exposed theme-owned collector machinery
 
-The [`zsh-theme-bench` report](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-01.md) compared representative prompt architectures in fresh interactive terminals against the same 1,000-file Git fixture. Each target ran 20 timed clean, tracked-dirty, and untracked transitions, followed by staged and detached-HEAD checks. The `wsh` precursor, shown as `wakamex` in that report, had the lowest worst retained settled latency among targets that passed every applicable semantic check at 7.211 ms, while agnoster reached an 85.881 ms first-prompt maximum.
+The [`zsh-theme-bench` report](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md) compared representative prompt architectures in fresh interactive terminals against the same 1,000-file Git fixture. Each target ran 20 timed clean, tracked-dirty, and untracked transitions, followed by staged and detached-HEAD checks. The `wsh` precursor, shown as `wakamex` in that report, had the lowest worst retained settled latency among targets that passed every applicable semantic check at 8.126 ms, while mortalscumbag reached a 118.289 ms first-prompt maximum.
 
 The median results show how tightly theme selection is currently coupled to collection behavior:
 
 | Theme path | First editable prompt, ms | Settled prompt, ms | Git processes per transition | Collection design |
 |---|---:|---:|---:|---|
-| `wsh` precursor | 1.4-1.5 | 1.4-6.9 | 1 | Custom asynchronous worker with one status scan |
-| Oh My Zsh `robbyrussell` | 6.1-6.7 | 27.9-28.9 | 5 | Shared Oh My Zsh asynchronous helper |
-| Oh My Zsh `agnoster` | 79.4-81.4 | 79.4-81.4 | 16 | Theme-owned synchronous Git commands |
-| Pure | 10.7-11.5 | 23.5-24.5 | 6 | Theme-owned native-Zsh asynchronous worker |
-| Powerlevel10k Pure preset | 11.9-12.4 | 12.6-13.0 | 0 | Persistent `gitstatusd` provider |
+| `wsh` precursor | 1.5-1.5 | 1.5-7.1 | 1 | Custom asynchronous worker with one status scan |
+| Oh My Zsh `robbyrussell` | 6.3-6.9 | 28.5-29.8 | 5 | Shared Oh My Zsh asynchronous helper |
+| Oh My Zsh `agnoster` | 81.9-83.1 | 81.9-83.1 | 16 | Theme-owned synchronous Git commands |
+| Pure | 11.1-12.5 | 24.6-28.3 | 6 | Theme-owned native-Zsh asynchronous worker |
+| Powerlevel10k Pure preset | 11.8-13.4 | 12.4-14.5 | 0 | Persistent `gitstatusd` provider |
 
 The accompanying [`direct Git inspection`](https://github.com/wakamex/zsh-theme-bench/blob/main/research/direct-git-inspection-2264a8042763.md) found 65 direct Git invocation sites across 28 Oh My Zsh themes. Twenty-seven themes connected at least one site to an active prompt or hook. The review identified repeated repository detection, duplicate status scans, synchronous commit-age lookups, optional Git locks, async registration gaps, and incomplete cache invalidation.
 
-The implementations make different tradeoffs. The `wsh` precursor was correct in its advertised scope across the five tested scenarios, used one optional-lock-safe Git process per transition, and returned an editable prompt near the raw control. Oh My Zsh's shared helpers preserved the tested semantics and supplied asynchronous execution and lock suppression, but used five Git processes and settled around 28-45 ms in the measured themes. Pure preserved its tested semantics but used six Git processes, five without optional-lock suppression, and settled around 24 ms. Powerlevel10k served broad state without observed Git child processes during measured transitions because collection work occurred inside its resident `gitstatusd` process, not because collection was free.
+The implementations make different tradeoffs. The `wsh` precursor was correct in its advertised scope across the five tested scenarios, used one optional-lock-safe Git process per transition, and returned an editable prompt near the raw control. Oh My Zsh's shared helpers preserved the tested semantics and supplied asynchronous execution and lock suppression, but used five Git processes and settled around 29-42 ms in the measured themes. Pure preserved its tested semantics but used six Git processes, five without optional-lock suppression, and settled around 25-28 ms. Powerlevel10k served broad state without observed Git child processes during measured transitions because collection work occurred inside its resident `gitstatusd` process, not because collection was free.
 
 The benchmark evidence is scoped to the pinned targets, one host, one 1,000-file fixture, 20 timed clean, dirty, and untracked transitions, and one staged and detached-HEAD check. Within that scope, it shows that theme selection currently selects both presentation and collection behavior. The renderer-independent service is the proposed response, not a result established by the benchmark.
 
