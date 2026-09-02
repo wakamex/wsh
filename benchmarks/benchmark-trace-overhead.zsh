@@ -115,6 +115,10 @@ measure_session() {
   ready_us=$REPLY
   refresh
   apply_state $state
+  refresh
+  prepare_state $state
+  refresh
+  apply_state $state
   local -F started=$EPOCHREALTIME
   refresh
   refresh_us=$(( (EPOCHREALTIME - started) * 1000000 + 0.5 ))
