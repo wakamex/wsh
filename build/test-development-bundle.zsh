@@ -8,14 +8,19 @@ readonly repository_root=${script_dir:h}
 readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 readonly maximum_glibc=${WSH_MINIMUM_GLIBC:-}
 
-for command in cargo diff find git jq mktemp od readelf rm sed sort tail tr; do
+for command in cargo cp diff find git jq mkdir mktemp od readelf rm sed sort tail tr; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
   }
 done
 
-bundle=$(zsh ${script_dir}/build-development-bundle.zsh)
+built_bundle=$(zsh ${script_dir}/build-development-bundle.zsh)
+bundle_identity=${built_bundle:t}
+test_root=$(mktemp -d /tmp/wsh-floor-bundle.XXXXXX)
+trap 'rm -rf -- $test_root' EXIT INT TERM
+bundle=${test_root}/relocated-bundle
+cp -R -- $built_bundle $bundle
 runtime=${bundle}/bin/wsh-runtime
 manager=${cargo_target_dir}/release/wsh
 theme=${bundle}/share/wsh/themes/minimal.toml
@@ -24,9 +29,10 @@ cargo test --locked --workspace
 ${manager} bundle verify ${bundle} >/dev/null
 ${bundle}/bin/zsh --version
 ${runtime} validate-theme ${theme}
+${manager} run --bundle ${bundle} -- -c 'zmodload zsh/datetime'
 
-fixture=$(mktemp -d /tmp/wsh-floor-provider.XXXXXX)
-trap 'rm -rf -- $fixture' EXIT INT TERM
+fixture=${test_root}/fixture
+mkdir -p -- $fixture
 git -C $fixture init -q -b main
 git -C $fixture config user.name 'wsh floor test'
 git -C $fixture config user.email floor-test@wsh.invalid
@@ -55,6 +61,7 @@ WSH_TEST_RUNTIME=${runtime} \
 WSH_TEST_INTEGRATION=${bundle}/share/wsh/integration.zsh \
 WSH_TEST_THEME=${theme} \
 WSH_TEST_PROMPT_MARKER='git:main' \
+WSH_TEST_BUNDLE_ROOT=${bundle} \
 ${repository_root}/tests/runtime-pty.zsh
 
 needed=$(find ${bundle} -type f -exec readelf -d {} \; 2>/dev/null | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' | sort -u)
@@ -74,4 +81,4 @@ if [[ -n $maximum_glibc ]]; then
   }
 fi
 
-print -r -- "PASS: development bundle ${bundle:t} on glibc floor; maximum required symbol ${actual_glibc:-not-checked}"
+print -r -- "PASS: relocated development bundle ${bundle_identity} on glibc floor; maximum required symbol ${actual_glibc:-not-checked}"

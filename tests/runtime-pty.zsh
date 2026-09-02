@@ -9,6 +9,7 @@ local runtime=${WSH_TEST_RUNTIME:-$root/target/release/wsh-runtime}
 local integration=${WSH_TEST_INTEGRATION:-$root/integration/integration.zsh}
 local theme=${WSH_TEST_THEME:-$root/benchmarks/wsh-benchmark.toml}
 local prompt_marker=${WSH_TEST_PROMPT_MARKER:-ZTB_PROMPT>}
+local bundle_root=${WSH_TEST_BUNDLE_ROOT:-}
 local scratch
 scratch=$(mktemp -d /var/tmp/wsh-runtime-pty.XXXXXX)
 local pty_name=wsh_runtime_pty
@@ -70,7 +71,11 @@ wsh_pty_child() {
 
 zpty -b $pty_name wsh_pty_child
 pty_wait_for WSH_BOOT 5
-zpty -w $pty_name "typeset -gx WSH_RUNTIME=${(q)runtime} WSH_THEME=${(q)theme}; source ${(q)integration}; print -r -- \$'WSH_\\x53ETUP_DONE'"
+local bundle_setup=
+if [[ -n $bundle_root ]]; then
+  bundle_setup="typeset -gx WSH_BUNDLE_ROOT=${(q)bundle_root}; module_path=(${(q)bundle_root}/lib/zsh/5.9.2); fpath=(${(q)bundle_root}/share/zsh/5.9.2/functions \$fpath); "
+fi
+zpty -w $pty_name "${bundle_setup}typeset -gx WSH_RUNTIME=${(q)runtime} WSH_THEME=${(q)theme}; source ${(q)integration}; print -r -- \$'WSH_\\x53ETUP_DONE'"
 pty_wait_for WSH_SETUP_DONE 3
 pty_wait_for $prompt_marker 3
 zpty -w $pty_name "print -r -- \$'WSH_\\x53TATE='\${WSH_RUNTIME_PID}:\${WSH_RUNTIME_READY}:\${WSH_RUNTIME_REPAINTS}"
