@@ -61,16 +61,24 @@ local cwd_hex
 cwd_hex=$(printf %s $fixture | command od -An -tx1 | command tr -d ' \n')
 [[ $cwd_hex == [[:xdigit:]]# ]] || return 1
 
+runtime_child() {
+  local mode=$1 trace_file=$2
+  if [[ $mode == traced ]]; then
+    export WSH_TRACE_FILE=$trace_file
+  else
+    unset WSH_TRACE_FILE
+  fi
+  exec $runtime serve --theme $theme
+}
+
 start_runtime() {
   local mode=$1 ready trace_file=$2
   local -i elapsed_us
   local -F started=$EPOCHREALTIME
   if [[ $mode == traced ]]; then
     command rm -f -- $trace_file
-    coproc env WSH_TRACE_FILE=$trace_file $runtime serve --theme $theme
-  else
-    coproc $runtime serve --theme $theme
   fi
+  coproc runtime_child $mode $trace_file
   runtime_pid=$!
   exec {runtime_input_fd}>&p
   exec {runtime_output_fd}<&p
