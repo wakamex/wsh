@@ -117,6 +117,8 @@ The first reference workload is the pinned 1,000-file fixture and clean, tracked
 
 The settled-latency stretch target is the report's A band of at most 5 ms added over the raw maximum. Missing the stretch target does not weaken the fixed 7.1 ms p90 or 8 ms maximum gates. The p90 gate uses 0.1 ms precision because the accepted reference measured 7.005 ms over raw and the benchmark summary reports latency to 0.1 ms; this threshold was fixed before measuring a wsh provider. The runtime also records retained memory, CPU time, direct-control overhead, protocol bytes, theme validation and render cost, and tracing overhead before a release threshold is assigned to those measurements.
 
+The first clean provider result passed the fixed gates with a 6.893 ms worst added p90, 7.241 ms worst added maximum, 0.943 ms worst added first-editable maximum, one optional-lock-safe Git process, one changed-result repaint, and all 62 applicable semantic checks. It did not meet the separate 5 ms stretch target. The full result and the preceding failed polling baseline are retained in [`benchmarks/phase-one-result-2026-09-02.md`](benchmarks/phase-one-result-2026-09-02.md).
+
 Every comparison identifies the wsh revision and manifest digest, Zsh source and binary identities, Rust and C toolchains, target, build configuration, enabled components, theme definition digest, fixture, command, trace mode, host, raw samples, and exclusions.
 
 ## The first experiments fixed the local slice

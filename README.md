@@ -2,7 +2,7 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
-The project is now building its first local vertical slice. The repository can build the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable release yet.
+The first local vertical slice now passes its fixed correctness and performance gates with both bundled theme presentations. The repository builds the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
 
 ## Motivation
 
@@ -37,6 +37,8 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 ## Development slice
 
 The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. It does not download updates, verify GitHub attestations, publish official bundles, or operate the public theme directory yet.
+
+The retained [phase-one result](benchmarks/phase-one-result-2026-09-02.md) records the matched raw-Zsh controls, failed first counterfactual, accepted latency and correctness results, trace overhead, retained memory, compatibility-floor checks, exact identities, and raw data.
 
 Build and test the local slice with:
 

@@ -19,7 +19,7 @@ The provider comparison must run the same PTY workload through four paths built 
 
 ## Provider gate
 
-The cheapest counterfactual is the same one-process scan through the session runtime. It must preserve one Git process per transition, zero calls without optional-lock suppression, and all advertised state semantics. The fixed first milestone thresholds are at most 7.1 ms p90 and 8.0 ms maximum added over raw Zsh for updated Git state. The first clean-revision matched run is retained in [`phase-one-pre-polling.md`](phase-one-pre-polling.md); it passed the other gates but missed the p90 threshold, so it remains an optimization baseline rather than an accepted provider result.
+The cheapest counterfactual is the same one-process scan through the session runtime. It must preserve one Git process per transition, zero calls without optional-lock suppression, and all advertised state semantics. The fixed first milestone thresholds are at most 7.1 ms p90 and 8.0 ms maximum added over raw Zsh for updated Git state. The first clean-revision matched run is retained in [`phase-one-pre-polling.md`](phase-one-pre-polling.md); it passed the other gates but missed the p90 threshold. Reducing the worker polling interval as one isolated change passed the same gate in [`phase-one-result-2026-09-02.md`](phase-one-result-2026-09-02.md).
 
 ## Development bundle identity
 
