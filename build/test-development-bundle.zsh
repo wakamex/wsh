@@ -7,6 +7,7 @@ readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
 readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 readonly maximum_glibc=${WSH_MINIMUM_GLIBC:-}
+readonly archive_output_root=${WSH_ARCHIVE_OUTPUT_ROOT:-}
 
 for command in cargo cp diff find git jq mkdir mktemp od readelf rm sed sort tail tr; do
   (( $+commands[$command] )) || {
@@ -14,6 +15,8 @@ for command in cargo cp diff find git jq mkdir mktemp od readelf rm sed sort tai
     exit 1
   }
 done
+
+${script_dir}/verify-rust-toolchain.zsh >/dev/null
 
 built_bundle=$(zsh ${script_dir}/build-development-bundle.zsh)
 bundle_identity=${built_bundle:t}
@@ -79,6 +82,12 @@ if [[ -n $maximum_glibc ]]; then
     print -u2 -- "error: bundle imports $actual_glibc above the GLIBC_${maximum_glibc} floor"
     exit 1
   }
+fi
+
+if [[ -n $archive_output_root ]]; then
+  SOURCE_DATE_EPOCH=${SOURCE_DATE_EPOCH:-} \
+    WSH_MANAGER=$manager \
+    ${script_dir}/archive-development-bundle.zsh $built_bundle $archive_output_root
 fi
 
 print -r -- "PASS: relocated development bundle ${bundle_identity} on glibc floor; newest imported symbol ${actual_glibc:-not-checked}"

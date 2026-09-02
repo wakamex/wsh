@@ -51,6 +51,8 @@ cargo test --workspace
 
 The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.28-development-bundle.zsh` builds and exercises the same development slice on the first tested compatibility floor. Every generated manifest says `development`; local output remains a development bundle even if it later reproduces an official GitHub Release asset byte for byte.
 
+The glibc 2.28 builder verifies the complete Rocky package lock and Rust 1.95.0 toolchain tree, fixes locale, timezone, parallelism, and source timestamps, and emits a canonical `.tar.xz` archive after the complete floor test passes. Run `./build/test-reproducible-development-bundles.zsh <new-output-directory>` from a clean commit to build the same revision in two detached worktrees and require byte-identical manifests and archives.
+
 ## Later capabilities require evidence
 
 Several useful capabilities are being investigated, but they are not release promises:

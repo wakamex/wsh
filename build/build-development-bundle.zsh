@@ -71,6 +71,14 @@ rust_compiler=$(rustc --version)
 c_compiler=$(gcc --version | head -n 1)
 linker=$(ld --version | head -n 1)
 minimum_glibc=${WSH_MINIMUM_GLIBC:-}
+builder_base_image=${WSH_BUILDER_BASE_IMAGE:-}
+builder_package_lock_sha256=${WSH_BUILDER_PACKAGE_LOCK_SHA256:-}
+rust_toolchain_sha256=${WSH_RUST_TOOLCHAIN_SHA256:-}
+source_date_epoch=${SOURCE_DATE_EPOCH:-}
+build_lang=${LANG:-C}
+build_lc_all=${LC_ALL:-${LANG:-C}}
+build_timezone=${TZ:-UTC}
+build_jobs=${CARGO_BUILD_JOBS:-auto}
 dynamic_libraries=$(find "$stage" -type f -exec readelf -d {} \; 2>/dev/null \
   | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' \
   | sort -u \
@@ -85,6 +93,14 @@ jq -n \
   --arg c_compiler "$c_compiler" \
   --arg linker "$linker" \
   --arg minimum_glibc "$minimum_glibc" \
+  --arg builder_base_image "$builder_base_image" \
+  --arg builder_package_lock_sha256 "$builder_package_lock_sha256" \
+  --arg rust_toolchain_sha256 "$rust_toolchain_sha256" \
+  --arg source_date_epoch "$source_date_epoch" \
+  --arg build_lang "$build_lang" \
+  --arg build_lc_all "$build_lc_all" \
+  --arg build_timezone "$build_timezone" \
+  --arg build_jobs "$build_jobs" \
   --argjson dynamic_libraries "$dynamic_libraries" \
   --slurpfile files "$file_records" \
   '{
@@ -93,6 +109,13 @@ jq -n \
     release_id:$release_id,
     target:"x86_64-unknown-linux-gnu",
     minimum_manager_version:"0.1.0",
+    builder:{
+      base_image:(if $builder_base_image == "" then null else $builder_base_image end),
+      package_lock_sha256:(if $builder_package_lock_sha256 == "" then null else $builder_package_lock_sha256 end),
+      rust_toolchain_sha256:(if $rust_toolchain_sha256 == "" then null else $rust_toolchain_sha256 end),
+      source_date_epoch:(if $source_date_epoch == "" then null else ($source_date_epoch | tonumber) end),
+      environment:{lang:$build_lang,lc_all:$build_lc_all,tz:$build_timezone,build_jobs:$build_jobs}
+    },
     zsh:{
       version:"5.9.2",
       source_archive:"https://downloads.sourceforge.net/project/zsh/zsh/5.9.2/zsh-5.9.2.tar.xz",

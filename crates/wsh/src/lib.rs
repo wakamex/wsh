@@ -19,12 +19,32 @@ pub struct BundleManifest {
     pub release_id: String,
     pub target: String,
     pub minimum_manager_version: String,
+    pub builder: Builder,
     pub zsh: ZshBuild,
     pub rust: RustBuild,
     pub api_versions: ApiVersions,
     pub entrypoints: Entrypoints,
     pub requirements: Requirements,
     pub files: Vec<PayloadFile>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Builder {
+    pub base_image: Option<String>,
+    pub package_lock_sha256: Option<String>,
+    pub rust_toolchain_sha256: Option<String>,
+    pub source_date_epoch: Option<u64>,
+    pub environment: BuildEnvironment,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct BuildEnvironment {
+    pub lang: String,
+    pub lc_all: String,
+    pub tz: String,
+    pub build_jobs: String,
 }
 
 #[derive(Debug, Deserialize, PartialEq, Eq)]
@@ -529,6 +549,13 @@ mod tests {
             "release_id": "test",
             "target": "x86_64-unknown-linux-gnu",
             "minimum_manager_version": "0.1.0",
+            "builder": {
+                "base_image": null,
+                "package_lock_sha256": null,
+                "rust_toolchain_sha256": null,
+                "source_date_epoch": null,
+                "environment": {"lang":"C","lc_all":"C","tz":"UTC","build_jobs":"1"}
+            },
             "zsh": {
                 "version": "5.9.2",
                 "source_archive": "zsh-5.9.2.tar.xz",
@@ -585,6 +612,7 @@ mod tests {
             "release_id": "dev",
             "target": "x86_64-unknown-linux-gnu",
             "minimum_manager_version": "0.1.0",
+            "builder": {"base_image":null,"package_lock_sha256":null,"rust_toolchain_sha256":null,"source_date_epoch":null,"environment":{"lang":"C","lc_all":"C","tz":"UTC","build_jobs":"1"}},
             "zsh": {"version":"5.9.2","source_archive":"x","source_sha256":"x","signer_fingerprint":"x","source_revision":"x","patches":[],"configure_args":[],"compiler":"x","linker":"x"},
             "rust": {"source_revision":"x","lockfile_sha256":"x","target":"x86_64-unknown-linux-gnu","compiler":"x","profile":"debug"},
             "api_versions": {"runtime_protocol":1,"provider_schema":1,"theme_schema":1,"integration_api":1},

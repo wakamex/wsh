@@ -10,6 +10,7 @@
     "release_id",
     "target",
     "minimum_manager_version",
+    "builder",
     "zsh",
     "rust",
     "api_versions",
@@ -23,6 +24,7 @@
     "release_id": { "$ref": "#/$defs/nonempty" },
     "target": { "const": "x86_64-unknown-linux-gnu" },
     "minimum_manager_version": { "$ref": "#/$defs/nonempty" },
+    "builder": { "$ref": "#/$defs/builder" },
     "zsh": { "$ref": "#/$defs/zsh" },
     "rust": { "$ref": "#/$defs/rust" },
     "api_versions": { "$ref": "#/$defs/api_versions" },
@@ -49,6 +51,28 @@
       "minLength": 1,
       "maxLength": 4096,
       "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\)[^/]+(?:/[^/]+)*$"
+    },
+    "builder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_image", "package_lock_sha256", "rust_toolchain_sha256", "source_date_epoch", "environment"],
+      "properties": {
+        "base_image": { "type": ["string", "null"], "minLength": 1, "maxLength": 512 },
+        "package_lock_sha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "rust_toolchain_sha256": { "anyOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] },
+        "source_date_epoch": { "type": ["integer", "null"], "minimum": 1 },
+        "environment": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lang", "lc_all", "tz", "build_jobs"],
+          "properties": {
+            "lang": { "$ref": "#/$defs/nonempty" },
+            "lc_all": { "$ref": "#/$defs/nonempty" },
+            "tz": { "$ref": "#/$defs/nonempty" },
+            "build_jobs": { "$ref": "#/$defs/nonempty" }
+          }
+        }
+      }
     },
     "zsh": {
       "type": "object",

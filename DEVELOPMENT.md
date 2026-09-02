@@ -52,4 +52,12 @@ Reports lead with the motivation, short result, and how it was tested. Detailed 
 
 An accepted intervention retains its reproducer, fixtures, commands, raw measurements, generated summary, and regression test. Generated reports identify their inputs and should be reproducible from retained data. If later evidence invalidates a result or architecture premise, update or replace the old conclusion rather than accumulating mutually inconsistent plans.
 
+## Reproducible development builds use the release-shaped path
+
+`./build/build-glibc-2.28-development-bundle.zsh` is the canonical target build entrypoint. It verifies the locked Rust toolchain tree, rebuilds the builder from its digest-pinned Rocky base image, requires the complete installed RPM set to match `build/rocky-8.10-packages.lock`, fixes locale, timezone, Cargo parallelism, umask, and `SOURCE_DATE_EPOCH`, runs the floor suite, and produces one normalized `.tar.xz` archive. The package lock records NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest for every installed package. Repository drift causes a build failure. The lock does not preserve package bytes or guarantee their future availability, so an offline package archive or frozen repository remains a release-infrastructure decision.
+
+`build/rust-toolchain.lock` records the exact Rust and Cargo versions and a path-independent digest of every file in the installed toolchain tree selected by `rust-toolchain.toml`. Verification happens before the toolchain is mounted read-only into the builder. Each isolated build uses its own Cargo home and target directory; Cargo dependencies remain fixed by `Cargo.lock` and crate checksums.
+
+`./build/test-reproducible-development-bundles.zsh <new-output-directory> [revision]` requires a clean worktree, creates two detached worktrees at the exact commit, runs the complete builder sequentially without sharing build or compiler caches, and compares both manifests and canonical archives byte for byte. Failed comparisons retain both workers and logs for diagnosis. A passing local comparison establishes repeatability across those two isolated builds, not independent infrastructure or official release status.
+
 The feature admission rules and deferred triggers are defined in [`FEATURES.md`](FEATURES.md). Bundle, theme, and update trust properties are defined in [`SECURITY.md`](SECURITY.md). The runtime and immutable bundle boundaries are defined in [`DESIGN.md`](DESIGN.md).
