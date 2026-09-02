@@ -52,7 +52,7 @@ jobs:
           ./build/verify-rust-toolchain.zsh
       - name: Fetch the digest-pinned floor image
         run: podman pull "$ROCKY_IMAGE"
-      - name: Build and test the glibc 2.28 development bundle
+      - name: Build and test the development bundle on the glibc 2.28 floor
         run: ./build/build-glibc-2.28-development-bundle.zsh
 
   retained-resource-gates:
