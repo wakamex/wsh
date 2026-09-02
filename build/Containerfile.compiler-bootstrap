@@ -1,0 +1,5 @@
+FROM localhost/wsh-glibc-2.28-builder:development
+
+RUN dnf install -y --setopt=install_weak_deps=False gmp-devel libmpc-devel mpfr-devel zlib-devel \
+    && dnf clean all \
+    && rm -rf /var/cache/dnf

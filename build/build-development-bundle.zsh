@@ -9,7 +9,7 @@ readonly zsh_root=${WSH_ZSH_ROOT:-${repository_root}/build/out/zsh-5.9.2}
 readonly output_root=${WSH_BUNDLE_OUTPUT_ROOT:-${repository_root}/bundles}
 readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 
-for command in cargo cp find gcc git head install jq ld mktemp mv readelf rm rustc sed sha256sum sort stat; do
+for command in cargo cp find git head install jq ld mktemp mv readelf rm rustc sed sha256sum sort stat; do
   if (( ! $+commands[$command] )); then
     print -u2 -- "error: required command not found: ${command}"
     exit 1
@@ -71,7 +71,17 @@ fi
 lockfile_sha256=$(sha256sum Cargo.lock)
 lockfile_sha256=${lockfile_sha256%% *}
 rust_compiler=$(rustc --version)
-c_compiler=$(gcc --version | head -n 1)
+c_compiler_command=${CC:-gcc}
+if [[ $c_compiler_command == */* ]]; then
+  [[ -x $c_compiler_command ]] || {
+    print -u2 -- "error: C compiler not found: ${c_compiler_command}"
+    exit 1
+  }
+elif (( ! $+commands[$c_compiler_command] )); then
+  print -u2 -- "error: C compiler not found: ${c_compiler_command}"
+  exit 1
+fi
+c_compiler=$(${c_compiler_command} --version | head -n 1)
 linker=$(ld --version | head -n 1)
 minimum_glibc=${WSH_MINIMUM_GLIBC:-}
 builder_base_image=${WSH_BUILDER_BASE_IMAGE:-}
