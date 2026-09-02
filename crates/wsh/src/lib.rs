@@ -131,6 +131,11 @@ pub struct EntrypointPaths {
     pub zdotdir: PathBuf,
 }
 
+pub struct LaunchBundle {
+    pub root: PathBuf,
+    pub manifest: BundleManifest,
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
 struct BundleState {
@@ -184,28 +189,24 @@ pub fn active_bundle(state_root: &Path) -> Result<PathBuf, String> {
     Ok(state.active.path)
 }
 
+pub fn active_bundle_for_launch(state_root: &Path) -> Result<LaunchBundle, String> {
+    let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
+    let (manifest, manifest_sha256) = read_manifest(&state.active.path)?;
+    if manifest_sha256 != state.active.manifest_sha256 {
+        return Err(format!(
+            "active bundle manifest digest changed: {}",
+            state.active.path.display()
+        ));
+    }
+    verify_entrypoint_metadata(&state.active.path, &manifest)?;
+    Ok(LaunchBundle {
+        root: state.active.path,
+        manifest,
+    })
+}
+
 pub fn verify_bundle(root: &Path) -> Result<VerifiedBundle, String> {
-    let root_metadata = fs::symlink_metadata(root)
-        .map_err(|error| format!("could not inspect bundle {}: {error}", root.display()))?;
-    if !root_metadata.file_type().is_dir() || root_metadata.file_type().is_symlink() {
-        return Err("bundle root must be a real directory".into());
-    }
-
-    let manifest_path = root.join(MANIFEST_NAME);
-    let manifest_metadata = fs::symlink_metadata(&manifest_path)
-        .map_err(|error| format!("could not inspect {}: {error}", manifest_path.display()))?;
-    if !manifest_metadata.file_type().is_file() || manifest_metadata.file_type().is_symlink() {
-        return Err("manifest.json must be a regular file".into());
-    }
-    if manifest_metadata.len() > MAX_MANIFEST_BYTES {
-        return Err(format!("manifest.json exceeds {MAX_MANIFEST_BYTES} bytes"));
-    }
-
-    let manifest_bytes = fs::read(&manifest_path)
-        .map_err(|error| format!("could not read {}: {error}", manifest_path.display()))?;
-    let manifest: BundleManifest = serde_json::from_slice(&manifest_bytes)
-        .map_err(|error| format!("invalid manifest.json: {error}"))?;
-    validate_manifest(&manifest)?;
+    let (manifest, manifest_sha256) = read_manifest(root)?;
 
     let mut listed = HashSet::with_capacity(manifest.files.len());
     for expected in &manifest.files {
@@ -228,12 +229,7 @@ pub fn verify_bundle(root: &Path) -> Result<VerifiedBundle, String> {
         ));
     }
 
-    for path in [
-        &manifest.entrypoints.shell,
-        &manifest.entrypoints.runtime,
-        &manifest.entrypoints.integration,
-        &manifest.entrypoints.default_theme,
-    ] {
+    for path in manifest_entrypoints(&manifest) {
         if !listed.contains(path) {
             return Err(format!(
                 "entrypoint is not listed as a payload file: {path}"
@@ -243,8 +239,34 @@ pub fn verify_bundle(root: &Path) -> Result<VerifiedBundle, String> {
 
     Ok(VerifiedBundle {
         manifest,
-        manifest_sha256: sha256_bytes(&manifest_bytes),
+        manifest_sha256,
     })
+}
+
+fn read_manifest(root: &Path) -> Result<(BundleManifest, String), String> {
+    let root_metadata = fs::symlink_metadata(root)
+        .map_err(|error| format!("could not inspect bundle {}: {error}", root.display()))?;
+    if !root_metadata.file_type().is_dir() || root_metadata.file_type().is_symlink() {
+        return Err("bundle root must be a real directory".into());
+    }
+
+    let manifest_path = root.join(MANIFEST_NAME);
+    let manifest_metadata = fs::symlink_metadata(&manifest_path)
+        .map_err(|error| format!("could not inspect {}: {error}", manifest_path.display()))?;
+    if !manifest_metadata.file_type().is_file() || manifest_metadata.file_type().is_symlink() {
+        return Err("manifest.json must be a regular file".into());
+    }
+    if manifest_metadata.len() > MAX_MANIFEST_BYTES {
+        return Err(format!("manifest.json exceeds {MAX_MANIFEST_BYTES} bytes"));
+    }
+
+    let manifest_bytes = fs::read(&manifest_path)
+        .map_err(|error| format!("could not read {}: {error}", manifest_path.display()))?;
+    let manifest: BundleManifest = serde_json::from_slice(&manifest_bytes)
+        .map_err(|error| format!("invalid manifest.json: {error}"))?;
+    validate_manifest(&manifest)?;
+    let manifest_sha256 = sha256_bytes(&manifest_bytes);
+    Ok((manifest, manifest_sha256))
 }
 
 pub fn entrypoints(root: &Path, manifest: &BundleManifest) -> EntrypointPaths {
@@ -404,6 +426,27 @@ fn validate_manifest(manifest: &BundleManifest) -> Result<(), String> {
     Ok(())
 }
 
+fn manifest_entrypoints(manifest: &BundleManifest) -> [&str; 4] {
+    [
+        &manifest.entrypoints.shell,
+        &manifest.entrypoints.runtime,
+        &manifest.entrypoints.integration,
+        &manifest.entrypoints.default_theme,
+    ]
+}
+
+fn verify_entrypoint_metadata(root: &Path, manifest: &BundleManifest) -> Result<(), String> {
+    for path in manifest_entrypoints(manifest) {
+        let expected = manifest
+            .files
+            .iter()
+            .find(|file| file.path == path)
+            .ok_or_else(|| format!("entrypoint is not listed as a payload file: {path}"))?;
+        verify_payload_metadata(root, expected)?;
+    }
+    Ok(())
+}
+
 fn validate_relative_path(path: &str) -> Result<(), String> {
     if path.is_empty() || path.contains('\\') {
         return Err(format!("invalid payload path: {path:?}"));
@@ -422,6 +465,15 @@ fn validate_relative_path(path: &str) -> Result<(), String> {
 }
 
 fn verify_payload_file(root: &Path, expected: &PayloadFile) -> Result<(), String> {
+    let path = verify_payload_metadata(root, expected)?;
+    let actual_digest = sha256_file(&path)?;
+    if actual_digest != expected.sha256 {
+        return Err(format!("digest mismatch for {}", expected.path));
+    }
+    Ok(())
+}
+
+fn verify_payload_metadata(root: &Path, expected: &PayloadFile) -> Result<PathBuf, String> {
     if expected.kind != PayloadKind::File {
         return Err(format!("unsupported payload type for {}", expected.path));
     }
@@ -449,11 +501,7 @@ fn verify_payload_file(root: &Path, expected: &PayloadFile) -> Result<(), String
     if metadata.mode() & 0o7777 != expected.mode {
         return Err(format!("mode mismatch for {}", expected.path));
     }
-    let actual_digest = sha256_file(&path)?;
-    if actual_digest != expected.sha256 {
-        return Err(format!("digest mismatch for {}", expected.path));
-    }
-    Ok(())
+    Ok(path)
 }
 
 fn collect_payload_files(root: &Path) -> Result<HashSet<String>, String> {
@@ -690,6 +738,21 @@ mod tests {
     }
 
     #[test]
+    fn launch_trusts_activation_while_explicit_verification_detects_later_tampering() {
+        let directory = tempfile::tempdir().unwrap();
+        let bundle = directory.path().join("bundle");
+        let state = directory.path().join("state");
+        fs::create_dir(&bundle).unwrap();
+        write_test_bundle(&bundle);
+        activate_bundle(&state, &bundle).unwrap();
+
+        fs::write(bundle.join("bin/wsh-runtime"), b"changed").unwrap();
+        let launch = active_bundle_for_launch(&state).unwrap();
+        assert_eq!(launch.root, bundle.canonicalize().unwrap());
+        assert!(verify_bundle(&bundle).is_err());
+    }
+
+    #[test]
     fn detects_swapped_entrypoints_and_manifest_mutation() {
         let directory = tempfile::tempdir().unwrap();
         let bundle = directory.path().join("bundle");
@@ -707,6 +770,8 @@ mod tests {
         let mut manifest = fs::read(bundle.join("manifest.json")).unwrap();
         manifest.push(b'\n');
         fs::write(bundle.join("manifest.json"), manifest).unwrap();
+        let launch_error = active_bundle_for_launch(&state).err().unwrap();
+        assert!(launch_error.contains("manifest digest changed"));
         let error = active_bundle(&state).unwrap_err();
         assert!(error.contains("manifest digest changed"));
     }

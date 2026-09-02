@@ -2,7 +2,10 @@ use std::env;
 use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
-use wsh::{activate_bundle, active_bundle, entrypoints, rollback_bundle, verify_bundle};
+use wsh::{
+    activate_bundle, active_bundle, active_bundle_for_launch, entrypoints, rollback_bundle,
+    verify_bundle,
+};
 
 fn usage() -> &'static str {
     "usage:\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
@@ -84,12 +87,18 @@ fn run() -> Result<(), String> {
                 }
                 index += 2;
             }
-            let bundle = match bundle {
-                Some(bundle) => bundle,
-                None => active_bundle(&state_root.unwrap_or(default_state_root()?))?,
+            let (bundle, manifest) = match bundle {
+                Some(bundle) => {
+                    let verified = verify_bundle(&bundle)?;
+                    (bundle, verified.manifest)
+                }
+                None => {
+                    let launch =
+                        active_bundle_for_launch(&state_root.unwrap_or(default_state_root()?))?;
+                    (launch.root, launch.manifest)
+                }
             };
-            let verified = verify_bundle(&bundle)?;
-            let paths = entrypoints(&bundle, &verified.manifest);
+            let paths = entrypoints(&bundle, &manifest);
             let mut command = Command::new(&paths.shell);
             if shell_args.is_empty() {
                 command.arg("-d");
