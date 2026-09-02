@@ -30,11 +30,11 @@ The first accepted bundle uses stable Zsh 5.9.2. The current upstream developmen
 
 ## The manager and runtime are Rust programs
 
-The stable manager and launcher are Rust. The shared runtime and initial Git provider are Rust. Normal startup reads one compact activation record, validates the recorded type, mode, and size of the four required entrypoints, and replaces the launcher process with the selected Zsh through `exec`. No manager process remains resident. One runtime process belongs to each interactive `wsh` session; prompt transitions do not start another runtime process. The Git provider initially performs the demonstrated one-process optional-lock-safe Git scan rather than embedding Git or adopting a persistent Git index.
+The stable manager and launcher are Rust. The release installer, shared runtime, and initial Git provider are also Rust. Normal startup reads one compact activation record, validates the recorded type, mode, and size of the four required entrypoints, and replaces the launcher process with the selected Zsh through `exec`. No manager process remains resident. The separate `wsh-install` executable owns archive and attestation work so its larger cryptographic and decompression dependency graph is never loaded during shell startup. One runtime process belongs to each interactive `wsh` session; prompt transitions do not start another runtime process. The Git provider initially performs the demonstrated one-process optional-lock-safe Git scan rather than embedding Git or adopting a persistent Git index.
 
 A small bundled `integration.zsh` adapter owns hooks, ZLE descriptor callbacks, prompt installation, snapshot transfer, and repaint requests because those interfaces exist inside Zsh. It contains no theme-specific Git collection. Its protocol with the runtime is versioned and bounded. A native loadable Zsh module remains deferred until profiling isolates material adapter, serialization, or copying cost.
 
-The Rust workspace should begin with the smallest separation that preserves the installed authority boundary: a manager executable, a runtime executable, shared manifest and protocol types, and integration tests. Additional crates require a concrete ownership or compile-time benefit.
+The Rust workspace uses three executable boundaries: the compact manager and launcher, the release installer, and the per-session runtime. The installer split preserves the measured startup boundary while allowing strict archive and GitHub provenance verification. Additional crates require a concrete ownership or compile-time benefit.
 
 ## One repository preserves atomic product and build changes
 
@@ -43,6 +43,7 @@ The first implementation keeps the manager, runtime, Zsh adapter, schemas, theme
 ```text
 crates/
 ├── wsh/
+├── wsh-install/
 └── wsh-runtime/
 integration/
 schemas/
@@ -62,6 +63,7 @@ The first managed installation layout is:
 
 ```text
 ~/.local/bin/wsh
+~/.local/libexec/wsh-install
 ~/.local/share/wsh/
 ├── bundles/
 │   └── <manifest-sha256>/
@@ -78,7 +80,7 @@ The first managed installation layout is:
 └── cache/
 ```
 
-The manager at `~/.local/bin/wsh` remains outside the selected bundle so it can verify, activate, and roll back a bundle whose Zsh or runtime cannot start. Mutable configuration, local themes, history, traces, and provider caches also remain outside bundle directories.
+The manager at `~/.local/bin/wsh` and install helper at `~/.local/libexec/wsh-install` remain outside the selected bundle so verification, installation, activation, and rollback do not depend on the active Zsh or runtime starting. Mutable configuration, local themes, history, traces, and provider caches also remain outside bundle directories.
 
 `manifest.json` is strict machine-generated JSON. Its initial schema records at least:
 
@@ -89,7 +91,7 @@ The manager at `~/.local/bin/wsh` remains outside the selected bundle so it can 
 - Entrypoints and the path, type, mode, size, and SHA-256 digest of every payload file
 - Runtime library and ABI requirements not carried inside the bundle
 
-The SHA-256 digest of the exact manifest bytes is the bundle directory identity. The manifest does not list itself; attested immutable GitHub Release metadata authenticates its digest, and its file table covers every other file in the bundle. Schema version 1 rejects unknown fields, absolute paths, `..` traversal, special files, and symbolic links. Files are unpacked into a new directory, checked against the manifest, smoke-tested, and only then selected by atomically replacing one state record containing the active and previous references. The normal local builder writes `status: development`. The release builder writes `status: release` only for a matching annotated version tag and exact clean revision, but the status is structural metadata rather than proof of authenticity. Only the expected immutable GitHub Release and build attestations authenticate it.
+The SHA-256 digest of the exact manifest bytes is the bundle directory identity. The manifest does not list itself; authenticated build provenance binds the archive digest to the exact repository, release ref, source commit, and signer workflow, while the manifest file table covers every payload file. Schema version 1 rejects unknown fields, absolute paths, `..` traversal, special files, and symbolic links. The installer also rejects unsafe or duplicate archive paths, links, special entries, unsupported modes, multiple roots, and resource-limit violations before the manifest is trusted. Files are unpacked into a private new directory, checked against the manifest, smoke-tested, and only then selected by atomically replacing one state record containing the active and previous references. The normal local builder writes `status: development`. The release builder writes `status: release` only for a matching annotated version tag and exact clean revision, but the status is structural metadata rather than proof of authenticity.
 
 Activation state schema 2 stores the verified bundle root, manifest digest, and path, mode, and size for the shell, runtime, integration adapter, and default theme, plus the fixed ZDOTDIR path. Activation and rollback still verify the complete manifest and every payload digest. Ordinary launch trusts that completed activation and the release bundle's immutability, reads only the bounded state record, rejects missing, symbolic, wrong-sized, or wrong-mode launch files, and performs no network or update work. It does not detect a same-size post-activation content mutation; `wsh bundle verify` and `wsh bundle current` retain complete verification for that check. Unsupported state versions fail closed. Because schema 1 was never released, development users remove its state record and activate again rather than carrying a compatibility parser.
 
@@ -138,6 +140,8 @@ The first clean glibc 2.28 rebuild passed all fixed Wakamex gates and all correc
 The first [resource-gate result](benchmarks/resource-gates-2026-09-02/report.md) passed the fixed tracing and retained-memory thresholds. Tracing added 1.533 ms at runtime-ready p90 and 0.190 ms at refresh p90. The bundled Zsh and runtime added 1,961 KiB of retained PSS at p90 and 1,981 KiB at maximum over paired raw bundled Zsh; that experiment did not launch through the manager.
 
 The first [manager-launch result](benchmarks/manager-launch-2026-09-02/report.md) found that the normal entrypoint added 38.1 ms at the median by verifying the complete bundle twice. Reusing the activation-time verification record reduced that to 1.6 ms. The subsequent [installed-startup result](benchmarks/exec-launch-2026-09-02/report.md) replaced manifest parsing and child-process supervision with compact state and `exec`: isolated median launcher overhead fell to 0.65 ms locally and 0.70 ms in the glibc 2.28 build. At the floor, normal wsh startup reached its first editable prompt in 7.963 ms at p90, 2.723 ms over raw bundled Zsh, with a 0.527 ms launcher contribution over the direct complete path. This cold-start measurement is separate from the existing first-editable release gate, which measures the prompt returned after a command while asynchronous refresh continues.
+
+The first [verified-install result](benchmarks/verified-install-2026-09-02/report.md) kept the cryptographic verifier out of the launcher and tested it against real external GitHub Actions provenance. Complete warm offline verification took 2.229 ms at p90, while the rebuilt glibc 2.28 launcher remained below the unchanged startup gates at 0.80 ms paired median and 0.702 ms p90 contribution through the first prompt. Invalid provenance and unsafe archives created no install state; failed candidates left the active bundle unchanged; implicit downgrades were rejected; and rollback required no attestation or network access.
 
 The controlled [GCC 16.2 and Clang 23.1 comparison](benchmarks/compiler-comparison-2026-09-02/report.md) kept the glibc 2.28 target recipe fixed and reversed compiler order. Neither modern compiler improved raw Zsh or repeated startup consistently across both blocks, so the locked Rocky GCC 8.5 compiler remains the default. A new compiler comparison requires a measured hypothesis beyond version recency.
 

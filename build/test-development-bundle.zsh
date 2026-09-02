@@ -27,9 +27,14 @@ bundle=${test_root}/relocated-bundle
 cp -R -- $built_bundle $bundle
 runtime=${bundle}/bin/wsh-runtime
 manager=${cargo_target_dir}/release/wsh
+installer=${cargo_target_dir}/release/wsh-install
 theme=${bundle}/share/wsh/themes/minimal.toml
 
 cargo test --locked --workspace
+[[ -x $installer ]] || {
+  print -u2 -- 'error: release installer was not built'
+  exit 1
+}
 ${manager} bundle verify ${bundle} >/dev/null
 ${bundle}/bin/zsh --version
 ${runtime} validate-theme ${theme}
@@ -82,7 +87,7 @@ recorded=$(jq -r '.requirements.dynamic_libraries[]' ${bundle}/manifest.json | s
 diff -u <(print -r -- $needed) <(print -r -- $recorded)
 
 if [[ -n $maximum_glibc ]]; then
-  actual_glibc=$(find ${bundle} -type f -exec readelf --version-info {} \; 2>/dev/null | sed -n 's/.*\(GLIBC_[0-9][0-9.]*\).*/\1/p' | sort -Vu | tail -n 1)
+  actual_glibc=$(find ${bundle} ${manager} ${installer} -type f -exec readelf --version-info {} \; 2>/dev/null | sed -n 's/.*\(GLIBC_[0-9][0-9.]*\).*/\1/p' | sort -Vu | tail -n 1)
   [[ -n $actual_glibc ]] || {
     print -u2 -- 'error: could not determine the newest imported glibc symbol'
     exit 1

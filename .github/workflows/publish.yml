@@ -112,6 +112,7 @@ jobs:
     timeout-minutes: 20
     permissions:
       actions: read
+      artifact-metadata: write
       attestations: write
       contents: write
       id-token: write
@@ -135,32 +136,70 @@ jobs:
           mapfile -t archives_b < <(find incoming/b -maxdepth 1 -type f -name '*.tar.xz' -print)
           mapfile -t manifests_a < <(find incoming/a -maxdepth 1 -type f -name '*.manifest.json' -print)
           mapfile -t manifests_b < <(find incoming/b -maxdepth 1 -type f -name '*.manifest.json' -print)
+          mapfile -t launchers_a < <(find incoming/a -maxdepth 1 -type f -name 'wsh-launcher-*' -print)
+          mapfile -t launchers_b < <(find incoming/b -maxdepth 1 -type f -name 'wsh-launcher-*' -print)
+          mapfile -t installers_a < <(find incoming/a -maxdepth 1 -type f -name 'wsh-install-*' -print)
+          mapfile -t installers_b < <(find incoming/b -maxdepth 1 -type f -name 'wsh-install-*' -print)
           test "${#archives_a[@]}" -eq 1
           test "${#archives_b[@]}" -eq 1
           test "${#manifests_a[@]}" -eq 1
           test "${#manifests_b[@]}" -eq 1
+          test "${#launchers_a[@]}" -eq 1
+          test "${#launchers_b[@]}" -eq 1
+          test "${#installers_a[@]}" -eq 1
+          test "${#installers_b[@]}" -eq 1
           test "${archives_a[0]##*/}" = "${archives_b[0]##*/}"
           test "${manifests_a[0]##*/}" = "${manifests_b[0]##*/}"
+          test "${launchers_a[0]##*/}" = "${launchers_b[0]##*/}"
+          test "${installers_a[0]##*/}" = "${installers_b[0]##*/}"
           cmp --silent "${archives_a[0]}" "${archives_b[0]}"
           cmp --silent "${manifests_a[0]}" "${manifests_b[0]}"
+          cmp --silent "${launchers_a[0]}" "${launchers_b[0]}"
+          cmp --silent "${installers_a[0]}" "${installers_b[0]}"
           mkdir release-assets
-          cp "${archives_a[0]}" "${manifests_a[0]}" release-assets/
+          cp "${archives_a[0]}" "${manifests_a[0]}" "${launchers_a[0]}" "${installers_a[0]}" release-assets/
           cp incoming/a/build-record-a.json incoming/b/build-record-b.json release-assets/
           (
             cd release-assets
             sha256sum -- * | LC_ALL=C sort -k2 > SHA256SUMS
           )
+          find release-assets -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > attested-assets.txt
+      - name: Install the release-verification GitHub CLI
+        env:
+          GH_ARCHIVE_SHA256: 83d5c2ccad5498f58bf6368acb1ab32588cf43ab3a4b1c301bf36328b1c8bd60
+          GH_VERSION: 2.96.0
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/gh.tar.gz"
+          curl --fail --location --retry 3 --output "$archive" "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz"
+          printf '%s  %s\n' "$GH_ARCHIVE_SHA256" "$archive" | sha256sum --check --status
+          tar --extract --gzip --file "$archive" --directory="$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/gh_${GH_VERSION}_linux_amd64/bin" >> "$GITHUB_PATH"
       - name: Attest every release asset
+        id: attest
         uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.1.0
         with:
           subject-path: release-assets/*
+      - name: Stage the offline build-provenance bundle
+        env:
+          ATTESTATION_BUNDLE: ${{ steps.attest.outputs.bundle-path }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: install -m 644 "$ATTESTATION_BUNDLE" "release-assets/wsh-${RELEASE_TAG}-build-provenance.sigstore.json"
       - name: Verify the build attestations before publication
         env:
+          ATTESTATION_BUNDLE: ${{ steps.attest.outputs.bundle-path }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          for asset in release-assets/*; do
-            gh attestation verify "$asset" --repo "$GITHUB_REPOSITORY"
-          done
+          while IFS= read -r asset; do
+            gh attestation verify "release-assets/$asset" \
+              --bundle "$ATTESTATION_BUNDLE" \
+              --repo "$GITHUB_REPOSITORY" \
+              --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/publish.yml" \
+              --signer-digest "$GITHUB_SHA" \
+              --source-ref "$GITHUB_REF" \
+              --source-digest "$GITHUB_SHA" \
+              --deny-self-hosted-runners
+          done < attested-assets.txt
       - name: Publish the immutable GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}

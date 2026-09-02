@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/wsh", "crates/wsh-runtime"]
+members = ["crates/wsh", "crates/wsh-install", "crates/wsh-runtime"]
 resolver = "3"
 
 [workspace.package]

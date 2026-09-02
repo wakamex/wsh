@@ -31,6 +31,8 @@ jobs:
           ./build/verify-rust-toolchain.zsh
       - name: Run the Rust correctness suite
         run: cargo test --locked --workspace
+      - name: Verify a real external GitHub Actions attestation
+        run: ./tests/external-attestation.zsh
 
   floor-bundle:
     name: Bundle, PTY, and portability
