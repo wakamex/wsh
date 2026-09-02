@@ -2,6 +2,8 @@
 
 The clean rebuild at the tested glibc 2.28 floor passed every correctness, process, lock, repaint, and first-editable gate. The Wakamex renderer also passed both updated-state latency gates. The minimal renderer missed the untracked-state p90 gate by 0.070 ms and the maximum gate by 0.098 ms, so this revision is not an accepted release candidate and the fixed thresholds remain unchanged.
 
+This result remains the failed baseline for the subsequent [one-pass decoder fix](minimal-tail-2026-09-02/report.md), which passed the unchanged 20-iteration gates.
+
 The matched benchmark used the exact bundled Zsh 5.9.2 binary, one 1,000-file Git fixture, and 20 clean, tracked-dirty, and untracked transitions per target. Calibration ran before and after each run, and CPU-pressure telemetry covered every target phase. Staged and detached-HEAD correctness were checked separately.
 
 | Gate | Required | Minimal renderer result | Wakamex renderer result |
@@ -33,4 +35,4 @@ The benchmark revision was `8dc0b5fea25671d6745a556bffb740d3866e189c`, and its r
 
 The complete minimal-theme evidence is retained in [`phase-one-glibc-2.28-minimal-2026-09-02/`](phase-one-glibc-2.28-minimal-2026-09-02/), and the Wakamex evidence is retained in [`phase-one-glibc-2.28-wakamex-2026-09-02/`](phase-one-glibc-2.28-wakamex-2026-09-02/). Each directory contains the runner metadata, raw samples, telemetry, target summary, and generated distribution table with their recorded input digests.
 
-The earlier [`phase-one-result-2026-09-02.md`](phase-one-result-2026-09-02.md) remains the result for its glibc 2.35 development build and source identity. This glibc 2.28 clean rebuild is the current compatibility-floor performance result.
+The earlier [`phase-one-result-2026-09-02.md`](phase-one-result-2026-09-02.md) remains the result for its glibc 2.35 development build and source identity. This glibc 2.28 rebuild remains the pre-fix compatibility-floor baseline.

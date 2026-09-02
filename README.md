@@ -2,7 +2,7 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
-The first local vertical slice passes its fixed correctness gates with both bundled theme presentations. A clean rebuild at the glibc 2.28 compatibility floor passed every performance gate with the Wakamex renderer, while the minimal renderer narrowly missed two untracked-state latency gates. The repository builds the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
+The first local vertical slice passes its fixed correctness and performance gates with both bundled theme presentations at the glibc 2.28 compatibility floor. The repository builds the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
 
 ## Motivation
 
@@ -38,7 +38,7 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. It does not download updates, verify GitHub attestations, publish official bundles, or operate the public theme directory yet.
 
-The retained [glibc 2.28 phase-one result](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) records the current matched raw-Zsh controls, accepted correctness results, passing Wakamex measurements, narrowly failing minimal-renderer latency measurements, exact identities, and raw data. The earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
+The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
 Build and test the local slice with:
 

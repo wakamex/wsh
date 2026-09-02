@@ -1,0 +1,10 @@
+target	state	samples	first_median_ms	first_p10_ms	first_p90_ms	first_max_ms	settled_median_ms	settled_p10_ms	settled_p90_ms	settled_max_ms	repaints_median	git_calls_median	unlocked_calls_median	semantic_passes
+raw	clean	100	0.420	0.398	0.470	0.515	0.420	0.398	0.470	0.515	0.000	0.000	0.000	na
+raw	dirty	100	0.367	0.342	0.409	0.459	0.367	0.342	0.409	0.459	0.000	0.000	0.000	na
+raw	untracked	100	0.397	0.368	0.455	0.506	0.397	0.368	0.455	0.506	0.000	0.000	0.000	na
+direct-git	clean	100	5.467	5.157	5.775	5.986	5.467	5.157	5.775	5.986	0.000	1.000	0.000	na
+direct-git	dirty	100	5.526	5.209	5.791	6.047	5.526	5.209	5.791	6.047	0.000	1.000	0.000	na
+direct-git	untracked	100	5.666	5.358	5.925	6.162	5.666	5.358	5.925	6.162	0.000	1.000	0.000	na
+wsh	clean	100	1.218	1.068	1.575	2.348	7.033	6.633	7.352	7.926	1.000	1.000	0.000	100/100
+wsh	dirty	100	1.488	1.312	1.650	1.978	7.034	6.679	7.453	8.516	1.000	1.000	0.000	100/100
+wsh	untracked	100	1.735	1.616	1.869	2.159	7.295	7.028	7.529	7.893	1.000	1.000	0.000	100/100
