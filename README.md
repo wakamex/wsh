@@ -8,7 +8,7 @@ The first local vertical slice now passes its fixed correctness and performance 
 
 Zsh is a capable shell, but building a polished interactive environment usually means assembling a framework, themes, plugins, completion files, and terminal integration. Those pieces often own overlapping machinery for Git state, hooks, caching, background work, and prompt repainting. Choosing a visual theme can therefore also choose its performance and correctness behavior.
 
-The benchmark that started `wsh` ran representative prompt architectures in fresh interactive terminals against the same 1,000-file Git fixture. The tested paths ranged from one optional-lock-safe background Git scan to 16 synchronous Git calls per transition, with corresponding differences in prompt latency and state correctness. The detailed evidence and scope are recorded in [MOTIVATION.md](MOTIVATION.md).
+A benchmark of representative prompt architectures ran each path in fresh interactive terminals against the same 1,000-file Git fixture. The tested paths ranged from one optional-lock-safe background Git scan to 16 synchronous Git calls per transition, with corresponding differences in prompt latency and state correctness. The detailed evidence and scope are recorded in [MOTIVATION.md](MOTIVATION.md).
 
 `wsh` separates presentation from state collection. A theme definition selects trusted prompt components and declares the structured fields it needs without executing shell code. Shared providers own external commands, asynchronous work, cache invalidation, cancellation, freshness, and publication. Fixing a provider can then improve every theme that uses it.
 
@@ -49,7 +49,7 @@ cargo test --workspace
 ./tests/runtime-pty.zsh
 ```
 
-The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.35-development-bundle.zsh` builds and exercises the same development slice on the first compatibility floor. Every generated manifest says `development`; local output remains a development bundle even if it later reproduces an official GitHub Release asset byte for byte.
+The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.28-development-bundle.zsh` builds and exercises the same development slice on the first tested compatibility floor. Every generated manifest says `development`; local output remains a development bundle even if it later reproduces an official GitHub Release asset byte for byte.
 
 ## Later capabilities require evidence
 

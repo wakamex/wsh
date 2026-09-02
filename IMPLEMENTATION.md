@@ -6,7 +6,9 @@ This document fixes the first vertical-slice choices and acceptance gates. It do
 
 ## The first target is x86_64 Linux with glibc
 
-Development begins on the Fedora host, but the host's glibc version does not become the compatibility floor by accident. The first compatibility floor is glibc 2.35 on x86_64 Ubuntu 22.04. A development build made inside the pinned Ubuntu 22.04 base image required no glibc symbol newer than 2.35 and passed the upstream Zsh suite, runtime and manager suites, provider smoke test, dependency-manifest comparison, and interactive PTY repaint, crash, and cleanup test in that environment. The manifest records glibc 2.35 as the tested support floor.
+The first tested compatibility floor is glibc 2.28 on Rocky Linux 8.10. The floor test builds the complete development bundle in a pinned Rocky Linux 8.10 base image, rejects any glibc symbol newer than 2.28, and exercises the upstream Zsh suite, runtime and manager suites, relocated-bundle verification, a real provider request, dependency-manifest comparison, and interactive PTY repaint, crash, and cleanup behavior. The exact artifact fails to load on glibc 2.27 because of its `GLIBC_2.28` import. The exact result and system-library boundary are retained in [`benchmarks/portability-glibc-2.28-2026-09-02.md`](benchmarks/portability-glibc-2.28-2026-09-02.md).
+
+Rust documents support for `x86_64-unknown-linux-gnu` on older glibc releases, while the `wsh` floor covers the complete Zsh bundle and its system-supplied libraries. The manifest records glibc 2.28 as the tested floor and separately records every required dynamic-library soname. A lower floor requires the same complete build and execution experiment.
 
 Additional architectures, musl builds, and other operating systems require their own build identities, runtime fixtures, and benchmark results. They do not enter the first vertical slice.
 
@@ -121,8 +123,8 @@ The first clean provider result passed the fixed gates with a 6.893 ms worst add
 
 Every comparison identifies the wsh revision and manifest digest, Zsh source and binary identities, Rust and C toolchains, target, build configuration, enabled components, theme definition digest, fixture, command, trace mode, host, raw samples, and exclusions.
 
-## The first experiments fixed the local slice
+## The local slice has fixed contracts
 
 The local slice uses inherited pipes and bounded newline-delimited JSON, one process-backed Git scan, strict manifest and theme schemas, an immediately editable fallback prompt, stale-generation rejection, cancellation and process-group cleanup, repaint-on-change, manager-side atomic activation and rollback, and the matched raw, idle-runtime, direct-Git, complete-runtime, and trace benchmark controls. The minimal and Wakamex presentations exercise the same provider through separate data-only definitions.
 
-The first target, product boundary, implementation languages, Zsh release, bundle unit, provider scope, theme scope, glibc floor, update authority, and latency gates are decided. An official release still requires pinned build inputs, two isolated byte-identical builds, GitHub build attestations, an immutable GitHub Release, updater-side attestation verification, and the complete release gates in [`RELEASES.md`](RELEASES.md). Local outputs remain development bundles by definition.
+The initial release scope fixes the target, product boundary, implementation languages, Zsh release, bundle unit, provider scope, theme scope, glibc floor, update authority, and latency gates. An official release requires pinned build inputs, two isolated byte-identical builds, GitHub build attestations, an immutable GitHub Release, updater-side attestation verification, and the complete release gates in [`RELEASES.md`](RELEASES.md). Local outputs remain development bundles by definition.

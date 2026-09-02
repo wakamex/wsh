@@ -71,14 +71,14 @@ diff -u <(print -r -- $needed) <(print -r -- $recorded)
 if [[ -n $maximum_glibc ]]; then
   actual_glibc=$(find ${bundle} -type f -exec readelf --version-info {} \; 2>/dev/null | sed -n 's/.*\(GLIBC_[0-9][0-9.]*\).*/\1/p' | sort -Vu | tail -n 1)
   [[ -n $actual_glibc ]] || {
-    print -u2 -- 'error: could not determine the maximum required glibc symbol'
+    print -u2 -- 'error: could not determine the newest imported glibc symbol'
     exit 1
   }
   newest=$(print -r -- GLIBC_${maximum_glibc} $actual_glibc | tr ' ' '\n' | sort -Vu | tail -n 1)
   [[ $newest == GLIBC_${maximum_glibc} ]] || {
-    print -u2 -- "error: bundle requires $actual_glibc above the GLIBC_${maximum_glibc} floor"
+    print -u2 -- "error: bundle imports $actual_glibc above the GLIBC_${maximum_glibc} floor"
     exit 1
   }
 fi
 
-print -r -- "PASS: relocated development bundle ${bundle_identity} on glibc floor; maximum required symbol ${actual_glibc:-not-checked}"
+print -r -- "PASS: relocated development bundle ${bundle_identity} on glibc floor; newest imported symbol ${actual_glibc:-not-checked}"

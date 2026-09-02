@@ -4,7 +4,7 @@
 
 The product goal is a current, curated Zsh experience with the useful conventions people reach for Oh My Zsh to obtain, but without requiring users to assemble a framework, inherit unmaintained theme machinery, grant appearance files shell authority, or accept each theme's collector performance. It should provide Fish-like interactive usability and measured defaults while retaining compatibility with existing shell commands, Zsh scripts, completion functions, and selected plugins. `wsh` remains a service and distribution layer around upstream Zsh. It does not become another shell language or line editor.
 
-This direction came from benchmarking existing themes, not from an assumption that every prompt needs a new framework. The benchmark found that choosing a theme also chooses its Git-state implementation or integration path. Source inspection showed why: literal Oh My Zsh helper calls inherited shared asynchronous behavior, wrapped helpers could escape registration, direct collectors bypassed shared improvements, and custom caches owned their own invalidation.
+Choosing a theme currently also chooses its Git-state implementation or integration path. The benchmark measured the resulting performance and correctness differences, while source inspection identified their mechanisms: literal Oh My Zsh helper calls inherited shared asynchronous behavior, wrapped helpers could escape registration, direct collectors bypassed shared improvements, and custom caches owned their own invalidation.
 
 ## Benchmarking exposed theme-owned collector machinery
 

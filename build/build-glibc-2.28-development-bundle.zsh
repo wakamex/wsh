@@ -5,8 +5,8 @@ setopt errexit nounset pipefail
 
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
-readonly image=wsh-glibc-2.35-builder:development
-readonly portable_root=${repository_root}/build/portable/glibc-2.35
+readonly image=wsh-glibc-2.28-builder:development
+readonly portable_root=${repository_root}/build/portable/glibc-2.28
 readonly rustup_root=${RUSTUP_HOME:-$HOME/.rustup}
 readonly cargo_home=${CARGO_HOME:-$HOME/.cargo}
 
@@ -22,7 +22,7 @@ done
 }
 
 mkdir -p -- $portable_root
-podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.35 $repository_root
+podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.28 $repository_root
 podman run --rm --userns=keep-id --network=host \
   --volume ${repository_root}:/workspace:Z \
   --volume ${rustup_root}:/rustup:ro,Z \
@@ -31,12 +31,12 @@ podman run --rm --userns=keep-id --network=host \
   --env CARGO_HOME=/cargo \
   --env PATH=/cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
   --env CARGO_NET_OFFLINE=true \
-  --env CARGO_TARGET_DIR=/workspace/build/portable/glibc-2.35/target \
-  --env WSH_ZSH_OUTPUT_ROOT=/workspace/build/portable/glibc-2.35/zsh \
-  --env WSH_ZSH_ROOT=/workspace/build/portable/glibc-2.35/zsh/zsh-5.9.2 \
-  --env WSH_BUNDLE_OUTPUT_ROOT=/workspace/build/portable/glibc-2.35/bundles \
+  --env CARGO_TARGET_DIR=/workspace/build/portable/glibc-2.28/target \
+  --env WSH_ZSH_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/zsh \
+  --env WSH_ZSH_ROOT=/workspace/build/portable/glibc-2.28/zsh/zsh-5.9.2 \
+  --env WSH_BUNDLE_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/bundles \
   --env WSH_KEEP_FAILED_BUILD=1 \
-  --env WSH_MINIMUM_GLIBC=2.35 \
+  --env WSH_MINIMUM_GLIBC=2.28 \
   --workdir /workspace \
   $image \
   zsh /workspace/build/test-development-bundle.zsh

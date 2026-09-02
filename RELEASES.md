@@ -6,7 +6,9 @@ Only an immutable GitHub Release in `wakamex/wsh` is an official `wsh` release. 
 
 Each release asset is one canonical archive containing the exact Zsh binary and modules, matching `wsh` runtime, integration adapter, schemas, and bundled theme definitions for one target. Individual files are never release assets that the manager can mix into an installed bundle. Changing Zsh, Rust code, a trusted adapter, a schema, a theme, the compiler, a linked dependency, or build flags creates a new complete candidate and reruns every gate.
 
-The first target is `x86_64-unknown-linux-gnu` with glibc 2.35 as its compatibility floor. Ubuntu 22.04 provides this build and test environment and remains in standard maintenance through May 2027 according to [Canonical's release cycle](https://ubuntu.com/about/release-cycle?product=ubuntu&release=ubuntu&version=22.04+LTS). Moving the floor or builder image requires a recorded compatibility reason and a complete rerun.
+The first target is `x86_64-unknown-linux-gnu` with glibc 2.28 as its tested compatibility floor. The Rocky Linux 8.10 floor experiment built the complete bundle from source and passed the upstream Zsh suite, Rust suite, relocated-bundle verification, real provider request, interactive PTY lifecycle test, dynamic-dependency comparison, and maximum-symbol check without importing a symbol newer than `GLIBC_2.28`. The exact bundle was also rejected by the glibc 2.27 loader with `GLIBC_2.28 not found`, confirming the artifact boundary. The retained result is in [`benchmarks/portability-glibc-2.28-2026-09-02.md`](benchmarks/portability-glibc-2.28-2026-09-02.md).
+
+The runtime contract consists of the tested floor environment, glibc 2.28 or newer, and every system-supplied ELF library soname recorded in the manifest for the manager, runtime, Zsh executable, and loadable modules. Compatibility claims for another distribution require execution there. Moving the floor, builder image, or dynamic-library boundary requires a recorded compatibility reason and a complete rerun.
 
 ## Reproducibility compares two isolated builds
 
@@ -37,7 +39,7 @@ An official GitHub Release requires all of the following:
 1. The exact source commit and tag are fixed.
 2. The signed upstream Zsh archive, dependency lockfile, toolchain, builder image, and build recipe are pinned.
 3. Rust tests, Zsh upstream tests, theme-schema tests, provider fixtures, adversarial protocol tests, PTY lifecycle tests, tamper tests, and rollback tests pass.
-4. The complete bundle runs on the documented glibc floor.
+4. The complete bundle runs in the documented floor environment, imports no glibc symbol above the floor, and exactly records its system-supplied dynamic-library boundary.
 5. The retained benchmark passes semantic, process-count, optional-lock, repaint, first-editable, settled-latency, tracing-overhead, and memory gates.
 6. Two isolated canonical builds produce the same bytes.
 7. Build-provenance attestations cover the agreed assets and workflow identity.
