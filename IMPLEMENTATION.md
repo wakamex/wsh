@@ -121,13 +121,19 @@ The first reference workload is the pinned 1,000-file fixture and clean, tracked
 | Repaints for a changed rendered result | At most 1 | 1 |
 | Repaints for an unchanged rendered result | 0 | 0 for the measured clean transition |
 | New runtime processes per prompt transition | 0 | Not measured as a separate Rust runtime |
+| Traced runtime-ready p90 overhead | At most 3.0 ms | Not measured separately |
+| Traced refresh p90 overhead | At most 0.5 ms | Not measured separately |
+| Added retained PSS p90 per session | At most 4,096 KiB | Not measured separately |
+| Added retained PSS maximum per session | At most 5,120 KiB | Not measured separately |
 | Advertised semantic checks | 100 percent | 20/20 clean, dirty, and untracked; 1/1 staged and detached HEAD |
 
-The settled-latency stretch target is the report's A band of at most 5 ms added over the raw maximum. Missing the stretch target does not weaken the fixed 7.1 ms p90 or 8 ms maximum gates. The p90 gate uses 0.1 ms precision because the accepted reference measured 7.005 ms over raw and the benchmark summary reports latency to 0.1 ms; this threshold was fixed before measuring a wsh provider. The runtime also records retained memory, CPU time, direct-control overhead, protocol bytes, theme validation and render cost, and tracing overhead before a release threshold is assigned to those measurements.
+The settled-latency stretch target is the report's A band of at most 5 ms added over the raw maximum. Missing the stretch target does not weaken the fixed 7.1 ms p90 or 8 ms maximum gates. The p90 gate uses 0.1 ms precision because the accepted reference measured 7.005 ms over raw and the benchmark summary reports latency to 0.1 ms; this threshold was fixed before measuring a wsh provider. The benchmark suite also records CPU time, direct-control overhead, protocol bytes, theme validation, and render cost before a release threshold is assigned to those measurements.
 
 The glibc 2.35 development result passed the fixed gates with a 6.893 ms worst added p90, 7.241 ms worst added maximum, 0.943 ms worst added first-editable maximum, one optional-lock-safe Git process, one changed-result repaint, and all 62 applicable semantic checks. Its preceding failed polling baseline is retained in [`benchmarks/phase-one-result-2026-09-02.md`](benchmarks/phase-one-result-2026-09-02.md).
 
 The first clean glibc 2.28 rebuild passed all fixed Wakamex gates and all correctness gates for both renderers, but the minimal renderer missed its untracked p90 and maximum gates by 0.070 ms and 0.098 ms. Profiling isolated byte-at-a-time prompt decoding in the Zsh integration. A one-pass decoder reduced median decode cost from 279.555 to 93.266 microseconds per field, and the next accepted 20-iteration run passed the unchanged gates with a 6.711 ms worst added p90 and 6.911 ms worst added maximum. The [fixed result](benchmarks/minimal-tail-2026-09-02/report.md) retains the counterfactual, exact identities, raw samples, and a 100-iteration stress diagnostic; the [original miss](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains its failed baseline.
+
+The first [resource-gate result](benchmarks/resource-gates-2026-09-02/report.md) passed the fixed tracing and retained-memory thresholds. Tracing added 1.533 ms at runtime-ready p90 and 0.190 ms at refresh p90. The complete wsh session added 1,961 KiB of retained PSS at p90 and 1,981 KiB at maximum over paired raw bundled Zsh.
 
 The controlled [GCC 16.2 and Clang 23.1 comparison](benchmarks/compiler-comparison-2026-09-02/report.md) kept the glibc 2.28 target recipe fixed and reversed compiler order. Neither modern compiler improved raw Zsh or repeated startup consistently across both blocks, so the locked Rocky GCC 8.5 compiler remains the default. A new compiler comparison requires a measured hypothesis beyond version recency.
 

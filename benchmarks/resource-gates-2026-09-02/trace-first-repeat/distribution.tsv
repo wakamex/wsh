@@ -1,0 +1,4 @@
+target	state	samples	first_median_ms	first_p10_ms	first_p90_ms	first_max_ms	settled_median_ms	settled_p10_ms	settled_p90_ms	settled_max_ms	repaints_median	git_calls_median	unlocked_calls_median	semantic_passes
+wsh-trace	clean	20	0.921	0.856	1.040	1.143	11.724	11.421	12.053	12.388	1.000	1.000	0.000	20/20
+wsh-trace	dirty	20	0.934	0.858	1.031	1.119	6.921	6.437	7.409	7.579	1.000	1.000	0.000	20/20
+wsh-trace	untracked	20	1.005	0.935	1.104	1.152	7.126	6.739	7.385	7.924	1.000	1.000	0.000	20/20

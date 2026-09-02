@@ -1,0 +1,5 @@
+gate	required	observed	result
+trace-ready-p90-overhead-ms	<=3.000	1.533	pass
+trace-refresh-p90-overhead-ms	<=0.500	0.190	pass
+retained-added-pss-p90-kib	<=4096	1961	pass
+retained-added-pss-max-kib	<=5120	1981	pass

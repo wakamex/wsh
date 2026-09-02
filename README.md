@@ -40,6 +40,8 @@ The current code implements the local phase-one path. It verifies and atomically
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
+The retained [resource-gate result](benchmarks/resource-gates-2026-09-02/report.md) adds fixed tracing-overhead and retained-memory thresholds. The clean glibc 2.28 bundle passed with 0.190 ms refresh p90 overhead from tracing and 1,961 KiB added retained PSS at p90.
+
 Build and test the local slice with:
 
 ```sh
