@@ -1,0 +1,218 @@
+worker=b revision=947d8122254494d4c3f5d8ea9855a56d21d90e1a source=/var/tmp/wsh-reproducibility.LcvKFC/worker-b
+STEP 1/4: FROM quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
+STEP 2/4: COPY build/rocky-8.10-packages.lock /tmp/expected-packages.lock
+--> Using cache 81c335b108743ccb803b2fe11e10e074ce763c2e8b732abd28d99df20a6ae4f9
+--> 81c335b10874
+STEP 3/4: RUN dnf install -y --setopt=install_weak_deps=False binutils ca-certificates curl diffutils findutils gcc gcc-c++ git gnupg2 jq libcap-devel make ncurses-devel pcre2-devel pkgconf-pkg-config tar xz zsh     && rpm -qa --qf '%{NAME}\t%{EPOCHNUM}\t%{VERSION}\t%{RELEASE}\t%{ARCH}\t%{SHA256HEADER}\t%{PAYLOADDIGESTALGO}\t%{PAYLOADDIGEST}\n' | LC_ALL=C sort > /tmp/actual-packages.lock     && diff -u /tmp/expected-packages.lock /tmp/actual-packages.lock     && dnf clean all     && rm -rf /var/cache/dnf /tmp/actual-packages.lock /tmp/expected-packages.lock
+--> Using cache 093d8b6ce2df7f03452e0e36ceafcd00607b82bec9ae21d5c2557f760d399f8d
+--> 093d8b6ce2df
+STEP 4/4: LABEL org.wakamex.wsh.glibc-floor="2.28"
+--> Using cache 9c52f85c3070d9491f40e60c26d350852b796a1bb8c12d60faa4a23c089811b4
+COMMIT wsh-glibc-2.28-builder:development
+--> 9c52f85c3070
+Successfully tagged localhost/wsh-glibc-2.28-builder:development
+9c52f85c3070d9491f40e60c26d350852b796a1bb8c12d60faa4a23c089811b4
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   487  100   487    0     0   3225      0 --:--:-- --:--:-- --:--:--  3225
+  0 3358k    0 16115    0     0  35339      0  0:01:37 --:--:--  0:01:37 35339100 3358k  100 3358k    0     0  3905k      0 --:--:-- --:--:-- --:--:-- 8275k
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   507  100   507    0     0   4296      0 --:--:-- --:--:-- --:--:--  4296
+100   525  100   525    0     0   1442      0 --:--:-- --:--:-- --:--:--  1442
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100  2187    0  2187    0     0   8284      0 --:--:-- --:--:-- --:--:--  8252
+utils.o: In function `gettempname':
+utils.c:(.text+0x1612): warning: the use of `mktemp' is dangerous, better use `mkstemp' or `mkdtemp'
+utils.o: In function `gettempname':
+utils.c:(.text+0x1612): warning: the use of `mktemp' is dangerous, better use `mkstemp' or `mkdtemp'
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded adler2 v2.0.1
+  Downloaded crypto-common v0.1.7
+  Downloaded serde_spanned v1.1.1
+  Downloaded cpufeatures v0.2.17
+  Downloaded equivalent v1.0.2
+  Downloaded itoa v1.0.18
+  Downloaded block-buffer v0.10.4
+  Downloaded cfg-if v1.0.4
+  Downloaded version_check v0.9.5
+  Downloaded generic-array v0.14.7
+  Downloaded toml_datetime v0.7.5+spec-1.1.0
+  Downloaded simd-adler32 v0.3.10
+  Downloaded zmij v1.0.23
+  Downloaded typenum v1.20.1
+  Downloaded toml v0.9.12+spec-1.1.0
+  Downloaded unicode-ident v1.0.24
+  Downloaded miniz_oxide v0.9.1
+  Downloaded memchr v2.8.3
+  Downloaded flate2 v1.1.10
+  Downloaded serde_json v1.0.151
+  Downloaded winnow v1.0.4
+  Downloaded zlib-rs v0.6.7
+  Downloaded winnow v0.7.15
+  Downloaded hashbrown v0.17.1
+  Downloaded indexmap v2.14.1
+  Downloaded serde v1.0.229
+  Downloaded serde_derive v1.0.229
+  Downloaded proc-macro2 v1.0.107
+  Downloaded crc32fast v1.5.1
+  Downloaded syn v3.0.4
+  Downloaded serde_core v1.0.229
+  Downloaded digest v0.10.7
+  Downloaded toml_writer v1.1.2+spec-1.1.0
+  Downloaded toml_parser v1.1.3+spec-1.1.0
+  Downloaded sha2 v0.10.9
+  Downloaded quote v1.0.47
+  Downloaded libc v0.2.189
+   Compiling serde_core v1.0.229
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling zmij v1.0.23
+   Compiling cfg-if v1.0.4
+   Compiling typenum v1.20.1
+   Compiling syn v3.0.4
+   Compiling serde_json v1.0.151
+   Compiling serde v1.0.229
+   Compiling serde_derive v1.0.229
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling crc32fast v1.5.1
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling libc v0.2.189
+   Compiling simd-adler32 v0.3.10
+   Compiling winnow v1.0.4
+   Compiling adler2 v2.0.1
+   Compiling miniz_oxide v0.9.1
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling digest v0.10.7
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling serde_spanned v1.1.1
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling cpufeatures v0.2.17
+   Compiling winnow v0.7.15
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling sha2 v0.10.9
+   Compiling flate2 v1.1.10
+   Compiling wsh-runtime v0.1.0 (/workspace/crates/wsh-runtime)
+   Compiling wsh v0.1.0 (/workspace/crates/wsh)
+    Finished `release` profile [optimized] target(s) in 28.48s
+ Downloading crates ...
+  Downloaded errno v0.3.14
+  Downloaded fastrand v2.5.0
+  Downloaded tempfile v3.27.0
+  Downloaded getrandom v0.4.3
+  Downloaded bitflags v2.13.1
+  Downloaded once_cell v1.21.4
+  Downloaded rustix v1.1.4
+  Downloaded linux-raw-sys v0.12.1
+   Compiling serde_core v1.0.229
+   Compiling proc-macro2 v1.0.107
+   Compiling cfg-if v1.0.4
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling zmij v1.0.23
+   Compiling libc v0.2.189
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling syn v3.0.4
+   Compiling serde_json v1.0.151
+   Compiling serde v1.0.229
+   Compiling serde_derive v1.0.229
+   Compiling typenum v1.20.1
+   Compiling rustix v1.1.4
+   Compiling getrandom v0.4.3
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling bitflags v2.13.1
+   Compiling linux-raw-sys v0.12.1
+   Compiling fastrand v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling crc32fast v1.5.1
+   Compiling tempfile v3.27.0
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling simd-adler32 v0.3.10
+   Compiling adler2 v2.0.1
+   Compiling winnow v1.0.4
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling miniz_oxide v0.9.1
+   Compiling digest v0.10.7
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling serde_spanned v1.1.1
+   Compiling winnow v0.7.15
+   Compiling cpufeatures v0.2.17
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling sha2 v0.10.9
+   Compiling flate2 v1.1.10
+   Compiling wsh-runtime v0.1.0 (/workspace/crates/wsh-runtime)
+   Compiling wsh v0.1.0 (/workspace/crates/wsh)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 20.47s
+     Running unittests src/lib.rs (build/portable/glibc-2.28/target/debug/deps/wsh-6d7c9db93f185521)
+
+running 6 tests
+test tests::rejects_traversal_and_absolute_paths ... ok
+test tests::rejects_unknown_manifest_fields ... ok
+test tests::verifies_an_exact_development_payload_and_detects_tampering ... ok
+test tests::rejects_unlisted_files_and_symbolic_links ... ok
+test tests::detects_swapped_entrypoints_and_manifest_mutation ... ok
+test tests::atomically_activates_and_rolls_back_from_a_broken_active_bundle ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (build/portable/glibc-2.28/target/debug/deps/wsh-5aa990d206344045)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (build/portable/glibc-2.28/target/debug/deps/wsh_runtime-d07ffe0d38f3e30c)
+
+running 15 tests
+test tests::escapes_zsh_prompt_substitution_and_terminal_controls ... ok
+test tests::final_generation_check_rejects_completed_but_superseded_work ... ok
+test tests::detects_each_repository_operation_marker ... ok
+test tests::rejects_oversized_protocol_lines_without_unbounded_read ... ok
+test tests::rejects_control_characters_in_literals ... ok
+test tests::rejects_unknown_theme_fields ... ok
+test tests::parses_the_bundled_minimal_theme ... ok
+test tests::trace_is_versioned_bounded_private_and_rejects_symlinks ... ok
+test tests::wakamex_port_preserves_changed_only_and_compact_state ... ok
+test tests::serves_versioned_ping_and_shutdown ... ok
+test tests::cancellation_kills_the_git_process_group ... ok
+test tests::publishes_one_complete_snapshot_and_rejects_stale_generations ... ok
+test tests::resolves_common_refs_and_tags_in_a_linked_worktree ... ok
+test tests::parses_real_git_status_and_exact_annotated_tag ... ok
+test tests::parses_ahead_and_behind_from_a_diverged_upstream ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src/main.rs (build/portable/glibc-2.28/target/debug/deps/wsh_runtime-d321a7f408512683)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests wsh
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests wsh_runtime
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+zsh 5.9.2 (x86_64-pc-linux-gnu)
+minimal
+PASS: unchanged repaint suppression, runtime crash fallback, and shell-exit cleanup
+5b679a0d99867ee38af7acd8bdd3c9cfe75a3612d555aeaeb5c9f3282811c447  /workspace/build/portable/glibc-2.28/archives/wsh-development-x86_64-unknown-linux-gnu-894fb43d32fab167108fbf35607670af15fa73d2ea92760aba7741c03b26e118.tar.xz
+PASS: relocated development bundle 894fb43d32fab167108fbf35607670af15fa73d2ea92760aba7741c03b26e118 on glibc floor; newest imported symbol GLIBC_2.28

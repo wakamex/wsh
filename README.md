@@ -53,6 +53,8 @@ The bundle command prints a local bundle path. Verify it with `cargo run -p wsh 
 
 The glibc 2.28 builder verifies the complete Rocky package lock and Rust 1.95.0 toolchain tree, fixes locale, timezone, parallelism, and source timestamps, and emits a canonical `.tar.xz` archive after the complete floor test passes. Run `./build/test-reproducible-development-bundles.zsh <new-output-directory>` from a clean commit to build the same revision in two detached worktrees and require byte-identical manifests and archives.
 
+The retained [two-build result](benchmarks/reproducible-build-947d812-2026-09-02/report.md) produced identical manifests and archives from two isolated local builds. This satisfies the local reproducibility experiment; official releases still require the publication, attestation, immutable-release, and updater-verification gates.
+
 ## Later capabilities require evidence
 
 Several useful capabilities are being investigated, but they are not release promises:
