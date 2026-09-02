@@ -40,7 +40,7 @@ The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026
 
 The retained [resource-gate result](benchmarks/resource-gates-2026-09-02/report.md) adds fixed tracing-overhead and retained-memory thresholds. The clean bundle built and tested on the glibc 2.28 floor passed with 0.190 ms refresh p90 overhead from tracing and 1,961 KiB added retained PSS at p90.
 
-The retained [manager-launch result](benchmarks/manager-launch-2026-09-02/report.md) measures the previously omitted installed entrypoint. Reusing activation-time verification instead of hashing the complete bundle on every launch reduced median manager dispatch overhead from 38.1 ms to 1.6 ms.
+The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report.md) covers the normal entrypoint through the first editable prompt. A compact activation record and direct `exec` handoff reduced isolated median launcher overhead from the preceding 1.6 ms implementation to 0.65 ms locally and 0.70 ms in the glibc 2.28 build. At the compatibility floor, complete managed startup reached an editable prompt in 7.963 ms at p90, 2.723 ms over raw bundled Zsh; the launcher accounted for 0.527 ms of that p90 difference.
 
 Build and test the local slice with:
 

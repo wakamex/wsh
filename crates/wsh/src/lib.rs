@@ -9,7 +9,10 @@ use sha2::{Digest, Sha256};
 
 const MANIFEST_NAME: &str = "manifest.json";
 const MAX_MANIFEST_BYTES: u64 = 1024 * 1024;
+const MAX_STATE_BYTES: u64 = 16 * 1024;
 const STATE_FILE_NAME: &str = "bundle-state.json";
+const STATE_VERSION: u32 = 2;
+const ZDOTDIR_PATH: &str = "share/wsh/zdotdir";
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -127,13 +130,14 @@ pub struct VerifiedBundle {
 pub struct EntrypointPaths {
     pub shell: PathBuf,
     pub runtime: PathBuf,
+    pub integration: PathBuf,
     pub default_theme: PathBuf,
     pub zdotdir: PathBuf,
 }
 
 pub struct LaunchBundle {
     pub root: PathBuf,
-    pub manifest: BundleManifest,
+    pub entrypoints: EntrypointPaths,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -149,6 +153,25 @@ struct BundleState {
 struct BundleReference {
     path: PathBuf,
     manifest_sha256: String,
+    launch: LaunchReference,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+struct LaunchReference {
+    shell: LaunchFileReference,
+    runtime: LaunchFileReference,
+    integration: LaunchFileReference,
+    default_theme: LaunchFileReference,
+    zdotdir: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+struct LaunchFileReference {
+    path: String,
+    mode: u32,
+    size: u64,
 }
 
 pub fn activate_bundle(state_root: &Path, bundle: &Path) -> Result<String, String> {
@@ -157,7 +180,7 @@ pub fn activate_bundle(state_root: &Path, bundle: &Path) -> Result<String, Strin
     write_state(
         state_root,
         &BundleState {
-            version: 1,
+            version: STATE_VERSION,
             active: reference.clone(),
             previous,
         },
@@ -175,7 +198,7 @@ pub fn rollback_bundle(state_root: &Path) -> Result<String, String> {
     write_state(
         state_root,
         &BundleState {
-            version: 1,
+            version: STATE_VERSION,
             active: previous.clone(),
             previous: Some(state.active),
         },
@@ -191,17 +214,10 @@ pub fn active_bundle(state_root: &Path) -> Result<PathBuf, String> {
 
 pub fn active_bundle_for_launch(state_root: &Path) -> Result<LaunchBundle, String> {
     let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
-    let (manifest, manifest_sha256) = read_manifest(&state.active.path)?;
-    if manifest_sha256 != state.active.manifest_sha256 {
-        return Err(format!(
-            "active bundle manifest digest changed: {}",
-            state.active.path.display()
-        ));
-    }
-    verify_entrypoint_metadata(&state.active.path, &manifest)?;
+    let entrypoints = resolve_launch_reference(&state.active)?;
     Ok(LaunchBundle {
         root: state.active.path,
-        manifest,
+        entrypoints,
     })
 }
 
@@ -273,8 +289,9 @@ pub fn entrypoints(root: &Path, manifest: &BundleManifest) -> EntrypointPaths {
     EntrypointPaths {
         shell: root.join(&manifest.entrypoints.shell),
         runtime: root.join(&manifest.entrypoints.runtime),
+        integration: root.join(&manifest.entrypoints.integration),
         default_theme: root.join(&manifest.entrypoints.default_theme),
-        zdotdir: root.join("share/wsh/zdotdir"),
+        zdotdir: root.join(ZDOTDIR_PATH),
     }
 }
 
@@ -283,9 +300,11 @@ fn verified_reference(bundle: &Path) -> Result<BundleReference, String> {
         .canonicalize()
         .map_err(|error| format!("could not resolve bundle {}: {error}", bundle.display()))?;
     let verified = verify_bundle(&path)?;
+    let launch = launch_reference(&verified.manifest)?;
     Ok(BundleReference {
         path,
         manifest_sha256: verified.manifest_sha256,
+        launch,
     })
 }
 
@@ -294,6 +313,12 @@ fn verify_reference(reference: &BundleReference) -> Result<(), String> {
     if verified.manifest_sha256 != reference.manifest_sha256 {
         return Err(format!(
             "active bundle manifest digest changed: {}",
+            reference.path.display()
+        ));
+    }
+    if launch_reference(&verified.manifest)? != reference.launch {
+        return Err(format!(
+            "bundle launch record changed: {}",
             reference.path.display()
         ));
     }
@@ -310,14 +335,14 @@ fn read_state(state_root: &Path) -> Result<Option<BundleState>, String> {
     if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
         return Err("bundle state must be a regular file".into());
     }
-    if metadata.len() > MAX_MANIFEST_BYTES {
+    if metadata.len() > MAX_STATE_BYTES {
         return Err("bundle state is too large".into());
     }
     let bytes =
         fs::read(&path).map_err(|error| format!("could not read {}: {error}", path.display()))?;
     let state: BundleState =
         serde_json::from_slice(&bytes).map_err(|error| format!("invalid bundle state: {error}"))?;
-    if state.version != 1 {
+    if state.version != STATE_VERSION {
         return Err(format!(
             "unsupported bundle state version: {}",
             state.version
@@ -329,6 +354,13 @@ fn read_state(state_root: &Path) -> Result<Option<BundleState>, String> {
 fn write_state(state_root: &Path, state: &BundleState) -> Result<(), String> {
     use std::io::Write as _;
     use std::os::unix::fs::{OpenOptionsExt as _, PermissionsExt as _};
+
+    let mut encoded = serde_json::to_vec(state)
+        .map_err(|error| format!("could not encode bundle state: {error}"))?;
+    encoded.push(b'\n');
+    if encoded.len() > MAX_STATE_BYTES as usize {
+        return Err("bundle state is too large".into());
+    }
 
     fs::create_dir_all(state_root).map_err(|error| {
         format!(
@@ -367,9 +399,7 @@ fn write_state(state_root: &Path, state: &BundleState) -> Result<(), String> {
             .mode(0o600)
             .open(&temporary)
             .map_err(|error| format!("could not create {}: {error}", temporary.display()))?;
-        serde_json::to_writer(&mut file, state)
-            .map_err(|error| format!("could not encode bundle state: {error}"))?;
-        file.write_all(b"\n")
+        file.write_all(&encoded)
             .map_err(|error| format!("could not write bundle state: {error}"))?;
         file.sync_all()
             .map_err(|error| format!("could not sync bundle state: {error}"))?;
@@ -435,16 +465,57 @@ fn manifest_entrypoints(manifest: &BundleManifest) -> [&str; 4] {
     ]
 }
 
-fn verify_entrypoint_metadata(root: &Path, manifest: &BundleManifest) -> Result<(), String> {
-    for path in manifest_entrypoints(manifest) {
+fn launch_reference(manifest: &BundleManifest) -> Result<LaunchReference, String> {
+    let file = |path: &str| -> Result<LaunchFileReference, String> {
         let expected = manifest
             .files
             .iter()
             .find(|file| file.path == path)
             .ok_or_else(|| format!("entrypoint is not listed as a payload file: {path}"))?;
-        verify_payload_metadata(root, expected)?;
+        Ok(LaunchFileReference {
+            path: expected.path.clone(),
+            mode: expected.mode,
+            size: expected.size,
+        })
+    };
+    Ok(LaunchReference {
+        shell: file(&manifest.entrypoints.shell)?,
+        runtime: file(&manifest.entrypoints.runtime)?,
+        integration: file(&manifest.entrypoints.integration)?,
+        default_theme: file(&manifest.entrypoints.default_theme)?,
+        zdotdir: ZDOTDIR_PATH.into(),
+    })
+}
+
+fn resolve_launch_reference(reference: &BundleReference) -> Result<EntrypointPaths, String> {
+    let root_metadata = fs::symlink_metadata(&reference.path).map_err(|error| {
+        format!(
+            "could not inspect bundle {}: {error}",
+            reference.path.display()
+        )
+    })?;
+    if !root_metadata.file_type().is_dir() || root_metadata.file_type().is_symlink() {
+        return Err("bundle root must be a real directory".into());
     }
-    Ok(())
+    let zdotdir = reference.path.join(&reference.launch.zdotdir);
+    validate_relative_path(&reference.launch.zdotdir)?;
+    let zdotdir_metadata = fs::symlink_metadata(&zdotdir)
+        .map_err(|error| format!("could not inspect {}: {error}", zdotdir.display()))?;
+    if !zdotdir_metadata.file_type().is_dir() || zdotdir_metadata.file_type().is_symlink() {
+        return Err("ZDOTDIR must be a real directory".into());
+    }
+    Ok(EntrypointPaths {
+        shell: resolve_launch_file(&reference.path, &reference.launch.shell)?,
+        runtime: resolve_launch_file(&reference.path, &reference.launch.runtime)?,
+        integration: resolve_launch_file(&reference.path, &reference.launch.integration)?,
+        default_theme: resolve_launch_file(&reference.path, &reference.launch.default_theme)?,
+        zdotdir,
+    })
+}
+
+fn resolve_launch_file(root: &Path, expected: &LaunchFileReference) -> Result<PathBuf, String> {
+    validate_relative_path(&expected.path)?;
+    verify_file_metadata(root, &expected.path, expected.mode, expected.size)
 }
 
 fn validate_relative_path(path: &str) -> Result<(), String> {
@@ -489,17 +560,26 @@ fn verify_payload_metadata(root: &Path, expected: &PayloadFile) -> Result<PathBu
         return Err(format!("invalid SHA-256 digest for {}", expected.path));
     }
 
-    let path = root.join(&expected.path);
+    verify_file_metadata(root, &expected.path, expected.mode, expected.size)
+}
+
+fn verify_file_metadata(
+    root: &Path,
+    relative: &str,
+    expected_mode: u32,
+    expected_size: u64,
+) -> Result<PathBuf, String> {
+    let path = root.join(relative);
     let metadata = fs::symlink_metadata(&path)
-        .map_err(|error| format!("could not inspect {}: {error}", expected.path))?;
+        .map_err(|error| format!("could not inspect {relative}: {error}"))?;
     if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
-        return Err(format!("payload is not a regular file: {}", expected.path));
+        return Err(format!("payload is not a regular file: {relative}"));
     }
-    if metadata.len() != expected.size {
-        return Err(format!("size mismatch for {}", expected.path));
+    if metadata.len() != expected_size {
+        return Err(format!("size mismatch for {relative}"));
     }
-    if metadata.mode() & 0o7777 != expected.mode {
-        return Err(format!("mode mismatch for {}", expected.path));
+    if metadata.mode() & 0o7777 != expected_mode {
+        return Err(format!("mode mismatch for {relative}"));
     }
     Ok(path)
 }
@@ -573,6 +653,12 @@ mod tests {
                 b"integration".as_slice(),
                 0o644,
             ),
+            (
+                "share/wsh/zdotdir/.zshenv",
+                b"environment".as_slice(),
+                0o644,
+            ),
+            ("share/wsh/zdotdir/.zshrc", b"startup".as_slice(), 0o644),
             ("share/wsh/themes/minimal.toml", b"theme".as_slice(), 0o644),
         ];
         let mut files = Vec::new();
@@ -746,10 +832,22 @@ mod tests {
         write_test_bundle(&bundle);
         activate_bundle(&state, &bundle).unwrap();
 
+        let state_bytes = fs::read(state.join(STATE_FILE_NAME)).unwrap();
+        assert!(state_bytes.len() < MAX_STATE_BYTES as usize);
+        assert!(
+            !state_bytes
+                .windows(14)
+                .any(|bytes| bytes == b"source_archive")
+        );
+
         fs::write(bundle.join("bin/wsh-runtime"), b"changed").unwrap();
         let launch = active_bundle_for_launch(&state).unwrap();
         assert_eq!(launch.root, bundle.canonicalize().unwrap());
         assert!(verify_bundle(&bundle).is_err());
+
+        fs::remove_file(bundle.join("share/wsh/integration.zsh")).unwrap();
+        let error = active_bundle_for_launch(&state).err().unwrap();
+        assert!(error.contains("could not inspect share/wsh/integration.zsh"));
     }
 
     #[test]
@@ -770,8 +868,7 @@ mod tests {
         let mut manifest = fs::read(bundle.join("manifest.json")).unwrap();
         manifest.push(b'\n');
         fs::write(bundle.join("manifest.json"), manifest).unwrap();
-        let launch_error = active_bundle_for_launch(&state).err().unwrap();
-        assert!(launch_error.contains("manifest digest changed"));
+        active_bundle_for_launch(&state).unwrap();
         let error = active_bundle(&state).unwrap_err();
         assert!(error.contains("manifest digest changed"));
     }

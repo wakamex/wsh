@@ -36,7 +36,7 @@ Every wsh release maps to exactly one recorded Zsh build identity per target. Mo
 
 Release directories are immutable after verification. Activation selects a complete directory, and rollback selects the previous complete directory. Configuration, locally installed theme definitions, history, caches, and traces remain outside those directories and are not replaced by bundle activation.
 
-The minimal manager and launcher remain outside the selected bundle so listing, verification, selection, and rollback do not depend on the active Zsh or runtime starting successfully. Bundle updates do not replace that manager as a side effect. Its standalone update is a separate signed operation, and an external package manager retains authority over manager installations it owns.
+The minimal manager and launcher remain outside the selected bundle so listing, verification, selection, and rollback do not depend on the active Zsh or runtime starting successfully. Activation and rollback verify the complete payload before atomically writing a bounded launch record. Ordinary startup trusts that verification and bundle immutability, checks the recorded entrypoint type, mode, and size without rehashing content, and replaces itself with Zsh. A same-size post-activation mutation is detected by explicit verification rather than every shell startup. Bundle updates do not replace the manager as a side effect. Its standalone update is a separate signed operation, and an external package manager retains authority over manager installations it owns.
 
 ## Official updates are explicit, signed, reproducible, atomic, and reversible
 

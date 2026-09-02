@@ -36,7 +36,7 @@ The first updater should trust the fixed `wakamex/wsh` repository identity, requ
 
 ## Activation and rollback remain local atomic operations
 
-Download and verification happen in a new content-addressed directory. After the candidate passes a no-side-effect launch check, one atomically replaced state record selects the new complete bundle and retains the previous selection. An interrupted write leaves the old state record intact. Rollback verifies and selects the previous bundle without starting or trusting the broken active Zsh or runtime.
+Download and verification happen in a new content-addressed directory. After the candidate passes a no-side-effect launch check, one atomically replaced state record selects the new complete bundle, retains the previous selection, and records the bounded metadata required for startup. An interrupted write leaves the old state record intact. Ordinary startup reads only that record and replaces the launcher with Zsh; it does not parse or hash the complete manifest. Rollback verifies and selects the previous bundle without starting or trusting the broken active Zsh or runtime.
 
 The manager never mutates an installed bundle and never updates one component within it. It performs no update check during shell startup. Checking, downloading, and activating are separate explicit commands, and a downloaded candidate is inert until activation succeeds.
 

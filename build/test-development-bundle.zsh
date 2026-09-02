@@ -33,7 +33,16 @@ cargo test --locked --workspace
 ${manager} bundle verify ${bundle} >/dev/null
 ${bundle}/bin/zsh --version
 ${runtime} validate-theme ${theme}
-${manager} run --bundle ${bundle} -- -c 'zmodload zsh/datetime'
+state_root=${test_root}/state
+${manager} bundle activate ${bundle} --state-root ${state_root} >/dev/null
+launched_pid_file=${test_root}/launched.pid
+${manager} run --state-root ${state_root} -- -c 'zmodload zsh/datetime; print -r -- $$' > ${launched_pid_file} &
+launcher_pid=$!
+wait $launcher_pid
+[[ $(< ${launched_pid_file}) == $launcher_pid ]] || {
+  print -u2 -- 'error: manager did not replace itself with bundled Zsh'
+  exit 1
+}
 
 fixture=${test_root}/fixture
 mkdir -p -- $fixture

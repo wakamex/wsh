@@ -1,0 +1,9 @@
+# Compact activation state and exec must cover the installed startup path
+
+The accepted activation-backed launcher reduced median dispatch overhead from 38.1 ms to 1.6 ms, but it still parses the complete bundle manifest, spawns Zsh as a child, waits for the shell's lifetime, and was not included in the retained first-editable measurements. The next experiment asks whether a compact activation record and direct `exec` handoff remove that remaining process and make the installed entrypoint cheap enough for the complete startup path.
+
+The isolated launch comparison reuses [`benchmark-manager-launch.zsh`](benchmark-manager-launch.zsh) with the exact same activated bundle and `-f -c exit` control. The fixed gate is at most 1.0 ms paired median overhead over direct bundled Zsh. The interactive comparison starts three fresh PTYs in forward and reverse order: raw bundled Zsh, bundled Zsh with the complete wsh integration and runtime, and the normal activated `wsh` entrypoint. It records the time from PTY creation to the first visible editable prompt. Each variant receives five warmups and 40 measured starts. The manager contribution must add at most 1.0 ms at p90 over the direct complete path, and the normal wsh path must add at most 5.0 ms at p90 and 8.0 ms at maximum over raw bundled Zsh.
+
+The smallest intervention stores only the verified bundle root, manifest identity, and bounded metadata for the four launch files in state version 2. Normal launch reads that state, checks the recorded entrypoint metadata and ZDOTDIR directory, and replaces itself with Zsh through `exec`. It does not read the bundle manifest. Build, explicit verification, activation, current-state inspection, and rollback retain complete payload verification.
+
+One implementation attempt is allowed. If any gate fails, profile state decoding and process handoff before changing the bundle format, writing a native module, or patching Zsh.

@@ -1,4 +1,5 @@
 use std::env;
+use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
@@ -87,36 +88,34 @@ fn run() -> Result<(), String> {
                 }
                 index += 2;
             }
-            let (bundle, manifest) = match bundle {
+            let (bundle, paths) = match bundle {
                 Some(bundle) => {
                     let verified = verify_bundle(&bundle)?;
-                    (bundle, verified.manifest)
+                    let paths = entrypoints(&bundle, &verified.manifest);
+                    (bundle, paths)
                 }
                 None => {
                     let launch =
                         active_bundle_for_launch(&state_root.unwrap_or(default_state_root()?))?;
-                    (launch.root, launch.manifest)
+                    (launch.root, launch.entrypoints)
                 }
             };
-            let paths = entrypoints(&bundle, &manifest);
             let mut command = Command::new(&paths.shell);
             if shell_args.is_empty() {
                 command.arg("-d");
             } else {
                 command.args(shell_args);
             }
-            let status = command
+            command
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
                 .env("WSH_THEME", &paths.default_theme)
-                .env("ZDOTDIR", &paths.zdotdir)
-                .status()
-                .map_err(|error| format!("could not start {}: {error}", paths.shell.display()))?;
-            if status.success() {
-                Ok(())
-            } else {
-                Err(format!("bundled Zsh exited with {status}"))
-            }
+                .env("ZDOTDIR", &paths.zdotdir);
+            let error = command.exec();
+            Err(format!(
+                "could not replace the launcher with {}: {error}",
+                paths.shell.display()
+            ))
         }
         _ => Err(usage().into()),
     }

@@ -2,6 +2,8 @@
 
 Normal `wsh` launch added 38.1 ms at the median because it inspected and hashed all 1,282 files in the selected 12 MB bundle twice before starting Zsh. Reusing the activation-time verification record and checking only the recorded manifest identity and four required entrypoints reduced the median added cost to 1.6 ms, under the fixed 2.0 ms gate. The direct bundled-Zsh control remained at 1.8 ms.
 
+The later [compact-state and exec result](../exec-launch-2026-09-02/report.md) supersedes this launch implementation and extends the measurement through the first editable prompt.
+
 The comparison measured 1,000 launches per variant as ten observations of 100 sequential `-f -c exit` launches pinned to CPU 0. Forward and reverse blocks changed variant order, both variants received 20 warmup launches, and the before and after measurements used the same content-addressed bundle and command. Each added value subtracts the direct observation with the same block and repetition.
 
 | Path | Direct median | Managed median | Paired added median | Paired added range | Gate |

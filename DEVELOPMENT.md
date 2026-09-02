@@ -8,7 +8,7 @@ The first implementation should prove the complete local path before adding remo
 
 1. A manager selects a local development bundle.
 2. The manager validates the bundle manifest and installed-file digests before activation.
-3. The launcher checks the recorded manifest identity and required entrypoints, then starts the bundle's exact Zsh binary and matching runtime without rescanning the complete payload.
+3. The launcher reads the compact activation record, checks the required entrypoint metadata, and replaces itself with the bundle's exact Zsh binary without reading the manifest or rescanning the complete payload.
 4. The runtime loads one validated non-executable theme definition through trusted prompt components.
 5. The initial Git worker publishes one complete versioned snapshot.
 6. The prompt becomes editable, performs bounded asynchronous work, and emits a versioned trace.
