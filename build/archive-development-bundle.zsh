@@ -24,7 +24,7 @@ readonly source_date_epoch=${SOURCE_DATE_EPOCH:-}
   print -u2 -- 'error: SOURCE_DATE_EPOCH must be a positive integer'
   exit 1
 }
-for command in cmp mkdir mktemp mv rm sha256sum tar xz; do
+for command in cmp jq mkdir mktemp mv rm sha256sum tar xz; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
@@ -42,8 +42,28 @@ readonly bundle_identity=${bundle:t}
   exit 1
 }
 
+manifest_status=$(jq -er '.status' ${bundle}/manifest.json)
+release_id=$(jq -er '.release_id' ${bundle}/manifest.json)
+target=$(jq -er '.target' ${bundle}/manifest.json)
+case $manifest_status in
+  development)
+    archive_name=wsh-development-${target}-${bundle_identity}.tar.xz
+    ;;
+  release)
+    [[ $release_id =~ '^v[0-9]+\.[0-9]+\.[0-9]+$' ]] || {
+      print -u2 -- "error: invalid release identity in manifest: $release_id"
+      exit 1
+    }
+    archive_name=wsh-${release_id}-${target}.tar.xz
+    ;;
+  *)
+    print -u2 -- "error: unsupported bundle status in manifest: $manifest_status"
+    exit 1
+    ;;
+esac
+
 mkdir -p -- $output_root
-readonly archive_name=wsh-development-x86_64-unknown-linux-gnu-${bundle_identity}.tar.xz
+readonly archive_name
 readonly destination=${output_root}/${archive_name}
 temporary_archive=$(mktemp ${output_root}/.${archive_name}.XXXXXX)
 extract_root=$(mktemp -d ${output_root}/.verify.${bundle_identity}.XXXXXX)

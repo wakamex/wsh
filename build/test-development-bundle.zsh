@@ -20,6 +20,7 @@ ${script_dir}/verify-rust-toolchain.zsh >/dev/null
 
 built_bundle=$(zsh ${script_dir}/build-development-bundle.zsh)
 bundle_identity=${built_bundle:t}
+bundle_status=$(jq -er '.status' ${built_bundle}/manifest.json)
 test_root=$(mktemp -d /tmp/wsh-floor-bundle.XXXXXX)
 trap 'rm -rf -- $test_root' EXIT INT TERM
 bundle=${test_root}/relocated-bundle
@@ -90,4 +91,4 @@ if [[ -n $archive_output_root ]]; then
     ${script_dir}/archive-development-bundle.zsh $built_bundle $archive_output_root
 fi
 
-print -r -- "PASS: relocated development bundle ${bundle_identity} on glibc floor; newest imported symbol ${actual_glibc:-not-checked}"
+print -r -- "PASS: relocated ${bundle_status} bundle ${bundle_identity} on glibc floor; newest imported symbol ${actual_glibc:-not-checked}"

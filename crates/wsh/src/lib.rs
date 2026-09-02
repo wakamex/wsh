@@ -51,6 +51,7 @@ pub struct BuildEnvironment {
 #[serde(rename_all = "kebab-case")]
 pub enum BundleStatus {
     Development,
+    Release,
 }
 
 #[derive(Debug, Deserialize)]
@@ -373,9 +374,6 @@ fn validate_manifest(manifest: &BundleManifest) -> Result<(), String> {
             manifest.schema_version
         ));
     }
-    if manifest.status != BundleStatus::Development {
-        return Err("only unsigned development bundles are supported".into());
-    }
     if manifest.target != "x86_64-unknown-linux-gnu" {
         return Err(format!("unsupported bundle target: {}", manifest.target));
     }
@@ -635,6 +633,26 @@ mod tests {
         fs::write(directory.path().join("bin/zsh"), b"changed").unwrap();
         let error = verify_bundle(directory.path()).err().unwrap();
         assert!(error.contains("size mismatch") || error.contains("digest mismatch"));
+    }
+
+    #[test]
+    fn verifies_release_status_as_a_structural_manifest_property() {
+        let directory = tempfile::tempdir().unwrap();
+        write_test_bundle(directory.path());
+        let manifest_path = directory.path().join("manifest.json");
+        let mut manifest: serde_json::Value =
+            serde_json::from_slice(&fs::read(&manifest_path).unwrap()).unwrap();
+        manifest["status"] = serde_json::json!("release");
+        manifest["release_id"] = serde_json::json!("v0.1.0");
+        fs::write(
+            &manifest_path,
+            serde_json::to_vec_pretty(&manifest).unwrap(),
+        )
+        .unwrap();
+
+        let verified = verify_bundle(directory.path()).unwrap();
+        assert_eq!(verified.manifest.status, BundleStatus::Release);
+        assert_eq!(verified.manifest.release_id, "v0.1.0");
     }
 
     #[test]

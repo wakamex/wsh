@@ -1,0 +1,71 @@
+name: validation
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+env:
+  ROCKY_IMAGE: quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
+  RUST_TOOLCHAIN: 1.95.0
+
+jobs:
+  rust-correctness:
+    name: Rust correctness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install and verify the locked Rust toolchain
+        run: |
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
+          ./build/verify-rust-toolchain.zsh
+      - name: Run the Rust correctness suite
+        run: cargo test --locked --workspace
+
+  floor-bundle:
+    name: Bundle, PTY, and portability
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install host build requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes podman zsh
+      - name: Install and verify the locked Rust toolchain
+        run: |
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
+          ./build/verify-rust-toolchain.zsh
+      - name: Fetch the digest-pinned floor image
+        run: podman pull "$ROCKY_IMAGE"
+      - name: Build and test the glibc 2.28 development bundle
+        run: ./build/build-glibc-2.28-development-bundle.zsh
+
+  retained-resource-gates:
+    name: Retained resource evidence
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install evidence-checker requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes gawk zsh
+      - name: Test the resource-gate checker
+        run: ./tests/resource-gates.zsh
+      - name: Verify the retained accepted evidence
+        run: ./benchmarks/verify-resource-gate-evidence.zsh

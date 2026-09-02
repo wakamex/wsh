@@ -9,6 +9,8 @@ readonly repository_root=${script_dir:h}
 readonly image=wsh-glibc-2.28-builder:development
 readonly portable_root=${repository_root}/build/portable/glibc-2.28
 readonly rustup_root=${RUSTUP_HOME:-$HOME/.rustup}
+readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
+readonly release_id=${WSH_RELEASE_ID:-}
 
 for command in git podman sed sha256sum; do
   (( $+commands[$command] )) || {
@@ -56,6 +58,8 @@ podman run --rm --userns=keep-id --network=host \
   --env WSH_KEEP_FAILED_BUILD=1 \
   --env WSH_MINIMUM_GLIBC=2.28 \
   --env WSH_BUILD_JOBS=1 \
+  --env WSH_BUNDLE_STATUS=$bundle_status \
+  --env WSH_RELEASE_ID=$release_id \
   --env WSH_RUST_TOOLCHAIN_SHA256=$rust_toolchain_sha256 \
   --env WSH_SOURCE_REVISION=$source_revision \
   --workdir /workspace \

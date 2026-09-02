@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wsh.dev/schemas/bundle-v1.schema.json",
-  "title": "wsh development bundle manifest v1",
+  "title": "wsh bundle manifest v1",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -20,7 +20,7 @@
   ],
   "properties": {
     "schema_version": { "const": 1 },
-    "status": { "const": "development" },
+    "status": { "enum": ["development", "release"] },
     "release_id": { "$ref": "#/$defs/nonempty" },
     "target": { "const": "x86_64-unknown-linux-gnu" },
     "minimum_manager_version": { "$ref": "#/$defs/nonempty" },

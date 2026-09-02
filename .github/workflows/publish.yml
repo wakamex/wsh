@@ -1,0 +1,181 @@
+name: publish
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ROCKY_IMAGE: quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
+  RUST_TOOLCHAIN: 1.95.0
+
+jobs:
+  authorize:
+    name: Validate the deliberate release tag
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Check out the annotated tag
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+      - name: Install and verify the locked Rust toolchain
+        run: |
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
+          ./build/verify-rust-toolchain.zsh
+      - name: Require an eligible main commit and matching annotated tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: ./build/check-release-eligibility.zsh "$RELEASE_TAG"
+
+  build:
+    name: Canonical build ${{ matrix.worker }}
+    needs: authorize
+    strategy:
+      fail-fast: false
+      matrix:
+        worker:
+          - a
+          - b
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out the annotated tag
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
+      - name: Install host build requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes podman zsh
+      - name: Install and verify the locked Rust toolchain
+        run: |
+          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
+          ./build/verify-rust-toolchain.zsh
+      - name: Fetch the digest-pinned floor image
+        run: podman pull "$ROCKY_IMAGE"
+      - name: Run the canonical release build
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -o pipefail
+          ./build/build-glibc-2.28-release-bundle.zsh "$RELEASE_TAG" 2>&1 | tee release-build.log
+      - name: Collect the release candidate and build record
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          WORKER: ${{ matrix.worker }}
+        run: |
+          ./build/collect-release-build.zsh "$RELEASE_TAG" "$WORKER" "release-build-$WORKER"
+          cp release-build.log "release-build-$WORKER/"
+      - name: Upload the isolated build
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-build-${{ matrix.worker }}
+          path: release-build-${{ matrix.worker }}/
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 30
+      - name: Retain a failed build log
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: failed-release-build-${{ matrix.worker }}
+          path: release-build.log
+          if-no-files-found: warn
+          retention-days: 30
+
+  publish:
+    name: Compare, attest, and publish
+    needs:
+      - authorize
+      - build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      actions: read
+      attestations: write
+      contents: write
+      id-token: write
+    steps:
+      - name: Download canonical build a
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-build-a
+          path: incoming/a
+      - name: Download canonical build b
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: release-build-b
+          path: incoming/b
+      - name: Require byte-identical archives and manifests
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t archives_a < <(find incoming/a -maxdepth 1 -type f -name '*.tar.xz' -print)
+          mapfile -t archives_b < <(find incoming/b -maxdepth 1 -type f -name '*.tar.xz' -print)
+          mapfile -t manifests_a < <(find incoming/a -maxdepth 1 -type f -name '*.manifest.json' -print)
+          mapfile -t manifests_b < <(find incoming/b -maxdepth 1 -type f -name '*.manifest.json' -print)
+          test "${#archives_a[@]}" -eq 1
+          test "${#archives_b[@]}" -eq 1
+          test "${#manifests_a[@]}" -eq 1
+          test "${#manifests_b[@]}" -eq 1
+          test "${archives_a[0]##*/}" = "${archives_b[0]##*/}"
+          test "${manifests_a[0]##*/}" = "${manifests_b[0]##*/}"
+          cmp --silent "${archives_a[0]}" "${archives_b[0]}"
+          cmp --silent "${manifests_a[0]}" "${manifests_b[0]}"
+          mkdir release-assets
+          cp "${archives_a[0]}" "${manifests_a[0]}" release-assets/
+          cp incoming/a/build-record-a.json incoming/b/build-record-b.json release-assets/
+          (
+            cd release-assets
+            sha256sum -- * | LC_ALL=C sort -k2 > SHA256SUMS
+          )
+      - name: Attest every release asset
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.1.0
+        with:
+          subject-path: release-assets/*
+      - name: Verify the build attestations before publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for asset in release-assets/*; do
+            gh attestation verify "$asset" --repo "$GITHUB_REPOSITORY"
+          done
+      - name: Publish the immutable GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes --title "$RELEASE_TAG"
+      - name: Verify the published release and assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          verified=0
+          for attempt in $(seq 1 12); do
+            if gh release verify "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY"; then
+              verified=1
+              break
+            fi
+            sleep 5
+          done
+          test "$verified" -eq 1
+          for asset in release-assets/*; do
+            gh release verify-asset "$RELEASE_TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+          done

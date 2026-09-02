@@ -2,7 +2,7 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
-The first local vertical slice passes its fixed correctness and performance gates with both bundled theme presentations at the glibc 2.28 compatibility floor. The repository builds the pinned Zsh, Rust manager and runtime, strict development schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
+The first local vertical slice passes its fixed correctness and performance gates with both bundled theme presentations at the glibc 2.28 compatibility floor. The repository builds the pinned Zsh, Rust manager and runtime, strict bundle schemas, and an unsigned content-addressed development bundle, but there is no installable official release yet.
 
 ## Motivation
 
@@ -51,9 +51,9 @@ cargo test --workspace
 ./tests/runtime-pty.zsh
 ```
 
-The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.28-development-bundle.zsh` builds and exercises the same development slice on the first tested compatibility floor. Every generated manifest says `development`; local output remains a development bundle even if it later reproduces an official GitHub Release asset byte for byte.
+The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.28-development-bundle.zsh` builds and exercises the same development slice on the first tested compatibility floor. The default local path always writes `status: development`. The tag-only release path writes `status: release`, but an equivalent local reproduction remains unofficial because it lacks the immutable GitHub Release and workflow attestations.
 
-The glibc 2.28 builder verifies the complete Rocky package lock and Rust 1.95.0 toolchain tree, fixes locale, timezone, parallelism, and source timestamps, and emits a canonical `.tar.xz` archive after the complete floor test passes. Run `./build/test-reproducible-development-bundles.zsh <new-output-directory>` from a clean commit to build the same revision in two detached worktrees and require byte-identical manifests and archives.
+The glibc 2.28 builder verifies the complete Rocky package lock and the required Rust 1.95.0 toolchain components, fixes locale, timezone, parallelism, and source timestamps, and emits a canonical `.tar.xz` archive after the complete floor test passes. Run `./build/test-reproducible-development-bundles.zsh <new-output-directory>` from a clean commit to build the same revision in two detached worktrees and require byte-identical manifests and archives. Official publication is triggered by an annotated version tag only after the exact commit passes `release-eligible / validate`; two fresh release jobs must reproduce the same bytes before the workflow attests and publishes them.
 
 The retained [two-build result](benchmarks/reproducible-build-947d812-2026-09-02/report.md) produced identical manifests and archives from two isolated local builds. This satisfies the local reproducibility experiment; official releases still require the publication, attestation, immutable-release, and updater-verification gates.
 

@@ -8,6 +8,8 @@ readonly repository_root=${script_dir:h}
 readonly zsh_root=${WSH_ZSH_ROOT:-${repository_root}/build/out/zsh-5.9.2}
 readonly output_root=${WSH_BUNDLE_OUTPUT_ROOT:-${repository_root}/bundles}
 readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
+readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
+readonly requested_release_id=${WSH_RELEASE_ID:-}
 
 for command in cargo cp find git head install jq ld mktemp mv readelf rm rustc sed sha256sum sort stat; do
   if (( ! $+commands[$command] )); then
@@ -68,6 +70,31 @@ if [[ -z $source_revision ]]; then
     source_revision="${source_revision}+dirty"
   fi
 fi
+case $bundle_status in
+  development)
+    [[ -z $requested_release_id ]] || {
+      print -u2 -- 'error: a development bundle cannot set WSH_RELEASE_ID'
+      exit 1
+    }
+    release_id=development-${source_revision}
+    ;;
+  release)
+    [[ $requested_release_id =~ '^v[0-9]+\.[0-9]+\.[0-9]+$' ]] || {
+      print -u2 -- 'error: a release bundle requires WSH_RELEASE_ID=vMAJOR.MINOR.PATCH'
+      exit 1
+    }
+    [[ $source_revision =~ '^[0-9a-f]{40}$' ]] || {
+      print -u2 -- 'error: a release bundle requires an exact clean source revision'
+      exit 1
+    }
+    release_id=$requested_release_id
+    ;;
+  *)
+    print -u2 -- "error: unsupported bundle status: $bundle_status"
+    exit 1
+    ;;
+esac
+readonly release_id
 lockfile_sha256=$(sha256sum Cargo.lock)
 lockfile_sha256=${lockfile_sha256%% *}
 rust_compiler=$(rustc --version)
@@ -99,7 +126,8 @@ dynamic_libraries=$(find "$stage" -type f -exec readelf -d {} \; 2>/dev/null \
   | jq -s .)
 
 jq -n \
-  --arg release_id "development-${source_revision}" \
+  --arg status "$bundle_status" \
+  --arg release_id "$release_id" \
   --arg source_revision "$source_revision" \
   --arg lockfile_sha256 "$lockfile_sha256" \
   --arg rust_compiler "$rust_compiler" \
@@ -118,7 +146,7 @@ jq -n \
   --slurpfile files "$file_records" \
   '{
     schema_version:1,
-    status:"development",
+    status:$status,
     release_id:$release_id,
     target:"x86_64-unknown-linux-gnu",
     minimum_manager_version:"0.1.0",

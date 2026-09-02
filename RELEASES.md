@@ -14,7 +14,7 @@ The runtime contract consists of the tested floor environment, glibc 2.28 or new
 
 The release workflow starts twice from the same pinned source commit, upstream Zsh archive and signature, dependency lockfile, Rust toolchain, target, builder image digest, build recipe, environment, locale, timezone, archive ordering, timestamps, ownership, and compression parameters. The jobs use separate clean workers and do not exchange build directories or compiler caches. Each job emits the canonical archive digest, bundle manifest digest, file table, toolchain identities, test results, and build log.
 
-The development implementation supplies the local form of this gate. Its Rocky lock records the complete installed package set with NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest. Its Rust lock records exact compiler versions and the installed toolchain-tree digest. A package that no longer resolves to the lock causes a failure; the repository does not currently retain an offline RPM archive. The canonical archive uses sorted GNU tar entries, the source commit timestamp, normalized ownership and modes, and fixed single-threaded xz parameters.
+The development implementation supplies the local form of this gate. Its Rocky lock records the complete installed package set with NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest. Its Rust lock records exact compiler versions, required rustup components, and the digest of every file declared by those component manifests. A package that no longer resolves to the lock causes a failure; the repository does not currently retain an offline RPM archive. The canonical archive uses sorted GNU tar entries, the source commit timestamp, normalized ownership and modes, and fixed single-threaded xz parameters.
 
 The retained [`947d812` local comparison](benchmarks/reproducible-build-947d812-2026-09-02/report.md) passed this byte-identity gate with archive SHA-256 `5b679a0d99867ee38af7acd8bdd3c9cfe75a3612d555aeaeb5c9f3282811c447`. It used two isolated worktrees on one host, so the official workflow must still reproduce the result in its clean jobs and emit the required provenance.
 
@@ -22,9 +22,13 @@ Publication is blocked unless the two canonical archives match byte-for-byte. Ag
 
 The agreed archive and manifest are subject to GitHub build-provenance attestations tied to the release workflow, repository, commit, and artifact digest. The project also publishes the two build records so a third party can rerun the same recipe. GitHub documents both [artifact attestations](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations) and [offline attestation verification](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations).
 
-## GitHub publication supplies the official signature and immutability boundary
+## An annotated tag deliberately starts automatic publication
 
-The release is assembled as a draft after the tag commit passes correctness, performance, portability, reproducibility, and rollback gates. The publisher attaches only the agreed assets and their build records, verifies their digests, and publishes the draft with GitHub release immutability enabled.
+The maintainer pushes an annotated `vMAJOR.MINOR.PATCH` tag only after remote `main` points to the intended commit and its `release-eligible / validate` check succeeds. The tag is the human release authorization. The publisher independently confirms that the tag matches the workspace version and an exact commit on `main`, and that a successful main-push eligibility workflow exists for that commit.
+
+Two fresh release jobs build the tag through the canonical glibc 2.28 path without shared build or compiler caches. Publication is blocked unless their archives and manifests match byte-for-byte. The workflow publishes one matching archive, its manifest, both build records, and checksums. It attests every asset before asking GitHub to create the Release, and it does not accept manually selected, locally rebuilt, or separately uploaded assets.
+
+GitHub release immutability must be enabled before a release tag is pushed. `gh release create` internally assembles the assets as a draft and publishes only after the uploads complete. Immutability takes effect when GitHub publishes the release, after which the workflow verifies the release attestation and every local asset against the published release.
 
 GitHub immutable releases lock the tag and assets and automatically produce a signed release attestation covering the tag, commit, and assets. GitHub documents these properties in [Immutable releases](https://docs.github.com/en/code-security/concepts/supply-chain-security/immutable-releases) and exposes release and local-asset verification through `gh release verify` and `gh release verify-asset` in [Verifying the integrity of a release](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/secure-your-dependencies/verify-release-integrity).
 
@@ -47,7 +51,7 @@ An official GitHub Release requires all of the following:
 5. The retained benchmark passes semantic, process-count, optional-lock, repaint, first-editable, settled-latency, tracing-overhead, and memory gates.
 6. Two isolated canonical builds produce the same bytes.
 7. Build-provenance attestations cover the agreed assets and workflow identity.
-8. A draft release contains the complete asset set and build records before it becomes immutable.
+8. The automated publisher supplies the complete asset set and both build records before GitHub publishes the release and makes it immutable.
 9. Release and asset verification succeeds after publication.
 
 Until all nine gates exist and pass, the repository can publish source and development artifacts but has no official binary release.

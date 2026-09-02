@@ -1,4 +1,5 @@
 toolchain=1.95.0-x86_64-unknown-linux-gnu
 rustc_version=rustc 1.95.0 (59807616e 2026-04-14)
 cargo_version=cargo 1.95.0 (f2d3ce0bd 2026-03-21)
-tree_sha256=95d4801160fbd483c64db9537da4b359d568e63a2c053de6cf2d1a9fb475c640
+components=cargo-x86_64-unknown-linux-gnu,rust-std-x86_64-unknown-linux-gnu,rustc-x86_64-unknown-linux-gnu
+required_components_sha256=a7e4e0e9ff4ed572a30fa9c49d347b01b81d1fa1a80cd00ea585939ac62b7e61

@@ -29,7 +29,7 @@ while IFS= read -r lock_line; do
   locked[$lock_key]=$lock_value
 done < $lock_file
 
-for lock_key in toolchain rustc_version cargo_version tree_sha256; do
+for lock_key in toolchain rustc_version cargo_version components required_components_sha256; do
   [[ -n ${locked[$lock_key]:-} ]] || {
     print -u2 -- "error: Rust toolchain lock omits $lock_key"
     exit 1
@@ -50,20 +50,46 @@ readonly toolchain_root=${WSH_RUST_TOOLCHAIN_ROOT:-${RUSTUP_HOME:-$HOME/.rustup}
   exit 1
 }
 
-actual_tree_sha256=$(
-  find -L $toolchain_root -type f -print0 \
-    | sort -z \
-    | while IFS= read -r -d '' toolchain_file; do
-        relative_file=${toolchain_file#${toolchain_root}/}
-        file_sha256=$(sha256sum $toolchain_file)
-        print -rn -- "${relative_file}\0${file_sha256%% *}\0"
-      done \
-    | sha256sum
-)
-actual_tree_sha256=${actual_tree_sha256%% *}
-[[ $actual_tree_sha256 == ${locked[tree_sha256]} ]] || {
-  print -u2 -- "error: Rust toolchain tree digest is $actual_tree_sha256; expected ${locked[tree_sha256]}"
+typeset -a required_components
+required_components=(${(s:,:)locked[components]})
+(( ${#required_components} > 0 )) || {
+  print -u2 -- 'error: Rust toolchain lock has no required components'
   exit 1
 }
 
-print -r -- "${locked[toolchain]} ${locked[tree_sha256]}"
+actual_components_sha256=$(
+  for component in $required_components; do
+    [[ $component =~ '^[a-z0-9._-]+$' ]] || {
+      print -u2 -- "error: invalid locked Rust component: $component"
+      exit 1
+    }
+    component_manifest=lib/rustlib/manifest-${component}
+    [[ -f ${toolchain_root}/${component_manifest} ]] || {
+      print -u2 -- "error: locked Rust component is unavailable: $component"
+      exit 1
+    }
+    component_manifest_sha256=$(sha256sum ${toolchain_root}/${component_manifest})
+    print -rn -- "${component_manifest}\0${component_manifest_sha256%% *}\0"
+    while IFS= read -r component_entry; do
+      [[ $component_entry == file:* ]] || continue
+      relative_file=${component_entry#file:}
+      [[ -n $relative_file && $relative_file != / && $relative_file != /* && $relative_file != .. && $relative_file != *../* && $relative_file != ../* && $relative_file != */.. ]] || {
+        print -u2 -- "error: invalid path in Rust component $component: $relative_file"
+        exit 1
+      }
+      [[ -f ${toolchain_root}/${relative_file} ]] || {
+        print -u2 -- "error: file from Rust component $component is unavailable: $relative_file"
+        exit 1
+      }
+      file_sha256=$(sha256sum ${toolchain_root}/${relative_file})
+      print -rn -- "${relative_file}\0${file_sha256%% *}\0"
+    done < ${toolchain_root}/${component_manifest}
+  done | sort -z | sha256sum
+)
+actual_components_sha256=${actual_components_sha256%% *}
+[[ $actual_components_sha256 == ${locked[required_components_sha256]} ]] || {
+  print -u2 -- "error: required Rust components digest is $actual_components_sha256; expected ${locked[required_components_sha256]}"
+  exit 1
+}
+
+print -r -- "${locked[toolchain]} ${locked[required_components_sha256]}"
