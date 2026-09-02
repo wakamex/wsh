@@ -18,6 +18,7 @@ const MAX_PROTOCOL_LINE_BYTES: usize = 64 * 1024;
 const MAX_LITERAL_CHARS: usize = 128;
 const MAX_GIT_OUTPUT_BYTES: u64 = 4 * 1024 * 1024;
 const GIT_TIMEOUT: Duration = Duration::from_secs(2);
+const GIT_POLL_INTERVAL: Duration = Duration::from_micros(100);
 const MAX_PENDING_EVENTS: usize = 32;
 const WORKER_STOP_TIMEOUT: Duration = Duration::from_millis(2500);
 const MAX_TRACE_BYTES: u64 = 8 * 1024 * 1024;
@@ -748,7 +749,7 @@ fn collect_git_snapshot_with_command(
         }
         match child.try_wait() {
             Ok(Some(status)) => break Ok(status),
-            Ok(None) => thread::sleep(Duration::from_millis(1)),
+            Ok(None) => thread::sleep(GIT_POLL_INTERVAL),
             Err(error) => break Err(error),
         }
     };
