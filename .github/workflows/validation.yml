@@ -21,6 +21,10 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Install the script runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes zsh
       - name: Install and verify the locked Rust toolchain
         run: |
           rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
