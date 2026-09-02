@@ -15,7 +15,7 @@ The first implementation should prove the complete local path before adding remo
 7. Correctness and performance are measured through the existing PTY and repository fixtures.
 8. Manager-side rollback selects the previous bundle even when the active Zsh or runtime cannot start.
 
-This slice uses local artifacts only. Its manifest identifies it as a development bundle, and no documentation, diagnostic, or command may present it as signed, reproducible, official, or release-ready. Network updates, the public theme directory, broad compatibility adapters, generic completion, pane history, and terminal lifecycle replacement remain outside this slice.
+This slice uses local artifacts only. Its manifest identifies it as a development bundle. A local build can reproduce another build byte for byte, but it remains unsigned and unofficial. Only immutable, attested assets published through GitHub Releases are releases. Network updates, the public theme directory, broad compatibility adapters, generic completion, pane history, and terminal lifecycle replacement remain outside this slice.
 
 ## Every intervention starts with a fixed gate
 

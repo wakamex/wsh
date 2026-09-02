@@ -1,13 +1,13 @@
 schema-version = 1
-id = "minimal"
-name = "Minimal"
+id = "benchmark"
+name = "wsh benchmark"
 left = ["cwd", "git", "prompt-character"]
-right = ["duration"]
+right = []
 
 [context]
 enabled = false
 show-local = false
-show-ssh = true
+show-ssh = false
 prefix = ""
 separator = "@"
 suffix = " "
@@ -19,24 +19,24 @@ style = "short"
 show-on-change = false
 max-length = 80
 home-symbol = "~"
-color = "blue"
+color = "default"
 
 [git]
 enabled = true
 compact = false
 hide-branches = []
-prefix = " "
-separator = " "
-color = "magenta"
+prefix = " ZTB_GIT["
+separator = ":"
+color = "default"
 
 [git.symbols]
-branch = "git:"
-detached = "detached:"
-tag = "tag:"
+branch = ""
+detached = "ZTB_COMMIT@"
+tag = "ZTB_TAG@"
 clean = "clean"
-staged = "+"
-modified = "!"
-untracked = "?"
+staged = "staged"
+modified = "unstaged"
+untracked = "untracked"
 ahead = "ahead"
 behind = "behind"
 diverged = "diverged"
@@ -47,18 +47,18 @@ revert = "revert"
 bisect = "bisect"
 
 [duration]
-enabled = true
+enabled = false
 threshold-ms = 2000
 format = "milliseconds"
 prefix = "took "
 suffix = " "
-color = "yellow"
+color = "default"
 
 [prompt-character]
 enabled = true
-success = "%"
-failure = "%"
-privileged = "#"
-success-color = "green"
-failure-color = "red"
-privileged-color = "yellow"
+success = "]ZTB_PROMPT>"
+failure = "]ZTB_PROMPT>"
+privileged = "]ZTB_PROMPT>"
+success-color = "default"
+failure-color = "default"
+privileged-color = "default"

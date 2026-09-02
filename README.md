@@ -36,7 +36,7 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 ## Development slice
 
-The current code is intentionally smaller than the first release. It verifies exact development-bundle payloads, launches the bundle's Zsh 5.9.2 and matching session runtime, validates a bounded non-executable theme, and cleans up the runtime when the shell exits. It does not render the theme or collect Git state yet.
+The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. It does not download updates, verify GitHub attestations, publish official bundles, or operate the public theme directory yet.
 
 Build and test the local slice with:
 
@@ -44,9 +44,10 @@ Build and test the local slice with:
 cargo test --workspace
 ./build/build-zsh.zsh
 ./build/build-development-bundle.zsh
+./tests/runtime-pty.zsh
 ```
 
-The final command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. Every generated manifest says `development`; this path does not create or emulate a signed release.
+The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. `./build/build-glibc-2.35-development-bundle.zsh` builds and exercises the same development slice on the first compatibility floor. Every generated manifest says `development`; local output remains a development bundle even if it later reproduces an official GitHub Release asset byte for byte.
 
 ## Later capabilities require evidence
 
@@ -72,6 +73,7 @@ Zsh remains the shell engine. Applications remain authoritative for their comman
 - [MOTIVATION.md](MOTIVATION.md) explains the benchmark results and product direction.
 - [DESIGN.md](DESIGN.md) defines the Git provider, snapshot, renderer, and distribution contracts.
 - [SECURITY.md](SECURITY.md) defines non-executable themes, open directory admission, and the signed reproducible update policy.
+- [RELEASES.md](RELEASES.md) defines which GitHub artifacts are official and how reproducibility, attestations, activation, and rollback are verified.
 - [DEVELOPMENT.md](DEVELOPMENT.md) defines the vertical-slice, testing, benchmarking, and evidence-retention workflow.
 - [FEATURES.md](FEATURES.md) defines how later capabilities enter the roadmap.
 - [COMPLETION.md](COMPLETION.md) specifies the Wakterm dynamic-completion experiment.

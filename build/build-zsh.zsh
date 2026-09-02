@@ -14,7 +14,7 @@ readonly key_url='https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7CA7EC
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
 readonly cache_dir=${repository_root}/build/cache
-readonly output_root=${repository_root}/build/out
+readonly output_root=${WSH_ZSH_OUTPUT_ROOT:-${repository_root}/build/out}
 readonly output_dir=${output_root}/zsh-${zsh_version}
 readonly archive=${cache_dir}/${archive_name}
 readonly signature=${archive}.asc
@@ -44,7 +44,14 @@ curl --fail --location --retry 3 --output "$signature" "$signature_url"
 print -r -- "${source_sha256}  ${archive}" | sha256sum --check --status
 
 work_dir=$(mktemp -d "${output_root}/.zsh-${zsh_version}.XXXXXX")
-trap 'rm -rf -- "$work_dir"' EXIT INT TERM
+cleanup_work_dir() {
+  if [[ -n ${WSH_KEEP_FAILED_BUILD:-} ]]; then
+    print -u2 -- "preserved failed Zsh build: $work_dir"
+  else
+    rm -rf -- "$work_dir"
+  fi
+}
+trap cleanup_work_dir EXIT INT TERM
 chmod 700 "$work_dir"
 
 curl --fail --location --retry 3 --output "${work_dir}/signing-key.asc" "$key_url"

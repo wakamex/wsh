@@ -1,0 +1,64 @@
+schema-version = 1
+id = "wakamex-benchmark"
+name = "Wakamex benchmark"
+left = ["context", "cwd", "git", "duration", "prompt-character"]
+right = []
+
+[context]
+enabled = true
+show-local = false
+show-ssh = true
+prefix = "["
+separator = "@"
+suffix = "]"
+color = "default"
+
+[cwd]
+enabled = true
+style = "full"
+show-on-change = true
+max-length = 50
+home-symbol = "~"
+color = "default"
+
+[git]
+enabled = true
+compact = true
+hide-branches = ["main", "master"]
+prefix = ""
+separator = ""
+color = "default"
+
+[git.symbols]
+branch = ""
+detached = "➦ "
+tag = "◈ "
+clean = "±"
+staged = "+"
+modified = "!"
+untracked = "?"
+ahead = "↱"
+behind = "↰"
+diverged = "⇅"
+rebase = ">R>"
+merge = ">M<"
+cherry-pick = ">C>"
+revert = "<R>"
+bisect = "<B>"
+
+[duration]
+enabled = true
+threshold-ms = 61000
+format = "human"
+prefix = ""
+suffix = " "
+color = "default"
+
+[prompt-character]
+enabled = true
+success = "❯ZTB_PROMPT>"
+failure = "❯ZTB_PROMPT>"
+privileged = "❯❯❯ZTB_PROMPT>"
+success-color = "default"
+failure-color = "default"
+privileged-color = "default"

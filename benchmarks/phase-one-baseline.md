@@ -19,7 +19,7 @@ The provider comparison must run the same PTY workload through four paths built 
 
 ## Provider gate
 
-The cheapest counterfactual is the same one-process scan through the session runtime. It must preserve one Git process per transition, zero calls without optional-lock suppression, and all advertised state semantics. The fixed first milestone thresholds are at most 7.1 ms p90 and 8.0 ms maximum added over raw Zsh for updated Git state. The Rust provider has not been implemented or measured yet.
+The cheapest counterfactual is the same one-process scan through the session runtime. It must preserve one Git process per transition, zero calls without optional-lock suppression, and all advertised state semantics. The fixed first milestone thresholds are at most 7.1 ms p90 and 8.0 ms maximum added over raw Zsh for updated Git state. The Rust provider is implemented, but it is not an accepted performance result until the clean-revision matched run replaces this baseline with retained raw samples and a generated summary.
 
 ## Development bundle identity
 

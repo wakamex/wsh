@@ -197,7 +197,7 @@ Every candidate Zsh snapshot should pass:
 - First-editable and final-state latency measurements
 - Repaint and external-process limits
 - Optional-lock checks
-- Signed-manifest, reproducible-build, interrupted-update, atomic-activation, and offline-rollback tests
+- Release-attestation, build-attestation, reproducible-build, interrupted-update, atomic-activation, and offline-rollback tests
 - Full-bundle immutability and recovery tests that reject component replacement and keep rollback usable when the active Zsh or runtime cannot start
 
 The binary reports the upstream commit, build configuration, compiler, applied patch set, and distribution version. Benchmark artifacts record the executable hash as well as the printed Zsh version so development snapshots cannot be confused.

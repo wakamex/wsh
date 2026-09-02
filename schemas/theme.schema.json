@@ -38,11 +38,12 @@
     "context": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["enabled", "show-local", "show-ssh", "separator", "suffix", "color"],
+      "required": ["enabled", "show-local", "show-ssh", "prefix", "separator", "suffix", "color"],
       "properties": {
         "enabled": { "type": "boolean" },
         "show-local": { "type": "boolean" },
         "show-ssh": { "type": "boolean" },
+        "prefix": { "$ref": "#/$defs/literal" },
         "separator": { "$ref": "#/$defs/literal" },
         "suffix": { "$ref": "#/$defs/literal" },
         "color": { "$ref": "#/$defs/color" }
@@ -51,10 +52,12 @@
     "cwd": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["enabled", "style", "home-symbol", "color"],
+      "required": ["enabled", "style", "show-on-change", "max-length", "home-symbol", "color"],
       "properties": {
         "enabled": { "type": "boolean" },
         "style": { "enum": ["full", "short"] },
+        "show-on-change": { "type": "boolean" },
+        "max-length": { "type": "integer", "minimum": 0, "maximum": 4096 },
         "home-symbol": { "$ref": "#/$defs/literal" },
         "color": { "$ref": "#/$defs/color" }
       }
@@ -62,10 +65,12 @@
     "git_symbols": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["branch", "detached", "staged", "modified", "untracked", "ahead", "behind", "diverged", "rebase", "merge", "cherry-pick", "revert", "bisect"],
+      "required": ["branch", "detached", "tag", "clean", "staged", "modified", "untracked", "ahead", "behind", "diverged", "rebase", "merge", "cherry-pick", "revert", "bisect"],
       "properties": {
         "branch": { "$ref": "#/$defs/literal" },
         "detached": { "$ref": "#/$defs/literal" },
+        "tag": { "$ref": "#/$defs/literal" },
+        "clean": { "$ref": "#/$defs/literal" },
         "staged": { "$ref": "#/$defs/literal" },
         "modified": { "$ref": "#/$defs/literal" },
         "untracked": { "$ref": "#/$defs/literal" },
@@ -82,9 +87,10 @@
     "git": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["enabled", "hide-branches", "prefix", "separator", "color", "symbols"],
+      "required": ["enabled", "compact", "hide-branches", "prefix", "separator", "color", "symbols"],
       "properties": {
         "enabled": { "type": "boolean" },
+        "compact": { "type": "boolean" },
         "hide-branches": { "type": "array", "items": { "$ref": "#/$defs/literal" }, "maxItems": 16, "uniqueItems": true },
         "prefix": { "$ref": "#/$defs/literal" },
         "separator": { "$ref": "#/$defs/literal" },
@@ -95,10 +101,11 @@
     "duration": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["enabled", "threshold-ms", "prefix", "suffix", "color"],
+      "required": ["enabled", "threshold-ms", "format", "prefix", "suffix", "color"],
       "properties": {
         "enabled": { "type": "boolean" },
         "threshold-ms": { "type": "integer", "minimum": 0, "maximum": 86400000 },
+        "format": { "enum": ["milliseconds", "human"] },
         "prefix": { "$ref": "#/$defs/literal" },
         "suffix": { "$ref": "#/$defs/literal" },
         "color": { "$ref": "#/$defs/color" }

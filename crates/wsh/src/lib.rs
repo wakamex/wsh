@@ -4,11 +4,12 @@ use std::io::{BufReader, Read};
 use std::os::unix::fs::MetadataExt;
 use std::path::{Component, Path, PathBuf};
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
 const MANIFEST_NAME: &str = "manifest.json";
 const MAX_MANIFEST_BYTES: u64 = 1024 * 1024;
+const STATE_FILE_NAME: &str = "bundle-state.json";
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -109,6 +110,59 @@ pub struct EntrypointPaths {
     pub zdotdir: PathBuf,
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+struct BundleState {
+    version: u32,
+    active: BundleReference,
+    previous: Option<BundleReference>,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+#[serde(deny_unknown_fields)]
+struct BundleReference {
+    path: PathBuf,
+    manifest_sha256: String,
+}
+
+pub fn activate_bundle(state_root: &Path, bundle: &Path) -> Result<String, String> {
+    let reference = verified_reference(bundle)?;
+    let previous = read_state(state_root)?.map(|state| state.active);
+    write_state(
+        state_root,
+        &BundleState {
+            version: 1,
+            active: reference.clone(),
+            previous,
+        },
+    )?;
+    Ok(reference.manifest_sha256)
+}
+
+pub fn rollback_bundle(state_root: &Path) -> Result<String, String> {
+    let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
+    let previous = state
+        .previous
+        .clone()
+        .ok_or_else(|| "no previous bundle to roll back to".to_owned())?;
+    verify_reference(&previous)?;
+    write_state(
+        state_root,
+        &BundleState {
+            version: 1,
+            active: previous.clone(),
+            previous: Some(state.active),
+        },
+    )?;
+    Ok(previous.manifest_sha256)
+}
+
+pub fn active_bundle(state_root: &Path) -> Result<PathBuf, String> {
+    let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
+    verify_reference(&state.active)?;
+    Ok(state.active.path)
+}
+
 pub fn verify_bundle(root: &Path) -> Result<VerifiedBundle, String> {
     let root_metadata = fs::symlink_metadata(root)
         .map_err(|error| format!("could not inspect bundle {}: {error}", root.display()))?;
@@ -179,6 +233,117 @@ pub fn entrypoints(root: &Path, manifest: &BundleManifest) -> EntrypointPaths {
         default_theme: root.join(&manifest.entrypoints.default_theme),
         zdotdir: root.join("share/wsh/zdotdir"),
     }
+}
+
+fn verified_reference(bundle: &Path) -> Result<BundleReference, String> {
+    let path = bundle
+        .canonicalize()
+        .map_err(|error| format!("could not resolve bundle {}: {error}", bundle.display()))?;
+    let verified = verify_bundle(&path)?;
+    Ok(BundleReference {
+        path,
+        manifest_sha256: verified.manifest_sha256,
+    })
+}
+
+fn verify_reference(reference: &BundleReference) -> Result<(), String> {
+    let verified = verify_bundle(&reference.path)?;
+    if verified.manifest_sha256 != reference.manifest_sha256 {
+        return Err(format!(
+            "active bundle manifest digest changed: {}",
+            reference.path.display()
+        ));
+    }
+    Ok(())
+}
+
+fn read_state(state_root: &Path) -> Result<Option<BundleState>, String> {
+    let path = state_root.join(STATE_FILE_NAME);
+    let metadata = match fs::symlink_metadata(&path) {
+        Ok(metadata) => metadata,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(None),
+        Err(error) => return Err(format!("could not inspect {}: {error}", path.display())),
+    };
+    if !metadata.file_type().is_file() || metadata.file_type().is_symlink() {
+        return Err("bundle state must be a regular file".into());
+    }
+    if metadata.len() > MAX_MANIFEST_BYTES {
+        return Err("bundle state is too large".into());
+    }
+    let bytes =
+        fs::read(&path).map_err(|error| format!("could not read {}: {error}", path.display()))?;
+    let state: BundleState =
+        serde_json::from_slice(&bytes).map_err(|error| format!("invalid bundle state: {error}"))?;
+    if state.version != 1 {
+        return Err(format!(
+            "unsupported bundle state version: {}",
+            state.version
+        ));
+    }
+    Ok(Some(state))
+}
+
+fn write_state(state_root: &Path, state: &BundleState) -> Result<(), String> {
+    use std::io::Write as _;
+    use std::os::unix::fs::{OpenOptionsExt as _, PermissionsExt as _};
+
+    fs::create_dir_all(state_root).map_err(|error| {
+        format!(
+            "could not create state directory {}: {error}",
+            state_root.display()
+        )
+    })?;
+    let root_metadata = fs::symlink_metadata(state_root).map_err(|error| {
+        format!(
+            "could not inspect state directory {}: {error}",
+            state_root.display()
+        )
+    })?;
+    if !root_metadata.file_type().is_dir() || root_metadata.file_type().is_symlink() {
+        return Err("state root must be a real directory".into());
+    }
+    fs::set_permissions(state_root, fs::Permissions::from_mode(0o700)).map_err(|error| {
+        format!(
+            "could not secure state directory {}: {error}",
+            state_root.display()
+        )
+    })?;
+    let destination = state_root.join(STATE_FILE_NAME);
+    let nonce = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .map_err(|_| "system clock is before the Unix epoch")?
+        .as_nanos();
+    let temporary = state_root.join(format!(
+        ".{STATE_FILE_NAME}.{}.{nonce}.tmp",
+        std::process::id()
+    ));
+    let result = (|| {
+        let mut file = fs::OpenOptions::new()
+            .write(true)
+            .create_new(true)
+            .mode(0o600)
+            .open(&temporary)
+            .map_err(|error| format!("could not create {}: {error}", temporary.display()))?;
+        serde_json::to_writer(&mut file, state)
+            .map_err(|error| format!("could not encode bundle state: {error}"))?;
+        file.write_all(b"\n")
+            .map_err(|error| format!("could not write bundle state: {error}"))?;
+        file.sync_all()
+            .map_err(|error| format!("could not sync bundle state: {error}"))?;
+        fs::rename(&temporary, &destination).map_err(|error| {
+            format!(
+                "could not replace bundle state {}: {error}",
+                destination.display()
+            )
+        })?;
+        File::open(state_root)
+            .and_then(|directory| directory.sync_all())
+            .map_err(|error| format!("could not sync {}: {error}", state_root.display()))
+    })();
+    if result.is_err() {
+        let _ = fs::remove_file(&temporary);
+    }
+    result
 }
 
 fn validate_manifest(manifest: &BundleManifest) -> Result<(), String> {
@@ -454,5 +619,49 @@ mod tests {
         symlink("bin/zsh", directory.path().join("link")).unwrap();
         let error = verify_bundle(directory.path()).err().unwrap();
         assert!(error.contains("symbolic links are not allowed"));
+    }
+
+    #[test]
+    fn atomically_activates_and_rolls_back_from_a_broken_active_bundle() {
+        let directory = tempfile::tempdir().unwrap();
+        let first = directory.path().join("first");
+        let second = directory.path().join("second");
+        let state = directory.path().join("state");
+        fs::create_dir(&first).unwrap();
+        fs::create_dir(&second).unwrap();
+        write_test_bundle(&first);
+        write_test_bundle(&second);
+        activate_bundle(&state, &first).unwrap();
+        activate_bundle(&state, &second).unwrap();
+        fs::write(state.join(".bundle-state.json.interrupted.tmp"), b"partial").unwrap();
+        fs::write(second.join("bin/zsh"), b"broken").unwrap();
+        assert!(active_bundle(&state).is_err());
+        rollback_bundle(&state).unwrap();
+        assert_eq!(
+            active_bundle(&state).unwrap(),
+            first.canonicalize().unwrap()
+        );
+    }
+
+    #[test]
+    fn detects_swapped_entrypoints_and_manifest_mutation() {
+        let directory = tempfile::tempdir().unwrap();
+        let bundle = directory.path().join("bundle");
+        fs::create_dir(&bundle).unwrap();
+        write_test_bundle(&bundle);
+        let shell = fs::read(bundle.join("bin/zsh")).unwrap();
+        let runtime = fs::read(bundle.join("bin/wsh-runtime")).unwrap();
+        fs::write(bundle.join("bin/zsh"), runtime).unwrap();
+        fs::write(bundle.join("bin/wsh-runtime"), shell).unwrap();
+        assert!(verify_bundle(&bundle).is_err());
+
+        write_test_bundle(&bundle);
+        let state = directory.path().join("state");
+        activate_bundle(&state, &bundle).unwrap();
+        let mut manifest = fs::read(bundle.join("manifest.json")).unwrap();
+        manifest.push(b'\n');
+        fs::write(bundle.join("manifest.json"), manifest).unwrap();
+        let error = active_bundle(&state).unwrap_err();
+        assert!(error.contains("manifest digest changed"));
     }
 }

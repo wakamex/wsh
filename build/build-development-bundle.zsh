@@ -5,10 +5,11 @@ setopt errexit nounset pipefail
 
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
-readonly zsh_root=${repository_root}/build/out/zsh-5.9.2
-readonly output_root=${repository_root}/bundles
+readonly zsh_root=${WSH_ZSH_ROOT:-${repository_root}/build/out/zsh-5.9.2}
+readonly output_root=${WSH_BUNDLE_OUTPUT_ROOT:-${repository_root}/bundles}
+readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 
-for command in cargo cp find gcc git head install jq ld mktemp mv rm rustc sha256sum sort stat; do
+for command in cargo cp find gcc git head install jq ld mktemp mv readelf rm rustc sed sha256sum sort stat; do
   if (( ! $+commands[$command] )); then
     print -u2 -- "error: required command not found: ${command}"
     exit 1
@@ -25,7 +26,7 @@ trap 'rm -rf -- "$stage"' EXIT INT TERM
 chmod 700 "$stage"
 
 install -D -m 755 "${zsh_root}/bin/zsh" "${stage}/bin/zsh"
-install -D -m 755 "${repository_root}/target/release/wsh-runtime" "${stage}/bin/wsh-runtime"
+install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
 cp -R -- "${zsh_root}/lib" "$stage/lib"
 mkdir -p -- "${stage}/share/zsh/5.9.2"
 cp -R -- "${zsh_root}/share/zsh/5.9.2/functions" "${stage}/share/zsh/5.9.2/functions"
@@ -35,6 +36,7 @@ install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share
 install -D -m 644 "${repository_root}/schemas/bundle.schema.json" "${stage}/share/wsh/schemas/bundle.schema.json"
 install -D -m 644 "${repository_root}/schemas/theme.schema.json" "${stage}/share/wsh/schemas/theme.schema.json"
 install -D -m 644 "${repository_root}/themes/minimal.toml" "${stage}/share/wsh/themes/minimal.toml"
+install -D -m 644 "${repository_root}/themes/wakamex.toml" "${stage}/share/wsh/themes/wakamex.toml"
 
 if [[ -n $(find "$stage" -type l -print -quit) ]]; then
   print -u2 -- 'error: development payload contains a symbolic link'
@@ -68,6 +70,12 @@ lockfile_sha256=${lockfile_sha256%% *}
 rust_compiler=$(rustc --version)
 c_compiler=$(gcc --version | head -n 1)
 linker=$(ld --version | head -n 1)
+minimum_glibc=${WSH_MINIMUM_GLIBC:-}
+dynamic_libraries=$(find "$stage" -type f -exec readelf -d {} \; 2>/dev/null \
+  | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' \
+  | sort -u \
+  | jq -R . \
+  | jq -s .)
 
 jq -n \
   --arg release_id "development-${source_revision}" \
@@ -76,6 +84,8 @@ jq -n \
   --arg rust_compiler "$rust_compiler" \
   --arg c_compiler "$c_compiler" \
   --arg linker "$linker" \
+  --arg minimum_glibc "$minimum_glibc" \
+  --argjson dynamic_libraries "$dynamic_libraries" \
   --slurpfile files "$file_records" \
   '{
     schema_version:1,
@@ -103,7 +113,7 @@ jq -n \
     },
     api_versions:{runtime_protocol:1,provider_schema:1,theme_schema:1,integration_api:1},
     entrypoints:{shell:"bin/zsh",runtime:"bin/wsh-runtime",integration:"share/wsh/integration.zsh",default_theme:"share/wsh/themes/minimal.toml"},
-    requirements:{dynamic_libraries:["libc.so.6","libcap.so.2","libm.so.6","libncursesw.so.6","libpcre2-8.so.0","libtinfo.so.6"],minimum_glibc:null},
+    requirements:{dynamic_libraries:$dynamic_libraries,minimum_glibc:(if $minimum_glibc == "" then null else $minimum_glibc end)},
     files:$files
   }' > "${stage}/manifest.json"
 rm -- "$file_records"
@@ -112,7 +122,7 @@ manifest_sha256=$(sha256sum "${stage}/manifest.json")
 manifest_sha256=${manifest_sha256%% *}
 destination=${output_root}/${manifest_sha256}
 if [[ -e $destination ]]; then
-  "${repository_root}/target/release/wsh" bundle verify "$destination" >/dev/null
+  "${cargo_target_dir}/release/wsh" bundle verify "$destination" >/dev/null
   rm -rf -- "$stage"
   trap - EXIT INT TERM
   print -r -- "$destination"

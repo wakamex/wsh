@@ -6,7 +6,7 @@ This document fixes the first vertical-slice choices and acceptance gates. It do
 
 ## The first target is x86_64 Linux with glibc
 
-Development begins on the Fedora host, but the host's glibc version does not become the compatibility floor by accident. The release builder will use a recorded older glibc baseline selected by an install-and-PTY test on the oldest supported environment. The exact minimum distribution or glibc version remains unset until that test exists.
+Development begins on the Fedora host, but the host's glibc version does not become the compatibility floor by accident. The first compatibility floor is glibc 2.35 on x86_64 Ubuntu 22.04. A development build made inside the pinned Ubuntu 22.04 base image required no glibc symbol newer than 2.35 and passed the upstream Zsh suite, runtime and manager suites, provider smoke test, dependency-manifest comparison, and interactive PTY repaint, crash, and cleanup test in that environment. The manifest records glibc 2.35 as the tested support floor.
 
 Additional architectures, musl builds, and other operating systems require their own build identities, runtime fixtures, and benchmark results. They do not enter the first vertical slice.
 
@@ -14,7 +14,7 @@ Additional architectures, musl builds, and other operating systems require their
 
 The Zsh project publishes signed source archives rather than an official portable Linux binary distribution. The first bundle therefore builds Zsh 5.9.2 from its upstream signed release archive. The build records the archive URL and digest, verified OpenPGP signing key fingerprint, corresponding source revision, patch set, configure arguments, compiler and linker identities, dependency identities, target, and resulting file digests.
 
-The initial patch set is empty. The release build includes the Zsh executable, required loadable modules, functions, and other runtime files rather than copying `/usr/bin/zsh` from the build host. The portability experiment will determine which non-glibc runtime libraries must be included and which target ABI requirements can safely remain system dependencies. That decision is made from dependency inspection plus execution on the compatibility floor, not from the Fedora development machine alone.
+The initial patch set is empty. The release build includes the Zsh executable, required loadable modules, functions, and other runtime files rather than copying `/usr/bin/zsh` from the build host. The current development bundle carries the Zsh runtime tree and records every system-supplied dynamic library found across the manager, runtime, Zsh executable, and loadable modules. An official builder must pin every build input and repeat dependency inspection plus execution on the floor before preserving that boundary.
 
 Compilation happens in wsh release infrastructure. The installed manager downloads a completed bundle and never resolves formulas, builds Zsh, substitutes system libraries, or falls back to compiling source on the user's machine. This borrows the managed-runtime installation shape used by tools such as uv and the prebuilt-artifact shape used by package managers, but `wsh` manages only its own complete distribution. It has no general package index, dependency solver, formula language, or authority over unrelated software.
 
@@ -66,9 +66,7 @@ The first managed installation layout is:
 │           ├── integration.zsh
 │           ├── schemas/
 │           └── themes/
-├── state/
-│   ├── active
-│   └── previous
+├── bundle-state.json
 └── cache/
 ```
 
@@ -83,7 +81,7 @@ The manager at `~/.local/bin/wsh` remains outside the selected bundle so it can 
 - Entrypoints and the path, type, mode, size, and SHA-256 digest of every payload file
 - Runtime library and ABI requirements not carried inside the bundle
 
-The SHA-256 digest of the exact manifest bytes is the bundle directory identity. The manifest does not list itself; signed release metadata authenticates its digest, and its file table covers every other file in the bundle. Schema version 1 rejects unknown fields, absolute paths, `..` traversal, special files, and symbolic links. Files are unpacked into a new directory, checked against the manifest, smoke-tested, and only then selected by an atomic replacement of the small `active` state file. A development manifest says it is unsigned and cannot be promoted in place to an official bundle.
+The SHA-256 digest of the exact manifest bytes is the bundle directory identity. The manifest does not list itself; attested immutable GitHub Release metadata authenticates its digest, and its file table covers every other file in the bundle. Schema version 1 rejects unknown fields, absolute paths, `..` traversal, special files, and symbolic links. Files are unpacked into a new directory, checked against the manifest, smoke-tested, and only then selected by atomically replacing one state record containing the active and previous references. A development manifest says it is unsigned and cannot be promoted in place to an official bundle.
 
 ## Theme schema 1 covers minimal and Wakamex presentations
 
@@ -121,13 +119,8 @@ The settled-latency stretch target is the report's A band of at most 5 ms added 
 
 Every comparison identifies the wsh revision and manifest digest, Zsh source and binary identities, Rust and C toolchains, target, build configuration, enabled components, theme definition digest, fixture, command, trace mode, host, raw samples, and exclusions.
 
-## Remaining choices are fixed by the first experiments
+## The first experiments fixed the local slice
 
-The product boundary, first platform, implementation languages, Zsh release, bundle unit, initial provider, theme scope, and latency gates are decided. The following implementation choices remain, and each has a concrete first-slice test rather than requiring another product-direction decision:
+The local slice uses inherited pipes and bounded newline-delimited JSON, one process-backed Git scan, strict manifest and theme schemas, an immediately editable fallback prompt, stale-generation rejection, cancellation and process-group cleanup, repaint-on-change, manager-side atomic activation and rollback, and the matched raw, idle-runtime, direct-Git, complete-runtime, and trace benchmark controls. The minimal and Wakamex presentations exercise the same provider through separate data-only definitions.
 
-- Select the oldest supported glibc environment and bundled-library boundary by inspecting the release binary and running the install, upstream, PTY, and provider suites there.
-- Fix the runtime transport and message encoding by comparing the smallest pipe-based protocol with the latency, cancellation, malformed-message, restart, and backpressure requirements.
-- Write the exact manifest JSON and theme TOML schemas, including field meanings and resource limits, against hostile and forward-compatibility fixtures.
-- Define runtime startup, crash, and Zsh-exit behavior so a failed provider cannot hang the editor or leave a child process behind.
-- Retain the direct one-scan Git control and its exact benchmark identity when judging the Rust provider.
-- Choose official signing keys, release hosting, metadata expiration, and key-recovery procedure only after the unsigned local bundle passes. These do not block the first vertical slice.
+The first target, product boundary, implementation languages, Zsh release, bundle unit, provider scope, theme scope, glibc floor, update authority, and latency gates are decided. An official release still requires pinned build inputs, two isolated byte-identical builds, GitHub build attestations, an immutable GitHub Release, updater-side attestation verification, and the complete release gates in [`RELEASES.md`](RELEASES.md). Local outputs remain development bundles by definition.

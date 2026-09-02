@@ -1,0 +1,5 @@
+FROM docker.io/library/ubuntu@sha256:34577a83cd7a8f1e55f6eb173fd9bb70c16127a83d6bf06f56f6b1fff9e406b9
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends binutils build-essential ca-certificates curl git gnupg jq libcap-dev libncurses-dev libpcre2-dev pkg-config xz-utils zsh && rm -rf /var/lib/apt/lists/*
+
+LABEL org.wakamex.wsh.glibc-floor="2.35"

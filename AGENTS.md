@@ -8,7 +8,7 @@ Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmar
 - Run correctness and adversarial tests before comparing performance.
 - Identify every result by source revision, wsh bundle identity, Zsh source and binary identity, target, build configuration, enabled components, workload, fixture, trace mode, and benchmark command.
 - Compare the same workload under the same instrumentation mode before and after a change, and measure instrumentation overhead separately.
-- Mark local development bundles as unsigned development artifacts. Never describe them as official, verified, reproducible, or release-ready until they pass the corresponding documented gates.
+- Mark every local bundle as an unsigned development artifact. A local build may be described as byte-identical to another build only when retained evidence proves it, but only immutable, attested GitHub Release assets are official releases.
 - Do not add a resident provider, native module, generic broker, database, remote updater, public directory backend, or compatibility framework without the evidence required by [`FEATURES.md`](FEATURES.md).
 - When evidence invalidates a premise, replace the old design or plan instead of preserving contradictory paths.
 - Preserve benchmark inputs, raw results, summaries, exact commands, and relevant hashes needed to reproduce an accepted claim.

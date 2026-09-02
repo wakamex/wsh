@@ -9,6 +9,13 @@ fn usage() -> &'static str {
 }
 
 fn run() -> Result<(), String> {
+    #[cfg(target_os = "linux")]
+    unsafe {
+        let parent = libc::getppid();
+        if libc::prctl(libc::PR_SET_PDEATHSIG, libc::SIGTERM) != 0 || libc::getppid() != parent {
+            return Err("could not bind runtime lifetime to its parent".into());
+        }
+    }
     let mut args = env::args_os().skip(1);
     match args
         .next()
@@ -33,7 +40,11 @@ fn run() -> Result<(), String> {
                 return Err(usage().into());
             }
             let theme = load_theme(&path)?;
-            serve(theme, std::io::stdin().lock(), std::io::stdout().lock())
+            serve(
+                theme,
+                std::io::BufReader::new(std::io::stdin()),
+                std::io::stdout().lock(),
+            )
         }
         _ => Err(usage().into()),
     }
