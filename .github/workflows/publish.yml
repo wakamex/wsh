@@ -127,7 +127,7 @@ jobs:
         with:
           name: release-build-b
           path: incoming/b
-      - name: Require byte-identical archives and manifests
+      - name: Require byte-identical release outputs
         id: stage
         shell: bash
         run: |
@@ -140,6 +140,8 @@ jobs:
           mapfile -t launchers_b < <(find incoming/b -maxdepth 1 -type f -name 'wsh-launcher-*' -print)
           mapfile -t installers_a < <(find incoming/a -maxdepth 1 -type f -name 'wsh-install-*' -print)
           mapfile -t installers_b < <(find incoming/b -maxdepth 1 -type f -name 'wsh-install-*' -print)
+          mapfile -t bootstraps_a < <(find incoming/a -maxdepth 1 -type f -name 'wsh-v*-install.sh' -print)
+          mapfile -t bootstraps_b < <(find incoming/b -maxdepth 1 -type f -name 'wsh-v*-install.sh' -print)
           test "${#archives_a[@]}" -eq 1
           test "${#archives_b[@]}" -eq 1
           test "${#manifests_a[@]}" -eq 1
@@ -148,16 +150,20 @@ jobs:
           test "${#launchers_b[@]}" -eq 1
           test "${#installers_a[@]}" -eq 1
           test "${#installers_b[@]}" -eq 1
+          test "${#bootstraps_a[@]}" -eq 1
+          test "${#bootstraps_b[@]}" -eq 1
           test "${archives_a[0]##*/}" = "${archives_b[0]##*/}"
           test "${manifests_a[0]##*/}" = "${manifests_b[0]##*/}"
           test "${launchers_a[0]##*/}" = "${launchers_b[0]##*/}"
           test "${installers_a[0]##*/}" = "${installers_b[0]##*/}"
+          test "${bootstraps_a[0]##*/}" = "${bootstraps_b[0]##*/}"
           cmp --silent "${archives_a[0]}" "${archives_b[0]}"
           cmp --silent "${manifests_a[0]}" "${manifests_b[0]}"
           cmp --silent "${launchers_a[0]}" "${launchers_b[0]}"
           cmp --silent "${installers_a[0]}" "${installers_b[0]}"
+          cmp --silent "${bootstraps_a[0]}" "${bootstraps_b[0]}"
           mkdir release-assets
-          cp "${archives_a[0]}" "${manifests_a[0]}" "${launchers_a[0]}" "${installers_a[0]}" release-assets/
+          cp "${archives_a[0]}" "${manifests_a[0]}" "${launchers_a[0]}" "${installers_a[0]}" "${bootstraps_a[0]}" release-assets/
           cp incoming/a/build-record-a.json incoming/b/build-record-b.json release-assets/
           (
             cd release-assets

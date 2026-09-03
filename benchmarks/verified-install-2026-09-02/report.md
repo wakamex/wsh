@@ -28,7 +28,7 @@ Attestation verification is not repeated during startup. `wsh run` continues to 
 
 The release workflow now grants the artifact-metadata permission required by the pinned attestation action, attests the archive, manifest, launcher, installer, build records, and checksum list, and publishes the resulting offline Sigstore bundle as another immutable release asset. Before publication it verifies every subject with a digest-pinned GitHub CLI 2.96.0 and exact repository, workflow, signer revision, source ref, source revision, and hosted-runner policy. GitHub's release attestation remains the publication-time immutability check; the native installer currently verifies the workflow build provenance carried in the published offline bundle.
 
-The first bootstrap still needs a release-specific trusted digest for the installer or distribution archive. Downloading an untrusted verifier and asking that same binary to authenticate itself would not add a trust boundary. Later updates can rely on the already-installed verifier.
+The subsequent [release-bootstrap experiment](../bootstrap-install-2026-09-02/report.md) supplies release-specific trusted launcher and installer digests. Downloading an untrusted verifier and asking that same binary to authenticate itself would not add a trust boundary. Later updates can rely on the already-installed verifier.
 
 ## Measurement method
 

@@ -67,6 +67,13 @@ for worker_name in a b; do
   cp -- ${worker_bundles[1]}/manifest.json ${output_root}/worker-${worker_name}.manifest.json
   cp -- ${worker_source}/build/portable/glibc-2.28/target/release/wsh ${output_root}/worker-${worker_name}.launcher
   cp -- ${worker_source}/build/portable/glibc-2.28/target/release/wsh-install ${output_root}/worker-${worker_name}.installer
+  ${worker_source}/build/render-bootstrap.zsh \
+    v0.0.0 \
+    $revision \
+    $worker_archives[1] \
+    ${worker_source}/build/portable/glibc-2.28/target/release/wsh \
+    ${worker_source}/build/portable/glibc-2.28/target/release/wsh-install \
+    ${output_root}/worker-${worker_name}.bootstrap >/dev/null
 done
 
 readonly archive_a=${output_root}/worker-a.tar.xz
@@ -77,6 +84,8 @@ readonly launcher_a=${output_root}/worker-a.launcher
 readonly launcher_b=${output_root}/worker-b.launcher
 readonly installer_a=${output_root}/worker-a.installer
 readonly installer_b=${output_root}/worker-b.installer
+readonly bootstrap_a=${output_root}/worker-a.bootstrap
+readonly bootstrap_b=${output_root}/worker-b.bootstrap
 archive_a_sha256=$(sha256sum $archive_a)
 archive_b_sha256=$(sha256sum $archive_b)
 manifest_a_sha256=$(sha256sum $manifest_a)
@@ -85,6 +94,8 @@ launcher_a_sha256=$(sha256sum $launcher_a)
 launcher_b_sha256=$(sha256sum $launcher_b)
 installer_a_sha256=$(sha256sum $installer_a)
 installer_b_sha256=$(sha256sum $installer_b)
+bootstrap_a_sha256=$(sha256sum $bootstrap_a)
+bootstrap_b_sha256=$(sha256sum $bootstrap_b)
 archive_a_sha256=${archive_a_sha256%% *}
 archive_b_sha256=${archive_b_sha256%% *}
 manifest_a_sha256=${manifest_a_sha256%% *}
@@ -93,6 +104,8 @@ launcher_a_sha256=${launcher_a_sha256%% *}
 launcher_b_sha256=${launcher_b_sha256%% *}
 installer_a_sha256=${installer_a_sha256%% *}
 installer_b_sha256=${installer_b_sha256%% *}
+bootstrap_a_sha256=${bootstrap_a_sha256%% *}
+bootstrap_b_sha256=${bootstrap_b_sha256%% *}
 
 {
   print -r -- 'format_version=1'
@@ -105,6 +118,8 @@ installer_b_sha256=${installer_b_sha256%% *}
   print -r -- "launcher_b_sha256=$launcher_b_sha256"
   print -r -- "installer_a_sha256=$installer_a_sha256"
   print -r -- "installer_b_sha256=$installer_b_sha256"
+  print -r -- "bootstrap_a_sha256=$bootstrap_a_sha256"
+  print -r -- "bootstrap_b_sha256=$bootstrap_b_sha256"
   print -r -- "package_lock_sha256=$(sha256sum ${repository_root}/build/rocky-8.10-packages.lock | cut -d ' ' -f 1)"
   print -r -- "rust_toolchain_lock_sha256=$(sha256sum ${repository_root}/build/rust-toolchain.lock | cut -d ' ' -f 1)"
 } >| ${output_root}/result.txt
@@ -125,7 +140,11 @@ cmp --silent $installer_a $installer_b || {
   print -u2 -- 'error: isolated installers differ'
   exit 1
 }
+cmp --silent $bootstrap_a $bootstrap_b || {
+  print -u2 -- 'error: isolated bootstrap scripts differ'
+  exit 1
+}
 
 print -r -- 'byte_identical=1' >> ${output_root}/result.txt
 completed=1
-print -r -- "PASS: two isolated archives, manifests, launchers, and installers are byte-identical"
+print -r -- "PASS: two isolated archives, manifests, launchers, installers, and bootstrap scripts are byte-identical"

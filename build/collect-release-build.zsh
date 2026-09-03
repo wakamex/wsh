@@ -50,6 +50,7 @@ readonly archive_name=${archive:t}
 readonly manifest_name=${archive_name%.tar.xz}.manifest.json
 readonly launcher_name=wsh-launcher-${tag}-x86_64-unknown-linux-gnu
 readonly installer_name=wsh-install-${tag}-x86_64-unknown-linux-gnu
+readonly bootstrap_name=wsh-${tag}-install.sh
 [[ -x ${target_root}/wsh && -x ${target_root}/wsh-install ]] || {
   print -u2 -- 'error: canonical build did not produce the release tools'
   exit 1
@@ -58,14 +59,24 @@ cp -- $archive ${output}/${archive_name}
 cp -- $manifest ${output}/${manifest_name}
 cp -- ${target_root}/wsh ${output}/${launcher_name}
 cp -- ${target_root}/wsh-install ${output}/${installer_name}
+readonly source_revision=$(jq -er '.rust.source_revision' $manifest)
+${script_dir}/render-bootstrap.zsh \
+  $tag \
+  $source_revision \
+  ${output}/${archive_name} \
+  ${output}/${launcher_name} \
+  ${output}/${installer_name} \
+  ${output}/${bootstrap_name} >/dev/null
 archive_digest=$(sha256sum ${output}/${archive_name})
 manifest_digest=$(sha256sum ${output}/${manifest_name})
 launcher_digest=$(sha256sum ${output}/${launcher_name})
 installer_digest=$(sha256sum ${output}/${installer_name})
+bootstrap_digest=$(sha256sum ${output}/${bootstrap_name})
 archive_digest=${archive_digest%% *}
 manifest_digest=${manifest_digest%% *}
 launcher_digest=${launcher_digest%% *}
 installer_digest=${installer_digest%% *}
+bootstrap_digest=${bootstrap_digest%% *}
 tool_dynamic_libraries=$(find ${output}/${launcher_name} ${output}/${installer_name} -type f -exec readelf -d {} \; 2>/dev/null \
   | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' \
   | sort -u \
@@ -94,6 +105,8 @@ jq -n \
   --arg launcher_sha256 "$launcher_digest" \
   --arg installer "$installer_name" \
   --arg installer_sha256 "$installer_digest" \
+  --arg bootstrap "$bootstrap_name" \
+  --arg bootstrap_sha256 "$bootstrap_digest" \
   --arg tool_maximum_glibc "$tool_maximum_glibc" \
   --argjson tool_dynamic_libraries "$tool_dynamic_libraries" \
   --slurpfile bundle "$manifest" \
@@ -115,7 +128,8 @@ jq -n \
       archive:{name:$archive,sha256:$archive_sha256},
       manifest:{name:$manifest,sha256:$manifest_sha256},
       launcher:{name:$launcher,sha256:$launcher_sha256},
-      installer:{name:$installer,sha256:$installer_sha256}
+      installer:{name:$installer,sha256:$installer_sha256},
+      bootstrap:{name:$bootstrap,sha256:$bootstrap_sha256}
     }
   }' > ${output}/build-record-${worker}.json
 

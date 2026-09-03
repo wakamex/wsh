@@ -1,0 +1,142 @@
+#!/bin/sh
+
+set -eu
+umask 077
+
+release_tag='@RELEASE_TAG@'
+source_commit='@SOURCE_COMMIT@'
+release_base_url='@RELEASE_BASE_URL@'
+archive_name='@ARCHIVE_NAME@'
+attestation_name='@ATTESTATION_NAME@'
+launcher_name='@LAUNCHER_NAME@'
+launcher_sha256='@LAUNCHER_SHA256@'
+installer_name='@INSTALLER_NAME@'
+installer_sha256='@INSTALLER_SHA256@'
+
+fail() {
+  printf '%s\n' "error: $*" >&2
+  exit 1
+}
+
+for command in curl getconf install mkdir mktemp mv rm sha256sum uname; do
+  command -v "$command" >/dev/null 2>&1 || fail "required command not found: $command"
+done
+
+[ "$(uname -s)" = Linux ] || fail 'this release supports Linux only'
+[ "$(uname -m)" = x86_64 ] || fail 'this release supports x86_64 only'
+[ -n "${HOME:-}" ] || fail 'HOME is required'
+glibc_identity=$(getconf GNU_LIBC_VERSION 2>/dev/null) || fail 'this release requires glibc 2.28 or newer'
+glibc_version=${glibc_identity#glibc }
+[ "$glibc_version" != "$glibc_identity" ] || fail 'this release requires glibc 2.28 or newer'
+glibc_major=${glibc_version%%.*}
+glibc_minor=${glibc_version#*.}
+glibc_minor=${glibc_minor%%.*}
+case "$glibc_major:$glibc_minor" in
+  *[!0-9:]*|:|*:|:*|*:*:*) fail "could not parse glibc version: $glibc_identity" ;;
+esac
+if [ "$glibc_major" -lt 2 ] || { [ "$glibc_major" -eq 2 ] && [ "$glibc_minor" -lt 28 ]; }; then
+  fail "this release requires glibc 2.28 or newer, found $glibc_version"
+fi
+
+temporary_root=$(mktemp -d "${TMPDIR:-/tmp}/wsh-bootstrap.XXXXXX")
+tool_stage=''
+cleanup() {
+  rm -rf -- "$temporary_root"
+  if [ -n "$tool_stage" ]; then
+    rm -f -- "$tool_stage"
+  fi
+}
+trap cleanup 0
+trap 'exit 1' HUP INT TERM
+
+download() {
+  url=$1
+  output=$2
+  case "$url" in
+    https://*)
+      curl --disable --proto '=https' --proto-redir '=https' --tlsv1.2 --fail --location --retry 3 --silent --show-error --output "$output" "$url"
+      ;;
+    file://*)
+      curl --disable --proto '=file' --proto-redir '=file' --fail --location --retry 3 --silent --show-error --output "$output" "$url"
+      ;;
+    *) fail "unsupported release URL: $url" ;;
+  esac
+}
+
+verify_digest() {
+  expected=$1
+  path=$2
+  printf '%s  %s\n' "$expected" "$path" | sha256sum --check --status - || fail "SHA-256 mismatch for ${path##*/}"
+}
+
+archive="$temporary_root/$archive_name"
+attestation="$temporary_root/$attestation_name"
+launcher="$temporary_root/$launcher_name"
+installer="$temporary_root/$installer_name"
+
+download "$release_base_url/$archive_name" "$archive"
+download "$release_base_url/$attestation_name" "$attestation"
+download "$release_base_url/$launcher_name" "$launcher"
+download "$release_base_url/$installer_name" "$installer"
+verify_digest "$launcher_sha256" "$launcher"
+verify_digest "$installer_sha256" "$installer"
+chmod 755 "$launcher" "$installer"
+
+bin_root=${WSH_BIN_DIR:-"$HOME/.local/bin"}
+libexec_root=${WSH_LIBEXEC_DIR:-"$HOME/.local/libexec"}
+case "$bin_root:$libexec_root" in
+  /*:/*) ;;
+  *) fail 'tool installation directories must be absolute paths' ;;
+esac
+launcher_destination="$bin_root/wsh"
+installer_destination="$libexec_root/wsh-install"
+
+check_destination() {
+  destination=$1
+  expected=$2
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    [ -f "$destination" ] && [ ! -L "$destination" ] || fail "existing tool is not a regular file: $destination"
+    verify_digest "$expected" "$destination"
+  fi
+}
+
+prepare_directory() {
+  directory=$1
+  [ ! -L "$directory" ] || fail "tool directory must not be a symbolic link: $directory"
+  mkdir -p "$directory"
+  [ -d "$directory" ] && [ ! -L "$directory" ] || fail "tool directory is unsafe: $directory"
+}
+
+install_tool() {
+  source=$1
+  destination=$2
+  expected=$3
+  if [ -e "$destination" ]; then
+    return
+  fi
+  directory=${destination%/*}
+  tool_stage=$(mktemp "$directory/.wsh-tool.XXXXXX")
+  install -m 755 "$source" "$tool_stage"
+  verify_digest "$expected" "$tool_stage"
+  mv "$tool_stage" "$destination"
+  tool_stage=''
+}
+
+check_destination "$launcher_destination" "$launcher_sha256"
+check_destination "$installer_destination" "$installer_sha256"
+prepare_directory "$bin_root"
+prepare_directory "$libexec_root"
+install_tool "$launcher" "$launcher_destination" "$launcher_sha256"
+install_tool "$installer" "$installer_destination" "$installer_sha256"
+
+"$installer_destination" install \
+  --archive "$archive" \
+  --attestation "$attestation" \
+  --tag "$release_tag" \
+  --commit "$source_commit"
+
+printf '%s\n' "Installed wsh $release_tag."
+case ":${PATH:-}:" in
+  *:"$bin_root":*) ;;
+  *) printf '%s\n' "Add $bin_root to PATH." ;;
+esac

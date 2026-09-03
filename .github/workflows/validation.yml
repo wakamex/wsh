@@ -24,13 +24,15 @@ jobs:
       - name: Install the script runtime
         run: |
           sudo apt-get update
-          sudo apt-get install --yes zsh
+          sudo apt-get install --yes jq zsh
       - name: Install and verify the locked Rust toolchain
         run: |
           rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
           ./build/verify-rust-toolchain.zsh
       - name: Run the Rust correctness suite
         run: cargo test --locked --workspace
+      - name: Test the release bootstrap
+        run: ./tests/bootstrap-install.zsh
       - name: Verify a real external GitHub Actions attestation
         run: ./tests/external-attestation.zsh
 
@@ -58,7 +60,7 @@ jobs:
         run: ./build/build-glibc-2.28-development-bundle.zsh
 
   retained-resource-gates:
-    name: Retained resource evidence
+    name: Retained benchmark evidence
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -74,4 +76,6 @@ jobs:
       - name: Test the resource-gate checker
         run: ./tests/resource-gates.zsh
       - name: Verify the retained accepted evidence
-        run: ./benchmarks/verify-resource-gate-evidence.zsh
+        run: |
+          ./benchmarks/verify-resource-gate-evidence.zsh
+          ./benchmarks/verify-bootstrap-evidence.zsh

@@ -34,7 +34,7 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 ## Development slice
 
-The current code implements the local phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A separate install helper verifies offline GitHub Actions build provenance before extracting or selecting a release candidate. It does not download updates, publish official bundles, or operate the public theme directory yet.
+The current code implements the phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. No official bundle has been published yet, and the public theme directory is not implemented.
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
@@ -44,10 +44,13 @@ The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report
 
 The retained [verified-install result](benchmarks/verified-install-2026-09-02/report.md) checks a real external GitHub Actions provenance record and the local install transaction. Offline provenance verification took 2.229 ms at p90 across 100 warm samples. Keeping that code in `wsh-install` left the normal launcher below its existing 1.0 ms gates, and a network-only launch trace remained empty.
 
+The retained [bootstrap result](benchmarks/bootstrap-install-2026-09-02/report.md) covers first-install acquisition without self-authentication. It rejected tool substitution, missing assets, unsafe destinations, and conflicting installed tools before candidate execution. Local orchestration completed in 61.642 ms at p90; the first official release will supply the real network and full-install measurement.
+
 Build and test the local slice with:
 
 ```sh
 cargo test --workspace
+./tests/bootstrap-install.zsh
 ./build/build-zsh.zsh
 ./build/build-development-bundle.zsh
 ./tests/runtime-pty.zsh

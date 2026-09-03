@@ -1,0 +1,14 @@
+baseline_source_revision=424d7314a03227355fc08be2d149d4a7430909d8
+intervention_source_revision=commit containing this evidence
+target=x86_64-unknown-linux-gnu
+samples=30
+warmup=the correctness run before the measured loop
+benchmark_command=./tests/bootstrap-install.zsh benchmarks/bootstrap-install-2026-09-02/samples.tsv 30
+workload=four file-url curl downloads, two native-tool digest checks, fresh tool placement, and strict candidate-installer execution
+samples_sha256=27ecfb64fa07d02e91eb159708ff49a81193c55c4d85fc4d0fc2fce35793bd78
+bootstrap_template_sha256=56af713958854915ed28661ec25f47642fe2976eeeee84c6fdd0ab147261a0ff
+renderer_sha256=31059a50a7e2022dc5f52f45693de89fadf3d0a0b2e5a2921f61c27a0e612562
+test_sha256=c9879b7c3e52309c9e284f53c0c9f73ae311f7c80bc559f4cb9eff575ccc7042
+publish_workflow_sha256=1db5f20804a2b2f751a87c9c03fde79cb51d7267f605dd3bcdd845b075dc3c60
+host=Linux 7.1.9-200.fc44.x86_64 x86_64
+cpu=AMD Ryzen 9 3950X 16-Core Processor
