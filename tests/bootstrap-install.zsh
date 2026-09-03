@@ -124,12 +124,13 @@ grep -F 'curl:' ${missing}.error >/dev/null
 mv -- ${assets}/${archive_name}.missing ${assets}/${archive_name}
 
 readonly conflict=${test_root}/conflict
-mkdir -p -- ${conflict}/bin
+mkdir -p -- ${conflict}/bin ${conflict}/libexec
 print -rn -- 'existing' > ${conflict}/bin/wsh
-readonly conflict_digest=$(sha256sum ${conflict}/bin/wsh)
-! run_bootstrap $conflict $first >/dev/null 2>${conflict}.error
-grep -F 'SHA-256 mismatch' ${conflict}.error >/dev/null
-[[ $(sha256sum ${conflict}/bin/wsh) == $conflict_digest && ! -e ${conflict}/executions && ! -e ${conflict}/libexec/wsh-install ]]
+print -rn -- 'older installer' > ${conflict}/libexec/wsh-install
+run_bootstrap $conflict $first >/dev/null
+cmp --silent ${assets}/${launcher_name} ${conflict}/bin/wsh
+cmp --silent ${assets}/${installer_name} ${conflict}/libexec/wsh-install
+[[ $(wc -l < ${conflict}/executions) == 1 ]]
 
 readonly linked=${test_root}/linked
 mkdir -p -- ${linked}/bin
@@ -137,6 +138,15 @@ ln -s /bin/false ${linked}/bin/wsh
 ! run_bootstrap $linked $first >/dev/null 2>${linked}.error
 grep -F 'existing tool is not a regular file' ${linked}.error >/dev/null
 [[ -L ${linked}/bin/wsh && ! -e ${linked}/executions && ! -e ${linked}/libexec/wsh-install ]]
+
+readonly unsafe_second=${test_root}/unsafe-second
+mkdir -p -- ${unsafe_second}/bin ${unsafe_second}/libexec
+print -rn -- 'older launcher' > ${unsafe_second}/bin/wsh
+readonly older_launcher_digest=$(sha256sum ${unsafe_second}/bin/wsh)
+ln -s /bin/false ${unsafe_second}/libexec/wsh-install
+! run_bootstrap $unsafe_second $first >/dev/null 2>${unsafe_second}.error
+grep -F 'existing tool is not a regular file' ${unsafe_second}.error >/dev/null
+[[ $(sha256sum ${unsafe_second}/bin/wsh) == $older_launcher_digest && -L ${unsafe_second}/libexec/wsh-install && ! -e ${unsafe_second}/executions ]]
 
 readonly unsupported=${test_root}/unsupported
 mkdir -p -- ${unsupported}/fake-bin
@@ -173,4 +183,4 @@ if [[ -n $benchmark_output ]]; then
   done
 fi
 
-print -r -- 'PASS: release bootstrap is deterministic, rerunnable, and rejects substitution and unsafe destinations'
+print -r -- 'PASS: release bootstrap is deterministic, rerunnable, replaces prior regular tools, and rejects substitution and unsafe destinations'

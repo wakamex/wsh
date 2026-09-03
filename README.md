@@ -42,7 +42,7 @@ curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/do
 
 Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
 
-To update, run the release-specific installer command for the newer version. It verifies and installs a complete immutable bundle before atomically selecting it. `wsh bundle rollback` returns to the previously active bundle without a network request.
+To update, run the same release-specific command with the exact newer version in both URL path segments. It verifies the matching native tools and complete immutable bundle before atomically selecting the bundle. There is no `latest` installer or `wsh update` command yet. `wsh bundle rollback` returns to the previously active bundle without a network request.
 
 ## Development slice
 
@@ -58,7 +58,7 @@ The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-0
 
 The retained [verified-install result](benchmarks/verified-install-2026-09-02/report.md) checks a real external GitHub Actions provenance record and the local install transaction. Offline provenance verification took 2.229 ms at p90 across 100 warm samples. Keeping that code in `wsh-install` left the normal launcher below its existing 1.0 ms gates, and a network-only launch trace remained empty.
 
-The retained [bootstrap result](benchmarks/bootstrap-install-2026-09-02/report.md) covers first-install acquisition without self-authentication. It rejected tool substitution, missing assets, unsafe destinations, and conflicting installed tools before candidate execution. Local orchestration completed in 61.642 ms at p90.
+The retained [bootstrap result](benchmarks/bootstrap-install-2026-09-02/report.md) covers first-install acquisition without self-authentication. Its original fixture rejected tool substitution, missing assets, unsafe destinations, and conflicting installed tools before candidate execution. The [`v0.1.2` public update failure](benchmarks/public-update-v0.1.2-failure-2026-09-03.md) showed that rejecting every differing regular tool also rejected legitimate cross-version updates; the corrective gate now requires digest-verified replacement of installer-owned regular tool paths while retaining substitution and unsafe-destination rejection.
 
 The retained [public-install result](benchmarks/public-install-v0.1.1-2026-09-03/report.md) covers the real immutable GitHub Release path through the first editable prompt. Ten fresh installations passed on Fedora 44 and ten passed at the glibc 2.28 Rocky 8.10 floor. The slower Fedora result completed in 1,756.501 ms at p90, including HTTPS acquisition, provenance and payload verification, extraction, activation, and shell startup. The preceding [`v0.1.0` failure](benchmarks/public-install-v0.1.0-failure-2026-09-03.md) remains the regression baseline for relocatable candidate testing.
 

@@ -93,10 +93,8 @@ installer_destination="$libexec_root/wsh-install"
 
 check_destination() {
   destination=$1
-  expected=$2
   if [ -e "$destination" ] || [ -L "$destination" ]; then
     [ -f "$destination" ] && [ ! -L "$destination" ] || fail "existing tool is not a regular file: $destination"
-    verify_digest "$expected" "$destination"
   fi
 }
 
@@ -111,9 +109,6 @@ install_tool() {
   source=$1
   destination=$2
   expected=$3
-  if [ -e "$destination" ]; then
-    return
-  fi
   directory=${destination%/*}
   tool_stage=$(mktemp "$directory/.wsh-tool.XXXXXX")
   install -m 755 "$source" "$tool_stage"
@@ -122,8 +117,8 @@ install_tool() {
   tool_stage=''
 }
 
-check_destination "$launcher_destination" "$launcher_sha256"
-check_destination "$installer_destination" "$installer_sha256"
+check_destination "$launcher_destination"
+check_destination "$installer_destination"
 prepare_directory "$bin_root"
 prepare_directory "$libexec_root"
 install_tool "$launcher" "$launcher_destination" "$launcher_sha256"

@@ -181,7 +181,7 @@ wsh installation
     └── caches and traces
 ```
 
-The manager and launcher remain outside the active release directory and implement bundle listing, verification, selection, and rollback without starting the active Zsh or runtime. Activation writes a bounded launch record derived from the completely verified manifest. Ordinary startup reads only that record, checks required entrypoint metadata, and replaces itself with the selected Zsh through `exec`; it does not retain a manager process or perform update work. A bundle update does not silently replace the manager. A standalone manager update is a separate signed operation, while a package-manager installation leaves manager updates to that package manager.
+The launcher and release installer remain outside the active release directory and implement bundle listing, verification, installation, selection, and rollback without starting the active Zsh or runtime. Activation writes a bounded launch record derived from the completely verified manifest. Ordinary startup reads only that record, checks required entrypoint metadata, and replaces itself with the selected Zsh through `exec`; it does not retain a manager process or perform update work. Direct bundle activation does not replace either native tool. The explicit release-specific bootstrap installs the matching launcher and installer together with the complete release, while a package-manager installation leaves those tools to that package manager.
 
 Official wsh-managed bundles always use their recorded Zsh build. A development or compatibility command may test an external system Zsh, but that combination is outside the official bundle's correctness, performance, reproducibility, and rollback guarantees.
 
