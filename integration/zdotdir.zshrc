@@ -15,6 +15,7 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
   module_path=("$WSH_STARTUP_MODULE_PATH" "${(@)module_path:#${(b)WSH_STARTUP_MODULE_PATH}}")
   fpath=("$WSH_STARTUP_FUNCTION_PATH" "${(@)fpath:#${(b)WSH_STARTUP_FUNCTION_PATH}}")
   unset WSH_STARTUP_MODULE_PATH WSH_STARTUP_FUNCTION_PATH
+  source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/history-substring-search.zsh"
   source "${WSH_BUNDLE_ROOT}/share/wsh/integration.zsh"
 fi
 

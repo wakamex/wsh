@@ -1,0 +1,6 @@
+build	variant	samples	median_ms	p90_ms	maximum_ms
+baseline	clean	40	6.803393	6.983519	7.740259
+baseline	external	40	9.390593	9.869099	10.546207
+candidate	clean	40	9.528161	10.518312	10.870457
+candidate	disabled	40	6.929040	7.091522	7.904053
+candidate	external	40	11.575937	12.615442	13.384342

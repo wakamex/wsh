@@ -61,6 +61,8 @@ The retained [bare-launch result](benchmarks/bare-launch-2026-09-03/report.md) v
 
 The retained [configuration coexistence result](benchmarks/zsh-config-coexistence-2026-09-03/report.md) restores existing user startup files before `wsh` integration. Plain managed startup added 0.865 ms at p90 over direct integration; aliases, existing hooks, Oh My Zsh, and the three targeted ZLE plugins loaded correctly. The experiment records that some legacy themes retained unused Git collectors, and the current adapter does not try to unload arbitrary user code.
 
+The retained [history substring search result](benchmarks/history-substring-search-2026-09-03/report.md) adds the first measured interactive default. Actual ZLE input passed newest, older, forward, and no-match behavior plus configuration, coexistence, and ownership fixtures. The precompiled default added 3.427 ms at p90 over disabled and replaced a recognized upstream or Oh My Zsh copy without leaving duplicate runtime hooks. Modified implementations and custom bindings remain user-owned.
+
 The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-09-03/report.md) covers the internal coprocess lifecycle. Runtime startup prints no job announcement, keeps the service in a separate process group, restores interactive job control, survives Ctrl-C at the prompt, and passes the existing cold-start gates.
 
 The retained [update-command result](benchmarks/update-cli-2026-09-03/report.md) covers check-only, exact-version, and latest-release updates plus the unchanged launcher startup gates. Managed startup reached 8.016 ms at p90, including 0.623 ms over direct complete integration, while a live no-side-effect request confirmed GitHub's latest-release redirect contract.
