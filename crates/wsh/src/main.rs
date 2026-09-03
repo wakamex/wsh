@@ -1,4 +1,5 @@
 use std::env;
+use std::ffi::OsString;
 use std::os::unix::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Command, ExitCode};
@@ -32,6 +33,37 @@ fn parse_state_root(arguments: &[std::ffi::OsString]) -> Result<PathBuf, String>
         [option, path] if option == "--state-root" => Ok(PathBuf::from(path)),
         _ => Err(usage().into()),
     }
+}
+
+fn select_user_zdotdir(
+    configured: Option<OsString>,
+    inherited_bundle_root: Option<OsString>,
+    inherited_user_zdotdir: Option<OsString>,
+    home: Option<OsString>,
+) -> Option<OsString> {
+    let inherited_bundle_zdotdir = inherited_bundle_root
+        .map(PathBuf::from)
+        .map(|root| root.join("share/wsh/zdotdir"));
+    match configured {
+        Some(path)
+            if inherited_bundle_zdotdir
+                .as_ref()
+                .is_some_and(|bundle| PathBuf::from(&path) == *bundle) =>
+        {
+            inherited_user_zdotdir.or(home)
+        }
+        Some(path) => Some(path),
+        None => home,
+    }
+}
+
+fn user_zdotdir() -> Option<OsString> {
+    select_user_zdotdir(
+        env::var_os("ZDOTDIR"),
+        env::var_os("WSH_BUNDLE_ROOT"),
+        env::var_os("WSH_USER_ZDOTDIR"),
+        env::var_os("HOME"),
+    )
 }
 
 fn run() -> Result<(), String> {
@@ -105,16 +137,19 @@ fn run() -> Result<(), String> {
                 }
             };
             let mut command = Command::new(&paths.shell);
-            if shell_args.is_empty() {
-                command.arg("-d");
+            command.arg("-d").args(shell_args);
+            if let Some(user_zdotdir) = user_zdotdir() {
+                command.env("WSH_USER_ZDOTDIR", user_zdotdir);
             } else {
-                command.args(shell_args);
+                command.env_remove("WSH_USER_ZDOTDIR");
             }
             command
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
                 .env("WSH_THEME", &paths.default_theme)
-                .env("ZDOTDIR", &paths.zdotdir);
+                .env("ZDOTDIR", &paths.zdotdir)
+                .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
+                .env_remove("WSH_STARTUP_RCS");
             let error = command.exec();
             Err(format!(
                 "could not replace the launcher with {}: {error}",
@@ -189,5 +224,53 @@ fn main() -> ExitCode {
             eprintln!("error: {error}");
             ExitCode::FAILURE
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::select_user_zdotdir;
+    use std::ffi::OsString;
+
+    fn value(value: &str) -> Option<OsString> {
+        Some(OsString::from(value))
+    }
+
+    #[test]
+    fn preserves_explicit_user_zdotdir() {
+        assert_eq!(
+            select_user_zdotdir(value("/user/config"), None, None, value("/home/user")),
+            value("/user/config")
+        );
+    }
+
+    #[test]
+    fn recovers_user_zdotdir_inherited_from_an_older_wsh_session() {
+        assert_eq!(
+            select_user_zdotdir(
+                value("/old-bundle/share/wsh/zdotdir"),
+                value("/old-bundle"),
+                value("/user/config"),
+                value("/home/user"),
+            ),
+            value("/user/config")
+        );
+    }
+
+    #[test]
+    fn uses_home_when_zdotdir_is_unset_or_only_the_old_bundle_is_known() {
+        assert_eq!(
+            select_user_zdotdir(None, None, None, value("/home/user")),
+            value("/home/user")
+        );
+        assert_eq!(
+            select_user_zdotdir(
+                value("/old-bundle/share/wsh/zdotdir"),
+                value("/old-bundle"),
+                None,
+                value("/home/user"),
+            ),
+            value("/home/user")
+        );
     }
 }

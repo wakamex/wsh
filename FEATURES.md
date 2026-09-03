@@ -21,6 +21,8 @@ Profiling and tracing are accepted enabling capabilities because every admission
 
 | Investigation | Current evidence | Cheapest missing experiment | Result required for adoption |
 |---|---|---|---|
+| Existing `.zshrc` and Oh My Zsh coexistence | Official v0.1.3 loads only bundle startup files; the retained development experiment verifies user startup ordering and finds selective theme overlap | Add focused diagnosis or migration for a measured overlap; generic theme unloading remains excluded | Existing configuration loads once, unrelated behavior and hook order remain intact, `wsh` has one owner for each enabled subsystem, safe cases need no prompt, and only observed ambiguity directs the user to a focused doctor check |
+| Substring history search, autosuggestions, and syntax highlighting defaults | Users commonly install a framework or three executable plugins to obtain these editing conveniences, and independently loaded copies can compete for widgets and highlight state | Pin and configure the established implementations as trusted bundle components, one at a time, before considering a rewrite | Each feature passes its advertised editing semantics, preserves user-owned bindings and unrelated widgets, adds no duplicate implementation, and meets fixed startup, keystroke, repaint, process, and memory gates alone and together |
 | Shared Git state | The pinned `zsh-theme-bench` workload measured correctness, prompt latency, process count, optional-lock behavior, and repeated collection across theme paths | Implement the renderer-independent provider and rerun the same fixtures and transitions | Two renderers reuse one collector while meeting the documented semantic and performance gates |
 | Non-executable theme definitions | Oh My Zsh [sources selected theme files](https://github.com/ohmyzsh/ohmyzsh/blob/master/oh-my-zsh.sh), and its 2026 [prompt-injection advisory](https://github.com/ohmyzsh/ohmyzsh/security/advisories/GHSA-x96c-8w82-wf96) identifies ten themes that bypassed a shared escaping fix through separate Git paths | Render the two first-release themes through a data-only schema and run hostile definitions and provider values through the validator and PTY harness | Theme choice changes presentation and field requirements without adding shell, process, file, network, or raw terminal-control authority |
 | Verified reproducible bundles | Oh My Zsh [checks for updates during initialization](https://github.com/ohmyzsh/ohmyzsh/blob/master/tools/check_for_upgrade.sh) and supports [prompt, automatic, reminder, background, and disabled modes](https://github.com/ohmyzsh/ohmyzsh/wiki/Settings#update-settings); `wsh` already requires a pinned shell-runtime pair and rollback | Trace startup, build each development bundle twice from pinned inputs, authenticate exact hashes through GitHub build and immutable-release attestations, reject replacement of an individual component, interrupt every activation phase, and test manager-side offline rollback with a broken active bundle | Startup performs no update network or mutation work, official GitHub Release bundles reproduce byte-for-byte, each release maps to one exact Zsh build per target, tampering is rejected, activation is atomic, and the previous verified bundle remains usable |
@@ -81,7 +83,7 @@ The resulting boundary remains narrow: Zsh and ZLE own parsing and editing, appl
 | Resident provider idle expiration | A provider whose repeated cold start dominates direct execution or IPC; compare short-lived execution with measured idle lifetimes, retained memory, cleanup, crash recovery, and protocol migration cost |
 | Incremental or reference-backed snapshots | A measured serialization or copy cost for a large accepted provider snapshot; keep the current small complete replacement until that cost appears |
 | Project environment transactions | A reproducible conflict, partial transition, duplicated process, or latency problem that direct `direnv` and `mise` adapters do not solve |
-| ZLE presentation composition | A concrete autosuggestion, highlighting, selection, search, diagnostic, or modal-editing conflict that current Zsh highlight layers cannot express |
+| General ZLE presentation composition | A concrete autosuggestion, highlighting, selection, search, diagnostic, or modal-editing conflict that the three accepted defaults and current Zsh highlight layers cannot express |
 | Structured history adapter | A lifecycle conflict or duplicated hook that an Atuin adapter can remove without `wsh` taking over its database or synchronization |
 | Directory navigation adapter | Measured duplicated `chpwd` work or a widget conflict that a direct zoxide integration cannot solve |
 | Command discovery and correction | A measured latency or correctness problem in an operating-system command-not-found provider, with execution remaining explicit |
@@ -100,13 +102,15 @@ Mature utilities remain authoritative for their domains. [Atuin](https://docs.at
 
 1. Finish the Git-state provider, trusted prompt-component boundary, non-executable theme schema, benchmark comparison, immutable full-bundle layout, and signed reproducible update and rollback contract.
 2. Add enough profiling and tracing to attribute the same workload across exact builds, then use it for later gates.
-3. Run the foreground-startup counterfactual and add no `wsh` interface if the Wakterm-local fix passes.
-4. Measure Wakterm's current lifecycle integration and test whether `wsh` phases let Wakterm remove it.
-5. Persist a logical Wakterm pane token and test bounded and private history across restoration and process exit.
-6. Benchmark static, direct dynamic, and Wakterm-mux completion paths with cancellation and resource limits.
-7. Reduce pane metadata to fields demonstrated by Wakterm UI behavior.
-8. Prototype terminal diagnosis only against recorded lifecycle failures and reproduced compatibility rules.
-9. Investigate another candidate only after recording its baseline reproducer and expected consumer result.
+3. Measure existing `.zshrc`, Oh My Zsh, theme, plugin, and `wsh` coexistence; restore native startup behavior and accept only deterministic compatibility treatment.
+4. Add substring history search, autosuggestions, and syntax highlighting as separately measured defaults, preserving an already active compatible implementation rather than loading a second copy.
+5. Run the foreground-startup counterfactual and add no `wsh` interface if the Wakterm-local fix passes.
+6. Measure Wakterm's current lifecycle integration and test whether `wsh` phases let Wakterm remove it.
+7. Persist a logical Wakterm pane token and test bounded and private history across restoration and process exit.
+8. Benchmark static, direct dynamic, and Wakterm-mux completion paths with cancellation and resource limits.
+9. Reduce pane metadata to fields demonstrated by Wakterm UI behavior.
+10. Prototype terminal diagnosis only against recorded lifecycle failures and reproduced compatibility rules.
+11. Investigate another candidate only after recording its baseline reproducer and expected consumer result.
 
 ## Boundaries remain explicit
 

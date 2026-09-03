@@ -1,0 +1,1 @@
+PASS: user startup configuration missing under managed wsh

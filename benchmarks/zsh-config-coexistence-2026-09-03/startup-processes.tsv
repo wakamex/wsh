@@ -1,0 +1,8 @@
+variant	count	executable
+direct	1	wsh-runtime
+direct	1	zsh
+direct	1	git
+managed	1	wsh-runtime
+managed	1	zsh
+managed	1	wsh
+managed	1	git

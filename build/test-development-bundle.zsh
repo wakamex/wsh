@@ -24,7 +24,7 @@ bundle_status=$(jq -er '.status' ${built_bundle}/manifest.json)
 test_root=$(mktemp -d /tmp/wsh-floor-bundle.XXXXXX)
 trap 'rm -rf -- $test_root' EXIT INT TERM
 bundle=${test_root}/relocated-bundle
-cp -R -- $built_bundle $bundle
+cp -R --preserve=mode -- $built_bundle $bundle
 runtime=${bundle}/bin/wsh-runtime
 manager=${cargo_target_dir}/release/wsh
 installer=${cargo_target_dir}/release/wsh-install
@@ -94,6 +94,8 @@ WSH_TEST_THEME=${theme} \
 WSH_TEST_PROMPT_MARKER='git:main' \
 WSH_TEST_BUNDLE_ROOT=${bundle} \
 ${repository_root}/tests/runtime-pty.zsh
+
+${repository_root}/tests/zsh-config-coexistence.zsh ${manager} ${bundle} present
 
 needed=$(find ${bundle} -type f -exec readelf -d {} \; 2>/dev/null | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' | sort -u)
 recorded=$(jq -r '.requirements.dynamic_libraries[]' ${bundle}/manifest.json | sort -u)

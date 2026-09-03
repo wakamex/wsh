@@ -85,3 +85,4 @@ jobs:
           ./benchmarks/verify-runtime-job-announcement-evidence.zsh
           ./benchmarks/verify-update-cli-evidence.zsh
           ./benchmarks/verify-bare-launch-evidence.zsh
+          ./benchmarks/verify-config-coexistence-evidence.zsh

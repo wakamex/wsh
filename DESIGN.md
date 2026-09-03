@@ -149,15 +149,21 @@ The first bundle uses stable Zsh 5.9.2 and cannot assume interfaces present only
 
 When available in the selected Zsh identity, these features improve the boundary but do not remove the cost of external programs. Field registration and providers remain responsible for avoiding unnecessary work and keeping unavoidable work away from the first editable prompt.
 
-## Compatibility uses explicit adapters
+## Existing Zsh configuration remains executable and compatible
 
-`wsh` can support selected Oh My Zsh plugins and reproduce theme appearances without claiming the entire Oh My Zsh maintenance surface.
+`wsh` aims to preserve ordinary Zsh startup behavior for existing `.zshrc` files, Oh My Zsh setups, completion functions, and executable plugins. Compatibility does not mean reimplementing every Oh My Zsh plugin as a `wsh` builtin. Existing code continues to run with normal shell authority, while `wsh` can provide measured replacements for common subsystems.
+
+The default experience targets substring history search, autosuggestions, and syntax highlighting. The cheapest first implementation may pin, bundle, configure, and test established upstream implementations as trusted executable components. Reimplementation in Rust or a native module requires a reproduced correctness, composition, or performance problem that the established implementation cannot solve cleanly.
+
+Startup coexistence has explicit ownership. One component owns each prompt renderer, Git collector, lifecycle protocol, and ZLE widget or highlight layer. A `wsh` presentation owns `PROMPT`, `RPROMPT`, its Git provider, and its repaint path. An explicitly selected legacy theme owns its presentation instead of running a second renderer beside `wsh`. Existing plugins keep their unrelated functions, aliases, completions, widgets, and hooks.
+
+`wsh` handles a compatibility case automatically only when detection and treatment are deterministic, local, reversible, and covered by a fixture. If active components have ambiguous or overlapping ownership, interactive startup identifies the specific conflict and directs the user to a focused doctor check. Doctor explains the observed owners and alternatives; it does not silently rewrite arbitrary startup source or make an ambiguous choice.
 
 - A plugin adapter can provide selected lifecycle variables, hook behavior, and loading conventions.
 - A migration tool or maintained port can map an existing theme's visual choices into a non-executable `wsh` definition.
-- A legacy escape hatch can source unmodified code only as explicitly executable Zsh configuration outside the `wsh` theme directory, validator, and non-executable guarantee.
+- Unmodified themes and plugins remain explicitly executable Zsh configuration outside the `wsh` theme directory, validator, and non-executable guarantee.
 
-An adapter is accepted when it has tests and an owner. Code that can merely be sourced is not automatically supported.
+An adapter or automatic compatibility rule is accepted when it has a pinned reproducer, tests, and one clear owner. Code that can merely be sourced is not automatically a subsystem that `wsh` should replace.
 
 ## Release bundles keep one exact Zsh build and runtime together
 

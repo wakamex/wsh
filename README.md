@@ -2,6 +2,8 @@
 
 `wsh` is a benchmark-driven Zsh distribution. It pairs current Zsh with fast shared services, an open ecosystem of non-executable themes, curated integrations, and built-in profiling.
 
+A concise product model is a fast, tested distribution of edge Zsh with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
+
 ## Motivation
 
 Zsh is a capable shell, but building a polished interactive environment usually means assembling a framework, themes, plugins, completion files, and terminal integration. Those pieces often own overlapping machinery for Git state, hooks, caching, background work, and prompt repainting. Choosing a visual theme can therefore also choose its performance and correctness behavior.
@@ -13,7 +15,8 @@ A benchmark of representative prompt architectures ran each path in fresh intera
 ## What wsh aims to provide
 
 - Immutable release bundles that pair one exact Zsh build with its tested wsh runtime, with explicit, signed, reproducible, atomic, and reversible updates
-- Fish-like interactive usability while retaining compatibility with shell commands, Zsh scripts, completion functions, and selected plugins
+- Fish-like interactive usability while retaining compatibility with existing `.zshrc` files, Oh My Zsh setups, shell commands, Zsh scripts, completion functions, and executable plugins
+- Safe defaults for substring history search, autosuggestions, and syntax highlighting without requiring a framework installation
 - An open-submission theme directory where every mechanically valid non-executable theme is listed without stylistic maintainer approval
 - Curated prompt components and executable integrations without requiring users to assemble a large shell framework
 - Trust diagnostics that identify exact runtime and theme digests, signing and reproducibility records, executable plugins and adapters, local overrides, and the update channel
@@ -55,6 +58,8 @@ The retained [resource-gate result](benchmarks/resource-gates-2026-09-02/report.
 The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report.md) covers the normal entrypoint through the first editable prompt. A compact activation record and direct `exec` handoff reduced isolated median launcher overhead from the preceding 1.6 ms implementation to 0.65 ms locally and 0.70 ms in the glibc 2.28 build. At the compatibility floor, complete managed startup reached an editable prompt in 7.963 ms at p90, 2.723 ms over raw bundled Zsh; the launcher accounted for 0.527 ms of that p90 difference.
 
 The retained [bare-launch result](benchmarks/bare-launch-2026-09-03/report.md) verifies that `wsh` without arguments replaces itself with the active bundled Zsh through the same path as `wsh run`. Bare managed startup reached the first editable prompt in 7.990 ms at p90, adding 0.545 ms over direct complete integration and passing the unchanged startup gates.
+
+The retained [configuration coexistence result](benchmarks/zsh-config-coexistence-2026-09-03/report.md) restores existing user startup files before `wsh` integration. Plain managed startup added 0.865 ms at p90 over direct integration; aliases, existing hooks, Oh My Zsh, and the three targeted ZLE plugins loaded correctly. The experiment records that some legacy themes retained unused Git collectors, and the current adapter does not try to unload arbitrary user code.
 
 The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-09-03/report.md) covers the internal coprocess lifecycle. Runtime startup prints no job announcement, keeps the service in a separate process group, restores interactive job control, survives Ctrl-C at the prompt, and passes the existing cold-start gates.
 

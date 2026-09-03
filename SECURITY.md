@@ -2,7 +2,7 @@
 
 `wsh` reduces the authority attached to appearance and updates. A theme is a non-executable definition rendered by trusted prompt components, and a shell startup never downloads or modifies installed code. Official `wsh` updates are explicit, signed, reproducible, atomic, and reversible.
 
-These guarantees cover `wsh` theme definitions and `wsh`-managed installations. User Zsh configuration, selected plugins, compatibility adapters, and programs launched from the shell remain executable code with the user's normal authority.
+These guarantees cover `wsh` theme definitions and `wsh`-managed installations. User Zsh configuration, selected plugins, compatibility adapters, and programs launched from the shell remain executable code with the user's normal authority. Bundled substring history search, autosuggestion, and syntax-highlighting implementations are trusted executable bundle components rather than theme definitions; their exact source and digest follow the complete release review, testing, signing, and rollback path.
 
 ## Theme definitions cannot execute shell code
 
