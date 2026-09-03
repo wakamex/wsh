@@ -109,6 +109,9 @@ run_observation() {
     command sh $bootstrap >$install_log 2>&1
   installed=$EPOCHREALTIME
 
+  wait_for_first_prompt
+  prompt_ms=$REPLY
+
   local bundle=$($current_root/bin/wsh bundle current --state-root $current_root/state)
   [[ -d $bundle && ! -L $bundle ]] || {
     print -u2 -- "error: installed bundle is missing or unsafe: $bundle"
@@ -121,8 +124,6 @@ run_observation() {
       return 1
     }
 
-  wait_for_first_prompt
-  prompt_ms=$REPLY
   fetch_ms=$(( (fetched - started) * 1000 ))
   install_ms=$(( (installed - fetched) * 1000 ))
   total_ms=$(( fetch_ms + install_ms + prompt_ms ))

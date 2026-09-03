@@ -79,3 +79,4 @@ jobs:
         run: |
           ./benchmarks/verify-resource-gate-evidence.zsh
           ./benchmarks/verify-bootstrap-evidence.zsh
+          ./benchmarks/verify-public-install-evidence.zsh

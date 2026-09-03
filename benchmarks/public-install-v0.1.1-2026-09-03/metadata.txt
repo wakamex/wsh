@@ -1,0 +1,25 @@
+release_tag=v0.1.1
+source_revision=e62e19fe1cf8b10d28b703e2670b6478e540f38d
+tag_object=94c0d3610f134380eec4c0dd0be0dc317077ee93
+release_url=https://github.com/wakamex/wsh/releases/tag/v0.1.1
+eligibility_run_url=https://github.com/wakamex/wsh/actions/runs/33707623225
+publish_run_url=https://github.com/wakamex/wsh/actions/runs/33708035426
+target=x86_64-unknown-linux-gnu
+iterations_per_environment=10
+warmups_per_environment=1
+total_p90_gate_ms=5000
+first_prompt_p90_gate_ms=50
+fedora_environment=Fedora 44, glibc 2.43, Linux 7.1.9-200.fc44.x86_64
+rocky_environment=Rocky Linux 8.10, glibc 2.28, Linux 7.1.9-200.fc44.x86_64 host kernel
+cpu=AMD Ryzen 9 3950X 16-Core Processor
+fedora_command=./benchmarks/benchmark-public-install.zsh benchmarks/public-install-v0.1.1-2026-09-03/fedora.tsv fedora-44 v0.1.1 e62e19fe1cf8b10d28b703e2670b6478e540f38d 10
+rocky_command=podman run --rm --userns=keep-id --network=host --volume /code/wsh:/workspace:Z --workdir /workspace localhost/wsh-glibc-2.28-builder:development zsh ./benchmarks/benchmark-public-install.zsh /workspace/benchmarks/public-install-v0.1.1-2026-09-03/rocky.tsv rocky-8.10-glibc-2.28 v0.1.1 e62e19fe1cf8b10d28b703e2670b6478e540f38d 10
+fedora_samples_sha256=f297364008d6faf119f9bcdc510ce33024e33ccee813b576b8afd85218365811
+rocky_samples_sha256=5fa51190452688b29e7706c6578db37ae3fc0330a1cea50dffac8800f40e6033
+benchmark_sha256=4b3b14b862ef14ebddef3a5469e281072080346a6e9604205acd66dcf8d62529
+plan_sha256=907db2e2706226cf2968d59e3455360b31481ce8ad1b25d40ca412d639772762
+archive_sha256=2b52b15d34b97529d3f802746f451866de30cc0e6ee6ba11a7acb9e6d8b61a8e
+manifest_sha256=9ec9ecf5226a39220b96f8a3e1522229b5ffea0ebc7bbd3909465500dd6e373e
+launcher_sha256=4ea097310771677c0bab9e8a25cbe782965c1ddc27e617f43475f3dafa95cba6
+installer_sha256=abf060fd3c9b2545ee19c36a260d9e5a0a330d9210c8fa24eefb36741809ad8a
+bootstrap_sha256=932b06336aea3b8ecaed9bf494625cf045db08f32b0291f6991cb39af3c3f41f

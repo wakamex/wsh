@@ -22,9 +22,9 @@ A benchmark of representative prompt architectures ran each path in fresh intera
 - Built-in profiling and tracing for startup, prompts, providers, child processes, repaints, completion, history, and terminal events
 - Reproducible benchmarks and correctness fixtures for every performance claim
 
-## First milestone
+## First release
 
-The first release remains deliberately narrow. It will package one exact Zsh build, the matching `wsh` runtime, one shared Git-state provider, and two non-executable theme definitions with different presentation and field requirements as one immutable release bundle.
+The first release is deliberately narrow. It packages one exact Zsh build, the matching `wsh` runtime, one shared Git-state provider, and two non-executable theme definitions with different presentation and field requirements as one immutable release bundle.
 
 The wsh release pipeline builds and tests Zsh from signed upstream source. Users install the resulting prebuilt bundle; the manager does not compile locally, resolve formulas or dependencies, or manage unrelated software.
 
@@ -32,9 +32,19 @@ That milestone must demonstrate that switching themes changes formatting without
 
 An installed bundle never updates only Zsh or only the wsh runtime. Any component change produces a new complete bundle and reruns the full compatibility, correctness, performance, provenance, and rollback gates. Several wsh releases may reuse the same Zsh build, but every wsh release identifies exactly one Zsh source and build identity for each supported target.
 
+## Install
+
+The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the exact `v0.1.1` bundle from its immutable GitHub Release:
+
+```sh
+curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.1/wsh-v0.1.1-install.sh | sh
+```
+
+Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
+
 ## Development slice
 
-The current code implements the phase-one path. It verifies and atomically selects exact development bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. No official bundle has been published yet, and the public theme directory is not implemented.
+The current code implements the phase-one path. It verifies and atomically selects exact bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. `v0.1.1` is the first installable official release; the public theme directory is not implemented.
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
@@ -44,7 +54,9 @@ The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report
 
 The retained [verified-install result](benchmarks/verified-install-2026-09-02/report.md) checks a real external GitHub Actions provenance record and the local install transaction. Offline provenance verification took 2.229 ms at p90 across 100 warm samples. Keeping that code in `wsh-install` left the normal launcher below its existing 1.0 ms gates, and a network-only launch trace remained empty.
 
-The retained [bootstrap result](benchmarks/bootstrap-install-2026-09-02/report.md) covers first-install acquisition without self-authentication. It rejected tool substitution, missing assets, unsafe destinations, and conflicting installed tools before candidate execution. Local orchestration completed in 61.642 ms at p90; the first official release will supply the real network and full-install measurement.
+The retained [bootstrap result](benchmarks/bootstrap-install-2026-09-02/report.md) covers first-install acquisition without self-authentication. It rejected tool substitution, missing assets, unsafe destinations, and conflicting installed tools before candidate execution. Local orchestration completed in 61.642 ms at p90.
+
+The retained [public-install result](benchmarks/public-install-v0.1.1-2026-09-03/report.md) covers the real immutable GitHub Release path through the first editable prompt. Ten fresh installations passed on Fedora 44 and ten passed at the glibc 2.28 Rocky 8.10 floor. The slower Fedora result completed in 1,756.501 ms at p90, including HTTPS acquisition, provenance and payload verification, extraction, activation, and shell startup. The preceding [`v0.1.0` failure](benchmarks/public-install-v0.1.0-failure-2026-09-03.md) remains the regression baseline for relocatable candidate testing.
 
 Build and test the local slice with:
 

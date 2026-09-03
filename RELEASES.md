@@ -56,4 +56,4 @@ An official GitHub Release requires all of the following:
 8. The automated publisher supplies the complete asset set and both build records before GitHub publishes the release and makes it immutable.
 9. Release and asset verification succeeds after publication.
 
-Until all nine gates exist and pass, the repository can publish source and development artifacts but has no official binary release.
+`v0.1.1` is the first installable official binary release to pass all nine gates and the separate public download-to-prompt experiment. Immutable `v0.1.0` passed the original publication workflow but failed its first public install before activation, which added relocated candidate startup to gate 3 for subsequent releases.
