@@ -1725,15 +1725,20 @@ mod tests {
         let worker = thread::spawn(move || {
             collect_git_snapshot_with_command(&cwd, 1, &worker_cancel, &script)
         });
-        let deadline = Instant::now() + Duration::from_secs(1);
-        while !child_pid.exists() && Instant::now() < deadline {
+        let deadline = Instant::now() + Duration::from_secs(5);
+        let pid: i32 = loop {
+            if let Ok(contents) = fs::read_to_string(&child_pid)
+                && let Ok(pid) = contents.trim().parse()
+            {
+                break pid;
+            }
+            if Instant::now() >= deadline {
+                cancel.store(true, Ordering::Release);
+                let _ = worker.join();
+                panic!("slow Git fixture did not publish its child PID before the deadline");
+            }
             thread::sleep(Duration::from_millis(1));
-        }
-        let pid: i32 = fs::read_to_string(&child_pid)
-            .unwrap()
-            .trim()
-            .parse()
-            .unwrap();
+        };
         cancel.store(true, Ordering::Release);
         let (_, cancelled) = worker.join().unwrap();
         assert!(cancelled);
