@@ -1,0 +1,9 @@
+bundle=aa20a748b1d020d32198a662208170e6373ab47277685f1da7abda8e290f2b99
+plugin_revision=85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
+owner=wsh|1
+cpu=0
+edit_started_epoch=1788467201.162572145
+suggestion_visible_epoch=1788467201.172945023
+suggestion_available_ms=10.372877
+edit_window_process_creations=1
+edit_window_execve=0

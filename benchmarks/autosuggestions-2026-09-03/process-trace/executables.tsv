@@ -1,0 +1,6 @@
+count	executable
+2	git
+1	taskset
+1	wsh
+1	wsh-runtime
+1	zsh

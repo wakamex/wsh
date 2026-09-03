@@ -40,6 +40,12 @@ install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/P
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/OH-MY-ZSH-LICENSE.txt" "${stage}/share/wsh/defaults/zsh-history-substring-search-OH-MY-ZSH-LICENSE.txt"
 (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-history-substring-search.zsh.zwc zsh-history-substring-search.zsh')
 chmod 644 "${stage}/share/wsh/defaults/zsh-history-substring-search.zsh.zwc"
+install -D -m 644 "${repository_root}/integration/autosuggestions.zsh" "${stage}/share/wsh/defaults/autosuggestions.zsh"
+install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/zsh-autosuggestions.zsh" "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh"
+install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/PROVENANCE.md" "${stage}/share/wsh/defaults/zsh-autosuggestions-PROVENANCE.md"
+install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "${stage}/share/wsh/defaults/zsh-autosuggestions-LICENSE"
+(cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')
+chmod 644 "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh.zwc"
 install -D -m 644 "${repository_root}/integration/zdotdir.zshenv" "${stage}/share/wsh/zdotdir/.zshenv"
 install -D -m 644 "${repository_root}/integration/zdotdir.zprofile" "${stage}/share/wsh/zdotdir/.zprofile"
 install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share/wsh/zdotdir/.zshrc"
