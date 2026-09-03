@@ -22,6 +22,17 @@ verify_hash() {
   }
 }
 
+verify_git_object_hash() {
+  local key=$1
+  local revision=$2
+  local input_path=$3
+  local actual=$(git show ${revision}:${input_path} | sha256sum)
+  [[ ${actual%% *} == $(metadata_value $key) ]] || {
+    print -u2 -- "error: retained runtime-job source hash mismatch: $key"
+    exit 1
+  }
+}
+
 verify_sample() {
   local input_file=$1
   awk -F '\t' '
@@ -60,8 +71,9 @@ verify_hash release_samples_sha256 $release
 verify_hash fixed_samples_sha256 $fixed
 verify_hash release_cpu0_samples_sha256 $release_cpu0
 verify_hash fixed_cpu0_failed_samples_sha256 $fixed_cpu0_failed
-verify_hash benchmark_sha256 ${repository_root}/benchmarks/benchmark-first-editable.zsh
-verify_hash plan_sha256 ${repository_root}/benchmarks/runtime-job-announcement-plan-2026-09-03.md
+readonly fixed_source_revision=$(metadata_value fixed_source_revision)
+verify_git_object_hash benchmark_sha256 $fixed_source_revision benchmarks/benchmark-first-editable.zsh
+verify_git_object_hash plan_sha256 $fixed_source_revision benchmarks/runtime-job-announcement-plan-2026-09-03.md
 verify_sample $release
 verify_sample $fixed
 verify_sample $release_cpu0

@@ -54,6 +54,8 @@ The retained [resource-gate result](benchmarks/resource-gates-2026-09-02/report.
 
 The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report.md) covers the normal entrypoint through the first editable prompt. A compact activation record and direct `exec` handoff reduced isolated median launcher overhead from the preceding 1.6 ms implementation to 0.65 ms locally and 0.70 ms in the glibc 2.28 build. At the compatibility floor, complete managed startup reached an editable prompt in 7.963 ms at p90, 2.723 ms over raw bundled Zsh; the launcher accounted for 0.527 ms of that p90 difference.
 
+The retained [bare-launch result](benchmarks/bare-launch-2026-09-03/report.md) verifies that `wsh` without arguments replaces itself with the active bundled Zsh through the same path as `wsh run`. Bare managed startup reached the first editable prompt in 7.990 ms at p90, adding 0.545 ms over direct complete integration and passing the unchanged startup gates.
+
 The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-09-03/report.md) covers the internal coprocess lifecycle. Runtime startup prints no job announcement, keeps the service in a separate process group, restores interactive job control, survives Ctrl-C at the prompt, and passes the existing cold-start gates.
 
 The retained [update-command result](benchmarks/update-cli-2026-09-03/report.md) covers check-only, exact-version, and latest-release updates plus the unchanged launcher startup gates. Managed startup reached 8.016 ms at p90, including 0.623 ms over direct complete integration, while a live no-side-effect request confirmed GitHub's latest-release redirect contract.
