@@ -569,7 +569,9 @@ fn is_sha256_directory(path: &Path) -> bool {
 fn smoke_test(root: &Path, manifest: &wsh::BundleManifest) -> Result<(), String> {
     let paths = entrypoints(root, manifest);
     let shell = Command::new(&paths.shell)
-        .args(["-f", "-c", "zmodload zsh/datetime"])
+        .args(["-d", "-c", "zmodload zsh/datetime"])
+        .env("WSH_BUNDLE_ROOT", root)
+        .env("ZDOTDIR", &paths.zdotdir)
         .stdout(Stdio::null())
         .status()
         .map_err(|error| format!("could not start candidate Zsh: {error}"))?;
@@ -944,7 +946,11 @@ mod tests {
         fs::create_dir_all(stage.join("bin"))?;
         fs::create_dir_all(stage.join("share/wsh/zdotdir"))?;
         fs::create_dir_all(stage.join("share/wsh/themes"))?;
-        fs::copy("/bin/zsh", stage.join("bin/zsh"))?;
+        write_file(
+            &stage.join("bin/zsh"),
+            b"#!/bin/sh\n[ \"$#\" -eq 3 ] || exit 91\n[ \"$1\" = -d ] || exit 92\n[ \"$2\" = -c ] || exit 93\n[ \"$3\" = 'zmodload zsh/datetime' ] || exit 94\n[ -n \"${WSH_BUNDLE_ROOT:-}\" ] || exit 95\n[ \"${ZDOTDIR:-}\" = \"$WSH_BUNDLE_ROOT/share/wsh/zdotdir\" ] || exit 96\nexec /bin/zsh \"$@\"\n",
+            0o755,
+        )?;
         write_file(
             &stage.join("bin/wsh-runtime"),
             format!("#!/bin/sh\nexit {}\n", options.runtime_exit).as_bytes(),
@@ -965,8 +971,6 @@ mod tests {
             b"schema_version = 1\n",
             0o644,
         )?;
-        fs::set_permissions(stage.join("bin/zsh"), fs::Permissions::from_mode(0o755))?;
-
         let mut files = collect_file_records(&stage)?;
         files.sort_by(|left, right| left["path"].as_str().cmp(&right["path"].as_str()));
         if options.add_unlisted_file {

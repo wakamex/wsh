@@ -37,6 +37,9 @@ cargo test --locked --workspace
 }
 ${manager} bundle verify ${bundle} >/dev/null
 ${bundle}/bin/zsh --version
+WSH_BUNDLE_ROOT=${bundle} \
+ZDOTDIR=${bundle}/share/wsh/zdotdir \
+  ${bundle}/bin/zsh -d -c 'zmodload zsh/datetime'
 ${runtime} validate-theme ${theme}
 state_root=${test_root}/state
 ${manager} bundle activate ${bundle} --state-root ${state_root} >/dev/null
