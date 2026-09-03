@@ -1,6 +1,6 @@
 # wsh terminal integration
 
-`wsh` can replace terminal-maintained shell injection when a reproducible comparison shows that one ordered lifecycle improves correctness, process count, latency, or integration size. The first Wakterm experiment covers OSC 7 working-directory updates and OSC 133 command zones. Stable pane identity and bounded pane-local history are a separate restoration experiment.
+`wsh` can replace terminal-maintained shell injection when a reproducible comparison shows that one ordered lifecycle improves correctness, process count, latency, or integration size. The first Wakterm experiment covers OSC 7 working-directory updates and OSC 133 command zones. Foreground-job state, stable pane identity, and bounded pane-local history are separate experiments.
 
 The target state is small: the terminal supplies stable pane identity and optional capabilities, while `wsh` translates Zsh events into existing terminal protocols. That target becomes accepted architecture only after the current terminal integration is measured and the replacement produces a concrete terminal improvement.
 
@@ -215,6 +215,7 @@ The same local IPC could later support clone tokens, pane-close hints, metadata 
 | Experiment | Terminal work | Required result |
 |---|---|---|
 | Lifecycle | Skip Wakterm's injected script for `wsh` and consume OSC 7 and OSC 133 | Same-directory pane creation, prompt navigation, output selection, and idle-state detection remain correct with a measured improvement |
+| Foreground jobs | Compare Wakterm's cached native-frontend identity with ordered shell job transitions only if a gap remains | Managed identity clears after exit or replacement, survives stop and continue, and cannot transfer to a new frontend |
 | Pane restore | Persist and export a globally unique `WSH_PANE_TOKEN` | Each restored pane recovers only its bounded command recall |
 | Private history | Push a fresh memory-only history context and disable durable adapters | Sentinel commands remain available only during the private context and never enter `wsh` files, indexes, metadata, or default traces |
 | Metadata | Consume the versioned allowlist and explicit clears | Project-aware UI works without a full command line or arbitrary variables |
