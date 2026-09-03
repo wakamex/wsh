@@ -34,10 +34,10 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 ## Install
 
-The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the exact `v0.1.2` bundle from its immutable GitHub Release:
+The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the exact `v0.1.3` bundle from its immutable GitHub Release:
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.2/wsh-v0.1.2-install.sh | sh
+curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.3/wsh-v0.1.3-install.sh | sh
 ```
 
 Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
@@ -46,7 +46,7 @@ To update, run the same release-specific command with the exact newer version in
 
 ## Development slice
 
-The current code implements the phase-one path. It verifies and atomically selects exact bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. `v0.1.2` is the current official release; the public theme directory is not implemented.
+The current code implements the phase-one path. It verifies and atomically selects exact bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. `v0.1.3` is the current official release; the public theme directory is not implemented.
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 

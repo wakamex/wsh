@@ -895,7 +895,7 @@ dependencies = [
 
 [[package]]
 name = "wsh"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "serde",
  "serde_json",
@@ -905,7 +905,7 @@ dependencies = [
 
 [[package]]
 name = "wsh-install"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "attestation-verify",
  "semver",
@@ -918,7 +918,7 @@ dependencies = [
 
 [[package]]
 name = "wsh-runtime"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "flate2",
  "libc",
