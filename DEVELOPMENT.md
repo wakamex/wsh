@@ -56,6 +56,18 @@ Every vendored component addition or update also updates [`VENDORED-COMPONENTS.m
 
 ## Reproducible development builds use the release-shaped path
 
+For a fast host development loop, run:
+
+```sh
+cargo test --workspace
+./tests/bootstrap-install.zsh
+./build/build-zsh.zsh
+./build/build-development-bundle.zsh
+./tests/runtime-pty.zsh
+```
+
+The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. These host commands support iteration; the glibc 2.28 build below is the canonical complete target experiment.
+
 `./build/build-glibc-2.28-development-bundle.zsh` is the canonical target build entrypoint. It verifies every file declared by the locked required Rust components, rebuilds the builder from its digest-pinned Rocky base image, requires the complete installed RPM set to match `build/rocky-8.10-packages.lock`, resolves the exact source identity before entering the container, fixes locale, timezone, Rust and Zsh parallelism, umask, and `SOURCE_DATE_EPOCH`, runs the floor suite, and produces one normalized `.tar.xz` archive. The package lock records NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest for every installed package. Repository drift causes a build failure. The lock does not preserve package bytes or guarantee their future availability, so an offline package archive or frozen repository remains a release-infrastructure decision.
 
 `build/rust-toolchain.lock` records the exact Rust and Cargo versions, the required rustup components, and a path-independent digest of every file declared by those component manifests. Verification happens before the toolchain is mounted read-only into the builder. Optional local components such as rustfmt, Clippy, or Rust source do not change the compiler, Cargo, or standard-library identity used by the build. Each isolated build uses its own Cargo home and target directory; Cargo dependencies remain fixed by `Cargo.lock` and crate checksums.
