@@ -39,6 +39,15 @@ fn run() -> Result<(), String> {
             if args.next().is_some() {
                 return Err(usage().into());
             }
+            #[cfg(target_os = "linux")]
+            unsafe {
+                if libc::setpgid(0, 0) != 0 {
+                    return Err(format!(
+                        "could not isolate runtime process group: {}",
+                        std::io::Error::last_os_error()
+                    ));
+                }
+            }
             let theme = load_theme(&path)?;
             serve(
                 theme,

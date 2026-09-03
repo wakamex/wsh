@@ -78,6 +78,20 @@ fi
 zpty -w $pty_name "${bundle_setup}typeset -gx WSH_RUNTIME=${(q)runtime} WSH_THEME=${(q)theme}; source ${(q)integration}; print -r -- \$'WSH_\\x53ETUP_DONE'"
 pty_wait_for WSH_SETUP_DONE 3
 pty_wait_for $prompt_marker 3
+[[ $pty_output != *'['<->'] '<->* ]] || {
+  print -u2 -r -- "runtime startup exposed an internal job announcement: ${(qqq)pty_output}"
+  return 1
+}
+zpty -w $pty_name "print -r -- \$'WSH_\\x4dONITOR='\$options[monitor]"
+pty_wait_for WSH_MONITOR= 3
+[[ $pty_output == *'WSH_MONITOR=on'* ]] || {
+  print -u2 -r -- "runtime startup did not restore interactive job control: ${(qqq)pty_output}"
+  return 1
+}
+zpty -w $pty_name "print -r -- \$'WSH_\\x53HELL_PID='\$\$"
+pty_wait_for WSH_SHELL_PID= 3
+local shell_pid=${pty_output##*WSH_SHELL_PID=}
+shell_pid=${shell_pid%%[^0-9]*}
 zpty -w $pty_name "print -r -- \$'WSH_\\x53TATE='\${WSH_RUNTIME_PID}:\${WSH_RUNTIME_READY}:\${WSH_RUNTIME_REPAINTS}"
 pty_wait_for WSH_STATE= 3
 local state=${pty_output##*WSH_STATE=}
@@ -88,6 +102,16 @@ runtime_pid=${state%%:*}
   return 1
 }
 local initial_repaints=${state##*:}
+local shell_stat runtime_stat
+local -a shell_fields runtime_fields
+shell_stat=$(< /proc/${shell_pid}/stat)
+runtime_stat=$(< /proc/${runtime_pid}/stat)
+shell_fields=(${=shell_stat})
+runtime_fields=(${=runtime_stat})
+[[ $shell_fields[5] == $shell_pid && $runtime_fields[5] == $runtime_pid && $runtime_fields[5] != $shell_fields[5] ]] || {
+  print -u2 -- "runtime shares the interactive shell process group: shell=${shell_pid}:${shell_fields[5]} runtime=${runtime_pid}:${runtime_fields[5]}"
+  return 1
+}
 
 local hex_payload='' hex_byte
 local -i hex_value
@@ -117,6 +141,14 @@ local unchanged_repaints=${pty_output##*WSH_UNCHANGED_REPAINTS=}
 unchanged_repaints=${unchanged_repaints%%[^0-9]*}
 [[ $unchanged_repaints == $initial_repaints ]] || {
   print -u2 -r -- "unchanged prompt repainted: before=$initial_repaints after=$unchanged_repaints output=${(qqq)pty_output}"
+  return 1
+}
+
+pty_output=''
+zpty -w $pty_name $'\x03'
+pty_wait_for $prompt_marker 3
+kill -0 $runtime_pid 2>/dev/null || {
+  print -u2 -- "runtime did not survive Ctrl-C at the prompt: $runtime_pid"
   return 1
 }
 
@@ -155,4 +187,4 @@ kill -0 $runtime_pid 2>/dev/null && {
 }
 runtime_pid=-1
 zpty -d $pty_name 2>/dev/null || true
-print -r -- 'PASS: unchanged repaint suppression, runtime crash fallback, and shell-exit cleanup'
+print -r -- 'PASS: hidden isolated internal job, restored job control, prompt interrupt survival, unchanged repaint suppression, runtime crash fallback, and shell-exit cleanup'

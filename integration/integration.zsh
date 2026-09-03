@@ -170,6 +170,7 @@ _wsh_runtime_start() {
     return 1
   fi
 
+  unsetopt monitor
   coproc "$WSH_RUNTIME" serve --theme "$WSH_THEME"
   WSH_RUNTIME_PID=$!
   exec {WSH_RUNTIME_INPUT_FD}>&p
