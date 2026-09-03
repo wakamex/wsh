@@ -4,6 +4,8 @@ Wsh commits exact upstream runtime source so a release can build offline, reprod
 
 The current plugin snapshots are byte-identical to their recorded upstream revisions. Wsh compiles additional `.zwc` files during the bundle build, retains the source and license, and loads the source through Wsh-owned adapters. A source patch would require a separate patch file, upstream and resulting digests, a minimal reproducer, and an explicit reason it cannot remain in the adapter.
 
+All three interactive defaults come from repositories maintained by `zsh-users`. Oh My Zsh ships an opt-in copy of history substring search. Autosuggestions and syntax highlighting are separate projects commonly installed through Oh My Zsh's custom plugin directory. None is enabled by Oh My Zsh by default.
+
 ## Current divergence summary
 
 | Component | Upstream source changes | Wsh behavior around the component | Classification |

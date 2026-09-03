@@ -2,6 +2,12 @@
 
 `wsh` is a fast, tested distribution of edge Zsh with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
 
+Currently includes:
+
+- [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
+- [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
+- [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)
+
 ## Motivation
 
 Zsh is a capable shell, but building a polished interactive environment usually means assembling a framework, themes, plugins, completion files, and terminal integration. Those pieces often own overlapping machinery for Git state, hooks, caching, background work, and prompt repainting. Choosing a visual theme can therefore also choose its performance and correctness behavior.
@@ -9,18 +15,6 @@ Zsh is a capable shell, but building a polished interactive environment usually 
 A benchmark of representative prompt architectures ran each path in fresh interactive terminals against the same 1,000-file Git fixture. The tested paths ranged from one optional-lock-safe background Git scan to 16 synchronous Git calls per transition, with corresponding differences in prompt latency and state correctness. The detailed evidence and scope are recorded in [MOTIVATION.md](MOTIVATION.md).
 
 `wsh` separates presentation from state collection. A theme definition selects trusted prompt components and declares the structured fields it needs without executing shell code. Shared providers own external commands, asynchronous work, cache invalidation, cancellation, freshness, and publication. Fixing a provider can then improve every theme that uses it.
-
-## Everyday conveniences are measured defaults
-
-The current development version enables three widely used `zsh-users` plugins without requiring Oh My Zsh or separate plugin installation. Wsh vendors pinned upstream source byte for byte, compiles it with the bundled Zsh, and adds tested loading and compatibility policy around it.
-
-| Capability | Upstream source | Relationship to Oh My Zsh |
-|---|---|---|
-| Substring history search | [`zsh-users/zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search) | Oh My Zsh ships its own opt-in copy. Wsh recognizes that exact copy and avoids leaving duplicate runtime hooks. |
-| Autosuggestions | [`zsh-users/zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions) | Oh My Zsh does not ship it. Users commonly install it under `$ZSH_CUSTOM/plugins`. |
-| Syntax highlighting | [`zsh-users/zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting) | Oh My Zsh does not ship it. Users commonly install it under `$ZSH_CUSTOM/plugins`. |
-
-None of the three is enabled by Oh My Zsh by default. Wsh enables all three by default, preserves custom bindings and modified implementations, and provides explicit disable settings. The retained correctness and performance results are linked from [IMPLEMENTATION.md](IMPLEMENTATION.md), while [VENDORED-COMPONENTS.md](VENDORED-COMPONENTS.md) records exact revisions and every Wsh-owned difference around the unchanged sources.
 
 ## What wsh aims to provide
 
