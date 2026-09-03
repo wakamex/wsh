@@ -80,7 +80,7 @@ first_editable_child() {
       ;;
     managed-complete)
       export WSH_STATE_ROOT=$state_root
-      exec taskset -c $cpu $manager run
+      exec taskset -c $cpu $manager
       ;;
     *)
       print -u2 -- "error: unknown variant: $current_variant"

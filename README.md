@@ -40,7 +40,7 @@ The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the
 curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.3/wsh-v0.1.3-install.sh | sh
 ```
 
-Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
+Then start it with `wsh`. `wsh run` is the explicit form for scripts and for passing Zsh arguments after `--`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh` or add it to `PATH`.
 
 After installing `v0.1.3` or newer, use `wsh update --check` to check without changing anything, `wsh update` to install GitHub's current immutable release when newer, or `wsh update --to vX.Y.Z` to select an exact newer release. The command downloads the release-specific bootstrap to a private temporary directory and preserves its digest, provenance, complete-bundle, activation, and rollback checks. Existing `v0.1.1` and `v0.1.2` installations need the exact `v0.1.3` curl command above once because those launchers do not implement `wsh update`. `wsh bundle rollback` returns to the previously active bundle without a network request.
 

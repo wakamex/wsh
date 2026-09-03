@@ -11,7 +11,7 @@ use wsh::{
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
+    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -36,12 +36,14 @@ fn parse_state_root(arguments: &[std::ffi::OsString]) -> Result<PathBuf, String>
 
 fn run() -> Result<(), String> {
     let mut args = env::args_os().skip(1);
-    match args
+    let action = args
         .next()
-        .and_then(|arg| arg.into_string().ok())
-        .as_deref()
-    {
-        Some("bundle") => {
+        .map(|arg| arg.into_string())
+        .transpose()
+        .map_err(|_| usage().to_owned())?;
+    let action = action.as_deref().unwrap_or("run");
+    match action {
+        "bundle" => {
             let action = args
                 .next()
                 .and_then(|arg| arg.into_string().ok())
@@ -72,7 +74,7 @@ fn run() -> Result<(), String> {
             }
             Ok(())
         }
-        Some("run") => {
+        "run" => {
             let remaining: Vec<_> = args.collect();
             let separator = remaining.iter().position(|arg| arg == "--");
             let (options, shell_args) = separator.map_or((&remaining[..], &[][..]), |index| {
@@ -119,7 +121,7 @@ fn run() -> Result<(), String> {
                 paths.shell.display()
             ))
         }
-        Some("update") => {
+        "update" => {
             let remaining: Vec<_> = args.collect();
             let mut check = false;
             let mut target = None;

@@ -51,6 +51,16 @@ wait $launcher_pid
   print -u2 -- 'error: manager did not replace itself with bundled Zsh'
   exit 1
 }
+bare_input_file=${test_root}/bare.input
+bare_pid_file=${test_root}/bare.pid
+print -r -- 'zmodload zsh/datetime; print -r -- $$' > ${bare_input_file}
+WSH_STATE_ROOT=${state_root} ${manager} < ${bare_input_file} > ${bare_pid_file} &
+bare_launcher_pid=$!
+wait $bare_launcher_pid
+[[ $(< ${bare_pid_file}) == $bare_launcher_pid ]] || {
+  print -u2 -- 'error: bare wsh did not replace itself with bundled Zsh'
+  exit 1
+}
 
 fixture=${test_root}/fixture
 mkdir -p -- $fixture
