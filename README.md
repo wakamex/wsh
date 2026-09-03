@@ -65,7 +65,7 @@ The retained [history substring search result](benchmarks/history-substring-sear
 
 The retained [autosuggestions result](benchmarks/autosuggestions-2026-09-03/report.md) adds the second measured interactive default. The pinned upstream implementation runs in documented manual-rebind mode, cutting settled no-op prompt p90 from 20.698 ms to 10.545 ms while matching direct-upstream suggestion and acceptance latency. Exact pending copies are replaced, active or modified copies remain user-owned, and the PTY fixture covers cancellation, history-search composition, custom widgets, explicit later rebinding, configuration, and syntax-highlighting composition.
 
-The retained [syntax-highlighting result](benchmarks/syntax-highlighting-2026-09-03/report.md) adds the third measured interactive default. An ordinary direct plugin declaration through Wsh's nested startup path installed no redraw hooks because ZLE was not active yet. Deferred bundled loading fixed that silent failure and reached the first editable prompt at 29.260 ms p90, 3.155 ms faster than the correctly initialized direct-upstream control. Short and 1,000-byte redraw p90 remained within 0.2 percent of direct upstream, and the isolated edit path created no process.
+The retained [syntax-highlighting result](benchmarks/syntax-highlighting-2026-09-03/report.md) adds the third measured interactive default. An ordinary direct plugin declaration through Wsh's nested startup path installed no redraw hooks because ZLE was not active yet. Deferred bundled loading fixed this Wsh integration failure and reached the first editable prompt at 29.260 ms p90, 3.155 ms faster than the correctly initialized direct-upstream control. Short and 1,000-byte redraw p90 remained within 0.2 percent of direct upstream, and the isolated edit path created no process.
 
 The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-09-03/report.md) covers the internal coprocess lifecycle. Runtime startup prints no job announcement, keeps the service in a separate process group, restores interactive job control, survives Ctrl-C at the prompt, and passes the existing cold-start gates.
 
@@ -119,6 +119,7 @@ Zsh remains the shell engine. Applications remain authoritative for their comman
 - [MOTIVATION.md](MOTIVATION.md) explains the benchmark results and product direction.
 - [DESIGN.md](DESIGN.md) defines the Git provider, snapshot, renderer, and distribution contracts.
 - [SECURITY.md](SECURITY.md) defines non-executable themes, open directory admission, and the signed reproducible update policy.
+- [VENDORED-COMPONENTS.md](VENDORED-COMPONENTS.md) records exact upstream snapshots and Wsh's build, configuration, lifecycle, and compatibility differences around them.
 - [RELEASES.md](RELEASES.md) defines which GitHub artifacts are official and how reproducibility, attestations, activation, and rollback are verified.
 - [DEVELOPMENT.md](DEVELOPMENT.md) defines the vertical-slice, testing, benchmarking, and evidence-retention workflow.
 - [FEATURES.md](FEATURES.md) defines how later capabilities enter the roadmap.

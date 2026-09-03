@@ -52,6 +52,8 @@ Reports lead with the motivation, short result, and how it was tested. Detailed 
 
 An accepted intervention retains its reproducer, fixtures, commands, raw measurements, generated summary, and regression test. Generated reports identify their inputs and should be reproducible from retained data. If later evidence invalidates a result or architecture premise, update or replace the old conclusion rather than accumulating mutually inconsistent plans.
 
+Every vendored component addition or update also updates [`VENDORED-COMPONENTS.md`](VENDORED-COMPONENTS.md). The review records whether source bytes changed, build-only transformations, selected upstream configuration, Wsh-owned lifecycle and compatibility behavior, upstream-suite results, and the reproducer that still requires each divergence.
+
 ## Reproducible development builds use the release-shaped path
 
 `./build/build-glibc-2.28-development-bundle.zsh` is the canonical target build entrypoint. It verifies every file declared by the locked required Rust components, rebuilds the builder from its digest-pinned Rocky base image, requires the complete installed RPM set to match `build/rocky-8.10-packages.lock`, resolves the exact source identity before entering the container, fixes locale, timezone, Rust and Zsh parallelism, umask, and `SOURCE_DATE_EPOCH`, runs the floor suite, and produces one normalized `.tar.xz` archive. The package lock records NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest for every installed package. Repository drift causes a build failure. The lock does not preserve package bytes or guarantee their future availability, so an offline package archive or frozen repository remains a release-infrastructure decision.

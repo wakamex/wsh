@@ -1,6 +1,6 @@
-# Deferred loading fixes silent syntax-highlighting failure and improves clean startup
+# Deferred loading fixes Wsh syntax-highlighting startup and improves clean startup
 
-Wsh now provides syntax highlighting without requiring Oh My Zsh or a separately installed plugin. An ordinary direct plugin declaration in Wsh's nested startup path ran before ZLE was active, defined the plugin functions, and installed no redraw hooks. The bundled default defers the pinned upstream implementation until the first prompt, when ZLE is ready. It produced working highlighting at 29.260 ms first-editable p90, 3.155 ms faster than the 32.416 ms correctly initialized direct-upstream control.
+Wsh now provides syntax highlighting without requiring Oh My Zsh or a separately installed plugin. An ordinary direct plugin declaration in Wsh's nested startup path ran before ZLE was active, defined the plugin functions, and installed no redraw hooks. This was a Wsh startup-integration failure, not a general upstream defect. The bundled default defers the unchanged pinned upstream implementation until the first prompt, when ZLE is ready. It produced working highlighting at 29.260 ms first-editable p90, 3.155 ms faster than the 32.416 ms correctly initialized direct-upstream control.
 
 The benchmark pinned `zsh-users/zsh-syntax-highlighting` commit `2fc57d63067c18b1100ecdbf684fa5baf49459d1`, ran the upstream test suite against both the checkout and bundled runtime files, exercised actual ZLE input and terminal output, and compared direct loading with the precompiled Wsh component. The retained correctness fixture also covers exact-copy takeover, modified and custom implementations, configuration, existing hooks, and composition with history substring search and autosuggestions.
 

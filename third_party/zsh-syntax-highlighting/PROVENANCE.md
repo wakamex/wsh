@@ -2,6 +2,8 @@
 
 Wsh vendors the runtime files below byte for byte from [zsh-users/zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) commit `2fc57d63067c18b1100ecdbf684fa5baf49459d1`.
 
+Wsh's unchanged source, build transformation, deferred loading, and exact-copy hook activation are recorded in [`VENDORED-COMPONENTS.md`](https://github.com/wakamex/wsh/blob/main/VENDORED-COMPONENTS.md). The deferred load fixes a Wsh startup-integration failure, not a general upstream defect.
+
 | Upstream path | SHA-256 |
 |---|---|
 | `.revision-hash` | `2070743a71dbdccd323f1848e8f9f1fd893081c4e779f9f5a3cebcee6b2e467d` |
