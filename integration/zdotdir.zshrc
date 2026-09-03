@@ -17,6 +17,11 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
   unset WSH_STARTUP_MODULE_PATH WSH_STARTUP_FUNCTION_PATH
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/history-substring-search.zsh"
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/autosuggestions.zsh"
+  if [[ ${WSH_DISABLE_SYNTAX_HIGHLIGHTING:-0} == 1 ]]; then
+    typeset -g WSH_SYNTAX_HIGHLIGHTING_OWNER=disabled
+  else
+    source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/syntax-highlighting.zsh"
+  fi
   source "${WSH_BUNDLE_ROOT}/share/wsh/integration.zsh"
 fi
 

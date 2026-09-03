@@ -153,8 +153,8 @@ run_interactive() {
   local remainder=${hook_line#*:}
   local -a recorded_preexec=(${(s:,:)${remainder%%:*}})
   local -a recorded_zshexit=(${(s:,:)${hook_line##*:}})
-  [[ ${(j:,:)recorded_precmd} == _wsh_user_precmd,_wsh_runtime_precmd ]] || return 1
-  [[ ${(j:,:)recorded_preexec} == _wsh_user_preexec,_wsh_runtime_preexec ]] || return 1
+  [[ ${(j:,:)recorded_precmd} == _wsh_user_precmd,_wsh_runtime_precmd,_zsh_highlight_main__precmd_hook ]] || return 1
+  [[ ${(j:,:)recorded_preexec} == _wsh_user_preexec,_wsh_runtime_preexec,_zsh_highlight_preexec_hook ]] || return 1
   [[ ${(j:,:)recorded_zshexit} == _wsh_user_zshexit,_wsh_runtime_stop ]] || return 1
 }
 

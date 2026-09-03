@@ -1,0 +1,23 @@
+revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
+variant=upstream
+make: Entering directory '<test-root>/upstream'
+make test QUIET=y
+make[1]: Entering directory '<test-root>/upstream'
+ZSH_PATCHLEVEL=zsh-5.9.2-0-gddee3e7
+Running test brackets
+Running test main
+Running test pattern
+Running test regexp
+make[1]: Leaving directory '<test-root>/upstream'
+make: Leaving directory '<test-root>/upstream'
+variant=bundled-runtime
+make: Entering directory '<test-root>/candidate'
+make test QUIET=y
+make[1]: Entering directory '<test-root>/candidate'
+ZSH_PATCHLEVEL=zsh-5.9.2-0-gddee3e7
+Running test brackets
+Running test main
+Running test pattern
+Running test regexp
+make[1]: Leaving directory '<test-root>/candidate'
+make: Leaving directory '<test-root>/candidate'

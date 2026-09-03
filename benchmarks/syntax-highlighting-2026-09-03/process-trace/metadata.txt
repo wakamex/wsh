@@ -1,0 +1,9 @@
+bundle=4fd2e3236e0ec9adf3ac8836212da5163a043d5fa67aed474554465f2ac92c39
+plugin_revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
+owner=external-exact|1
+cpu=0
+edit_started_epoch=1788470734.741891384
+highlight_visible_epoch=1788470734.762296200
+highlight_redraw_ms=20.404816
+edit_window_process_creations=0
+edit_window_execve=0

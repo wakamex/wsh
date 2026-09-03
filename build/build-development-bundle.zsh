@@ -46,6 +46,10 @@ install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/PROVENANCE
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "${stage}/share/wsh/defaults/zsh-autosuggestions-LICENSE"
 (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')
 chmod 644 "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh.zwc"
+install -D -m 644 "${repository_root}/integration/syntax-highlighting.zsh" "${stage}/share/wsh/defaults/syntax-highlighting.zsh"
+cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/share/wsh/defaults/zsh-syntax-highlighting"
+(cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/zsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
+find "${stage}/share/wsh/defaults/zsh-syntax-highlighting" -type f -exec chmod 644 {} +
 install -D -m 644 "${repository_root}/integration/zdotdir.zshenv" "${stage}/share/wsh/zdotdir/.zshenv"
 install -D -m 644 "${repository_root}/integration/zdotdir.zprofile" "${stage}/share/wsh/zdotdir/.zprofile"
 install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share/wsh/zdotdir/.zshrc"

@@ -1,0 +1,14 @@
+measurement	build	variant	workload	samples	median_ms	p90_ms	maximum_ms
+first-editable	baseline	clean	-	40	26.697159	27.282238	28.078318
+first-editable	baseline	external	-	40	31.228542	31.831980	32.408237
+first-editable	baseline	external-ready	-	40	31.945943	32.415628	34.224749
+first-editable	candidate	clean	-	40	28.818011	29.260159	30.313730
+first-editable	candidate	disabled	-	40	26.865125	27.285099	27.773142
+first-editable	candidate	external	-	40	33.656001	34.520864	34.805536
+first-editable	candidate	external-ready	-	40	33.453465	33.824444	34.940958
+redraw	baseline	external-ready	long	100	13.362407	13.624191	14.489889
+redraw	baseline	external-ready	short	100	13.342023	13.550758	13.788700
+redraw	candidate	clean	long	100	13.384223	13.628960	13.956785
+redraw	candidate	clean	short	100	13.328195	13.565540	13.897896
+redraw	candidate	external	long	100	13.378977	13.612032	15.435696
+redraw	candidate	external	short	100	13.320804	13.523579	13.638020

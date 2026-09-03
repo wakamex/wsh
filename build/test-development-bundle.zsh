@@ -98,6 +98,7 @@ ${repository_root}/tests/runtime-pty.zsh
 ${repository_root}/tests/zsh-config-coexistence.zsh ${manager} ${bundle} present
 ${repository_root}/tests/history-substring-search.zsh ${manager} ${bundle}
 ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
+${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
 
 needed=$(find ${bundle} -type f -exec readelf -d {} \; 2>/dev/null | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' | sort -u)
 recorded=$(jq -r '.requirements.dynamic_libraries[]' ${bundle}/manifest.json | sort -u)

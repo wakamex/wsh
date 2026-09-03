@@ -88,3 +88,4 @@ jobs:
           ./benchmarks/verify-config-coexistence-evidence.zsh
           ./benchmarks/verify-history-substring-search-evidence.zsh
           ./benchmarks/verify-autosuggestions-evidence.zsh
+          ./benchmarks/verify-syntax-highlighting-evidence.zsh

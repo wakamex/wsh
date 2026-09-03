@@ -21,7 +21,7 @@ ebafdc07e6614d28d5138860689c950cb69cf15cded7be9fff42a852e07d9b97  process-trace/
 
 print -r -- 'eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a  third_party/zsh-autosuggestions/zsh-autosuggestions.zsh
 2d369f247f2a7278c83e90ba48690d0a1f63528837d034055b1cbec87d86a6d6  integration/autosuggestions.zsh
-f0993825b0aef79ebb697b03f9b3f3229c11ec6b594cf71beb5ab4c05a2c1ef1  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
+add0274292b3ef623e24a169ca1c53a7dcd4778b0ec034c3c7fb430006af888e  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
 
 $root/benchmarks/summarize-autosuggestions.zsh startup-baseline.tsv startup-candidate.tsv prompt-baseline.tsv prompt-candidate.tsv edit-baseline.tsv edit-candidate.tsv $temporary/summary.tsv >/dev/null
 diff -u summary.tsv $temporary/summary.tsv
