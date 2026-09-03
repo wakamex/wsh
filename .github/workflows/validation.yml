@@ -33,6 +33,8 @@ jobs:
         run: cargo test --locked --workspace
       - name: Test the release bootstrap
         run: ./tests/bootstrap-install.zsh
+      - name: Test explicit release updates
+        run: ./tests/update-cli.zsh
       - name: Verify a real external GitHub Actions attestation
         run: ./tests/external-attestation.zsh
 

@@ -4,12 +4,14 @@ use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
 use wsh::{
-    activate_bundle, active_bundle, active_bundle_for_launch, entrypoints, rollback_bundle,
-    verify_bundle,
+    BundleStatus, activate_bundle, active_bundle, active_bundle_for_launch, entrypoints,
+    rollback_bundle, verify_bundle,
 };
 
+mod update;
+
 fn usage() -> &'static str {
-    "usage:\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
+    "usage:\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -116,6 +118,63 @@ fn run() -> Result<(), String> {
                 "could not replace the launcher with {}: {error}",
                 paths.shell.display()
             ))
+        }
+        Some("update") => {
+            let remaining: Vec<_> = args.collect();
+            let mut check = false;
+            let mut target = None;
+            let mut state_root = None;
+            let mut index = 0;
+            while index < remaining.len() {
+                match remaining[index].to_str() {
+                    Some("--check") => {
+                        if check {
+                            return Err(usage().into());
+                        }
+                        check = true;
+                        index += 1;
+                    }
+                    Some("--to") => {
+                        if target.is_some() {
+                            return Err(usage().into());
+                        }
+                        let value = remaining.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        target = Some(
+                            value
+                                .to_str()
+                                .ok_or_else(|| "release tag must be UTF-8".to_owned())?
+                                .to_owned(),
+                        );
+                        index += 2;
+                    }
+                    Some("--state-root") => {
+                        if state_root.is_some() {
+                            return Err(usage().into());
+                        }
+                        let value = remaining.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        state_root = Some(PathBuf::from(value));
+                        index += 2;
+                    }
+                    _ => return Err(usage().into()),
+                }
+            }
+            if check && target.is_some() {
+                return Err(usage().into());
+            }
+            let state_root = state_root.unwrap_or(default_state_root()?);
+            let bundle = active_bundle(&state_root)?;
+            let verified = verify_bundle(&bundle)?;
+            if verified.manifest.status != BundleStatus::Release {
+                return Err("updates require an active official release bundle".into());
+            }
+            let mode = if check {
+                update::UpdateMode::Check
+            } else if let Some(target) = target {
+                update::UpdateMode::Exact(target)
+            } else {
+                update::UpdateMode::Latest
+            };
+            update::run(mode, &verified.manifest.release_id, &state_root)
         }
         _ => Err(usage().into()),
     }

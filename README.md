@@ -42,7 +42,7 @@ curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/do
 
 Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
 
-To update, run the same release-specific command with the exact newer version in both URL path segments. It verifies the matching native tools and complete immutable bundle before atomically selecting the bundle. There is no `latest` installer or `wsh update` command yet. `wsh bundle rollback` returns to the previously active bundle without a network request.
+After installing `v0.1.3` or newer, use `wsh update --check` to check without changing anything, `wsh update` to install GitHub's current immutable release when newer, or `wsh update --to vX.Y.Z` to select an exact newer release. The command downloads the release-specific bootstrap to a private temporary directory and preserves its digest, provenance, complete-bundle, activation, and rollback checks. Existing `v0.1.1` and `v0.1.2` installations need the exact `v0.1.3` curl command above once because those launchers do not implement `wsh update`. `wsh bundle rollback` returns to the previously active bundle without a network request.
 
 ## Development slice
 
