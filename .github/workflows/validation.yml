@@ -83,3 +83,4 @@ jobs:
           ./benchmarks/verify-bootstrap-evidence.zsh
           ./benchmarks/verify-public-install-evidence.zsh
           ./benchmarks/verify-runtime-job-announcement-evidence.zsh
+          ./benchmarks/verify-update-cli-evidence.zsh
