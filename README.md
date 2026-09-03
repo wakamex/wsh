@@ -34,23 +34,27 @@ An installed bundle never updates only Zsh or only the wsh runtime. Any componen
 
 ## Install
 
-The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the exact `v0.1.1` bundle from its immutable GitHub Release:
+The first supported target is x86-64 Linux with glibc 2.28 or newer. Install the exact `v0.1.2` bundle from its immutable GitHub Release:
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.1/wsh-v0.1.1-install.sh | sh
+curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.2/wsh-v0.1.2-install.sh | sh
 ```
 
 Then start it with `wsh run`. The installer uses `~/.local/bin`; if that directory is not on `PATH`, run `~/.local/bin/wsh run` or add it to `PATH`.
 
+To update, run the release-specific installer command for the newer version. It verifies and installs a complete immutable bundle before atomically selecting it. `wsh bundle rollback` returns to the previously active bundle without a network request.
+
 ## Development slice
 
-The current code implements the phase-one path. It verifies and atomically selects exact bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. `v0.1.1` is the first installable official release; the public theme directory is not implemented.
+The current code implements the phase-one path. It verifies and atomically selects exact bundles, launches the bundled Zsh 5.9.2 and matching session runtime, collects one versioned Git snapshot with one optional-lock-safe Git process, renders the minimal or Wakamex data-only theme, suppresses stale results and unchanged repaints, emits bounded private traces, cleans up on cancellation or shell exit, and rolls back without starting the broken active bundle. Both bundled theme presentations pass the fixed correctness and performance gates at the glibc 2.28 compatibility floor. A release-specific bootstrap downloads exact immutable-release assets, verifies the native tools against embedded digests, and hands the archive and offline GitHub Actions provenance to the separate install helper before extraction or activation. `v0.1.2` is the current official release; the public theme directory is not implemented.
 
 The retained [minimal-renderer optimization result](benchmarks/minimal-tail-2026-09-02/report.md) records the measured decoder cause, unchanged gates, matched raw-Zsh controls, accepted fixed result, longer stress diagnostic, exact identities, and raw data. The preceding [glibc 2.28 failure](benchmarks/phase-one-glibc-2.28-result-2026-09-02.md) remains available as its fixed-gate baseline, and the earlier [glibc 2.35 result](benchmarks/phase-one-result-2026-09-02.md) remains available for its exact build identity.
 
 The retained [resource-gate result](benchmarks/resource-gates-2026-09-02/report.md) adds fixed tracing-overhead and retained-memory thresholds. The clean bundle built and tested on the glibc 2.28 floor passed with 0.190 ms refresh p90 overhead from tracing and 1,961 KiB added retained PSS at p90.
 
 The retained [installed-startup result](benchmarks/exec-launch-2026-09-02/report.md) covers the normal entrypoint through the first editable prompt. A compact activation record and direct `exec` handoff reduced isolated median launcher overhead from the preceding 1.6 ms implementation to 0.65 ms locally and 0.70 ms in the glibc 2.28 build. At the compatibility floor, complete managed startup reached an editable prompt in 7.963 ms at p90, 2.723 ms over raw bundled Zsh; the launcher accounted for 0.527 ms of that p90 difference.
+
+The retained [runtime-startup result](benchmarks/runtime-job-announcement-2026-09-03/report.md) covers the internal coprocess lifecycle. Runtime startup prints no job announcement, keeps the service in a separate process group, restores interactive job control, survives Ctrl-C at the prompt, and passes the existing cold-start gates.
 
 The retained [verified-install result](benchmarks/verified-install-2026-09-02/report.md) checks a real external GitHub Actions provenance record and the local install transaction. Offline provenance verification took 2.229 ms at p90 across 100 warm samples. Keeping that code in `wsh-install` left the normal launcher below its existing 1.0 ms gates, and a network-only launch trace remained empty.
 

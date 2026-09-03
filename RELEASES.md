@@ -56,4 +56,4 @@ An official GitHub Release requires all of the following:
 8. The automated publisher supplies the complete asset set and both build records before GitHub publishes the release and makes it immutable.
 9. Release and asset verification succeeds after publication.
 
-`v0.1.1` is the first installable official binary release to pass all nine gates and the separate public download-to-prompt experiment. Immutable `v0.1.0` passed the original publication workflow but failed its first public install before activation, which added relocated candidate startup to gate 3 for subsequent releases.
+`v0.1.2` suppresses the internal runtime job announcement while preserving a separate runtime process group, interactive job control, and prompt interrupt handling. `v0.1.1` is the first installable official binary release to pass all nine gates and the separate public download-to-prompt experiment. Immutable `v0.1.0` passed the original publication workflow but failed its first public install before activation, which added relocated candidate startup to gate 3 for subsequent releases.
