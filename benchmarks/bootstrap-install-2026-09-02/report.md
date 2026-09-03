@@ -34,4 +34,4 @@ This result measures the new orchestration rather than claiming a complete relea
 
 ## Exact identities
 
-The baseline source revision was `424d7314a03227355fc08be2d149d4a7430909d8`. [`metadata.txt`](metadata.txt) records the intervention source convention, implementation and sample digests, command, host, and CPU. The fixed hypothesis and gates were recorded before implementation in [`../bootstrap-install-plan-2026-09-02.md`](../bootstrap-install-plan-2026-09-02.md).
+The baseline source revision was `424d7314a03227355fc08be2d149d4a7430909d8`, the accepted implementation and evidence revision was `8e1dd0018d06f9f01a7d7b44ae449cafa7e03f00`, and the publication-workflow provenance refresh was `e253573211e0d6a9d2943f943ff04ae1d21f6dd9`. [`metadata.txt`](metadata.txt) records those revisions, implementation and sample digests, command, host, and CPU. The verifier reads the pinned historical Git objects so later bootstrap changes do not rewrite the accepted result's implementation identity. The fixed hypothesis and gates were recorded before implementation in [`../bootstrap-install-plan-2026-09-02.md`](../bootstrap-install-plan-2026-09-02.md).

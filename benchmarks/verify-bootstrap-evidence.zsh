@@ -23,11 +23,24 @@ verify_hash() {
   }
 }
 
+verify_git_object_hash() {
+  local key=$1
+  local revision=$2
+  local input_path=$3
+  local actual=$(git show ${revision}:${input_path} | sha256sum)
+  [[ ${actual%% *} == $(metadata_value $key) ]] || {
+    print -u2 -- "error: retained bootstrap evidence hash mismatch: $key"
+    exit 1
+  }
+}
+
 verify_hash samples_sha256 $samples
-verify_hash bootstrap_template_sha256 ${repository_root}/build/bootstrap-install.sh.in
-verify_hash renderer_sha256 ${repository_root}/build/render-bootstrap.zsh
-verify_hash test_sha256 ${repository_root}/tests/bootstrap-install.zsh
-verify_hash publish_workflow_sha256 ${repository_root}/.github/workflows/publish.yml
+readonly intervention_source_revision=$(metadata_value intervention_source_revision)
+readonly provenance_refresh_source_revision=$(metadata_value provenance_refresh_source_revision)
+verify_git_object_hash bootstrap_template_sha256 $intervention_source_revision build/bootstrap-install.sh.in
+verify_git_object_hash renderer_sha256 $intervention_source_revision build/render-bootstrap.zsh
+verify_git_object_hash test_sha256 $intervention_source_revision tests/bootstrap-install.zsh
+verify_git_object_hash publish_workflow_sha256 $provenance_refresh_source_revision .github/workflows/publish.yml
 
 readonly summary=$(
   awk -F '\t' 'NR > 1 { print $2 }' $samples \
@@ -39,4 +52,4 @@ readonly summary=$(
   exit 1
 }
 
-print -r -- 'PASS: retained bootstrap inputs, implementation digests, and summary agree'
+print -r -- 'PASS: retained bootstrap inputs, historical implementation digests, and summary agree'
