@@ -12,7 +12,7 @@ The runtime contract consists of the tested floor environment, glibc 2.28 or new
 
 ## Reproducibility compares two isolated builds
 
-The release workflow starts twice from the same pinned source commit, upstream Zsh archive and signature, dependency lockfile, Rust toolchain, target, builder image digest, build recipe, environment, locale, timezone, archive ordering, timestamps, ownership, and compression parameters. The jobs use separate clean workers and do not exchange build directories or compiler caches. Each job emits the canonical archive digest, bundle manifest digest, file table, toolchain identities, test results, and build log.
+The release workflow starts twice from the same pinned source commit, upstream Zsh source lock and snapshot, upstream signature when the source is a signed release, dependency lockfile, Rust toolchain, target, builder image digest, build recipe, environment, locale, timezone, archive ordering, timestamps, ownership, and compression parameters. The jobs use separate clean workers and do not exchange build directories or compiler caches. Each job emits the canonical archive digest, bundle manifest digest, file table, toolchain identities, test results, and build log.
 
 The development implementation supplies the local form of this gate. Its Rocky lock records the complete installed package set with NEVRA, architecture, RPM header SHA-256, payload digest algorithm, and payload digest. Its Rust lock records exact compiler versions, required rustup components, and the digest of every file declared by those component manifests. A package that no longer resolves to the lock causes a failure; the repository does not currently retain an offline RPM archive. The canonical archive uses sorted GNU tar entries, the source commit timestamp, normalized ownership and modes, and fixed single-threaded xz parameters.
 
@@ -47,7 +47,7 @@ The manager never mutates an installed bundle and never updates one component wi
 An official GitHub Release requires all of the following:
 
 1. The exact source commit and tag are fixed.
-2. The signed upstream Zsh archive, dependency lockfile, toolchain, builder image, and build recipe are pinned.
+2. The upstream Zsh source mode, canonical location, revision, tree, snapshot digest, maintainer signature when present, dependency lockfile, toolchain, builder image, and build recipe are pinned.
 3. Rust tests, Zsh upstream tests, theme-schema tests, provider fixtures, adversarial protocol tests, PTY lifecycle tests, tamper tests, and rollback tests pass.
 4. The complete bundle runs in the documented floor environment, imports no glibc symbol above the floor, and exactly records its system-supplied dynamic-library boundary.
 5. The retained benchmark passes semantic, process-count, optional-lock, repaint, first-editable, settled-latency, tracing-overhead, and memory gates.

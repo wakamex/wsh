@@ -1,6 +1,6 @@
 # wsh
 
-`wsh` is a fast, tested distribution of edge Zsh with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
+`wsh` is a fast, tested Zsh distribution with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
 
 Currently includes:
 

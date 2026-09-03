@@ -12,9 +12,11 @@ Rust documents support for `x86_64-unknown-linux-gnu` on older glibc releases, w
 
 Additional architectures, musl builds, and other operating systems require their own build identities, runtime fixtures, and benchmark results. They do not enter the first vertical slice.
 
-## wsh builds Zsh from signed upstream source
+## wsh builds Zsh from pinned upstream source
 
-The Zsh project publishes signed source archives rather than an official portable Linux binary distribution. The first bundle therefore builds Zsh 5.9.2 from its upstream signed release archive. The build records the archive URL and digest, verified OpenPGP signing key fingerprint, corresponding source revision, patch set, configure arguments, compiler and linker identities, dependency identities, target, and resulting file digests.
+The Zsh project publishes signed source archives rather than an official portable Linux binary distribution. Stable Wsh bundles build Zsh from an upstream signed release archive and record the archive URL and digest, verified OpenPGP signing key fingerprint, corresponding source revision, patch set, configure arguments, compiler and linker identities, dependency identities, target, and resulting file digests.
+
+An accepted development revision uses a committed source lock containing the canonical `zsh-users/zsh` repository URL, exact commit and tree identities, and the SHA-256 digest of the complete source snapshot. A pushed commit containing the pin authorizes source selection. The ordinary Wsh release tag authorizes publication, and build provenance binds the selected input to the published bundle. Build jobs reject moving refs and changed source bytes. This policy identifies the canonical upstream bytes selected by Wsh without describing an unsigned development commit as maintainer-signed.
 
 The initial patch set is empty. The release build includes the Zsh executable, required loadable modules, functions, and other runtime files rather than copying `/usr/bin/zsh` from the build host. The current development bundle carries the Zsh runtime tree and records every system-supplied dynamic library found across the manager, runtime, Zsh executable, and loadable modules.
 
@@ -26,7 +28,7 @@ The first local two-build experiment produced identical manifests and archives w
 
 Compilation happens in wsh release infrastructure. The installed manager downloads a completed bundle and never resolves formulas, builds Zsh, substitutes system libraries, or falls back to compiling source on the user's machine. This borrows the managed-runtime installation shape used by tools such as uv and the prebuilt-artifact shape used by package managers, but `wsh` manages only its own complete distribution. It has no general package index, dependency solver, formula language, or authority over unrelated software.
 
-The first accepted bundle uses stable Zsh 5.9.2. The current upstream development revision is a separate benchmark candidate, not a second initial update channel. `wsh` moves to a development revision only when a named capability or measured improvement passes the complete Zsh, integration, correctness, performance, and rollback gates. A later stable Zsh release is also a new full-bundle candidate.
+The first accepted bundle uses stable Zsh 5.9.2. Upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`, which is 1,074 commits on `master` after the Zsh 5.9 release, is the next pinned benchmark candidate. Zsh 5.9.2 was developed on a maintenance branch, so it is a comparison baseline rather than the start of a linear `master` commit count. The candidate must pass the experiment in [`benchmarks/edge-zsh-plan-2026-09-03.md`](benchmarks/edge-zsh-plan-2026-09-03.md) before Wsh describes a build as edge Zsh. A later stable Zsh release is also a new full-bundle candidate.
 
 ## The manager and runtime are Rust programs
 
@@ -95,7 +97,7 @@ The manager at `~/.local/bin/wsh` and install helper at `~/.local/libexec/wsh-in
 `manifest.json` is strict machine-generated JSON. Its initial schema records at least:
 
 - Manifest schema version, bundle status, release identity, target, and minimum manager version
-- Zsh source archive, digest, verified signing identity, source revision, patch set, configure arguments, and build toolchain
+- Zsh source mode, canonical location, archive digest, source revision and tree, verified signing identity when present, patch set, configure arguments, and build toolchain
 - Rust source revision, lockfile digest, target, compiler, profile, and build inputs
 - Runtime protocol, provider schema, theme schema, and integration API versions
 - Entrypoints and the path, type, mode, size, and SHA-256 digest of every payload file
