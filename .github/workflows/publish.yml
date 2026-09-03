@@ -164,6 +164,8 @@ jobs:
           cmp --silent "${bootstraps_a[0]}" "${bootstraps_b[0]}"
           mkdir release-assets
           cp "${archives_a[0]}" "${manifests_a[0]}" "${launchers_a[0]}" "${installers_a[0]}" "${bootstraps_a[0]}" release-assets/
+          cp "${bootstraps_a[0]}" release-assets/wsh-install.sh
+          cmp --silent "${bootstraps_a[0]}" release-assets/wsh-install.sh
           cp incoming/a/build-record-a.json incoming/b/build-record-b.json release-assets/
           (
             cd release-assets

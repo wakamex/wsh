@@ -1,0 +1,9 @@
+# v0.1.3 updates an existing v0.1.1 installation and preserves rollback
+
+The exact public `v0.1.3` bootstrap successfully replaced the launcher and installer from an isolated `v0.1.1` installation, activated the complete `v0.1.3` bundle, and preserved the old bundle for offline rollback. After rollback, the installed `wsh update --to v0.1.3` command selected the current release again through the same public bootstrap.
+
+The test downloaded both release-specific bootstrap scripts from their immutable GitHub Releases over HTTPS into fresh binary, libexec, install, and state directories on Fedora 44 with glibc 2.43. The `v0.1.1` script had SHA-256 `932b06336aea3b8ecaed9bf494625cf045db08f32b0291f6991cb39af3c3f41f`; the `v0.1.3` script had SHA-256 `817e4babbc8f7566a9384cb539c0f098b7ebae3993a43f4443b590d2c89677f6`.
+
+The initial installation selected bundle `9ec9ecf5226a39220b96f8a3e1522229b5ffea0ebc7bbd3909465500dd6e373e`. The `v0.1.3` bootstrap selected bundle `4c32ac60d7e30b4686fdda576b9163746c850cbcce4d3a88c7dae943515a012b`, and `wsh update --check` reported that `v0.1.3` was current. `wsh bundle rollback` returned to the original bundle without a network request. Running `wsh update --to v0.1.3` from that rolled-back state reauthenticated the public assets and selected the `v0.1.3` bundle.
+
+The tested release source was commit `4da1b0d07bb1a815449390c3ebd9c1085c30babd`. [Publication run 33773723979](https://github.com/wakamex/wsh/actions/runs/33773723979) independently built the tag twice, required byte-identical assets, verified their build provenance, published the immutable [`v0.1.3` release](https://github.com/wakamex/wsh/releases/tag/v0.1.3), and verified every published asset. This completes the post-publication gate defined in [`public-update-v0.1.3-plan-2026-09-03.md`](public-update-v0.1.3-plan-2026-09-03.md).
