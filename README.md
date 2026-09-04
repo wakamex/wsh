@@ -7,7 +7,7 @@ Currently includes:
 - [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
 - [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
 - [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)
-- Native prompt navigation, output zones, and working-directory reporting for compatible terminals
+- Native prompt navigation, output zones, and working-directory reporting for compatible terminals ([OSC 7](https://wezterm.org/shell-integration.html#osc-7-escape-sequence-to-set-the-working-directory), [OSC 133 semantic prompts](https://gitlab.freedesktop.org/Per_Bothner/specifications/-/blob/master/proposals/semantic-prompts.md))
 - A tested, pinned post-5.9 Zsh build incorporating 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md))
 
 ## Motivation
@@ -45,6 +45,8 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 ## Current status
 
 `v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+
+Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
 
 ## Planned capabilities require evidence
 
