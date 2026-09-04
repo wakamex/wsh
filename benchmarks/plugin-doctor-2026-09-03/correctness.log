@@ -1,0 +1,5 @@
+PASS: plugin doctor diagnoses exact and unknown implementations without modifying startup files
+PASS: history substring search candidate behavior
+PASS: autosuggestion display, acceptance, ownership, configuration, composition, custom widgets, and cancellation
+PASS: syntax highlighting ownership, semantics, configuration, hooks, and editing-default composition
+PASS: user startup configuration present under managed wsh

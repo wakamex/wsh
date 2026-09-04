@@ -9,10 +9,11 @@ use wsh::{
     rollback_bundle, verify_bundle,
 };
 
+mod doctor;
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
+    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -212,6 +213,20 @@ fn run() -> Result<(), String> {
                 update::UpdateMode::Latest
             };
             update::run(mode, &verified.manifest.release_id, &state_root)
+        }
+        "doctor" => {
+            let remaining: Vec<_> = args.collect();
+            let state_root = parse_state_root(&remaining)?;
+            let launch = active_bundle_for_launch(&state_root)?;
+            let user_zdotdir = user_zdotdir();
+            doctor::run(doctor::Shell {
+                executable: &launch.entrypoints.shell,
+                bundle_root: &launch.root,
+                runtime: &launch.entrypoints.runtime,
+                theme: &launch.entrypoints.default_theme,
+                zdotdir: &launch.entrypoints.zdotdir,
+                user_zdotdir: user_zdotdir.as_deref(),
+            })
         }
         _ => Err(usage().into()),
     }

@@ -6,6 +6,8 @@ The current plugin snapshots are byte-identical to their recorded upstream revis
 
 All three interactive defaults come from repositories maintained by `zsh-users`. Oh My Zsh ships an opt-in copy of history substring search. Autosuggestions and syntax highlighting are separate projects commonly installed through Oh My Zsh's custom plugin directory. None is enabled by Oh My Zsh by default.
 
+`wsh doctor` reuses the adapters' byte-exact ownership results. It recommends removing an external startup declaration only when that declaration loaded the pinned implementation already supplied by Wsh. Modified and unrecognized implementations stay active and receive no removal recommendation, disabled defaults produce no recommendation, and the command never rewrites startup source. The retained [plugin-doctor result](benchmarks/plugin-doctor-2026-09-03/report.md) tests these cases against the bundled source.
+
 ## Current divergence summary
 
 | Component | Upstream source changes | Wsh behavior around the component | Classification |

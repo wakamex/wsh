@@ -90,3 +90,4 @@ jobs:
           ./benchmarks/verify-autosuggestions-evidence.zsh
           ./benchmarks/verify-syntax-highlighting-evidence.zsh
           ./benchmarks/verify-edge-zsh-evidence.zsh
+          ./benchmarks/verify-plugin-doctor-evidence.zsh

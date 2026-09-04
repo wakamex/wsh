@@ -42,7 +42,7 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 
 ## Current status
 
-`v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+`v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 ## Planned capabilities require evidence
 
