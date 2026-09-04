@@ -1,11 +1,9 @@
 name: release-eligible
 
 on:
-  pull_request:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,16 +14,4 @@ concurrency:
 
 jobs:
   release-eligible:
-    name: Run validation
     uses: ./.github/workflows/validation.yml
-
-  validate:
-    name: validate
-    if: always()
-    needs: release-eligible
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Require every validation job to pass
-        env:
-          VALIDATION_RESULT: ${{ needs.release-eligible.result }}
-        run: test "$VALIDATION_RESULT" = success

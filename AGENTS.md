@@ -11,7 +11,7 @@ Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmar
 - Compare the same workload under the same instrumentation mode before and after a change, and measure instrumentation overhead separately.
 - Mark every local bundle as an unsigned development artifact. A local build may be described as byte-identical to another build only when retained evidence proves it, but only immutable, attested GitHub Release assets are official releases.
 - Treat an annotated `vMAJOR.MINOR.PATCH` tag push as deliberate release authorization. The `publish.yml` workflow builds twice from that tag, compares the canonical bytes, attests the agreed assets, and creates the immutable GitHub Release automatically. Never push a release tag unless the user explicitly authorizes that release.
-- Require the `release-eligible / validate` check on `main` and `v*` tags. The tag workflow must also find a successful main-push `release-eligibility.yml` run for the exact tagged commit before building.
+- The main-push `release-eligibility.yml` workflow produces the `release-eligible / validate` check. Require that exact check on `v*` tags. The tag workflow must also find a successful main-push run for the exact tagged commit before building.
 - Do not add a resident provider, native module, generic broker, database, remote updater, public directory backend, or compatibility framework without the evidence required by [`FEATURES.md`](FEATURES.md).
 - When evidence invalidates a premise, replace the old design or plan instead of preserving contradictory paths.
 - Preserve benchmark inputs, raw results, summaries, exact commands, and relevant hashes needed to reproduce an accepted claim.

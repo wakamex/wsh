@@ -1,6 +1,7 @@
 name: validation
 
 on:
+  pull_request:
   workflow_call:
 
 permissions:
@@ -94,3 +95,19 @@ jobs:
           ./benchmarks/verify-plugin-doctor-evidence.zsh
           ./benchmarks/verify-foreground-startup-evidence.zsh
           ./benchmarks/verify-native-terminal-integration-evidence.zsh
+
+  validate:
+    name: validate
+    if: always()
+    needs:
+      - rust-correctness
+      - floor-bundle
+      - retained-resource-gates
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require every validation job to pass
+        env:
+          FLOOR_RESULT: ${{ needs.floor-bundle.result }}
+          RESOURCE_RESULT: ${{ needs.retained-resource-gates.result }}
+          RUST_RESULT: ${{ needs.rust-correctness.result }}
+        run: test "$FLOOR_RESULT" = success && test "$RESOURCE_RESULT" = success && test "$RUST_RESULT" = success

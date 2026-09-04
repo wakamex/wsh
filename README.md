@@ -35,7 +35,7 @@ The [`zsh-theme-bench` benchmark](https://github.com/wakamex/zsh-theme-bench/blo
 The supported target is x86-64 Linux with glibc 2.28 or newer. Install the current immutable GitHub Release:
 
 ```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/download/v0.1.3/wsh-v0.1.3-install.sh | sh
+curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/latest/download/wsh-install.sh | sh
 ```
 
 Then start Wsh with `wsh`. The explicit `wsh run` form accepts Zsh arguments after `--`, such as `wsh run -- -f`. The installer uses `~/.local/bin`; add that directory to `PATH` or run `~/.local/bin/wsh` directly if necessary.
@@ -44,7 +44,7 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 
 ## Current status
 
-`v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
 

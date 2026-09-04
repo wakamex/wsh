@@ -1,6 +1,6 @@
 # First wsh implementation
 
-The first implementation targets `x86_64-unknown-linux-gnu`, uses Rust for the manager and shared runtime, keeps a thin trusted Zsh adapter for shell-process integration, and ships one complete content-addressed bundle built from pinned upstream Zsh source. Official release `v0.1.3` uses the signed Zsh 5.9.2 source release. Current development uses accepted upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`. Wsh does not use a system Zsh or a third-party Zsh binary for an official bundle.
+The first implementation targets `x86_64-unknown-linux-gnu`, uses Rust for the manager and shared runtime, keeps a thin trusted Zsh adapter for shell-process integration, and ships one complete content-addressed bundle built from pinned upstream Zsh source. Release `v0.1.3` used the signed Zsh 5.9.2 source release. The current source uses accepted upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`. Wsh does not use a system Zsh or a third-party Zsh binary for an official bundle.
 
 This document fixes the first vertical-slice choices and acceptance gates. It does not make the unsigned local slice an official release.
 
@@ -28,7 +28,7 @@ The first local two-build experiment produced identical manifests and archives w
 
 Compilation happens in wsh release infrastructure. The installed manager downloads a completed bundle and never resolves formulas, builds Zsh, substitutes system libraries, or falls back to compiling source on the user's machine. This borrows the managed-runtime installation shape used by tools such as uv and the prebuilt-artifact shape used by package managers, but `wsh` manages only its own complete distribution. It has no general package index, dependency solver, formula language, or authority over unrelated software.
 
-Official release `v0.1.3` uses stable Zsh 5.9.2. Current development uses upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`, which is 1,074 commits on `master` after the Zsh 5.9 release. Zsh 5.9.2 was developed on a maintenance branch, so it remains a comparison baseline rather than the start of a linear `master` commit count. The pinned revision passed the upstream suite after the test-only fixture correction and passed the complete Wsh compatibility, correctness, resource, and performance gates at the glibc 2.28 floor. The accepted result and retained evidence are in [`benchmarks/edge-zsh-2026-09-03/report.md`](benchmarks/edge-zsh-2026-09-03/report.md). A later Zsh revision is a new full-bundle candidate.
+Release `v0.1.3` used stable Zsh 5.9.2. The current source uses upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`, which is 1,074 commits on `master` after the Zsh 5.9 release. Zsh 5.9.2 was developed on a maintenance branch, so it remains a comparison baseline rather than the start of a linear `master` commit count. The pinned revision passed the upstream suite after the test-only fixture correction and passed the complete Wsh compatibility, correctness, resource, and performance gates at the glibc 2.28 floor. The accepted result and retained evidence are in [`benchmarks/edge-zsh-2026-09-03/report.md`](benchmarks/edge-zsh-2026-09-03/report.md). A later Zsh revision is a new full-bundle candidate.
 
 ## The manager and runtime are Rust programs
 
