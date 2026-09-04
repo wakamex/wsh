@@ -26,6 +26,7 @@ trap 'rm -rf -- $test_root' EXIT INT TERM
 bundle=${test_root}/relocated-bundle
 cp -R --preserve=mode -- $built_bundle $bundle
 runtime=${bundle}/bin/wsh-runtime
+test_zsh=${bundle}/bin/zsh
 manager=${cargo_target_dir}/release/wsh
 installer=${cargo_target_dir}/release/wsh-install
 theme=${bundle}/share/wsh/themes/minimal.toml
@@ -93,14 +94,16 @@ WSH_TEST_INTEGRATION=${bundle}/share/wsh/integration.zsh \
 WSH_TEST_THEME=${theme} \
 WSH_TEST_PROMPT_MARKER='git:main' \
 WSH_TEST_BUNDLE_ROOT=${bundle} \
-${repository_root}/tests/runtime-pty.zsh
+${test_zsh} ${repository_root}/tests/runtime-pty.zsh
 
-${repository_root}/tests/zsh-config-coexistence.zsh ${manager} ${bundle} present
-${repository_root}/tests/history-substring-search.zsh ${manager} ${bundle}
-${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
-${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
-${repository_root}/tests/plugin-doctor.zsh ${manager} ${bundle}
-${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
+${test_zsh} ${repository_root}/tests/zsh-config-coexistence.zsh ${manager} ${bundle} present
+${test_zsh} ${repository_root}/tests/history-substring-search.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/plugin-doctor.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
+WSH_EXPECT_NATIVE_TERMINAL_PASS=1 \
+  ${test_zsh} ${repository_root}/tests/native-terminal-integration.zsh ${bundle}/bin/zsh /dev/null native ${test_root}/native-terminal.bin >/dev/null
 
 zsh_version=$(${bundle}/bin/zsh -fc 'print -r -- $ZSH_VERSION')
 if [[ $zsh_version == 5.9.999.3-test ]]; then

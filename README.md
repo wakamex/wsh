@@ -7,6 +7,7 @@ Currently includes:
 - [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
 - [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
 - [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)
+- Native prompt navigation, output zones, and working-directory reporting for compatible terminals
 - A tested, pinned post-5.9 Zsh build incorporating 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md))
 
 ## Motivation
@@ -43,11 +44,11 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 
 ## Current status
 
-`v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+`v0.1.3` is the current official release. It includes the bundled Zsh 5.9.2 runtime, shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, and offline rollback. Current development adds native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 ## Planned capabilities require evidence
 
-Current investigations include application-backed dynamic completion, ordered terminal lifecycle events, stable pane identity with bounded pane-local and private history, terminal compatibility diagnostics, foreground-job events, and allowlisted terminal metadata.
+Current investigations include application-backed dynamic completion, stable pane identity with bounded pane-local and private history, terminal compatibility diagnostics, and allowlisted terminal metadata. A separate foreground-job event protocol is deferred because Wakterm's owner-local process-identity fix passes the current lifecycle reproducer.
 
 Each candidate begins with a reproducible current weakness, the cheapest owner-local counterfactual, and a measurable consumer improvement. A new daemon, database, protocol, or compatibility layer is not accepted solely because it is architecturally attractive. [FEATURES.md](FEATURES.md) records the admission rules, evidence, priorities, and deferred ideas.
 

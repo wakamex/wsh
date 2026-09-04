@@ -27,7 +27,24 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
         print -u2 -- 'wsh: foreground command is unavailable'
         return 127
       fi
+      local extension extension_name
+      local -i output_markers=1
+      for extension in "${.term.extensions[@]}"; do
+        extension_name=${extension#-}
+        if [[ $extension_name == integration || $extension_name == integration-output ]]; then
+          if [[ $extension == -* ]]; then
+            output_markers=0
+          else
+            output_markers=1
+          fi
+          break
+        fi
+      done
+      (( output_markers )) && print -nr -- $'\e]133;C\e\\' >| /dev/tty
       "$foreground_command[@]"
+      local -i foreground_status=$?
+      (( output_markers )) && print -nr -- $'\e]133;D\e\\' >| /dev/tty
+      return $foreground_status
     }
     add-zsh-hook precmd _wsh_run_foreground_startup
     precmd_functions=(_wsh_run_foreground_startup "${(@)precmd_functions:#_wsh_run_foreground_startup}")

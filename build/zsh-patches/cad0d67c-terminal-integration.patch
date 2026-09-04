@@ -1,0 +1,35 @@
+diff --git a/Src/Zle/termquery.c b/Src/Zle/termquery.c
+index 6b545fe1a..06177cd0e 100644
+--- a/Src/Zle/termquery.c
++++ b/Src/Zle/termquery.c
+@@ -231,7 +231,6 @@ probe_terminal(const char *tquery, seqstate_t *states,
+     settyinfo(&ti);
+ 
+     write_loop(SHTTY, tquery, strlen(tquery));
+-    notify_pwd(); /* unrelated to the function's main purpose */
+ 
+     while (!finish && *curstate) {
+ 	int consumed = 0; /* whether an input token has been matched */
+@@ -768,7 +767,7 @@ prompt_markers(void)
+ 	if (!aid) aid = 1; /* unlikely but just to be safe */
+ 	/* base64 not required but it is safe, convenient and compact */
+ 	h = base64_encode((const char *)&aid, sizeof(aid));
+-	memcpy(pre + 13, h, 6);
++	memcpy(strstr(pre, "ZZZZZZ"), h, 6);
+     }
+ 
+     return markers;
+diff --git a/Src/Zle/zle_main.c b/Src/Zle/zle_main.c
+index 921ebb9ec..abf88ec32 100644
+--- a/Src/Zle/zle_main.c
++++ b/Src/Zle/zle_main.c
+@@ -1220,6 +1220,9 @@ zleread(char **lp, char **rp, int flags, int context, char *init, char *finish)
+     int tmout = getiparam("TMOUT");
+     const char **markers = prompt_markers();
+ 
++    if (context == ZLCON_LINE_START)
++	notify_pwd();
++
+ #if defined(HAVE_POLL) || defined(HAVE_SELECT)
+     /* may not be set, but that's OK since getiparam() returns 0 == off */
+     baud = getiparam("BAUD");

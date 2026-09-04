@@ -1,0 +1,2 @@
+variant	prompt_starts	valid_prompt_starts	prompt_ends	command_starts	command_ends	cwd_reports	local_cwd_reports	child_cwd_reset	user_precmds	user_preexecs
+duplicate	19	0	20	14	14	11	10	1	9	7

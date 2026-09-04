@@ -1,18 +1,18 @@
 # wsh terminal integration
 
-`wsh` can replace terminal-maintained shell injection when a reproducible comparison shows that one ordered lifecycle improves correctness, process count, latency, or integration size. The first Wakterm experiment covers OSC 7 working-directory updates and OSC 133 command zones. Foreground-job state, stable pane identity, and bounded pane-local history are separate experiments.
+The bundled Zsh now owns standard OSC 7 working-directory reporting and OSC 133 prompt and command zones. Wakterm can omit its duplicate reporters when it launches Wsh while retaining its separate OSC 1337 metadata. Stable pane identity, bounded pane-local history, terminal diagnosis, and allowlisted metadata remain separate experiments.
 
-The target state is small: the terminal supplies stable pane identity and optional capabilities, while `wsh` translates Zsh events into existing terminal protocols. That target becomes accepted architecture only after the current terminal integration is measured and the replacement produces a concrete terminal improvement.
+The accepted boundary is small: Zsh emits established terminal protocols from the native command and ZLE paths, Wsh carries two measured corrections and brackets its one synthetic first job, and the terminal consumes those sequences without understanding shell source or job-control mechanics.
 
 ## Existing protocols cover the basic contract
 
-| Capability | Existing mechanism | `wsh` responsibility | Terminal feature enabled |
+| Capability | Existing mechanism | Owner | Terminal feature enabled |
 |---|---|---|---|
-| Current working directory | OSC 7 with a `file://host/path` URI | Emit after an accepted directory change and before the prompt | Open a new pane or tab in the same directory and display remote context correctly |
-| Prompt and output zones | OSC 133 `A`, `B`, `C`, and `D` markers | Mark prompt start, command start, output start, and command completion with exit status | Jump between prompts, select command output, distinguish idle shells, and improve close confirmation |
-| Pane metadata | OSC 1337 user variables where supported | Publish a small allowlisted set after state changes | Terminal status, tab titles, rules, and multiplexing based on project or command state |
+| Current working directory | OSC 7 with a `file://host/path` URI | Native Zsh emits before each editable prompt | Open a new pane or tab in the same directory and display remote context correctly |
+| Prompt and output zones | OSC 133 `A`, `B`, `C`, and `D` markers | Native Zsh marks ordinary prompts and commands; Wsh brackets only an exact first foreground application | Jump between prompts, select command output, distinguish idle shells, and improve close confirmation |
+| Pane metadata | OSC 1337 user variables where supported | Terminal integration publishes a small allowlisted set after state changes | Terminal status, tab titles, rules, and multiplexing based on project or command state |
 
-[WezTerm documents OSC 7, OSC 133, and OSC 1337](https://github.com/wezterm/wezterm/blob/main/docs/shell-integration.md), and [Windows Terminal documents the OSC 133 command lifecycle](https://learn.microsoft.com/en-us/windows/terminal/tutorials/shell-integration). [Ghostty uses shell integration](https://ghostty.org/docs/features/shell-integration) for working-directory inheritance, prompt navigation, output selection, close safety, cursor behavior, and prompt redraw. `wsh` should emit these established sequences once instead of installing a separate integration for each terminal.
+[WezTerm documents OSC 7, OSC 133, and OSC 1337](https://github.com/wezterm/wezterm/blob/main/docs/shell-integration.md), and [Windows Terminal documents the OSC 133 command lifecycle](https://learn.microsoft.com/en-us/windows/terminal/tutorials/shell-integration). [Ghostty uses shell integration](https://ghostty.org/docs/features/shell-integration) for working-directory inheritance, prompt navigation, output selection, close safety, cursor behavior, and prompt redraw. Wsh uses these established sequences once rather than defining a private protocol.
 
 ## Terminal diagnosis separates observed failures from inferred quirks
 
@@ -38,27 +38,25 @@ Useful output is direct:
 
 ```text
 observed: OSC 133 command markers were emitted twice
-owners: wsh lifecycle and Wakterm shell injection
-recommendation: disable Wakterm shell injection when launching wsh
+owners: native Zsh and Wakterm shell injection
+recommendation: let Wakterm skip its OSC 7 and OSC 133 reporters when launching wsh
 
 inferred: this Konsole version matches a reproduced OSC 133 compatibility rule
-recommendation: disable wsh OSC 133 prompt markers and keep OSC 7 enabled
+recommendation: disable native OSC 133 prompt markers and keep OSC 7 enabled
 verification: rerun the lifecycle capture after changing the setting
 ```
 
 The diagnostic passes only if disabling the named component removes the reproduced failure while unrelated components continue to pass. A generic terminal compatibility database, automatic configuration repair, visual screenshot interpretation, and broad terminal fingerprinting remain deferred until concrete cases require them.
 
-## Wakterm supplies the first lifecycle comparison
+## Native Zsh replaces Wakterm's duplicate standard reporters
 
-Wakterm currently injects a 573-line [`wakterm.sh`](../wakterm/assets/shell-integration/wakterm.sh) for Bash and Zsh. It installs or adapts pre-exec and pre-prompt hooks, modifies prompt strings, invokes helpers such as `base64`, `id`, and hostname commands, and emits OSC 7, OSC 133, and OSC 1337. This is a concrete replacement opportunity, but source length alone is not proof that the integration is slow or incorrect.
+Wakterm's shell integration emits OSC 7, OSC 133, and OSC 1337 and can run `wakterm set-working-directory` from its prompt hook. The pinned post-5.9 Zsh already emitted OSC 7 and OSC 133 natively, so enabling both paths produced duplicate prompt, command, output, and directory markers. The retained workload also observed nine `wakterm set-working-directory` executions.
 
-The baseline uses isolated Bash and Zsh startup files and records exact terminal sequences, prompt-time child processes, first-editable and settled prompt latency, hook ordering, and repaint count. Cases source the integration once and twice, install pre-existing Zsh `precmd` and `preexec` hooks, install a Bash `PROMPT_COMMAND` array and DEBUG trap, use ble.sh when available, and run `:`, `false`, a pipeline, multiline input, Ctrl-C, and `cd`. Assertions require existing hooks to run once in order, one OSC 133 lifecycle per command, correct status in OSC 133 `D`, OSC 7 after the cwd transition without status corruption, idempotent sourcing, and restored `PS1` and `PS2`.
+Native Zsh initially failed two correctness gates. A fixed byte offset overwrote the `aid=z` field in every OSC 133 prompt-start marker, so Wakterm's authoritative parser accepted 0 of 10 prompt starts. Wsh's measured decision to disable the optional terminal query also suppressed the native initial OSC 7 report, and a foreground child that emitted a remote directory could leave that stale value active after returning.
 
-Process measurements use `strace -f -c -e trace=process` and elapsed-time measurements for an exit-only startup workload followed by 100 `:` prompts with startup subtracted. The current script can start `wakterm set-working-directory` once per prompt, `base64` for each published user variable, and `id` or hostname helpers while also embedding a Bash pre-exec implementation.
+The smallest accepted source patch writes the generated prompt identifier into its named placeholder and reports the current directory from the native prompt path. The patched workload produced 10 valid prompt starts, 10 prompt ends, 7 command starts, 6 command ends, 10 local-directory reports, one verified reset after child output, 9 user `precmd` calls, and 7 user `preexec` calls. Empty input produced another prompt without a false native command region. It passed Wakterm's real parser and all 75 upstream Zsh test scripts, with 0 failures and 2 existing skips.
 
-The cheapest counterfactual remains entirely in Wakterm: make the script idempotent, cache stable user and host values, remove `WAKTERM_PROG`, emit OSC 7 without starting `wakterm`, and use native hook APIs where available. If that reaches zero added per-prompt child processes, preserves third-party hooks, emits one correctly ordered lifecycle, and improves prompt latency, Wakterm should keep the local solution.
-
-The `wsh` path is accepted only if `wsh` already owns command lifecycle for another measured feature and Wakterm can then skip its injected script, rather than installing a second lifecycle owner. Terminal behavior must remain correct and the comparison must demonstrate a fixed lifecycle case, zero added per-prompt child processes, lower latency, or deletion of the embedded hook machinery without replacing it with equivalent Wakterm-specific code.
+Wsh sets `WSH_NATIVE_TERMINAL_INTEGRATION=1` before startup. Wakterm uses it to skip only its OSC 7 and OSC 133 paths while retaining OSC 1337 metadata. The accepted coexistence path matched native-only correctness counts and executed no prompt-time Wakterm process. In 40 retained interleaved runs after 5 warmups, 100 no-op prompt cycles took 60.500 ms at p90 under coexistence and 60.552 ms under native-only, passing the fixed maximum regression of 0.5 ms. Leaving both reporters active took 499.381 ms at p90. The [retained report](benchmarks/native-terminal-integration-2026-09-04/report.md) contains raw transcripts, timings, process traces, exact identities, and reproduction commands.
 
 ## A pane token is enough for pane-local history
 
@@ -130,24 +128,24 @@ The test passes when Up and Down in each restored pane recall only that pane's b
 
 The cheapest counterfactual is a roughly 10-line Zsh integration that applies `fc -p` directly from Wakterm's persisted token. Serialization and restoration assertions belong beside Wakterm's session-persistence tests, with an isolated mux restart case in `wakterm/tests`. Wakterm needs the stable token regardless. A `wsh` history feature is accepted only if bounded context selection, pruning, or lifecycle integration proves reusable across terminals beyond that small Wakterm-local script.
 
-## Command zones should be emitted once
+## Native command zones have one owner
 
-`wsh` owns the lifecycle-to-OSC translation when enabled:
+The bundled Zsh emits:
 
 ```text
 OSC 133 ; A ST    prompt begins
 OSC 133 ; B ST    prompt ends and editable input begins
 OSC 133 ; C ST    command output begins
-OSC 133 ; D ; <exit-status> ST    command finishes
+OSC 133 ; D ST    command finishes
 ```
 
-The exact placement must survive empty commands, syntax errors, interrupted commands, nested prompts, `exec`, and asynchronous prompt repainting. Terminal-specific integrations must not emit a second copy of the same markers. `wsh` can expose which integration owns each sequence so users can diagnose duplicates.
+The current upstream implementation does not attach exit status to `D`, and no current Wakterm behavior requires it. Adding structured results remains evidence-gated. The retained fixture covers successful and failed commands, directory changes, multiline input, output without a trailing newline, Ctrl-C while editing, user hooks, and a child-emitted directory report. Terminal-specific integrations must not emit a second copy of the same markers.
 
 OSC 133 enables useful terminal behavior without revealing the command text. A terminal can identify the most recent prompt and output region, implement jump and select-output actions, and distinguish an idle prompt from a running command. Close confirmation still remains a terminal policy because the terminal also knows about foreground processes and pane visibility.
 
-## Working directory and remote identity need correct URI handling
+## Native directory reports restore shell context
 
-After a successful directory transition, `wsh` emits OSC 7 using the current host and an encoded absolute path. Over SSH or inside a container, the host component must describe the context that owns the path rather than the local terminal host. Terminals can then avoid treating a remote path as a local directory when creating a new pane.
+Before each editable prompt, native Zsh emits OSC 7 using the current host and an encoded absolute path. Reporting at that boundary restores shell context after any foreground child emitted its own cwd. Over SSH or inside a container, the host component describes the context that owns the path rather than the local terminal host. Terminals can then avoid treating a remote path as a local directory when creating a new pane.
 
 Project root is separate from current directory. When metadata is supported, `wsh` can publish an encoded project identifier or display-safe project name, but the terminal should use OSC 7 for directory inheritance.
 
@@ -214,8 +212,8 @@ The same local IPC could later support clone tokens, pane-close hints, metadata 
 
 | Experiment | Terminal work | Required result |
 |---|---|---|
-| Lifecycle | Skip Wakterm's injected script for `wsh` and consume OSC 7 and OSC 133 | Same-directory pane creation, prompt navigation, output selection, and idle-state detection remain correct with a measured improvement |
-| Foreground jobs | Compare Wakterm's cached native-frontend identity with ordered shell job transitions only if a gap remains | Managed identity clears after exit or replacement, survives stop and continue, and cannot transfer to a new frontend |
+| Native lifecycle | Accepted: Wakterm skips its OSC 7 and OSC 133 reporters for Wsh and consumes the native sequences | Retain valid parser output, correct directory restoration, zero duplicate markers, zero prompt-time Wakterm processes, and the prompt-cycle latency gate |
+| Foreground jobs | Accepted owner-local fix: keep Wakterm's cached native-frontend identity while its fixture passes | Managed identity clears after exit or replacement, survives stop and continue, and cannot transfer to a new frontend |
 | Pane restore | Persist and export a globally unique `WSH_PANE_TOKEN` | Each restored pane recovers only its bounded command recall |
 | Private history | Push a fresh memory-only history context and disable durable adapters | Sentinel commands remain available only during the private context and never enter `wsh` files, indexes, metadata, or default traces |
 | Metadata | Consume the versioned allowlist and explicit clears | Project-aware UI works without a full command line or arbitrary variables |
@@ -225,6 +223,6 @@ Notifications, progress, remote adapters, enhanced keyboard management, transien
 
 ## Validation covers bytes, lifecycle, nesting, and secrecy
 
-The integration test matrix should include fresh prompts, empty input, successful and failed commands, signals, syntax errors, multiline input, asynchronous repaints, directory changes, `exec`, nested shells, tmux or another multiplexer, SSH, containers, shell restart, terminal crash, and stale pane-history cleanup.
+The accepted native fixture covers fresh prompts, empty input, successful and failed commands, editing interruption, multiline input, output without a trailing newline, directory changes, child-emitted OSC 7, hook preservation, exact first-job startup, component disablement, and Wakterm's authoritative parser. Syntax errors, `exec`, nested shells, multiplexers, SSH, and containers remain additions when a concrete consumer case requires them.
 
 Protocol tests inspect exact emitted bytes with a headless parser. Interactive tests verify that one event produces one marker, prompt latency does not depend on terminal acknowledgement, unsupported terminals display no protocol debris, and disabling integration restores ordinary Zsh behavior. Privacy tests place secrets in arguments, environment values, paths, and Git configuration and verify that default metadata, notifications, history filenames, and logs do not expose them.

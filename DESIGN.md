@@ -1,6 +1,6 @@
 # wsh runtime design
 
-`wsh` provides a measured service and distribution layer around upstream Zsh. It keeps Zsh language semantics, job control, and ZLE editing while supplying curated defaults, tested adapters, shared state providers, and enough profiling to attribute their cost. The first service is a shared structured Git-state runtime between Zsh events and prompt rendering. Its provider adapts the asynchronous precursor worker measured by `zsh-theme-bench`; later provider implementations can change without changing theme definitions. Structured foreground startup is an accepted launcher feature outside the provider boundary. Generic environment state, completion, foreground-job events, and terminal integration remain evidence-gated in [`FEATURES.md`](FEATURES.md), [`FOREGROUND.md`](FOREGROUND.md), [`COMPLETION.md`](COMPLETION.md), and [`TERMINAL-INTEGRATION.md`](TERMINAL-INTEGRATION.md).
+`wsh` provides a measured service and distribution layer around upstream Zsh. It keeps Zsh language semantics, job control, and ZLE editing while supplying curated defaults, tested adapters, shared state providers, and enough profiling to attribute their cost. The first service is a shared structured Git-state runtime between Zsh events and prompt rendering. Its provider adapts the asynchronous precursor worker measured by `zsh-theme-bench`; later provider implementations can change without changing theme definitions. Structured foreground startup and native terminal reporting are accepted features outside the provider boundary. Generic environment state, completion, foreground-job events, pane history, and terminal metadata remain evidence-gated in [`FEATURES.md`](FEATURES.md), [`FOREGROUND.md`](FOREGROUND.md), [`COMPLETION.md`](COMPLETION.md), and [`TERMINAL-INTEGRATION.md`](TERMINAL-INTEGRATION.md).
 
 ## State collection and rendering have separate contracts
 
@@ -142,12 +142,21 @@ Official release `v0.1.3` uses stable Zsh 5.9.2. Current development pins upstre
 | Non-forking command substitutions | Capture output from pure Zsh renderers without creating a subshell |
 | Named ZLE highlight groups and numeric layers | Compose syntax, selection, search, diagnostic, and mode highlighting with explicit precedence |
 | Terminal capability parameters | Centralize terminal feature detection instead of repeating heuristics in themes |
+| Native OSC 7 and OSC 133 reporting | Give compatible terminals one shell-owned working-directory, prompt, command, and output lifecycle without injected prompt hooks or prompt-time helpers |
 | Cursor form controls | Express editing modes and interactive states through a common presentation service |
 | Monotonic high-resolution timing | Drive deadlines, cache ages, command duration, and internal measurements without wall-clock jumps |
 | `ZSH_EXEPATH` | Locate the bundled runtime and helper programs |
 | GNU-style `zparseopts` | Provide consistent argument parsing for `wsh` commands |
 
 When available in the selected Zsh identity, these features improve the boundary but do not remove the cost of external programs. Field registration and providers remain responsible for avoiding unnecessary work and keeping unavoidable work away from the first editable prompt.
+
+## Native Zsh owns standard terminal reporting
+
+The bundled Zsh emits OSC 7 working-directory reports and OSC 133 prompt and command zones from its native ZLE and command loop. Wsh disables only the optional startup query by default, because an unanswered query added 500 ms in the retained edge-Zsh experiment. The accepted source patch makes directory reporting independent of that query, produces a prompt identifier accepted by Wakterm's real parser, and reasserts the shell's local directory before every editable prompt after child applications may have emitted their own OSC 7 value.
+
+Wsh sets `WSH_NATIVE_TERMINAL_INTEGRATION=1` so a terminal's existing shell script can omit duplicate standard reporters while retaining unrelated integration. Wakterm uses this signal to skip its OSC 7 and OSC 133 paths and keep OSC 1337 user variables. It does not need to parse shell commands, reconstruct arguments, or understand Zsh job control.
+
+The exact first application launched with `wsh -- <command> [arguments...]` runs before the first ordinary editable command, so a one-shot adapter emits its OSC 133 `C` and `D` boundaries around that array. Every later command and prompt marker comes from native Zsh. A general lifecycle bus and shell-specific terminal protocol are not part of this design.
 
 ## Existing Zsh configuration remains executable and compatible
 
@@ -214,4 +223,4 @@ Every candidate Zsh snapshot should pass:
 
 The binary reports the upstream commit, build configuration, compiler, applied patch set, and distribution version. Benchmark artifacts record the executable hash as well as the printed Zsh version so development snapshots cannot be confused.
 
-The initial patch queue is empty. If a required capability cannot be implemented through functions, hooks, ZLE widgets, loadable modules, or a worker, `wsh` can carry a narrow patch tied to a reproducer and benchmark. Patches remain exceptional so the distribution can continue following upstream. [`IMPLEMENTATION.md`](IMPLEMENTATION.md) fixes the first target, source release, bundle layout, language boundary, theme scope, and milestone thresholds.
+The current patch queue contains one digest-pinned terminal-integration patch against the selected post-5.9 revision. It corrects the native OSC 133 prompt-marker identifier and restores the shell's OSC 7 directory after each completed foreground command. Both failures occur inside the native producer and cannot be corrected by a function or wrapper without installing a second lifecycle owner. The patch is tied to the real Wakterm parser, isolated PTY transcripts, process tracing, the complete upstream Zsh suite, and the retained [terminal-integration result](benchmarks/native-terminal-integration-2026-09-04/report.md). Further patches remain exceptional so the distribution can continue following upstream. [`IMPLEMENTATION.md`](IMPLEMENTATION.md) fixes the first target, source release, bundle layout, language boundary, theme scope, and milestone thresholds.

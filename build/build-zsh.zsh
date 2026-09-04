@@ -32,6 +32,10 @@ jq -e '
   (.archive_sha256 | type == "string" and test("^[0-9a-f]{64}$")) and
   (.source_revision | type == "string" and length > 0) and
   (.preconfigure | type == "boolean") and
+  (.source_patches | type == "array") and
+  (all(.source_patches[];
+    (.path | type == "string" and test("^build/zsh-patches/[A-Za-z0-9._-]+\\.patch$")) and
+    (.sha256 | type == "string" and test("^[0-9a-f]{64}$")))) and
   (.test_patches | type == "array") and
   (all(.test_patches[];
     (.path | type == "string" and test("^build/zsh-test-patches/[A-Za-z0-9._-]+\\.patch$")) and
@@ -53,7 +57,10 @@ readonly archive_name=$(jq -er '.archive_name' "$source_lock")
 readonly source_url=$(jq -er '.archive_url' "$source_lock")
 readonly source_sha256=$(jq -er '.archive_sha256' "$source_lock")
 readonly preconfigure=$(jq -er '.preconfigure' "$source_lock")
+readonly source_patch_count=$(jq -er '.source_patches | length' "$source_lock")
 readonly test_patch_count=$(jq -er '.test_patches | length' "$source_lock")
+source_lock_sha256=$(sha256sum "$source_lock")
+readonly source_lock_sha256=${source_lock_sha256%% *}
 readonly output_dir=${output_root}/${output_name}
 readonly archive=${cache_dir}/${archive_name}
 
@@ -65,14 +72,47 @@ if [[ $preconfigure == true ]]; then
     fi
   done
 fi
-if (( test_patch_count > 0 )) && (( ! $+commands[patch] )); then
-  print -u2 -- "error: required command not found for Zsh test patches: patch"
+if (( source_patch_count + test_patch_count > 0 )) && (( ! $+commands[patch] )); then
+  print -u2 -- "error: required command not found for Zsh patches: patch"
   exit 1
 fi
+
+verify_patch() {
+  local patch_path=$1 expected_sha256=$2 scope=$3
+  local absolute_path=${repository_root}/${patch_path}
+  [[ -f $absolute_path ]] || {
+    print -u2 -- "error: Zsh ${scope} patch not found: ${patch_path}"
+    return 1
+  }
+  print -r -- "${expected_sha256}  ${absolute_path}" | sha256sum --check --status || {
+    print -u2 -- "error: Zsh ${scope} patch digest mismatch: ${patch_path}"
+    return 1
+  }
+  if [[ $scope == test ]]; then
+    awk '
+      /^(---|\+\+\+) / && $2 !~ /^(a|b)\/Test\// { invalid = 1 }
+      END { exit invalid }
+    ' "$absolute_path" || {
+      print -u2 -- "error: Zsh test patch changes a path outside Test/: ${patch_path}"
+      return 1
+    }
+  fi
+}
+
+while IFS=$'\t' read -r source_patch_path source_patch_sha256; do
+  verify_patch "$source_patch_path" "$source_patch_sha256" source
+done < <(jq -r '.source_patches[] | [.path, .sha256] | @tsv' "$source_lock")
+while IFS=$'\t' read -r test_patch_path test_patch_sha256; do
+  verify_patch "$test_patch_path" "$test_patch_sha256" test
+done < <(jq -r '.test_patches[] | [.path, .sha256] | @tsv' "$source_lock")
 
 mkdir -p -- "$cache_dir" "$output_root"
 
 if [[ -x ${output_dir}/bin/zsh ]]; then
+  [[ -r ${output_dir}/.wsh-source-lock.sha256 && $(<${output_dir}/.wsh-source-lock.sha256) == $source_lock_sha256 ]] || {
+    print -u2 -- "error: existing output was built from a different Zsh source lock: ${output_dir}"
+    exit 1
+  }
   actual_version=$(${output_dir}/bin/zsh --version)
   if [[ $actual_version == "zsh ${zsh_version}"* ]]; then
     print -r -- "$output_dir"
@@ -128,6 +168,13 @@ mkdir -- "${work_dir}/source" "${work_dir}/dest"
 tar --extract --file "$archive" --directory "${work_dir}/source" --strip-components=1
 
 cd "${work_dir}/source"
+if (( source_patch_count > 0 )); then
+  source_patch=
+  while IFS=$'\t' read -r source_patch_path source_patch_sha256; do
+    source_patch=${repository_root}/${source_patch_path}
+    patch --batch --forward --strip=1 < "$source_patch"
+  done < <(jq -r '.source_patches[] | [.path, .sha256] | @tsv' "$source_lock")
+fi
 if [[ $preconfigure == true ]]; then
   ./Util/preconfig
 fi
@@ -141,21 +188,6 @@ if (( test_patch_count > 0 )); then
   test_patch=
   while IFS=$'\t' read -r test_patch_path test_patch_sha256; do
     test_patch=${repository_root}/${test_patch_path}
-    [[ -f $test_patch ]] || {
-      print -u2 -- "error: Zsh test patch not found: ${test_patch_path}"
-      exit 1
-    }
-    print -r -- "${test_patch_sha256}  ${test_patch}" | sha256sum --check --status || {
-      print -u2 -- "error: Zsh test patch digest mismatch: ${test_patch_path}"
-      exit 1
-    }
-    awk '
-      /^(---|\+\+\+) / && $2 !~ /^(a|b)\/Test\// { invalid = 1 }
-      END { exit invalid }
-    ' "$test_patch" || {
-      print -u2 -- "error: Zsh test patch changes a path outside Test/: ${test_patch_path}"
-      exit 1
-    }
     patch --batch --forward --strip=1 < "$test_patch"
   done < <(jq -r '.test_patches[] | [.path, .sha256] | @tsv' "$source_lock")
 fi
@@ -167,6 +199,7 @@ if [[ ! -x ${staged_install}/bin/zsh ]]; then
   print -u2 -- "error: build did not produce bin/zsh"
   exit 1
 fi
+print -r -- "$source_lock_sha256" >| "${staged_install}/.wsh-source-lock.sha256"
 
 mv -- "$staged_install" "$output_dir"
 trap - EXIT INT TERM

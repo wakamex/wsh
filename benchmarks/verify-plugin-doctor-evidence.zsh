@@ -22,6 +22,15 @@ verify_hash() {
   }
 }
 
+verify_git_object_hash() {
+  local key=$1 revision=$2 file_path=$3
+  local actual=$(git -C $root show ${revision}:${file_path} | sha256sum)
+  [[ ${actual%% *} == $(metadata_value $key) ]] || {
+    print -u2 -- "error: retained plugin-doctor historical hash mismatch: ${key}"
+    exit 1
+  }
+}
+
 verify_hash startup_baseline_sha256 $evidence/startup-baseline.tsv
 verify_hash startup_candidate_sha256 $evidence/startup-candidate.tsv
 verify_hash startup_summary_sha256 $evidence/startup-summary.tsv
@@ -29,12 +38,13 @@ verify_hash discarded_host_config_baseline_sha256 $evidence/discarded-host-confi
 verify_hash discarded_host_config_candidate_sha256 $evidence/discarded-host-config-candidate.tsv
 verify_hash correctness_log_sha256 $evidence/correctness.log
 verify_hash doctor_source_sha256 $root/crates/wsh/src/doctor.rs
-verify_hash manager_source_sha256 $root/crates/wsh/src/main.rs
 verify_hash doctor_test_sha256 $root/tests/plugin-doctor.zsh
 verify_hash benchmark_sha256 $root/benchmarks/benchmark-first-editable.zsh
 verify_hash summarizer_sha256 $root/benchmarks/summarize-plugin-doctor.zsh
 verify_hash plan_sha256 $root/benchmarks/plugin-doctor-plan-2026-09-03.md
-verify_hash floor_test_sha256 $root/build/test-development-bundle.zsh
+readonly previous_accepted_revision=9037627f6622c5d0b90e873fc67a954c33e0d253
+verify_git_object_hash manager_source_sha256 $previous_accepted_revision crates/wsh/src/main.rs
+verify_git_object_hash floor_test_sha256 $previous_accepted_revision build/test-development-bundle.zsh
 
 $root/benchmarks/summarize-plugin-doctor.zsh $evidence/startup-baseline.tsv $evidence/startup-candidate.tsv $temporary/summary.tsv >/dev/null
 diff -u $evidence/startup-summary.tsv $temporary/summary.tsv

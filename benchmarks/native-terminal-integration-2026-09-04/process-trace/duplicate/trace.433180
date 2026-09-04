@@ -1,0 +1,2 @@
+execve("/home/mihai/.local/bin/wakterm", ["wakterm", "set-working-directory"], 0x23b19950 /* 86 vars */) = 0
+exit_group(0)                           = ?

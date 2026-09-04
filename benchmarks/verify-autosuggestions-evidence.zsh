@@ -20,8 +20,9 @@ ebafdc07e6614d28d5138860689c950cb69cf15cded7be9fff42a852e07d9b97  process-trace/
 3d2b979dde0173fa55947604c14cf5812b43ab68d8128d29b19af96037bd84aa  process-trace/metadata.txt' | sha256sum -c - >/dev/null
 
 print -r -- 'eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a  third_party/zsh-autosuggestions/zsh-autosuggestions.zsh
-2d369f247f2a7278c83e90ba48690d0a1f63528837d034055b1cbec87d86a6d6  integration/autosuggestions.zsh
-88bff44041ed35327c3dc4099dedc45ca9c8aa966ac45cff7d4f6fb4351e07dd  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
+2d369f247f2a7278c83e90ba48690d0a1f63528837d034055b1cbec87d86a6d6  integration/autosuggestions.zsh' | (cd $root && sha256sum -c - >/dev/null)
+historical_zshrc=$(git -C $root show 9037627f6622c5d0b90e873fc67a954c33e0d253:integration/zdotdir.zshrc | sha256sum)
+[[ ${historical_zshrc%% *} == 88bff44041ed35327c3dc4099dedc45ca9c8aa966ac45cff7d4f6fb4351e07dd ]]
 
 $root/benchmarks/summarize-autosuggestions.zsh startup-baseline.tsv startup-candidate.tsv prompt-baseline.tsv prompt-candidate.tsv edit-baseline.tsv edit-candidate.tsv $temporary/summary.tsv >/dev/null
 diff -u summary.tsv $temporary/summary.tsv

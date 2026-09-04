@@ -25,8 +25,19 @@ verify_sha256() {
   }
 }
 
-verify_sha256 $(metadata_value stable_source_lock_sha256) $root/build/zsh-sources/zsh-5.9.2.json
-verify_sha256 $(metadata_value edge_source_lock_sha256) $root/build/zsh-sources/zsh-cad0d67c.json
+verify_git_object_sha256() {
+  local expected=$1 revision=$2 file_path=$3 actual
+  actual=$(git -C $root show ${revision}:${file_path} | sha256sum)
+  actual=${actual%% *}
+  [[ $actual == $expected ]] || {
+    print -u2 -- "digest mismatch for ${revision}:${file_path}: expected $expected, got $actual"
+    return 1
+  }
+}
+
+readonly accepted_revision=1ff7b2dc28c5e6af4574c474b75a3447d6448e95
+verify_git_object_sha256 $(metadata_value stable_source_lock_sha256) $accepted_revision build/zsh-sources/zsh-5.9.2.json
+verify_git_object_sha256 $(metadata_value edge_source_lock_sha256) $accepted_revision build/zsh-sources/zsh-cad0d67c.json
 verify_sha256 $(metadata_value edge_test_patch_sha256) $root/build/zsh-test-patches/cad0d67c-prompt-fixture.patch
 verify_sha256 $(metadata_value summary_sha256) $evidence/summary.tsv
 

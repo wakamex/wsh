@@ -3,7 +3,7 @@
   "id": "zsh-cad0d67c",
   "mode": "canonical-commit",
   "version": "5.9.999.3-test",
-  "output_name": "zsh-cad0d67c",
+  "output_name": "zsh-cad0d67c-wsh1",
   "repository": "https://github.com/zsh-users/zsh",
   "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
   "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
@@ -14,6 +14,12 @@
   "signer_fingerprint": null,
   "key_url": null,
   "preconfigure": true,
+  "source_patches": [
+    {
+      "path": "build/zsh-patches/cad0d67c-terminal-integration.patch",
+      "sha256": "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8"
+    }
+  ],
   "test_patches": [
     {
       "path": "build/zsh-test-patches/cad0d67c-prompt-fixture.patch",

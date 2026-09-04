@@ -27,8 +27,9 @@ bd6ef3aae900fee57ff132360b3dd9d68df5aab150a33e32259fd5adbe8efd49  third_party/zs
 d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd  third_party/zsh-syntax-highlighting/highlighters/main/main-highlighter.zsh
 c2d5b50db13936421672b5ce16c0d7ec4f1abfeded34ea3a23bb39d2499b953b  third_party/zsh-syntax-highlighting/highlighters/pattern/pattern-highlighter.zsh
 f567458da4fb89cae8ea220b8febea11ed67ab6f6c8f5e0d6723ea7285e932e7  third_party/zsh-syntax-highlighting/highlighters/regexp/regexp-highlighter.zsh
-6d14a315685176dcc317842064b4a1e061b1e87b0623d4bee688ee780de831e7  integration/syntax-highlighting.zsh
-88bff44041ed35327c3dc4099dedc45ca9c8aa966ac45cff7d4f6fb4351e07dd  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
+6d14a315685176dcc317842064b4a1e061b1e87b0623d4bee688ee780de831e7  integration/syntax-highlighting.zsh' | (cd $root && sha256sum -c - >/dev/null)
+historical_zshrc=$(git -C $root show 9037627f6622c5d0b90e873fc67a954c33e0d253:integration/zdotdir.zshrc | sha256sum)
+[[ ${historical_zshrc%% *} == 88bff44041ed35327c3dc4099dedc45ca9c8aa966ac45cff7d4f6fb4351e07dd ]]
 
 $root/benchmarks/summarize-syntax-highlighting.zsh startup.tsv edit-baseline.tsv edit-candidate.tsv $temporary/summary.tsv >/dev/null
 diff -u summary.tsv $temporary/summary.tsv

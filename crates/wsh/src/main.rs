@@ -13,7 +13,7 @@ mod doctor;
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
+    "usage:\n  wsh\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -69,12 +69,17 @@ fn user_zdotdir() -> Option<OsString> {
 
 fn run() -> Result<(), String> {
     let mut args = env::args_os().skip(1);
-    let action = args
+    let requested_action = args
         .next()
         .map(|arg| arg.into_string())
         .transpose()
         .map_err(|_| usage().to_owned())?;
-    let action = action.as_deref().unwrap_or("run");
+    let foreground_shorthand = requested_action.as_deref() == Some("--");
+    let action = if foreground_shorthand {
+        "run-foreground"
+    } else {
+        requested_action.as_deref().unwrap_or("run")
+    };
     match action {
         "bundle" => {
             let action = args
@@ -148,6 +153,7 @@ fn run() -> Result<(), String> {
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
                 .env("WSH_THEME", &paths.default_theme)
+                .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
                 .env("ZDOTDIR", &paths.zdotdir)
                 .env_remove("WSH_RUN_FOREGROUND")
                 .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
@@ -159,7 +165,10 @@ fn run() -> Result<(), String> {
             ))
         }
         "run-foreground" => {
-            let remaining: Vec<_> = args.collect();
+            let mut remaining: Vec<_> = args.collect();
+            if foreground_shorthand {
+                remaining.insert(0, OsString::from("--"));
+            }
             let separator = remaining
                 .iter()
                 .position(|arg| arg == "--")
@@ -218,6 +227,7 @@ fn run() -> Result<(), String> {
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
                 .env("WSH_THEME", &paths.default_theme)
+                .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
                 .env("WSH_RUN_FOREGROUND", "1")
                 .env("ZDOTDIR", &paths.zdotdir)
                 .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")

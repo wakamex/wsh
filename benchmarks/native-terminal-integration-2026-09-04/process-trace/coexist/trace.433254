@@ -1,0 +1,8 @@
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f469305ba10) = 433255
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=433255, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG|WSTOPPED|WCONTINUED, {ru_utime={tv_sec=0, tv_usec=0}, ru_stime={tv_sec=0, tv_usec=1928}, ...}) = 433255
+kill(-433255, 0)                        = -1 ESRCH (No such process)
+wait4(-1, 0x7ffec0c5ef5c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffec0c5f070) = -1 ECHILD (No child processes)
+execve("/code/wsh/build/out/zsh-cad0d67c-wsh1/bin/zsh", ["/code/wsh/build/out/zsh-cad0d67c"..., "-di"], 0x2b7225c0 /* 86 vars */) = 0
+--- SIGINT {si_signo=SIGINT, si_code=SI_KERNEL} ---
+exit_group(130)                         = ?

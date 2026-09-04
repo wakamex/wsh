@@ -16,6 +16,7 @@ readonly probe=$test_root/foreground-probe
 readonly fixture=$test_root/fixture
 readonly state_root=$test_root/state
 typeset -g current_pty= pty_output= current_variant= current_mode= current_report= current_home=
+typeset -gi current_disable_terminal=0
 typeset -ga current_extra_args=()
 
 [[ -x $manager && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
@@ -63,6 +64,7 @@ _wsh_test_foreground_line_init() {
 zle -N _wsh_test_foreground_line_init
 add-zle-hook-widget zle-line-init _wsh_test_foreground_line_init
 command stty -g < /dev/tty >> $WSH_TEST_TERMIOS_LOG' >| $home/.zshrc
+  (( current_disable_terminal )) && print -r -- 'typeset -ga .term.extensions=(-query -integration)' >> $home/.zshrc
   print -r -- $home
 }
 
@@ -92,6 +94,10 @@ foreground_child() {
       ;;
     candidate-non-login)
       exec $manager run-foreground --state-root $state_root -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      ;;
+    candidate-shorthand)
+      export WSH_STATE_ROOT=$state_root
+      exec $manager -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     *)
       print -u2 -- "error: unknown foreground variant: $current_variant"
@@ -199,6 +205,24 @@ assert_exact_arguments() {
   local -a expected=( '' 'two words' $'line one\nline two' 'quote'\''"' '$HOME' '*' '--leading' 'snowman-☃' $'non-utf8-\xff' )
   start_variant candidate exit0 "${expected[@]}"
   wait_for_prompt post-exit-prompt
+  if [[ -n ${WSH_FOREGROUND_TERMINAL_TRANSCRIPT:-} ]]; then
+    print -rn -- $pty_output >| $WSH_FOREGROUND_TERMINAL_TRANSCRIPT
+  fi
+  case ${WSH_FOREGROUND_TERMINAL_EXPECT:-pass} in
+    baseline)
+      [[ $pty_output != *$'\e]133;C\e\\'* && $pty_output != *$'\e]133;D\e\\'* ]]
+      ;;
+    pass)
+      [[ $pty_output == *$'\e]133;C\e\\'*$'WSH_FOREGROUND_READY\t'*$'\e]133;D\e\\'*$'\e]7;file:'*$'\e]133;A;cl=m;aid=z'*$'\e]133;B\e\\'* ]] || {
+        print -u2 -r -- "first foreground job lacks an ordered native terminal lifecycle: ${(qqq)pty_output}"
+        return 1
+      }
+      ;;
+    *)
+      print -u2 -- 'error: WSH_FOREGROUND_TERMINAL_EXPECT must be baseline or pass'
+      return 2
+      ;;
+  esac
   local index actual expected_hex
   for (( index = 1; index <= $#expected; index++ )); do
     actual=$(sed -n "s/^arg\t$(( index + 2 ))\t//p" $current_report)
@@ -319,6 +343,21 @@ assert_startup_modes() {
   stop_shell
 }
 
+assert_shorthand() {
+  start_variant candidate-shorthand exit0
+  wait_for_prompt shorthand-prompt
+  stop_shell
+}
+
+assert_disabled_terminal_integration() {
+  current_disable_terminal=1
+  start_variant candidate exit0
+  wait_for_text WSH_FOREGROUND_PROMPT disabled-integration-prompt
+  current_disable_terminal=0
+  [[ $pty_output != *$'\e]133;'* && $pty_output != *$'\e]7;file:'* ]]
+  stop_shell
+}
+
 assert_repeated_launches() {
   local repetition
   for repetition in {1..20}; do
@@ -345,6 +384,8 @@ assert_suspend_continue
 assert_nested_signal_domain
 assert_exit_and_terminal_state
 assert_startup_modes
+assert_shorthand
+assert_disabled_terminal_integration
 assert_repeated_launches
 
 print -r -- 'PASS: structured foreground startup preserves argv, job control, signals, terminal state, startup files, and repeated launch behavior'

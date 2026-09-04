@@ -28,7 +28,9 @@ readonly zsh_source_sha256=$(jq -er '.archive_sha256' "$zsh_source_lock")
 readonly zsh_signer_fingerprint=$(jq -r '.signer_fingerprint // ""' "$zsh_source_lock")
 readonly zsh_source_revision=$(jq -er '.source_revision' "$zsh_source_lock")
 readonly zsh_source_tree=$(jq -r '.source_tree // ""' "$zsh_source_lock")
-readonly zsh_test_patches=$(jq -c '[.test_patches[].sha256]' "$zsh_source_lock")
+readonly zsh_source_patches=$(jq -c '[.source_patches[].sha256]' "$zsh_source_lock")
+zsh_source_lock_sha256=$(sha256sum "$zsh_source_lock")
+readonly zsh_source_lock_sha256=${zsh_source_lock_sha256%% *}
 if [[ -n ${WSH_ZSH_ROOT:-} ]]; then
   readonly zsh_root=$WSH_ZSH_ROOT
 else
@@ -39,6 +41,10 @@ else
 fi
 [[ ${zsh_root:t} == $zsh_output_name ]] || {
   print -u2 -- "error: Zsh root does not match source lock output: ${zsh_root}"
+  exit 1
+}
+[[ -r ${zsh_root}/.wsh-source-lock.sha256 && $(<${zsh_root}/.wsh-source-lock.sha256) == $zsh_source_lock_sha256 ]] || {
+  print -u2 -- "error: Zsh root was not built from the selected source lock: ${zsh_root}"
   exit 1
 }
 cd "$repository_root"
@@ -191,7 +197,7 @@ jq -n \
   --arg zsh_signer_fingerprint "$zsh_signer_fingerprint" \
   --arg zsh_source_revision "$zsh_source_revision" \
   --arg zsh_source_tree "$zsh_source_tree" \
-  --argjson zsh_test_patches "$zsh_test_patches" \
+  --argjson zsh_source_patches "$zsh_source_patches" \
   --argjson dynamic_libraries "$dynamic_libraries" \
   --slurpfile files "$file_records" \
   '{
@@ -216,7 +222,7 @@ jq -n \
       signer_fingerprint:(if $zsh_signer_fingerprint == "" then null else $zsh_signer_fingerprint end),
       source_revision:$zsh_source_revision,
       source_tree:(if $zsh_source_tree == "" then null else $zsh_source_tree end),
-      patches:$zsh_test_patches,
+      patches:$zsh_source_patches,
       configure_args:["--enable-cap","--enable-multibyte","--enable-pcre"],
       compiler:$c_compiler,
       linker:$linker

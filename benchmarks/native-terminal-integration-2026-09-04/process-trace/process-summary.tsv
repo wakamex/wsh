@@ -1,0 +1,4 @@
+variant	execve_calls	wakterm_set_working_directory_calls
+native	22	0
+duplicate	31	9
+coexist	22	0

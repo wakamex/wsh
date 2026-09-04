@@ -1,0 +1,11 @@
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f469305ba10) = 433268
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f469305ba10) = 433269
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=433268, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG|WSTOPPED|WCONTINUED, {ru_utime={tv_sec=0, tv_usec=0}, ru_stime={tv_sec=0, tv_usec=2024}, ...}) = 433268
+kill(-433268, 0)                        = -1 ESRCH (No such process)
+wait4(-1, 0x7ffec0c5ee1c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffec0c5ef30) = 0
+kill(433269, SIGCONT)                   = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=433269, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG|WSTOPPED|WCONTINUED, {ru_utime={tv_sec=0, tv_usec=0}, ru_stime={tv_sec=0, tv_usec=2563}, ...}) = 433269
+wait4(-1, 0x7ffec0c5ee1c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffec0c5ef30) = -1 ECHILD (No child processes)
+exit_group(0)                           = ?

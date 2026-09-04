@@ -22,6 +22,15 @@ verify_hash() {
   }
 }
 
+verify_git_object_hash() {
+  local key=$1 revision=$2 file_path=$3
+  local actual=$(git -C $root show ${revision}:${file_path} | sha256sum)
+  [[ ${actual%% *} == $(metadata_value $key) ]] || {
+    print -u2 -- "error: retained foreground-startup historical hash mismatch: ${key}"
+    exit 1
+  }
+}
+
 verify_hash latency_sha256 $evidence/latency.tsv
 verify_hash latency_summary_sha256 $evidence/latency-summary.tsv
 verify_hash ordinary_sha256 $evidence/ordinary.tsv
@@ -49,13 +58,14 @@ verify_hash ordinary_benchmark_sha256 $root/benchmarks/benchmark-managed-builds.
 verify_hash ordinary_summarizer_sha256 $root/benchmarks/summarize-managed-builds.zsh
 verify_hash trace_script_sha256 $root/benchmarks/trace-foreground-startup.zsh
 verify_hash plan_sha256 $root/benchmarks/foreground-startup-plan-2026-09-03.md
-verify_hash correctness_test_sha256 $root/tests/foreground-startup.zsh
 verify_hash probe_source_sha256 $root/tests/fixtures/foreground-probe.c
-verify_hash manager_source_sha256 $root/crates/wsh/src/main.rs
 verify_hash doctor_source_sha256 $root/crates/wsh/src/doctor.rs
 verify_hash zshenv_source_sha256 $root/integration/zdotdir.zshenv
-verify_hash zshrc_source_sha256 $root/integration/zdotdir.zshrc
-verify_hash floor_test_sha256 $root/build/test-development-bundle.zsh
+readonly accepted_revision=9037627f6622c5d0b90e873fc67a954c33e0d253
+verify_git_object_hash correctness_test_sha256 $accepted_revision tests/foreground-startup.zsh
+verify_git_object_hash manager_source_sha256 $accepted_revision crates/wsh/src/main.rs
+verify_git_object_hash zshrc_source_sha256 $accepted_revision integration/zdotdir.zshrc
+verify_git_object_hash floor_test_sha256 $accepted_revision build/test-development-bundle.zsh
 
 $root/benchmarks/summarize-foreground-startup.zsh $evidence/latency.tsv $temporary/latency-summary.tsv >/dev/null
 diff -u $evidence/latency-summary.tsv $temporary/latency-summary.tsv

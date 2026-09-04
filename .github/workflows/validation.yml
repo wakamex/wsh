@@ -74,7 +74,7 @@ jobs:
       - name: Install evidence-checker requirements
         run: |
           sudo apt-get update
-          sudo apt-get install --yes gawk zsh
+          sudo apt-get install --yes gawk jq zsh
       - name: Test the resource-gate checker
         run: ./tests/resource-gates.zsh
       - name: Verify the retained accepted evidence
@@ -92,3 +92,4 @@ jobs:
           ./benchmarks/verify-edge-zsh-evidence.zsh
           ./benchmarks/verify-plugin-doctor-evidence.zsh
           ./benchmarks/verify-foreground-startup-evidence.zsh
+          ./benchmarks/verify-native-terminal-integration-evidence.zsh

@@ -1,0 +1,2 @@
+execve("/usr/bin/stty", ["stty", "-echo"], 0x3aa9e5c0 /* 85 vars */) = 0
+exit_group(0)                           = ?

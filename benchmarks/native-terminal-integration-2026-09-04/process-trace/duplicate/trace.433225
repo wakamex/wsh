@@ -1,0 +1,2 @@
+execve("/usr/bin/grep", ["grep", "-aFo", "--", "\33]133;A;cl=m;aid=z", "/code/wsh/benchmarks/native-term"...], 0x7ffeb1c50788 /* 84 vars */) = 0
+exit_group(0)                           = ?

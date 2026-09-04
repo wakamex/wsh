@@ -1,6 +1,6 @@
 # Foreground startup and job lifecycle
 
-Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh now provides that transition through `wsh run-foreground`. Foreground-job events for terminal metadata remain a separate measured investigation.
+Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh provides that transition through `wsh -- <command> [arguments...]`, with `wsh run-foreground` as the explicit form. Wakterm's existing process cache now passes the separate managed-identity lifecycle fixture, so no new foreground-job event protocol is planned.
 
 ## Both shell wrappers lose stopped jobs
 
@@ -23,18 +23,19 @@ Both wrappers replace the shell after the provider stops. The replacement does n
 The accepted command is:
 
 ```text
+wsh -- <command> [arguments...]
 wsh run-foreground [--state-root <directory>] [--login] -- <command> [arguments...]
 ```
 
 The manager reads the compact active-bundle state and replaces itself with the bundled Zsh using `-i -s`. Bundle startup captures the remaining positional parameters before user startup files run. A one-shot `precmd` hook removes itself and executes the captured array directly. That Zsh owns the foreground job, retains it in its job table across Ctrl-Z, and becomes the normal prompt without a second shell initialization. An explicit `--bundle` remains available for diagnostics but performs full bundle verification and is intentionally outside the installed startup timing path.
 
-Wakterm continues to own executable selection, arguments, environment, cwd, provider session, restore policy, and whether the shell is a login shell. Wsh owns the exact transition into its bundled Zsh and no application identity or restore policy.
+Wakterm continues to own executable selection, arguments, environment, cwd, provider session, restore policy, and whether the shell is a login shell. It can pass an argument vector to Wsh without constructing shell source. Wsh owns the exact transition into its bundled Zsh and no application identity or restore policy.
 
 ## The PTY fixture covers job-control and coexistence behavior
 
 The retained C probe records byte-exact arguments, PID, process group, terminal foreground process group, signals, and a nested child. The PTY test covers normal and nonzero exit, default and consumed Ctrl-C, Ctrl-Z followed by `fg`, terminal-mode restoration, login and non-login startup files, an existing alias and `precmd` hook, twenty fresh repeated launches, process exit, and zombie detection.
 
-Every correctness case passed. Empty arguments, whitespace, quotes, newlines, wildcard characters, dollar signs, leading dashes, Unicode, and a Unix byte sequence containing `0xff` arrived unchanged. The foreground process group owned the terminal, a nested child remained in that group, consumed Ctrl-C produced no premature prompt, and `fg` resumed the same PID and process group after Ctrl-Z.
+Every correctness case passed. Empty arguments, whitespace, quotes, newlines, wildcard characters, dollar signs, leading dashes, Unicode, and a Unix byte sequence containing `0xff` arrived unchanged. The foreground process group owned the terminal, a nested child remained in that group, consumed Ctrl-C produced no premature prompt, and `fg` resumed the same PID and process group after Ctrl-Z. The concise and explicit forms behave identically, and the first application is enclosed by OSC 133 `C` and `D` before native Zsh emits the first editable prompt. Disabling native integration through `.term.extensions` suppresses those markers as well.
 
 ## Startup cost stays within the fixed gates
 
@@ -68,13 +69,13 @@ The cheapest retained comparison runs the parent of the Wakterm fix and the fixe
 
 The correctness metric is zero stale bindings after exit or replacement and zero cleared bindings across stop and continue. The comparison also records time from observable process exit to metadata removal, process-snapshot calls, and refresh latency. The fixed path should stay within the existing 300 ms cache policy and add no process, prompt hook, or independent polling loop. A cache-bounded result is sufficient unless a reproduced UI operation remains stale long enough to be incorrect.
 
-## A reusable contract would report foreground-job transitions
+## A native foreground-job transition protocol is deferred
 
 The smallest plausible shell-owned contract identifies one shell-local job generation and process group, then emits ordered `started`, `stopped`, `continued`, and `finished` transitions. `finished` carries the exit or signal status after the shell has observed job completion. A new generation prevents process-group reuse from reviving old metadata. Consumers map that ephemeral job to their own application identity; the process group itself is not a provider thread, pane identity, durable route, or security authority.
 
 Ordinary `preexec` and `precmd` hooks can bracket a simple foreground command, but they do not expose every transition at the point where Zsh assigns the foreground process group or updates its job table. A precise contract may require a small Zsh module or paired Zsh change. That cost is unjustified while Wakterm's cached process identity passes the reproducer.
 
-The `wsh` contract becomes an implementation candidate if the local fix leaves a measured stale window or polling cost, or a shell transition cannot be inferred correctly from process snapshots. One concrete Wakterm improvement is sufficient for this focused contract when the event path is reliable and performant. An accepted result must let Wakterm remove corresponding process-lifecycle inference rather than run both owners.
+The Wakterm transition and process-shape tests pass for managed start, exit, consumed Ctrl-C, stop, continue, replacement, and PID identity. The fix reuses the existing process snapshot and adds no watcher, child process, prompt hook, or independent polling loop. A `wsh` contract becomes an implementation candidate only if a later case leaves a measured stale window or polling cost, or a shell transition cannot be inferred correctly from process snapshots. An accepted result must let Wakterm remove corresponding process-lifecycle inference rather than run both owners.
 
 ## Remote and container process identities stay local to their namespace
 
@@ -82,6 +83,6 @@ The reproduced remote TUI is a local Codex frontend connected to a remote provid
 
 A later event must therefore include an opaque shell-local generation and an explicit execution context when it crosses a terminal or mux boundary. The shell running in the remote or container context owns job transitions there, while Wakterm owns any mapping back to a local pane and provider session. No raw PID or process group becomes a durable cross-host identity or authorization token.
 
-## Foreground-job events remain behind earlier lifecycle work
+## Foreground startup remains the accepted boundary
 
-For `wsh`, this is a concrete but deferred investigation. Structured foreground startup is accepted, and the OSC command-lifecycle comparison remains earlier because it can remove existing injected shell integration. Foreground-job events come next, ahead of pane history and completion, if the Wakterm fixture demonstrates a remaining correctness gap or measurable polling cost. The passing owner-local fix otherwise remains the accepted solution.
+Structured foreground startup and native OSC command reporting are accepted. Wakterm's owner-local managed-identity fix remains the solution for application identity because it passes the current fixture within the existing cache policy. Foreground-job events stay deferred behind a new reproduced correctness gap or measurable polling cost.

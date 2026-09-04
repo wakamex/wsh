@@ -4,7 +4,7 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
 
 local root=${0:A:h:h}
-local zsh_binary=${WSH_TEST_ZSH:-$root/build/out/zsh-cad0d67c/bin/zsh}
+local zsh_binary=${WSH_TEST_ZSH:-$root/build/out/zsh-cad0d67c-wsh1/bin/zsh}
 local zsh_version=$($zsh_binary -fc 'print -r -- $ZSH_VERSION')
 local runtime=${WSH_TEST_RUNTIME:-$root/target/release/wsh-runtime}
 local integration=${WSH_TEST_INTEGRATION:-$root/integration/integration.zsh}
