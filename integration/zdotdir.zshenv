@@ -1,3 +1,9 @@
+if [[ ${WSH_RUN_FOREGROUND:-0} == 1 ]]; then
+  typeset -ga _WSH_FOREGROUND_ARGV=("$@")
+  set --
+  typeset -g WSH_RUN_FOREGROUND=prepared
+fi
+
 if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
   typeset WSH_STARTUP_MODULE_PATH=${WSH_BUNDLE_ROOT}/lib/zsh/${ZSH_VERSION}
   typeset WSH_STARTUP_FUNCTION_PATH=${WSH_BUNDLE_ROOT}/share/zsh/${ZSH_VERSION}/functions

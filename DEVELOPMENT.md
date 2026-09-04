@@ -28,7 +28,7 @@ Before changing an accepted path, record:
 5. The metric and threshold that distinguish a passing result from a failed one.
 6. The attempt or time limit for the hypothesis.
 
-Implement the smallest counterfactual first. A broader wsh abstraction is justified only when that counterfactual fails or leaves a second measured consumer with the same problem. After two failed interventions at one gate, audit the premise and require a new hypothesis before editing again.
+Implement the smallest counterfactual first. A Wsh intervention is justified when it produces a measured correctness or performance improvement for a concrete consumer and remains proportionate to that result. A second consumer strengthens the case for a general abstraction but is not required for a focused product feature. After two failed interventions at one gate, audit the premise and require a new hypothesis before editing again.
 
 ## Correctness gates precede performance comparisons
 

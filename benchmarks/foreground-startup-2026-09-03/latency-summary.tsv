@@ -1,0 +1,7 @@
+variant	metric	samples	median_ms	p90_ms	maximum_ms
+current	pty-to-ready	40	11.624455	17.533541	21.201611
+current	ready-to-prompt	40	513.375043	514.209270	516.150713
+positional	pty-to-ready	40	10.984302	13.209105	19.262791
+positional	ready-to-prompt	40	513.269901	514.301300	514.980793
+candidate	pty-to-ready	40	10.467529	11.675358	12.090683
+candidate	ready-to-prompt	40	0.786781	0.851393	1.306534

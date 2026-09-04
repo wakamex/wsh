@@ -1,0 +1,4 @@
+execve("/code/wsh/bundles/d2ebc5d5d800580d182a7c26231f76bd9c44629b0441dc579be25e6ad20ef392/bin/wsh-runtime", ["/code/wsh/bundles/d2ebc5d5d80058"..., "serve", "--theme", "/code/wsh/bundles/d2ebc5d5d80058"...], 0x7fff3ab50f88 /* 90 vars */) = 0
+clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x7fd110c81ce8, parent_tid=0x7fd110c81990, exit_signal=0, stack=0x7fd110a81000, stack_size=0x1ffec0, tls=0x7fd110c816c0} => {parent_tid=[3350448]}, 88) = 3350448
+clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x7fd110a80ce8, parent_tid=0x7fd110a80990, exit_signal=0, stack=0x7fd110880000, stack_size=0x1ffec0, tls=0x7fd110a806c0} => {parent_tid=[3350450]}, 88) = 3350450
+exit_group(0)                           = ?

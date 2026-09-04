@@ -1,0 +1,9 @@
+variant	count	executable
+current	1	wsh-runtime
+current	2	zsh
+current	1	foreground-probe
+candidate	1	wsh-runtime
+candidate	1	zsh
+candidate	1	git
+candidate	1	wsh-foreground-candidate-manager
+candidate	1	foreground-probe

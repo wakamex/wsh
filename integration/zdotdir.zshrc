@@ -15,6 +15,23 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
   module_path=("$WSH_STARTUP_MODULE_PATH" "${(@)module_path:#${(b)WSH_STARTUP_MODULE_PATH}}")
   fpath=("$WSH_STARTUP_FUNCTION_PATH" "${(@)fpath:#${(b)WSH_STARTUP_FUNCTION_PATH}}")
   unset WSH_STARTUP_MODULE_PATH WSH_STARTUP_FUNCTION_PATH
+  if [[ ${WSH_RUN_FOREGROUND:-0} == prepared ]]; then
+    autoload -Uz add-zsh-hook
+    _wsh_run_foreground_startup() {
+      builtin emulate -L zsh -o no_aliases
+      add-zsh-hook -d precmd _wsh_run_foreground_startup
+      local -a foreground_command=("${_WSH_FOREGROUND_ARGV[@]}")
+      unset _WSH_FOREGROUND_ARGV WSH_RUN_FOREGROUND
+      unfunction _wsh_run_foreground_startup
+      if (( $#foreground_command == 0 )); then
+        print -u2 -- 'wsh: foreground command is unavailable'
+        return 127
+      fi
+      "$foreground_command[@]"
+    }
+    add-zsh-hook precmd _wsh_run_foreground_startup
+    precmd_functions=(_wsh_run_foreground_startup "${(@)precmd_functions:#_wsh_run_foreground_startup}")
+  fi
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/history-substring-search.zsh"
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/autosuggestions.zsh"
   if [[ ${WSH_DISABLE_SYNTAX_HIGHLIGHTING:-0} == 1 ]]; then

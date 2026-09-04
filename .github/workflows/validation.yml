@@ -91,3 +91,4 @@ jobs:
           ./benchmarks/verify-syntax-highlighting-evidence.zsh
           ./benchmarks/verify-edge-zsh-evidence.zsh
           ./benchmarks/verify-plugin-doctor-evidence.zsh
+          ./benchmarks/verify-foreground-startup-evidence.zsh

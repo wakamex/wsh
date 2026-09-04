@@ -1,0 +1,3 @@
+execve("/code/wsh/bundles/d2ebc5d5d800580d182a7c26231f76bd9c44629b0441dc579be25e6ad20ef392/bin/wsh-runtime", ["/code/wsh/bundles/d2ebc5d5d80058"..., "serve", "--theme", "/code/wsh/bundles/d2ebc5d5d80058"...], 0x7fff69d98888 /* 89 vars */) = 0
+clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x7fa4a1c52ce8, parent_tid=0x7fa4a1c52990, exit_signal=0, stack=0x7fa4a1a52000, stack_size=0x1ffec0, tls=0x7fa4a1c526c0} => {parent_tid=[3350365]}, 88) = 3350365
++++ killed by SIGTERM +++

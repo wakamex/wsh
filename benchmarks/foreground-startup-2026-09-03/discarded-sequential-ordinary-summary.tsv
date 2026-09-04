@@ -1,0 +1,7 @@
+build	variant	samples	median_ms	p90_ms	maximum_ms
+baseline	raw	40	515.925765	516.376495	517.541409
+baseline	direct-complete	40	28.315306	29.814959	33.332586
+baseline	managed-complete	40	28.949976	30.367851	32.747507
+candidate	raw	40	515.834570	516.344309	518.384457
+candidate	direct-complete	40	28.098702	30.006170	31.420469
+candidate	managed-complete	40	28.221011	29.716253	30.308485

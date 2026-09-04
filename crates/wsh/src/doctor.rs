@@ -196,6 +196,7 @@ pub fn run(shell: Shell<'_>) -> Result<(), String> {
         .env("WSH_THEME", shell.theme)
         .env("ZDOTDIR", shell.zdotdir)
         .env("WSH_DOCTOR_REPORT", &report_file.path)
+        .env_remove("WSH_RUN_FOREGROUND")
         .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
         .env_remove("WSH_STARTUP_RCS")
         .stdin(Stdio::null())

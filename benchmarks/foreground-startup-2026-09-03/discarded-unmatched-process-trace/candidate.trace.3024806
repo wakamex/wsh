@@ -1,0 +1,14 @@
+execve("/var/tmp/wsh-foreground-candidate-manager", ["/var/tmp/wsh-foreground-candidat"..., "run-foreground", "--state-root", "/var/tmp/wsh-foreground-trace.am"..., "--login", "--", "/var/tmp/wsh-foreground-trace.am"..., "/var/tmp/wsh-foreground-trace.am"..., "exit0"], 0x7ffe7a081340 /* 89 vars */) = 0
+execve("/code/wsh/bundles/d2ebc5d5d800580d182a7c26231f76bd9c44629b0441dc579be25e6ad20ef392/bin/zsh", ["/code/wsh/bundles/d2ebc5d5d80058"..., "-d", "-l", "-i", "-s", "--", "/var/tmp/wsh-foreground-trace.am"..., "/var/tmp/wsh-foreground-trace.am"..., "exit0"], 0x5558a6b54650 /* 90 vars */) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7efce1f5ba10) = 3024809
+wait4(-1, 0x7ffea988821c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffea9888330) = 0
+clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7efce1f5ba10) = 3024811
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=3024811, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG|WSTOPPED|WCONTINUED, {ru_utime={tv_sec=0, tv_usec=2449}, ru_stime={tv_sec=0, tv_usec=0}, ...}) = 3024811
+kill(-3024811, 0)                       = -1 ESRCH (No such process)
+wait4(-1, 0x7ffea9889c9c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffea9889db0) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=3024809, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+wait4(-1, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], WNOHANG|WSTOPPED|WCONTINUED, {ru_utime={tv_sec=0, tv_usec=878}, ru_stime={tv_sec=0, tv_usec=10219}, ...}) = 3024809
+wait4(-1, 0x7ffea9887d1c, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffea9887e30) = -1 ECHILD (No child processes)
+wait4(-1, 0x7ffea9888edc, WNOHANG|WSTOPPED|WCONTINUED, 0x7ffea9888ff0) = -1 ECHILD (No child processes)
+exit_group(0)                           = ?

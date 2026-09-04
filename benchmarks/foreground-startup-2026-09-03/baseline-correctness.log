@@ -1,0 +1,1 @@
+PASS: current and positional wrappers lose the suspended job as expected

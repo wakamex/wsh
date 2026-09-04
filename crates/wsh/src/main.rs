@@ -13,7 +13,7 @@ mod doctor;
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]"
+    "usage:\n  wsh\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -148,6 +148,77 @@ fn run() -> Result<(), String> {
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
                 .env("WSH_THEME", &paths.default_theme)
+                .env("ZDOTDIR", &paths.zdotdir)
+                .env_remove("WSH_RUN_FOREGROUND")
+                .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
+                .env_remove("WSH_STARTUP_RCS");
+            let error = command.exec();
+            Err(format!(
+                "could not replace the launcher with {}: {error}",
+                paths.shell.display()
+            ))
+        }
+        "run-foreground" => {
+            let remaining: Vec<_> = args.collect();
+            let separator = remaining
+                .iter()
+                .position(|arg| arg == "--")
+                .ok_or_else(|| usage().to_owned())?;
+            let (options, foreground_args) = (&remaining[..separator], &remaining[separator + 1..]);
+            if foreground_args.is_empty() {
+                return Err(usage().into());
+            }
+            let mut bundle = None;
+            let mut state_root = None;
+            let mut login = false;
+            let mut index = 0;
+            while index < options.len() {
+                match options[index].to_str() {
+                    Some("--bundle") => {
+                        let value = options.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        bundle = Some(PathBuf::from(value));
+                        index += 2;
+                    }
+                    Some("--state-root") => {
+                        let value = options.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        state_root = Some(PathBuf::from(value));
+                        index += 2;
+                    }
+                    Some("--login") if !login => {
+                        login = true;
+                        index += 1;
+                    }
+                    _ => return Err(usage().into()),
+                }
+            }
+            let (bundle, paths) = match bundle {
+                Some(bundle) => {
+                    let verified = verify_bundle(&bundle)?;
+                    let paths = entrypoints(&bundle, &verified.manifest);
+                    (bundle, paths)
+                }
+                None => {
+                    let launch =
+                        active_bundle_for_launch(&state_root.unwrap_or(default_state_root()?))?;
+                    (launch.root, launch.entrypoints)
+                }
+            };
+            let mut command = Command::new(&paths.shell);
+            command.arg("-d");
+            if login {
+                command.arg("-l");
+            }
+            command.arg("-i").arg("-s").arg("--").args(foreground_args);
+            if let Some(user_zdotdir) = user_zdotdir() {
+                command.env("WSH_USER_ZDOTDIR", user_zdotdir);
+            } else {
+                command.env_remove("WSH_USER_ZDOTDIR");
+            }
+            command
+                .env("WSH_BUNDLE_ROOT", &bundle)
+                .env("WSH_RUNTIME", &paths.runtime)
+                .env("WSH_THEME", &paths.default_theme)
+                .env("WSH_RUN_FOREGROUND", "1")
                 .env("ZDOTDIR", &paths.zdotdir)
                 .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
                 .env_remove("WSH_STARTUP_RCS");

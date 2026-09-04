@@ -100,6 +100,7 @@ ${repository_root}/tests/history-substring-search.zsh ${manager} ${bundle}
 ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
 ${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
 ${repository_root}/tests/plugin-doctor.zsh ${manager} ${bundle}
+${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
 
 zsh_version=$(${bundle}/bin/zsh -fc 'print -r -- $ZSH_VERSION')
 if [[ $zsh_version == 5.9.999.3-test ]]; then

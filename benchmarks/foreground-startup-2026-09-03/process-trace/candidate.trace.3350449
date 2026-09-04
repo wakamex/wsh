@@ -1,0 +1,2 @@
+execve("/var/tmp/wsh-foreground-trace.NgjLxC/foreground-probe", ["/var/tmp/wsh-foreground-trace.Ng"..., "/var/tmp/wsh-foreground-trace.Ng"..., "exit0"], 0x7fff3ab50f88 /* 89 vars */) = 0
+exit_group(0)                           = ?

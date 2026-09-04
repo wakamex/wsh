@@ -1,0 +1,18 @@
+warning: `#[macro_use]` attribute cannot be used on crates
+ --> luahelper/src/lib.rs:1:1
+  |
+1 | #![macro_use]
+  | ^^^^^^^^^^^^^
+  |
+  = help: `#[macro_use]` can be applied to extern crates and modules
+  = warning: this was previously accepted by the compiler but is being phased out; it will become a hard error in a future release!
+  = note: `#[warn(unused_attributes)]` (part of `#[warn(unused)]`) on by default
+
+warning: `luahelper` (lib) generated 1 warning (run `cargo fix --lib -p luahelper` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.42s
+     Running unittests src/lib.rs (target/debug/deps/mux-ae0c54474baef299)
+
+running 1 test
+test session_persistence::test::restored_harness_runs_as_a_shell_child ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 261 filtered out; finished in 0.00s
