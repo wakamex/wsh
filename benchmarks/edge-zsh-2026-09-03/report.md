@@ -70,6 +70,8 @@ The targeted feature fixture verified four capabilities unavailable in the stabl
 
 These features support lower-process shell glue, structured state handoff, future highlight composition, and exact bundle self-identification. The fixture does not claim coverage for every item in upstream `NEWS`.
 
+Upstream's [NEWS at the exact revision](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS) provides the curated changes since 5.9, and its [README at the exact revision](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/README) records incompatibilities. The [exact GitHub comparison](https://github.com/zsh-users/zsh/compare/zsh-5.9...cad0d67c76e2be7371cf3526b79ea2581810d35a) is the exhaustive 1,074-commit and 751-file audit trail, although GitHub may decline to render a comparison of that size. The Wsh list above remains limited to capabilities exercised by its fixture.
+
 ## Bundle size and identity
 
 | Property | Stable | Edge | Difference |

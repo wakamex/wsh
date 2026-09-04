@@ -4,6 +4,7 @@
 
 Currently includes:
 
+- A [pinned post-5.9 Zsh](benchmarks/edge-zsh-2026-09-03/report.md) with current-shell command substitutions, named references, layered editor highlighting, and exact executable-path discovery ([complete upstream changes](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS))
 - [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
 - [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
 - [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)

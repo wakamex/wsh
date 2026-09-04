@@ -66,5 +66,6 @@ Every vendored update must:
 4. Run the authoritative upstream test suite when it exists.
 5. Rerun the retained Wsh correctness, composition, process, startup, prompt, edit, and floor-bundle gates that apply.
 6. Update this document when a divergence is added, removed, or moved upstream.
+7. For each Zsh identity, link the exact upstream `NEWS`, incompatibility notes, and commit comparison, then summarize only the capabilities and compatibility treatments Wsh directly tests.
 
 A Wsh workaround should be deleted when an upstream release or a simpler startup contract removes its reproducer. Historical benchmark reports continue to describe the exact revisions they measured.
