@@ -8,7 +8,7 @@ Each target bundle is one canonical archive containing the exact Zsh binary and 
 
 The first target is `x86_64-unknown-linux-gnu` with glibc 2.28 as its tested compatibility floor. The Rocky Linux 8.10 floor experiment built the complete bundle from source and passed the upstream Zsh suite, Rust suite, relocated-bundle verification, real provider request, interactive PTY lifecycle test, dynamic-dependency comparison, and maximum-symbol check without importing a symbol newer than `GLIBC_2.28`. The exact bundle was also rejected by the glibc 2.27 loader with `GLIBC_2.28 not found`, confirming the artifact boundary. The retained result is in [`benchmarks/portability-glibc-2.28-2026-09-02.md`](benchmarks/portability-glibc-2.28-2026-09-02.md).
 
-The runtime contract consists of the tested floor environment, glibc 2.28 or newer, and the system-supplied ELF library sonames recorded for the bundle payload and separate release tools. Compatibility claims for another distribution require execution there. Moving the floor, builder image, or dynamic-library boundary requires a recorded compatibility reason and a complete rerun.
+The runtime contract consists of the tested floor environment, glibc 2.28 or newer, and the system-supplied ELF library sonames recorded for the bundle payload and separate release tools. Compatibility claims for another distribution require execution there. The canonical build uses the public Wsh builder image by immutable OCI digest, with its package lock and recipe digest checked locally before use. Moving the floor, builder image, or dynamic-library boundary requires a recorded compatibility reason and a complete rerun.
 
 ## Reproducibility compares two isolated builds
 

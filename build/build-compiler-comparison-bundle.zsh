@@ -6,8 +6,8 @@ umask 022
 
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
-readonly image=wsh-glibc-2.28-builder:development
 readonly rustup_root=${RUSTUP_HOME:-$HOME/.rustup}
+readonly image=$(${script_dir}/resolve-glibc-2.28-builder.zsh)
 
 usage() {
   print -r -- 'usage: build-compiler-comparison-bundle.zsh gcc-8.5.0|gcc-16.2.0|clang-23.1.0'
@@ -73,7 +73,7 @@ readonly source_revision
 readonly portable_root=${repository_root}/build/portable/compiler-comparison/${variant}
 
 mkdir -p -- $portable_root
-podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.28 $repository_root
+podman image exists $image || podman pull $image
 podman run --rm --userns=keep-id --network=host \
   --volume ${repository_root}:/workspace:Z \
   --volume ${portable_root}:/comparison:Z \
@@ -91,7 +91,7 @@ podman run --rm --userns=keep-id --network=host \
   --env SOURCE_DATE_EPOCH=$source_date_epoch \
   --env TZ=UTC \
   --env WSH_ARCHIVE_OUTPUT_ROOT=/comparison/archives \
-  --env WSH_BUILDER_BASE_IMAGE=quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e \
+  --env WSH_BUILDER_BASE_IMAGE=$image \
   --env WSH_BUILDER_PACKAGE_LOCK_SHA256=$package_lock_sha256 \
   --env WSH_ZSH_OUTPUT_ROOT=/comparison/zsh \
   --env WSH_ZSH_ROOT=/comparison/zsh/zsh-5.9.2 \

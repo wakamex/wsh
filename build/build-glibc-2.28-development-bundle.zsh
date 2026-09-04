@@ -6,12 +6,12 @@ umask 022
 
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
-readonly image=wsh-glibc-2.28-builder:development
 readonly portable_root=${repository_root}/build/portable/glibc-2.28
 readonly rustup_root=${RUSTUP_HOME:-$HOME/.rustup}
 readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
 readonly release_id=${WSH_RELEASE_ID:-}
 readonly zsh_source_lock=${WSH_ZSH_SOURCE_LOCK:-${script_dir}/zsh-sources/zsh-cad0d67c.json}
+readonly image=$(${script_dir}/resolve-glibc-2.28-builder.zsh)
 
 for command in git podman sed sha256sum; do
   (( $+commands[$command] )) || {
@@ -42,7 +42,7 @@ fi
 readonly source_revision
 
 mkdir -p -- $portable_root
-podman build --pull=never --tag $image --file $script_dir/Containerfile.glibc-2.28 $repository_root
+podman image exists $image || podman pull $image
 podman run --rm --userns=keep-id --network=host \
   --volume ${repository_root}:/workspace:Z \
   --volume ${rust_toolchain_root}:/toolchain:ro,Z \
@@ -57,7 +57,7 @@ podman run --rm --userns=keep-id --network=host \
   --env SOURCE_DATE_EPOCH=$source_date_epoch \
   --env TZ=UTC \
   --env WSH_ARCHIVE_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/archives \
-  --env WSH_BUILDER_BASE_IMAGE=quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e \
+  --env WSH_BUILDER_BASE_IMAGE=$image \
   --env WSH_BUILDER_PACKAGE_LOCK_SHA256=$package_lock_sha256 \
   --env WSH_ZSH_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/zsh \
   --env WSH_ZSH_SOURCE_LOCK=$container_zsh_source_lock \

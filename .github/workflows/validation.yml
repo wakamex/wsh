@@ -7,7 +7,6 @@ permissions:
   contents: read
 
 env:
-  ROCKY_IMAGE: quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
   RUST_TOOLCHAIN: 1.95.0
 
 jobs:
@@ -33,6 +32,8 @@ jobs:
         run: cargo test --locked --workspace
       - name: Test the release bootstrap
         run: ./tests/bootstrap-install.zsh
+      - name: Test the immutable builder lock
+        run: ./tests/builder-image-lock.zsh
       - name: Test explicit release updates
         run: ./tests/update-cli.zsh
       - name: Verify a real external GitHub Actions attestation
@@ -57,7 +58,7 @@ jobs:
           rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
           ./build/verify-rust-toolchain.zsh
       - name: Fetch the digest-pinned floor image
-        run: podman pull "$ROCKY_IMAGE"
+        run: podman pull "$(./build/resolve-glibc-2.28-builder.zsh)"
       - name: Build and test the development bundle on the glibc 2.28 floor
         run: ./build/build-glibc-2.28-development-bundle.zsh
 
