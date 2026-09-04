@@ -1,0 +1,1 @@
+build/zsh-test-patches/*.patch whitespace=-blank-at-eol,-blank-at-eof

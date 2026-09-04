@@ -4,7 +4,8 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
 
 local root=${0:A:h:h}
-local zsh_binary=${WSH_TEST_ZSH:-$root/build/out/zsh-5.9.2/bin/zsh}
+local zsh_binary=${WSH_TEST_ZSH:-$root/build/out/zsh-cad0d67c/bin/zsh}
+local zsh_version=$($zsh_binary -fc 'print -r -- $ZSH_VERSION')
 local runtime=${WSH_TEST_RUNTIME:-$root/target/release/wsh-runtime}
 local integration=${WSH_TEST_INTEGRATION:-$root/integration/integration.zsh}
 local theme=${WSH_TEST_THEME:-$root/benchmarks/wsh-benchmark.toml}
@@ -73,7 +74,7 @@ zpty -b $pty_name wsh_pty_child
 pty_wait_for WSH_BOOT 5
 local bundle_setup=
 if [[ -n $bundle_root ]]; then
-  bundle_setup="typeset -gx WSH_BUNDLE_ROOT=${(q)bundle_root}; module_path=(${(q)bundle_root}/lib/zsh/5.9.2); fpath=(${(q)bundle_root}/share/zsh/5.9.2/functions \$fpath); "
+  bundle_setup="typeset -gx WSH_BUNDLE_ROOT=${(q)bundle_root}; module_path=(${(q)bundle_root}/lib/zsh/${(q)zsh_version}); fpath=(${(q)bundle_root}/share/zsh/${(q)zsh_version}/functions \$fpath); "
 fi
 zpty -w $pty_name "${bundle_setup}typeset -gx WSH_RUNTIME=${(q)runtime} WSH_THEME=${(q)theme}; source ${(q)integration}; print -r -- \$'WSH_\\x53ETUP_DONE'"
 pty_wait_for WSH_SETUP_DONE 3

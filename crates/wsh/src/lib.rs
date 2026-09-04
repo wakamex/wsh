@@ -61,10 +61,13 @@ pub enum BundleStatus {
 #[serde(deny_unknown_fields)]
 pub struct ZshBuild {
     pub version: String,
+    pub source_mode: Option<String>,
+    pub source_repository: Option<String>,
     pub source_archive: String,
     pub source_sha256: String,
-    pub signer_fingerprint: String,
+    pub signer_fingerprint: Option<String>,
     pub source_revision: String,
+    pub source_tree: Option<String>,
     pub patches: Vec<String>,
     pub configure_args: Vec<String>,
     pub compiler: String,

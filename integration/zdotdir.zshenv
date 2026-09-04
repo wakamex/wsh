@@ -1,6 +1,6 @@
 if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
-  typeset WSH_STARTUP_MODULE_PATH=${WSH_BUNDLE_ROOT}/lib/zsh/5.9.2
-  typeset WSH_STARTUP_FUNCTION_PATH=${WSH_BUNDLE_ROOT}/share/zsh/5.9.2/functions
+  typeset WSH_STARTUP_MODULE_PATH=${WSH_BUNDLE_ROOT}/lib/zsh/${ZSH_VERSION}
+  typeset WSH_STARTUP_FUNCTION_PATH=${WSH_BUNDLE_ROOT}/share/zsh/${ZSH_VERSION}/functions
   module_path=("$WSH_STARTUP_MODULE_PATH" "${(@)module_path:#${(b)WSH_STARTUP_MODULE_PATH}}")
   fpath=("$WSH_STARTUP_FUNCTION_PATH" "${(@)fpath:#${(b)WSH_STARTUP_FUNCTION_PATH}}")
   unset WSH_STARTUP_MODULE_PATH WSH_STARTUP_FUNCTION_PATH
@@ -25,4 +25,8 @@ if (( ${+WSH_USER_ZDOTDIR} )); then
     [[ $WSH_STARTUP_RCS == on ]] || unsetopt rcs
     unset WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
   fi
+fi
+
+if [[ $ZSH_VERSION == 5.9.999.3-test && ${WSH_ENABLE_ZLE_TERMINAL_QUERY:-0} != 1 && ! -v .term.extensions ]]; then
+  typeset -ga .term.extensions=(-query)
 fi

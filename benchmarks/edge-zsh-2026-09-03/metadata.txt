@@ -1,0 +1,59 @@
+format_version=1
+accepted=1
+wsh_source_revision=6169380bdb0d4919ccb424885b5f194dbb9fc786+dirty
+target=x86_64-unknown-linux-gnu
+minimum_glibc=2.28
+host=AMD Ryzen 9 3950X 16-Core Processor
+host_kernel=Linux 7.1.9-200.fc44.x86_64
+benchmark_cpu=31
+stable_zsh_version=5.9.2
+stable_source_mode=signed-release
+stable_source_revision=zsh-5.9.2
+stable_source_archive_sha256=36fa734374b44783582cec09bcd67822e2f992c779ec1624ab5596df078d2f81
+stable_source_lock_sha256=aa7f6d1ebdd335ee66190bc115cd2fc5a9babc6bda850a21da551ca6d33450a8
+stable_bundle=23806d05c2ee5ecac62414059ba5cc09a8f4d447ab3992e60f041051cf8d97dc
+stable_zsh_sha256=bac80fcae8e1dd2aa1d5b77d5a68a7bb73612f8bf349d1f33e775117b7cd5cfb
+stable_archive_sha256=a8a20437f013638ecf6fa193f2f9e10dc3e82c4dba54e5089c35ecb84fcceaff
+stable_archive_bytes=2466836
+stable_unpacked_bytes=9343271
+edge_zsh_version=5.9.999.3-test
+edge_source_mode=canonical-commit
+edge_source_revision=cad0d67c76e2be7371cf3526b79ea2581810d35a
+edge_source_tree=2c07cbc91c766336de8029e0da8e34723bbe09bf
+edge_source_archive_sha256=79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819
+edge_source_lock_sha256=19f6ea2674d0f693a41365394780e08f54a9dcc47aaa2f93b77ab372640e699d
+edge_test_patch_sha256=e5f79c067b6cf470f2f9ee40d821eb1dc2c188efed00ab32d3a7e2d20483f4b7
+edge_bundle=d5597552d6844f954065ff7154a1b479dd52600f0d5f50600b889615b5dbc99c
+edge_zsh_sha256=a902861ceae7cf1bc545fd0f3b0a3cfdb901c9d38e728886940e044de7efff48
+edge_archive_sha256=dffb0b1b228f45319267c3dc2f3b65cf2668da28c6da2999a93030b517c476c1
+edge_archive_bytes=2488224
+edge_unpacked_bytes=9396578
+runtime_sha256=c87a118f9303e29447b1d20ee39f81565a3fc904a25098b3da720e68ed355026
+builder_base_image=quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
+builder_package_lock_sha256=01128ba43dbd94d3218f64f03e7ed5ea56d69ce875dd86a2c7b074aac51d0c44
+rust_toolchain_sha256=a7e4e0e9ff4ed572a30fa9c49d347b01b81d1fa1a80cd00ea585939ac62b7e61
+rust_compiler=rustc 1.95.0 (59807616e 2026-04-14)
+c_compiler=gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-28)
+linker=GNU ld version 2.30-128.el8_10
+zsh_theme_bench_revision=8dc0b5fea25671d6745a556bffb740d3866e189c
+fixture_files=1000
+provider_iterations_per_run=20
+provider_order=stable,edge,edge,stable
+startup_repetitions_per_order=20
+startup_warmups=5
+raw_process_launches_per_observation=5000
+raw_process_observations_per_build=10
+syntax_internal_samples_per_workload_and_build=100
+memory_sessions_per_build=20
+summary_sha256=2b2c91de90d4029141d4c2c96731b24fc771b0b645cfa579b125502bc1d7c04f
+raw_process_command=WSH_STARTUP_BENCHMARK_CPU=31 ./benchmarks/benchmark-zsh-startup.zsh benchmarks/edge-zsh-2026-09-03/raw-process-startup.tsv stable=STABLE/bin/zsh edge=EDGE/bin/zsh
+first_editable_command=WSH_FIRST_EDITABLE_CPU=31 ./benchmarks/benchmark-edge-zsh-first-editable.zsh benchmarks/edge-zsh-2026-09-03/first-editable.tsv MANAGER STABLE EDGE
+defaults_startup_command=WSH_DEFAULTS_STARTUP_CPU=31 ./benchmarks/benchmark-edge-zsh-defaults-startup.zsh benchmarks/edge-zsh-2026-09-03/defaults-startup.tsv MANAGER STABLE EDGE
+provider_command=ZTB_ZSH_BINARY=BUNDLE/bin/zsh ZTB_WSH_INTEGRATION=BUNDLE/share/wsh/integration.zsh ZTB_WSH_RUNTIME=BUNDLE/bin/wsh-runtime ZTB_WSH_THEME=THEME /code/zsh-theme-bench/research/run-core-theme-benchmark.zsh --output OUTPUT -- --target raw --target TARGET
+autosuggestion_prompt_command=./benchmarks/benchmark-autosuggestions-prompt.zsh OUTPUT MANAGER BUNDLE /code/zsh-autosuggestions candidate 31
+autosuggestion_edit_command=./benchmarks/benchmark-autosuggestions-edit.zsh OUTPUT MANAGER BUNDLE /code/zsh-autosuggestions candidate 31
+syntax_external_observer_command=./benchmarks/benchmark-syntax-highlighting-edit.zsh OUTPUT MANAGER BUNDLE /code/zsh-syntax-highlighting candidate 31
+syntax_internal_command=WSH_SYNTAX_INTERNAL_CPU=31 ./benchmarks/benchmark-edge-zsh-syntax-internal.zsh benchmarks/edge-zsh-2026-09-03/syntax-internal.tsv MANAGER STABLE EDGE
+memory_command=WSH_MEMORY_ITERATIONS=20 WSH_MEMORY_WARMUP_PROMPTS=20 ./benchmarks/benchmark-edge-zsh-memory.zsh BUNDLE
+feature_command=./tests/edge-zsh-features.zsh STABLE EDGE
+summary_command=./benchmarks/summarize-edge-zsh.zsh benchmarks/edge-zsh-2026-09-03 OUTPUT

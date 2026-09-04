@@ -89,3 +89,4 @@ jobs:
           ./benchmarks/verify-history-substring-search-evidence.zsh
           ./benchmarks/verify-autosuggestions-evidence.zsh
           ./benchmarks/verify-syntax-highlighting-evidence.zsh
+          ./benchmarks/verify-edge-zsh-evidence.zsh

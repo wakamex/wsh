@@ -1,0 +1,171 @@
+--- a/Test/A02alias.ztst
++++ b/Test/A02alias.ztst
+@@ -63,7 +63,7 @@
+     { begin
+     {end
+     fc -l -2
+-  '
++  ' 2>/dev/null
+ 0:Aliasing reserved tokens
+ >begin
+ >end
+@@ -74,7 +74,7 @@
+     alias -g S=\"
+     echo S a string S "
+     fc -l -1
+-  '
++  ' 2>/dev/null
+ 0:Global aliasing quotes
+ > a string S 
+ *>*2*echo S a string S "
+--- a/Test/B06fc.ztst
++++ b/Test/B06fc.ztst
+@@ -10,13 +10,16 @@
+ 1:Checking that fc -l foo doesn't core dump when history is empty
+ ?./fcl:fc:1: event not found: foo
+ 
+-  PS1= $ZTST_testdir/../Src/zsh +Z -fsi <<< $'fc -p /dev/null 0 0\n:'
++  PS1='%% ' $ZTST_testdir/../Src/zsh +Z -fsi <<< $'fc -p /dev/null 0 0\n:'
+ 0:Checking that fc -p doesn't core dump when history size is zero
++*?*%*
+ 
+-  PS1= $ZTST_testdir/../Src/zsh +Z -fsi <<< 'fc -p /dev/null a 0'
++  PS1='%% ' $ZTST_testdir/../Src/zsh +Z -fsi <<< 'fc -p /dev/null a 0'
+ 1:Checking that fc -p rejects non-integer history size
+-?fc: HISTSIZE must be an integer
++*?*% fc: HISTSIZE must be an integer
++*?*%*
+ 
+-  PS1= $ZTST_testdir/../Src/zsh +Z -fsi <<< 'fc -p /dev/null 0 a'
++  PS1='%% ' $ZTST_testdir/../Src/zsh +Z -fsi <<< 'fc -p /dev/null 0 a'
+ 1:Checking that fc -p rejects non-integer history save size
+-?fc: SAVEHIST must be an integer
++*?*% fc: SAVEHIST must be an integer
++*?*%*
+--- a/Test/D04parameter.ztst
++++ b/Test/D04parameter.ztst
+@@ -147,17 +147,19 @@
+ ?(eval):1: unset1: exiting1
+ ?(eval):2: null1: exiting2
+ 
+-  PS1= PS2= $ZTST_testdir/../Src/zsh -fis <<<'
+-    exec 2>&1
+-    foo() {
+-        print ${1:?no arguments given}
+-        print not reached
+-    }
+-    foo
+-    print reached
+-  '
++  PROMPT="" $ZTST_testdir/../Src/zsh -fis <<<'
++  unsetopt PROMPT_SP
++  PS1="" PS2="" PS3="" PS4="" RPS1="" RPS2=""
++  exec 2>&1
++  foo() {
++      print ${1:?no arguments given}
++      print not reached
++  }
++  foo
++  print reached
++  ' 2>/dev/null
+ 0:interactive shell returns to top level on ${...?...} error
+->foo:1: 1: no arguments given
++*>*foo:1: 1: no arguments given
+ >reached
+ 
+   message="expand me and remove quotes"
+--- a/Test/K01nameref.ztst
++++ b/Test/K01nameref.ztst
+@@ -1553,7 +1553,7 @@
+     p=xx
+     typeset -p p
+    }
+- '
++ ' 2>/dev/null
+ 0:regression: assign to local that shadows global named reference
+ >typeset -g -n p=PS3
+ >typeset p=''
+@@ -1567,7 +1567,7 @@
+      p=zz
+    }
+    typeset -p PS3
+- '
++ ' 2>/dev/null
+ 0:regression - converting a string into a named reference
+ >typeset PS3=zz
+ 
+@@ -1592,7 +1592,7 @@
+    echo "nameddirs=( ${(kv)nameddirs} )"
+    r2=/B
+    echo "nameddirs=( ${(kv)nameddirs} )"
+- '
++ ' 2>/dev/null
+ 0:Only string parameters are promoted to named directories
+ >~v1: /1
+ >zsh: no such user or named directory: r1
+--- a/Test/W01history.ztst
++++ b/Test/W01history.ztst
+@@ -11,7 +11,7 @@
+     print !:$ !:10 !:9 !:1 !:0
+     print one two three four five six seven eight nine ten
+     print !:0-$ !:1-2
+-  '
++  ' 2>/dev/null
+ 0:History word references
+ >one two three four five six seven eight nine ten
+ >ten ten nine one print
+@@ -25,7 +25,7 @@
+     print !1:2
+     print !2:2
+     print !-3:1-$
+-  '
++  ' 2>/dev/null
+ 0:History line numbering
+ >line one of an arbitrary series
+ >issue two for some mystery sequence
+@@ -39,7 +39,7 @@
+     print !1:2:s/,/\\\\?/ !1:2:s/m/shm/:s/,/\!/
+     print !1:2:&
+     print -l !1:2-3:gs/a/o/
+-  '
++  ' 2>/dev/null
+ 0:History substitution
+ >All metaphor, Malachi, stilts and all
+ >metaphor? shmetaphor!
+@@ -51,7 +51,7 @@
+     echo foo bar
+     echo $(!!) again
+     echo more $( !! )
+-  '
++  ' 2>/dev/null
+ 0:Regression test for history references in command substitution
+ >foo bar
+ >foo bar again
+@@ -71,7 +71,7 @@
+    echo !1:1:t2
+    echo !1:1:t1
+    echo !1:1:t3:h2
+- '
++ ' 2>/dev/null
+ 0:Modifiers :h and :t with arguments
+ >/my/path/for/testing
+ >/my/path/for/testing
+@@ -87,7 +87,7 @@
+  PS1= $ZTST_testdir/../Src/zsh -fis <<<'
+    echo /my/path/for/testing
+    echo !1:1:P
+- '
++ ' 2>/dev/null
+ 0:Modifier :P
+ >/my/path/for/testing
+ >/my/path/for/testing
+@@ -105,7 +105,7 @@
+    fc -p -R hist
+    fc -l
+    rm hist
+- '
++ ' 2>/dev/null
+ 0:Lines ending in backslash saved and restored to history
+ >    1  one\
+ >    2  two\\
+

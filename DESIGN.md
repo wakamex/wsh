@@ -131,9 +131,9 @@ A later provider could use system Git, libgit2, a maintained fork, or a purpose-
 
 These rules are tested through both deterministic protocol tests and interactive terminal tests because worker lifecycle and ZLE integration have different failure modes.
 
-## Post-5.9 Zsh features may simplify later runtime work
+## The accepted post-5.9 Zsh revision supplies tested interfaces
 
-The first bundle uses stable Zsh 5.9.2 and cannot assume interfaces present only in the current development branch. The development revision is benchmarked separately when one of the following capabilities could remove measured adapter work or fix a reproduced problem. It enters an official bundle only as one exact tested Zsh identity.
+Official release `v0.1.3` uses stable Zsh 5.9.2. Current development pins upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a` as one exact Zsh identity after it passed the complete floor, correctness, compatibility, resource, and performance gates. The retained [edge-Zsh result](benchmarks/edge-zsh-2026-09-03/report.md) directly tests current-shell command substitutions, named references, named layered ZLE highlights, and `ZSH_EXEPATH`. Other post-5.9 interfaces remain candidates until a fixture verifies their behavior in the selected revision.
 
 | Zsh feature | Use in `wsh` |
 |---|---|

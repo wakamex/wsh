@@ -11,6 +11,7 @@ readonly portable_root=${repository_root}/build/portable/glibc-2.28
 readonly rustup_root=${RUSTUP_HOME:-$HOME/.rustup}
 readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
 readonly release_id=${WSH_RELEASE_ID:-}
+readonly zsh_source_lock=${WSH_ZSH_SOURCE_LOCK:-${script_dir}/zsh-sources/zsh-cad0d67c.json}
 
 for command in git podman sed sha256sum; do
   (( $+commands[$command] )) || {
@@ -18,6 +19,12 @@ for command in git podman sed sha256sum; do
     exit 1
   }
 done
+
+[[ $zsh_source_lock == ${repository_root}/* ]] || {
+  print -u2 -- "error: Zsh source lock must be inside the repository: ${zsh_source_lock}"
+  exit 1
+}
+readonly container_zsh_source_lock=/workspace/${zsh_source_lock#${repository_root}/}
 
 readonly rust_toolchain_name=$(sed -n 's/^toolchain=//p' ${script_dir}/rust-toolchain.lock)
 readonly rust_toolchain_root=${rustup_root}/toolchains/${rust_toolchain_name}
@@ -53,7 +60,7 @@ podman run --rm --userns=keep-id --network=host \
   --env WSH_BUILDER_BASE_IMAGE=quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e \
   --env WSH_BUILDER_PACKAGE_LOCK_SHA256=$package_lock_sha256 \
   --env WSH_ZSH_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/zsh \
-  --env WSH_ZSH_ROOT=/workspace/build/portable/glibc-2.28/zsh/zsh-5.9.2 \
+  --env WSH_ZSH_SOURCE_LOCK=$container_zsh_source_lock \
   --env WSH_BUNDLE_OUTPUT_ROOT=/workspace/build/portable/glibc-2.28/bundles \
   --env WSH_KEEP_FAILED_BUILD=1 \
   --env WSH_MINIMUM_GLIBC=2.28 \

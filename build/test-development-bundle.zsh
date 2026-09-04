@@ -100,6 +100,25 @@ ${repository_root}/tests/history-substring-search.zsh ${manager} ${bundle}
 ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
 ${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
 
+zsh_version=$(${bundle}/bin/zsh -fc 'print -r -- $ZSH_VERSION')
+if [[ $zsh_version == 5.9.999.3-test ]]; then
+  terminal_policy_zdotdir=${test_root}/terminal-policy-zdotdir
+  mkdir -p -- $terminal_policy_zdotdir
+  terminal_policy_default=$(HOME=$terminal_policy_zdotdir ZDOTDIR=$terminal_policy_zdotdir WSH_STATE_ROOT=$state_root TERM=dumb \
+    ${manager} run --state-root $state_root -- -dic 'typeset -p .term.extensions')
+  [[ $terminal_policy_default == *'.term.extensions=( -query )'* ]] || {
+    print -u2 -r -- "edge Zsh terminal-query default was not disabled: ${(qqq)terminal_policy_default}"
+    exit 1
+  }
+  print -r -- 'typeset -ga .term.extensions=(-query -color)' > $terminal_policy_zdotdir/.zshenv
+  terminal_policy_user=$(HOME=$terminal_policy_zdotdir ZDOTDIR=$terminal_policy_zdotdir WSH_STATE_ROOT=$state_root TERM=dumb \
+    ${manager} run --state-root $state_root -- -dic 'typeset -p .term.extensions')
+  [[ $terminal_policy_user == *'.term.extensions=( -query -color )'* ]] || {
+    print -u2 -r -- "explicit edge Zsh terminal policy was not preserved: ${(qqq)terminal_policy_user}"
+    exit 1
+  }
+fi
+
 needed=$(find ${bundle} -type f -exec readelf -d {} \; 2>/dev/null | sed -n 's/.*Shared library: \[\(.*\)\]/\1/p' | sort -u)
 recorded=$(jq -r '.requirements.dynamic_libraries[]' ${bundle}/manifest.json | sort -u)
 diff -u <(print -r -- $needed) <(print -r -- $recorded)

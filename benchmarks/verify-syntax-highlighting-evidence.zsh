@@ -28,7 +28,7 @@ d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd  third_party/zs
 c2d5b50db13936421672b5ce16c0d7ec4f1abfeded34ea3a23bb39d2499b953b  third_party/zsh-syntax-highlighting/highlighters/pattern/pattern-highlighter.zsh
 f567458da4fb89cae8ea220b8febea11ed67ab6f6c8f5e0d6723ea7285e932e7  third_party/zsh-syntax-highlighting/highlighters/regexp/regexp-highlighter.zsh
 6d14a315685176dcc317842064b4a1e061b1e87b0623d4bee688ee780de831e7  integration/syntax-highlighting.zsh
-add0274292b3ef623e24a169ca1c53a7dcd4778b0ec034c3c7fb430006af888e  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
+1b5f1a9f9ab6952ec84088404233b883560c5899a53195183905fc94dc9d1077  integration/zdotdir.zshrc' | (cd $root && sha256sum -c - >/dev/null)
 
 $root/benchmarks/summarize-syntax-highlighting.zsh startup.tsv edit-baseline.tsv edit-candidate.tsv $temporary/summary.tsv >/dev/null
 diff -u summary.tsv $temporary/summary.tsv

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "zsh-5.9.2",
+  "mode": "signed-release",
+  "version": "5.9.2",
+  "output_name": "zsh-5.9.2",
+  "repository": "https://github.com/zsh-users/zsh",
+  "archive_name": "zsh-5.9.2.tar.xz",
+  "archive_url": "https://downloads.sourceforge.net/project/zsh/zsh/5.9.2/zsh-5.9.2.tar.xz",
+  "archive_sha256": "36fa734374b44783582cec09bcd67822e2f992c779ec1624ab5596df078d2f81",
+  "source_revision": "zsh-5.9.2",
+  "source_tree": null,
+  "signature_url": "https://downloads.sourceforge.net/project/zsh/zsh/5.9.2/zsh-5.9.2.tar.xz.asc",
+  "signer_fingerprint": "7CA7ECAAF06216B90F894146ACF8146CAE8CBBC4",
+  "key_url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7CA7ECAAF06216B90F894146ACF8146CAE8CBBC4",
+  "preconfigure": false,
+  "test_patches": []
+}

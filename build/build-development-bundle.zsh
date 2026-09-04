@@ -5,7 +5,8 @@ setopt errexit nounset pipefail
 
 readonly script_dir=${0:A:h}
 readonly repository_root=${script_dir:h}
-readonly zsh_root=${WSH_ZSH_ROOT:-${repository_root}/build/out/zsh-5.9.2}
+readonly zsh_source_lock=${WSH_ZSH_SOURCE_LOCK:-${script_dir}/zsh-sources/zsh-cad0d67c.json}
+readonly zsh_output_root=${WSH_ZSH_OUTPUT_ROOT:-${repository_root}/build/out}
 readonly output_root=${WSH_BUNDLE_OUTPUT_ROOT:-${repository_root}/bundles}
 readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
@@ -18,7 +19,28 @@ for command in cargo cp find git head install jq ld mktemp mv readelf rm rustc s
   fi
 done
 
-"${script_dir}/build-zsh.zsh" >/dev/null
+readonly zsh_version=$(jq -er '.version' "$zsh_source_lock")
+readonly zsh_output_name=$(jq -er '.output_name' "$zsh_source_lock")
+readonly zsh_source_mode=$(jq -er '.mode' "$zsh_source_lock")
+readonly zsh_source_repository=$(jq -er '.repository' "$zsh_source_lock")
+readonly zsh_source_archive=$(jq -er '.archive_url' "$zsh_source_lock")
+readonly zsh_source_sha256=$(jq -er '.archive_sha256' "$zsh_source_lock")
+readonly zsh_signer_fingerprint=$(jq -r '.signer_fingerprint // ""' "$zsh_source_lock")
+readonly zsh_source_revision=$(jq -er '.source_revision' "$zsh_source_lock")
+readonly zsh_source_tree=$(jq -r '.source_tree // ""' "$zsh_source_lock")
+readonly zsh_test_patches=$(jq -c '[.test_patches[].sha256]' "$zsh_source_lock")
+if [[ -n ${WSH_ZSH_ROOT:-} ]]; then
+  readonly zsh_root=$WSH_ZSH_ROOT
+else
+  WSH_ZSH_SOURCE_LOCK=$zsh_source_lock \
+    WSH_ZSH_OUTPUT_ROOT=$zsh_output_root \
+    "${script_dir}/build-zsh.zsh" >/dev/null
+  readonly zsh_root=${zsh_output_root}/${zsh_output_name}
+fi
+[[ ${zsh_root:t} == $zsh_output_name ]] || {
+  print -u2 -- "error: Zsh root does not match source lock output: ${zsh_root}"
+  exit 1
+}
 cd "$repository_root"
 cargo build --release --locked --workspace
 
@@ -30,8 +52,8 @@ chmod 700 "$stage"
 install -D -m 755 "${zsh_root}/bin/zsh" "${stage}/bin/zsh"
 install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
 cp -R -- "${zsh_root}/lib" "$stage/lib"
-mkdir -p -- "${stage}/share/zsh/5.9.2"
-cp -R -- "${zsh_root}/share/zsh/5.9.2/functions" "${stage}/share/zsh/5.9.2/functions"
+mkdir -p -- "${stage}/share/zsh/${zsh_version}"
+cp -R -- "${zsh_root}/share/zsh/${zsh_version}/functions" "${stage}/share/zsh/${zsh_version}/functions"
 install -D -m 644 "${repository_root}/integration/integration.zsh" "${stage}/share/wsh/integration.zsh"
 install -D -m 644 "${repository_root}/integration/history-substring-search.zsh" "${stage}/share/wsh/defaults/history-substring-search.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/zsh-history-substring-search.zsh" "${stage}/share/wsh/defaults/zsh-history-substring-search.zsh"
@@ -161,6 +183,15 @@ jq -n \
   --arg build_lc_all "$build_lc_all" \
   --arg build_timezone "$build_timezone" \
   --arg build_jobs "$build_jobs" \
+  --arg zsh_version "$zsh_version" \
+  --arg zsh_source_mode "$zsh_source_mode" \
+  --arg zsh_source_repository "$zsh_source_repository" \
+  --arg zsh_source_archive "$zsh_source_archive" \
+  --arg zsh_source_sha256 "$zsh_source_sha256" \
+  --arg zsh_signer_fingerprint "$zsh_signer_fingerprint" \
+  --arg zsh_source_revision "$zsh_source_revision" \
+  --arg zsh_source_tree "$zsh_source_tree" \
+  --argjson zsh_test_patches "$zsh_test_patches" \
   --argjson dynamic_libraries "$dynamic_libraries" \
   --slurpfile files "$file_records" \
   '{
@@ -177,12 +208,15 @@ jq -n \
       environment:{lang:$build_lang,lc_all:$build_lc_all,tz:$build_timezone,build_jobs:$build_jobs}
     },
     zsh:{
-      version:"5.9.2",
-      source_archive:"https://downloads.sourceforge.net/project/zsh/zsh/5.9.2/zsh-5.9.2.tar.xz",
-      source_sha256:"36fa734374b44783582cec09bcd67822e2f992c779ec1624ab5596df078d2f81",
-      signer_fingerprint:"7CA7ECAAF06216B90F894146ACF8146CAE8CBBC4",
-      source_revision:"zsh-5.9.2",
-      patches:[],
+      version:$zsh_version,
+      source_mode:$zsh_source_mode,
+      source_repository:$zsh_source_repository,
+      source_archive:$zsh_source_archive,
+      source_sha256:$zsh_source_sha256,
+      signer_fingerprint:(if $zsh_signer_fingerprint == "" then null else $zsh_signer_fingerprint end),
+      source_revision:$zsh_source_revision,
+      source_tree:(if $zsh_source_tree == "" then null else $zsh_source_tree end),
+      patches:$zsh_test_patches,
       configure_args:["--enable-cap","--enable-multibyte","--enable-pcre"],
       compiler:$c_compiler,
       linker:$linker

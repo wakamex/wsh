@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "zsh-cad0d67c",
+  "mode": "canonical-commit",
+  "version": "5.9.999.3-test",
+  "output_name": "zsh-cad0d67c",
+  "repository": "https://github.com/zsh-users/zsh",
+  "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+  "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+  "archive_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+  "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+  "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+  "signature_url": null,
+  "signer_fingerprint": null,
+  "key_url": null,
+  "preconfigure": true,
+  "test_patches": [
+    {
+      "path": "build/zsh-test-patches/cad0d67c-prompt-fixture.patch",
+      "sha256": "e5f79c067b6cf470f2f9ee40d821eb1dc2c188efed00ab32d3a7e2d20483f4b7"
+    }
+  ]
+}

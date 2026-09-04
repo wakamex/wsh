@@ -4,6 +4,10 @@ if [[ ! -o interactive || -n ${WSH_INTEGRATION_LOADED:-} ]]; then
   return 0
 fi
 
+if [[ $ZSH_VERSION == 5.9.999.3-test && ${WSH_ENABLE_ZLE_TERMINAL_QUERY:-0} != 1 && ! -v .term.extensions ]]; then
+  typeset -ga .term.extensions=(-query)
+fi
+
 typeset -gr WSH_INTEGRATION_LOADED=1
 typeset -g WSH_RUNTIME_PID=''
 typeset -g WSH_RUNTIME_INPUT_FD=''
