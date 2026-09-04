@@ -184,6 +184,14 @@ jobs:
             cd release-assets
             sha256sum -- * | LC_ALL=C sort -k2 > SHA256SUMS
           )
+          printf '%s\n' \
+            "${archives_a[0]##*/}" \
+            "${manifests_a[0]##*/}" \
+            "${launchers_a[0]##*/}" \
+            "${installers_a[0]##*/}" \
+            "${bootstraps_a[0]##*/}" \
+            wsh-install.sh \
+            | LC_ALL=C sort > product-assets.txt
           find release-assets -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > attested-assets.txt
       - name: Install the release-verification GitHub CLI
         env:
@@ -221,14 +229,6 @@ jobs:
               --source-digest "$GITHUB_SHA" \
               --deny-self-hosted-runners
           done < attested-assets.txt
-      - name: Retain the exact publication candidate
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: published-release-assets
-          path: release-assets/
-          compression-level: 0
-          if-no-files-found: error
-          retention-days: 30
       - name: Publish or confirm the immutable GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -237,21 +237,70 @@ jobs:
           set -euo pipefail
           notes_file="release-notes/${RELEASE_TAG}.md"
           if release=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>release-error.txt); then
-            jq -e --arg tag "$RELEASE_TAG" --rawfile notes "$notes_file" '.tag_name == $tag and .draft == false and .prerelease == false and (.body | rtrimstr("\n")) == ($notes | rtrimstr("\n"))' <<<"$release" >/dev/null
+            jq -e --arg tag "$RELEASE_TAG" --rawfile notes "$notes_file" '.tag_name == $tag and .name == $tag and .draft == false and .prerelease == false and .immutable == true and .body == $notes' <<<"$release" >/dev/null
             find release-assets -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > expected-assets.txt
             jq -r '.assets[].name' <<<"$release" | LC_ALL=C sort > published-assets.txt
             cmp --silent expected-assets.txt published-assets.txt
             mkdir existing-release
             gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --dir existing-release
+            gh release verify "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY"
+            (
+              cd existing-release
+              sha256sum --check --strict SHA256SUMS
+            )
+            for worker in a b; do
+              record="existing-release/build-record-${worker}.json"
+              jq -e \
+                --arg worker "$worker" \
+                --arg repository "$GITHUB_REPOSITORY" \
+                --arg source_revision "$GITHUB_SHA" \
+                --arg release_tag "$RELEASE_TAG" \
+                '.format_version == 1
+                  and .worker == $worker
+                  and .repository == $repository
+                  and .source_revision == $source_revision
+                  and .release_id == $release_tag
+                  and .workflow.sha == $source_revision
+                  and .workflow.ref == ($repository + "/.github/workflows/publish.yml@refs/tags/" + $release_tag)
+                  and (.workflow.run_id | type == "string" and length > 0)
+                  and (.workflow.run_attempt | type == "string" and length > 0)
+                  and (.outputs | length == 5)' \
+                "$record" >/dev/null
+              while IFS=$'\t' read -r asset digest; do
+                printf '%s  %s\n' "$digest" "existing-release/$asset" | sha256sum --check --status
+              done < <(jq -r '.outputs[] | [.name, .sha256] | @tsv' "$record")
+            done
+            provenance="existing-release/wsh-${RELEASE_TAG}-build-provenance.sigstore.json"
+            while IFS= read -r asset; do
+              gh attestation verify "existing-release/$asset" \
+                --bundle "$provenance" \
+                --repo "$GITHUB_REPOSITORY" \
+                --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/publish.yml" \
+                --signer-digest "$GITHUB_SHA" \
+                --source-ref "$GITHUB_REF" \
+                --source-digest "$GITHUB_SHA" \
+                --deny-self-hosted-runners
+            done < <(sed -n 's/^[0-9a-f]\{64\}  //p' existing-release/SHA256SUMS; printf '%s\n' SHA256SUMS)
             while IFS= read -r asset; do
               cmp --silent "release-assets/$asset" "existing-release/$asset"
-            done < expected-assets.txt
+            done < product-assets.txt
+            mv release-assets fresh-release-assets
+            mv existing-release release-assets
           elif grep -F '(HTTP 404)' release-error.txt >/dev/null; then
             gh release create "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --verify-tag --notes-file "$notes_file" --title "$RELEASE_TAG"
           else
             cat release-error.txt >&2
             exit 1
           fi
+      - name: Retain the exact published asset set
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: published-release-assets
+          path: release-assets/
+          compression-level: 0
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 30
 
   verify:
     name: Verify the public release
@@ -292,6 +341,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
+          set -euo pipefail
+          notes_file="release-notes/${RELEASE_TAG}.md"
+          release=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}")
+          jq -e --arg tag "$RELEASE_TAG" --rawfile notes "$notes_file" '.tag_name == $tag and .name == $tag and .draft == false and .prerelease == false and .immutable == true and .body == $notes' <<<"$release" >/dev/null
+          find release-assets -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > expected-assets.txt
+          jq -r '.assets[].name' <<<"$release" | LC_ALL=C sort > published-assets.txt
+          cmp --silent expected-assets.txt published-assets.txt
           verified=0
           for attempt in $(seq 1 12); do
             if gh release verify "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY"; then
@@ -306,9 +362,15 @@ jobs:
           done
       - name: Verify the stable bootstrap alias
         env:
+          GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          latest_tag=$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .tag_name)
+          if [[ "$latest_tag" != "$RELEASE_TAG" ]]; then
+            echo "Skipping the stable bootstrap alias because ${RELEASE_TAG} is not the latest release (${latest_tag})."
+            exit 0
+          fi
           latest_bootstrap="$RUNNER_TEMP/wsh-install.sh"
           latest_matches=0
           for attempt in $(seq 1 12); do
