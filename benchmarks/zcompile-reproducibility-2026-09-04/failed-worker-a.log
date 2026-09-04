@@ -1,0 +1,995 @@
+worker=a revision=7fefaa6b7083c3fd174536b240a2dc94005a79d3 source=/var/tmp/wsh-reproducibility.Cf82kU/worker-a
+STEP 1/4: FROM quay.io/rockylinux/rockylinux@sha256:f5529992e67440c1a4ae7788244d4381c6909159a88eacd95b7523ae47ced82e
+STEP 2/4: COPY build/rocky-8.10-packages.lock /tmp/expected-packages.lock
+--> c7a99fe384bf
+STEP 3/4: RUN dnf install -y --setopt=install_weak_deps=False autoconf binutils ca-certificates curl diffutils findutils gcc gcc-c++ git gnupg2 jq libcap-devel make ncurses-devel patch pcre2-devel pkgconf-pkg-config tar xz zsh     && rpm -qa --qf '%{NAME}\t%{EPOCHNUM}\t%{VERSION}\t%{RELEASE}\t%{ARCH}\t%{SHA256HEADER}\t%{PAYLOADDIGESTALGO}\t%{PAYLOADDIGEST}\n' | LC_ALL=C sort > /tmp/actual-packages.lock     && diff -u /tmp/expected-packages.lock /tmp/actual-packages.lock     && dnf clean all     && rm -rf /var/cache/dnf /tmp/actual-packages.lock /tmp/expected-packages.lock
+Rocky Linux 8 - AppStream                        52 MB/s |  33 MB     00:00    
+Rocky Linux 8 - BaseOS                           88 MB/s |  78 MB     00:00    
+Rocky Linux 8 - Extras                           79 kB/s |  15 kB     00:00    
+Package binutils-2.30-123.el8.x86_64 is already installed.
+Package ca-certificates-2023.2.60_v7.0.306-80.0.el8_8.noarch is already installed.
+Package curl-7.61.1-34.el8.x86_64 is already installed.
+Package gnupg2-2.2.20-3.el8_6.x86_64 is already installed.
+Package tar-2:1.30-9.el8.x86_64 is already installed.
+Dependencies resolved.
+==========================================================================================
+ Package                  Arch    Version                                 Repo        Size
+==========================================================================================
+Installing:
+ autoconf                 noarch  2.69-29.el8_10.1                        appstream  710 k
+ diffutils                x86_64  3.6-6.el8                               baseos     358 k
+ findutils                x86_64  1:4.6.0-24.el8_10                       baseos     526 k
+ gcc                      x86_64  8.5.0-28.el8_10                         appstream   23 M
+ gcc-c++                  x86_64  8.5.0-28.el8_10                         appstream   12 M
+ git                      x86_64  2.43.7-1.el8_10                         appstream   92 k
+ jq                       x86_64  1.6-12.el8_10                           appstream  203 k
+ libcap-devel             x86_64  2.48-6.el8_10.1                         baseos      41 k
+ make                     x86_64  1:4.2.1-11.el8                          baseos     497 k
+ ncurses-devel            x86_64  6.1-10.20180224.el8                     baseos     527 k
+ patch                    x86_64  2.7.6-11.el8                            baseos     137 k
+ pcre2-devel              x86_64  10.32-3.el8_6                           baseos     604 k
+ pkgconf-pkg-config       x86_64  1.4.2-1.el8                             baseos      14 k
+ xz                       x86_64  5.2.4-4.el8_6                           baseos     152 k
+ zsh                      x86_64  5.5.1-10.el8                            baseos     2.9 M
+Upgrading:
+ binutils                 x86_64  2.30-128.el8_10                         baseos     5.8 M
+ ca-certificates          noarch  2025.2.80_v9.0.304-80.2.el8_10          baseos     1.0 M
+ curl                     x86_64  7.61.1-34.el8_10.13                     baseos     355 k
+ gnupg2                   x86_64  2.2.20-4.el8_10                         baseos     2.4 M
+ libcap                   x86_64  2.48-6.el8_10.1                         baseos      74 k
+ libcurl-minimal          x86_64  7.61.1-34.el8_10.13                     baseos     293 k
+ libgcc                   x86_64  8.5.0-28.el8_10                         baseos      81 k
+ libstdc++                x86_64  8.5.0-28.el8_10                         baseos     473 k
+ tar                      x86_64  2:1.30-11.el8_10                        baseos     838 k
+Installing dependencies:
+ cpp                      x86_64  8.5.0-28.el8_10                         appstream   10 M
+ emacs-filesystem         noarch  1:26.1-15.el8_10                        baseos      70 k
+ git-core                 x86_64  2.43.7-1.el8_10                         appstream   11 M
+ git-core-doc             noarch  2.43.7-1.el8_10                         appstream  3.1 M
+ glibc-devel              x86_64  2.28-251.el8_10.2                       baseos      86 k
+ glibc-headers            x86_64  2.28-251.el8_10.2                       baseos     491 k
+ groff-base               x86_64  1.22.3-18.el8                           baseos     1.0 M
+ isl                      x86_64  0.16.1-6.el8                            appstream  834 k
+ kernel-headers           x86_64  4.18.0-553.158.1.el8_10                 baseos      12 M
+ libedit                  x86_64  3.1-23.20170329cvs.el8                  baseos     102 k
+ libgomp                  x86_64  8.5.0-28.el8_10                         baseos     208 k
+ libmpc                   x86_64  1.1.0-9.1.el8                           appstream   60 k
+ libpkgconf               x86_64  1.4.2-1.el8                             baseos      34 k
+ libstdc++-devel          x86_64  8.5.0-28.el8_10                         appstream  2.1 M
+ libxcrypt-devel          x86_64  4.1.1-6.el8                             baseos      24 k
+ m4                       x86_64  1.4.18-7.el8                            baseos     221 k
+ ncurses                  x86_64  6.1-10.20180224.el8                     baseos     386 k
+ ncurses-c++-libs         x86_64  6.1-10.20180224.el8                     baseos      57 k
+ oniguruma                x86_64  6.8.2-3.el8                             appstream  187 k
+ openssh                  x86_64  8.0p1-30.el8_10                         baseos     527 k
+ openssh-clients          x86_64  8.0p1-30.el8_10                         baseos     648 k
+ openssl                  x86_64  1:1.1.1k-12.el8_9                       baseos     710 k
+ pcre2-utf16              x86_64  10.32-3.el8_6                           baseos     228 k
+ pcre2-utf32              x86_64  10.32-3.el8_6                           baseos     219 k
+ perl-Carp                noarch  1.42-396.el8                            baseos      29 k
+ perl-Data-Dumper         x86_64  2.167-399.el8                           baseos      57 k
+ perl-Digest              noarch  1.17-395.el8                            appstream   26 k
+ perl-Digest-MD5          x86_64  2.55-396.el8                            appstream   36 k
+ perl-Encode              x86_64  4:2.97-3.el8                            baseos     1.5 M
+ perl-Errno               x86_64  1.28-423.el8_10                         baseos      76 k
+ perl-Error               noarch  1:0.17025-2.el8                         appstream   45 k
+ perl-Exporter            noarch  5.72-396.el8                            baseos      33 k
+ perl-File-Path           noarch  2.15-2.el8                              baseos      37 k
+ perl-File-Temp           noarch  0.230.600-1.el8                         baseos      62 k
+ perl-Getopt-Long         noarch  1:2.50-4.el8                            baseos      62 k
+ perl-Git                 noarch  2.43.7-1.el8_10                         appstream   78 k
+ perl-HTTP-Tiny           noarch  0.074-3.el8                             baseos      58 k
+ perl-IO                  x86_64  1.38-423.el8_10                         baseos     141 k
+ perl-IO-Socket-IP        noarch  0.39-5.el8                              appstream   46 k
+ perl-IO-Socket-SSL       noarch  2.066-4.module+el8.9.0+1517+e71a7a62    appstream  297 k
+ perl-MIME-Base64         x86_64  3.15-396.el8                            baseos      30 k
+ perl-Mozilla-CA          noarch  20160104-7.module+el8.9.0+1521+0101edce appstream   14 k
+ perl-Net-SSLeay          x86_64  1.88-2.module+el8.9.0+1517+e71a7a62     appstream  378 k
+ perl-PathTools           x86_64  3.74-1.el8                              baseos      89 k
+ perl-Pod-Escapes         noarch  1:1.07-395.el8                          baseos      19 k
+ perl-Pod-Perldoc         noarch  3.28-396.el8                            baseos      85 k
+ perl-Pod-Simple          noarch  1:3.35-395.el8                          baseos     212 k
+ perl-Pod-Usage           noarch  4:1.69-395.el8                          baseos      33 k
+ perl-Scalar-List-Utils   x86_64  3:1.49-2.el8                            baseos      67 k
+ perl-Socket              x86_64  4:2.027-3.el8                           baseos      58 k
+ perl-Storable            x86_64  1:3.11-3.el8                            baseos      97 k
+ perl-Term-ANSIColor      noarch  4.06-396.el8                            baseos      45 k
+ perl-Term-Cap            noarch  1.17-395.el8                            baseos      22 k
+ perl-TermReadKey         x86_64  2.37-7.el8                              appstream   39 k
+ perl-Text-ParseWords     noarch  3.30-395.el8                            baseos      17 k
+ perl-Text-Tabs+Wrap      noarch  2013.0523-395.el8                       baseos      23 k
+ perl-Time-Local          noarch  1:1.280-1.el8                           baseos      32 k
+ perl-URI                 noarch  1.73-3.el8                              appstream  115 k
+ perl-Unicode-Normalize   x86_64  1.25-396.el8                            baseos      81 k
+ perl-constant            noarch  1.33-396.el8                            baseos      24 k
+ perl-interpreter         x86_64  4:5.26.3-423.el8_10                     baseos     6.3 M
+ perl-libnet              noarch  3.11-3.el8                              appstream  120 k
+ perl-libs                x86_64  4:5.26.3-423.el8_10                     baseos     1.6 M
+ perl-macros              x86_64  4:5.26.3-423.el8_10                     baseos      72 k
+ perl-parent              noarch  1:0.237-1.el8                           baseos      19 k
+ perl-podlators           noarch  4.11-1.el8                              baseos     117 k
+ perl-threads             x86_64  1:2.21-2.el8                            baseos      60 k
+ perl-threads-shared      x86_64  1.58-2.el8                              baseos      47 k
+ pkgconf                  x86_64  1.4.2-1.el8                             baseos      37 k
+ pkgconf-m4               noarch  1.4.2-1.el8                             baseos      16 k
+Enabling module streams:
+ perl                             5.26                                                    
+ perl-IO-Socket-SSL               2.066                                                   
+ perl-libwww-perl                 6.34                                                    
+
+Transaction Summary
+==========================================================================================
+Install  85 Packages
+Upgrade   9 Packages
+
+Total download size: 111 M
+Downloading Packages:
+(1/94): autoconf-2.69-29.el8_10.1.noarch.rpm    7.6 MB/s | 710 kB     00:00    
+(2/94): gcc-c++-8.5.0-28.el8_10.x86_64.rpm       91 MB/s |  12 MB     00:00    
+(3/94): git-2.43.7-1.el8_10.x86_64.rpm          5.4 MB/s |  92 kB     00:00    
+(4/94): cpp-8.5.0-28.el8_10.x86_64.rpm           34 MB/s |  10 MB     00:00    
+(5/94): gcc-8.5.0-28.el8_10.x86_64.rpm           46 MB/s |  23 MB     00:00    
+(6/94): isl-0.16.1-6.el8.x86_64.rpm              39 MB/s | 834 kB     00:00    
+(7/94): git-core-doc-2.43.7-1.el8_10.noarch.rpm  12 MB/s | 3.1 MB     00:00    
+(8/94): jq-1.6-12.el8_10.x86_64.rpm             5.0 MB/s | 203 kB     00:00    
+(9/94): libmpc-1.1.0-9.1.el8.x86_64.rpm         4.4 MB/s |  60 kB     00:00    
+(10/94): oniguruma-6.8.2-3.el8.x86_64.rpm       6.8 MB/s | 187 kB     00:00    
+(11/94): libstdc++-devel-8.5.0-28.el8_10.x86_64  44 MB/s | 2.1 MB     00:00    
+(12/94): perl-Digest-1.17-395.el8.noarch.rpm    2.5 MB/s |  26 kB     00:00    
+(13/94): perl-Digest-MD5-2.55-396.el8.x86_64.rp 3.8 MB/s |  36 kB     00:00    
+(14/94): perl-Error-0.17025-2.el8.noarch.rpm    3.1 MB/s |  45 kB     00:00    
+(15/94): perl-Git-2.43.7-1.el8_10.noarch.rpm    5.9 MB/s |  78 kB     00:00    
+(16/94): perl-IO-Socket-IP-0.39-5.el8.noarch.rp 4.5 MB/s |  46 kB     00:00    
+(17/94): perl-Mozilla-CA-20160104-7.module+el8. 1.7 MB/s |  14 kB     00:00    
+(18/94): perl-IO-Socket-SSL-2.066-4.module+el8. 9.1 MB/s | 297 kB     00:00    
+(19/94): perl-TermReadKey-2.37-7.el8.x86_64.rpm 3.4 MB/s |  39 kB     00:00    
+(20/94): perl-Net-SSLeay-1.88-2.module+el8.9.0+  10 MB/s | 378 kB     00:00    
+(21/94): perl-URI-1.73-3.el8.noarch.rpm         7.6 MB/s | 115 kB     00:00    
+(22/94): perl-libnet-3.11-3.el8.noarch.rpm       10 MB/s | 120 kB     00:00    
+(23/94): diffutils-3.6-6.el8.x86_64.rpm         808 kB/s | 358 kB     00:00    
+(24/94): emacs-filesystem-26.1-15.el8_10.noarch 156 kB/s |  70 kB     00:00    
+(25/94): findutils-4.6.0-24.el8_10.x86_64.rpm   3.6 MB/s | 526 kB     00:00    
+(26/94): glibc-devel-2.28-251.el8_10.2.x86_64.r 540 kB/s |  86 kB     00:00    
+(27/94): glibc-headers-2.28-251.el8_10.2.x86_64 9.4 MB/s | 491 kB     00:00    
+(28/94): git-core-2.43.7-1.el8_10.x86_64.rpm    9.1 MB/s |  11 MB     00:01    
+(29/94): groff-base-1.22.3-18.el8.x86_64.rpm    6.0 MB/s | 1.0 MB     00:00    
+(30/94): libedit-3.1-23.20170329cvs.el8.x86_64. 1.3 MB/s | 102 kB     00:00    
+(31/94): libgomp-8.5.0-28.el8_10.x86_64.rpm     2.4 MB/s | 208 kB     00:00    
+(32/94): kernel-headers-4.18.0-553.158.1.el8_10  36 MB/s |  12 MB     00:00    
+(33/94): libcap-devel-2.48-6.el8_10.1.x86_64.rp 181 kB/s |  41 kB     00:00    
+(34/94): libpkgconf-1.4.2-1.el8.x86_64.rpm      373 kB/s |  34 kB     00:00    
+(35/94): libxcrypt-devel-4.1.1-6.el8.x86_64.rpm 358 kB/s |  24 kB     00:00    
+(36/94): make-4.2.1-11.el8.x86_64.rpm           3.8 MB/s | 497 kB     00:00    
+(37/94): ncurses-6.1-10.20180224.el8.x86_64.rpm 2.6 MB/s | 386 kB     00:00    
+(38/94): m4-1.4.18-7.el8.x86_64.rpm             1.0 MB/s | 221 kB     00:00    
+(39/94): ncurses-c++-libs-6.1-10.20180224.el8.x 866 kB/s |  57 kB     00:00    
+(40/94): ncurses-devel-6.1-10.20180224.el8.x86_ 3.4 MB/s | 527 kB     00:00    
+(41/94): openssh-8.0p1-30.el8_10.x86_64.rpm     3.5 MB/s | 527 kB     00:00    
+(42/94): openssh-clients-8.0p1-30.el8_10.x86_64 4.2 MB/s | 648 kB     00:00    
+(43/94): openssl-1.1.1k-12.el8_9.x86_64.rpm     4.5 MB/s | 710 kB     00:00    
+(44/94): patch-2.7.6-11.el8.x86_64.rpm          610 kB/s | 137 kB     00:00    
+(45/94): pcre2-devel-10.32-3.el8_6.x86_64.rpm   2.9 MB/s | 604 kB     00:00    
+(46/94): pcre2-utf32-10.32-3.el8_6.x86_64.rpm   2.4 MB/s | 219 kB     00:00    
+(47/94): perl-Data-Dumper-2.167-399.el8.x86_64. 561 kB/s |  57 kB     00:00    
+(48/94): perl-Encode-2.97-3.el8.x86_64.rpm       11 MB/s | 1.5 MB     00:00    
+(49/94): perl-Errno-1.28-423.el8_10.x86_64.rpm  515 kB/s |  76 kB     00:00    
+(50/94): perl-Carp-1.42-396.el8.noarch.rpm       59 kB/s |  29 kB     00:00    
+(51/94): pcre2-utf16-10.32-3.el8_6.x86_64.rpm   381 kB/s | 228 kB     00:00    
+(52/94): perl-Exporter-5.72-396.el8.noarch.rpm  386 kB/s |  33 kB     00:00    
+(53/94): perl-File-Temp-0.230.600-1.el8.noarch. 910 kB/s |  62 kB     00:00    
+(54/94): perl-File-Path-2.15-2.el8.noarch.rpm   487 kB/s |  37 kB     00:00    
+(55/94): perl-Getopt-Long-2.50-4.el8.noarch.rpm 1.4 MB/s |  62 kB     00:00    
+(56/94): perl-HTTP-Tiny-0.074-3.el8.noarch.rpm  877 kB/s |  58 kB     00:00    
+(57/94): perl-IO-1.38-423.el8_10.x86_64.rpm     1.9 MB/s | 141 kB     00:00    
+(58/94): perl-MIME-Base64-3.15-396.el8.x86_64.r 363 kB/s |  30 kB     00:00    
+(59/94): perl-PathTools-3.74-1.el8.x86_64.rpm   1.2 MB/s |  89 kB     00:00    
+(60/94): perl-Pod-Escapes-1.07-395.el8.noarch.r 300 kB/s |  19 kB     00:00    
+(61/94): perl-Pod-Perldoc-3.28-396.el8.noarch.r 1.9 MB/s |  85 kB     00:00    
+(62/94): perl-Pod-Simple-3.35-395.el8.noarch.rp 5.0 MB/s | 212 kB     00:00    
+(63/94): perl-Pod-Usage-1.69-395.el8.noarch.rpm 402 kB/s |  33 kB     00:00    
+(64/94): perl-Scalar-List-Utils-1.49-2.el8.x86_ 809 kB/s |  67 kB     00:00    
+(65/94): perl-Socket-2.027-3.el8.x86_64.rpm     1.0 MB/s |  58 kB     00:00    
+(66/94): perl-Storable-3.11-3.el8.x86_64.rpm    2.6 MB/s |  97 kB     00:00    
+(67/94): perl-Term-ANSIColor-4.06-396.el8.noarc 650 kB/s |  45 kB     00:00    
+(68/94): perl-Text-ParseWords-3.30-395.el8.noar 454 kB/s |  17 kB     00:00    
+(69/94): perl-Term-Cap-1.17-395.el8.noarch.rpm  359 kB/s |  22 kB     00:00    
+(70/94): perl-Text-Tabs+Wrap-2013.0523-395.el8. 638 kB/s |  23 kB     00:00    
+(71/94): perl-Time-Local-1.280-1.el8.noarch.rpm 929 kB/s |  32 kB     00:00    
+(72/94): perl-Unicode-Normalize-1.25-396.el8.x8 1.5 MB/s |  81 kB     00:00    
+(73/94): perl-constant-1.33-396.el8.noarch.rpm  647 kB/s |  24 kB     00:00    
+(74/94): perl-macros-5.26.3-423.el8_10.x86_64.r 1.6 MB/s |  72 kB     00:00    
+(75/94): perl-parent-0.237-1.el8.noarch.rpm     419 kB/s |  19 kB     00:00    
+(76/94): perl-libs-5.26.3-423.el8_10.x86_64.rpm  13 MB/s | 1.6 MB     00:00    
+(77/94): perl-interpreter-5.26.3-423.el8_10.x86  40 MB/s | 6.3 MB     00:00    
+(78/94): perl-podlators-4.11-1.el8.noarch.rpm   2.5 MB/s | 117 kB     00:00    
+(79/94): perl-threads-2.21-2.el8.x86_64.rpm     956 kB/s |  60 kB     00:00    
+(80/94): perl-threads-shared-1.58-2.el8.x86_64. 982 kB/s |  47 kB     00:00    
+(81/94): pkgconf-1.4.2-1.el8.x86_64.rpm         933 kB/s |  37 kB     00:00    
+(82/94): pkgconf-pkg-config-1.4.2-1.el8.x86_64. 418 kB/s |  14 kB     00:00    
+(83/94): pkgconf-m4-1.4.2-1.el8.noarch.rpm      446 kB/s |  16 kB     00:00    
+(84/94): xz-5.2.4-4.el8_6.x86_64.rpm            1.3 MB/s | 152 kB     00:00    
+(85/94): ca-certificates-2025.2.80_v9.0.304-80.  13 MB/s | 1.0 MB     00:00    
+(86/94): zsh-5.5.1-10.el8.x86_64.rpm             13 MB/s | 2.9 MB     00:00    
+(87/94): curl-7.61.1-34.el8_10.13.x86_64.rpm    5.8 MB/s | 355 kB     00:00    
+(88/94): libcap-2.48-6.el8_10.1.x86_64.rpm      1.8 MB/s |  74 kB     00:00    
+(89/94): binutils-2.30-128.el8_10.x86_64.rpm     21 MB/s | 5.8 MB     00:00    
+(90/94): libcurl-minimal-7.61.1-34.el8_10.13.x8 4.5 MB/s | 293 kB     00:00    
+(91/94): libgcc-8.5.0-28.el8_10.x86_64.rpm      1.7 MB/s |  81 kB     00:00    
+(92/94): gnupg2-2.2.20-4.el8_10.x86_64.rpm       16 MB/s | 2.4 MB     00:00    
+(93/94): libstdc++-8.5.0-28.el8_10.x86_64.rpm    11 MB/s | 473 kB     00:00    
+(94/94): tar-1.30-11.el8_10.x86_64.rpm           14 MB/s | 838 kB     00:00    
+--------------------------------------------------------------------------------
+Total                                            28 MB/s | 111 MB     00:03     
+Rocky Linux 8 - AppStream                       1.6 MB/s | 1.6 kB     00:00    
+Importing GPG key 0x6D745A60:
+ Userid     : "Release Engineering <infrastructure@rockylinux.org>"
+ Fingerprint: 7051 C470 A929 F454 CEBE 37B7 15AF 5DAC 6D74 5A60
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial
+Key imported successfully
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                        1/1 
+  Upgrading        : libgcc-8.5.0-28.el8_10.x86_64                        1/103 
+  Running scriptlet: libgcc-8.5.0-28.el8_10.x86_64                        1/103 
+  Upgrading        : libstdc++-8.5.0-28.el8_10.x86_64                     2/103 
+  Running scriptlet: libstdc++-8.5.0-28.el8_10.x86_64                     2/103 
+  Installing       : libmpc-1.1.0-9.1.el8.x86_64                          3/103 
+  Upgrading        : libcurl-minimal-7.61.1-34.el8_10.13.x86_64           4/103 
+  Installing       : emacs-filesystem-1:26.1-15.el8_10.noarch             5/103 
+  Installing       : cpp-8.5.0-28.el8_10.x86_64                           6/103 
+  Running scriptlet: cpp-8.5.0-28.el8_10.x86_64                           6/103 
+  Installing       : libstdc++-devel-8.5.0-28.el8_10.x86_64               7/103 
+  Installing       : groff-base-1.22.3-18.el8.x86_64                      8/103 
+  Installing       : ncurses-c++-libs-6.1-10.20180224.el8.x86_64          9/103 
+  Upgrading        : binutils-2.30-128.el8_10.x86_64                     10/103 
+  Running scriptlet: binutils-2.30-128.el8_10.x86_64                     10/103 
+  Upgrading        : libcap-2.48-6.el8_10.1.x86_64                       11/103 
+  Running scriptlet: ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.n    12/103 
+  Upgrading        : ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.n    12/103 
+  Running scriptlet: ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.n    12/103 
+  Installing       : pkgconf-m4-1.4.2-1.el8.noarch                       13/103 
+  Installing       : pcre2-utf32-10.32-3.el8_6.x86_64                    14/103 
+  Installing       : pcre2-utf16-10.32-3.el8_6.x86_64                    15/103 
+  Installing       : openssl-1:1.1.1k-12.el8_9.x86_64                    16/103 
+  Running scriptlet: openssh-8.0p1-30.el8_10.x86_64                      17/103 
+  Installing       : openssh-8.0p1-30.el8_10.x86_64                      17/103 
+  Installing       : ncurses-6.1-10.20180224.el8.x86_64                  18/103 
+  Installing       : perl-Digest-1.17-395.el8.noarch                     19/103 
+  Installing       : perl-Digest-MD5-2.55-396.el8.x86_64                 20/103 
+  Installing       : perl-Data-Dumper-2.167-399.el8.x86_64               21/103 
+  Installing       : perl-libnet-3.11-3.el8.noarch                       22/103 
+  Installing       : perl-URI-1.73-3.el8.noarch                          23/103 
+  Installing       : perl-Pod-Escapes-1:1.07-395.el8.noarch              24/103 
+  Installing       : perl-Net-SSLeay-1.88-2.module+el8.9.0+1517+e71a7    25/103 
+  Installing       : perl-Mozilla-CA-20160104-7.module+el8.9.0+1521+0    26/103 
+  Installing       : perl-IO-Socket-IP-0.39-5.el8.noarch                 27/103 
+  Installing       : perl-Time-Local-1:1.280-1.el8.noarch                28/103 
+  Installing       : perl-IO-Socket-SSL-2.066-4.module+el8.9.0+1517+e    29/103 
+  Installing       : perl-Term-ANSIColor-4.06-396.el8.noarch             30/103 
+  Installing       : perl-Term-Cap-1.17-395.el8.noarch                   31/103 
+  Installing       : perl-File-Temp-0.230.600-1.el8.noarch               32/103 
+  Installing       : perl-Pod-Simple-1:3.35-395.el8.noarch               33/103 
+  Installing       : perl-HTTP-Tiny-0.074-3.el8.noarch                   34/103 
+  Installing       : perl-podlators-4.11-1.el8.noarch                    35/103 
+  Installing       : perl-Pod-Perldoc-3.28-396.el8.noarch                36/103 
+  Installing       : perl-Text-ParseWords-3.30-395.el8.noarch            37/103 
+  Installing       : perl-Pod-Usage-4:1.69-395.el8.noarch                38/103 
+  Installing       : perl-MIME-Base64-3.15-396.el8.x86_64                39/103 
+  Installing       : perl-Storable-1:3.11-3.el8.x86_64                   40/103 
+  Installing       : perl-Getopt-Long-1:2.50-4.el8.noarch                41/103 
+  Installing       : perl-Errno-1.28-423.el8_10.x86_64                   42/103 
+  Installing       : perl-Socket-4:2.027-3.el8.x86_64                    43/103 
+  Installing       : perl-Encode-4:2.97-3.el8.x86_64                     44/103 
+  Installing       : perl-Carp-1.42-396.el8.noarch                       45/103 
+  Installing       : perl-Exporter-5.72-396.el8.noarch                   46/103 
+  Installing       : perl-libs-4:5.26.3-423.el8_10.x86_64                47/103 
+  Installing       : perl-Scalar-List-Utils-3:1.49-2.el8.x86_64          48/103 
+  Installing       : perl-parent-1:0.237-1.el8.noarch                    49/103 
+  Installing       : perl-macros-4:5.26.3-423.el8_10.x86_64              50/103 
+  Installing       : perl-Text-Tabs+Wrap-2013.0523-395.el8.noarch        51/103 
+  Installing       : perl-Unicode-Normalize-1.25-396.el8.x86_64          52/103 
+  Installing       : perl-File-Path-2.15-2.el8.noarch                    53/103 
+  Installing       : perl-IO-1.38-423.el8_10.x86_64                      54/103 
+  Installing       : perl-PathTools-3.74-1.el8.x86_64                    55/103 
+  Installing       : perl-constant-1.33-396.el8.noarch                   56/103 
+  Installing       : perl-threads-1:2.21-2.el8.x86_64                    57/103 
+  Installing       : perl-threads-shared-1.58-2.el8.x86_64               58/103 
+  Installing       : perl-interpreter-4:5.26.3-423.el8_10.x86_64         59/103 
+  Installing       : perl-Error-1:0.17025-2.el8.noarch                   60/103 
+  Installing       : perl-TermReadKey-2.37-7.el8.x86_64                  61/103 
+  Installing       : m4-1.4.18-7.el8.x86_64                              62/103 
+  Running scriptlet: m4-1.4.18-7.el8.x86_64                              62/103 
+  Installing       : libpkgconf-1.4.2-1.el8.x86_64                       63/103 
+  Installing       : pkgconf-1.4.2-1.el8.x86_64                          64/103 
+  Installing       : pkgconf-pkg-config-1.4.2-1.el8.x86_64               65/103 
+  Installing       : libgomp-8.5.0-28.el8_10.x86_64                      66/103 
+  Running scriptlet: libgomp-8.5.0-28.el8_10.x86_64                      66/103 
+  Installing       : libedit-3.1-23.20170329cvs.el8.x86_64               67/103 
+  Installing       : openssh-clients-8.0p1-30.el8_10.x86_64              68/103 
+  Installing       : git-core-2.43.7-1.el8_10.x86_64                     69/103 
+  Installing       : git-core-doc-2.43.7-1.el8_10.noarch                 70/103 
+  Installing       : perl-Git-2.43.7-1.el8_10.noarch                     71/103 
+  Installing       : git-2.43.7-1.el8_10.x86_64                          72/103 
+  Installing       : kernel-headers-4.18.0-553.158.1.el8_10.x86_64       73/103 
+  Running scriptlet: glibc-headers-2.28-251.el8_10.2.x86_64              74/103 
+  Installing       : glibc-headers-2.28-251.el8_10.2.x86_64              74/103 
+  Installing       : libxcrypt-devel-4.1.1-6.el8.x86_64                  75/103 
+  Installing       : glibc-devel-2.28-251.el8_10.2.x86_64                76/103 
+  Running scriptlet: glibc-devel-2.28-251.el8_10.2.x86_64                76/103 
+  Installing       : oniguruma-6.8.2-3.el8.x86_64                        77/103 
+  Running scriptlet: oniguruma-6.8.2-3.el8.x86_64                        77/103 
+  Installing       : isl-0.16.1-6.el8.x86_64                             78/103 
+  Running scriptlet: isl-0.16.1-6.el8.x86_64                             78/103 
+  Installing       : gcc-8.5.0-28.el8_10.x86_64                          79/103 
+  Running scriptlet: gcc-8.5.0-28.el8_10.x86_64                          79/103 
+  Installing       : gcc-c++-8.5.0-28.el8_10.x86_64                      80/103 
+  Installing       : jq-1.6-12.el8_10.x86_64                             81/103 
+  Installing       : libcap-devel-2.48-6.el8_10.1.x86_64                 82/103 
+  Installing       : ncurses-devel-6.1-10.20180224.el8.x86_64            83/103 
+  Installing       : pcre2-devel-10.32-3.el8_6.x86_64                    84/103 
+  Installing       : autoconf-2.69-29.el8_10.1.noarch                    85/103 
+  Running scriptlet: autoconf-2.69-29.el8_10.1.noarch                    85/103 
+  Upgrading        : curl-7.61.1-34.el8_10.13.x86_64                     86/103 
+  Upgrading        : tar-2:1.30-11.el8_10.x86_64                         87/103 
+  Running scriptlet: tar-2:1.30-11.el8_10.x86_64                         87/103 
+  Upgrading        : gnupg2-2.2.20-4.el8_10.x86_64                       88/103 
+  Installing       : zsh-5.5.1-10.el8.x86_64                             89/103 
+  Running scriptlet: zsh-5.5.1-10.el8.x86_64                             89/103 
+  Installing       : xz-5.2.4-4.el8_6.x86_64                             90/103 
+  Installing       : patch-2.7.6-11.el8.x86_64                           91/103 
+  Installing       : make-1:4.2.1-11.el8.x86_64                          92/103 
+  Running scriptlet: make-1:4.2.1-11.el8.x86_64                          92/103 
+  Installing       : findutils-1:4.6.0-24.el8_10.x86_64                  93/103 
+  Running scriptlet: findutils-1:4.6.0-24.el8_10.x86_64                  93/103 
+  Installing       : diffutils-3.6-6.el8.x86_64                          94/103 
+  Running scriptlet: diffutils-3.6-6.el8.x86_64                          94/103 
+  Running scriptlet: binutils-2.30-123.el8.x86_64                        95/103 
+  Cleanup          : binutils-2.30-123.el8.x86_64                        95/103 
+  Running scriptlet: binutils-2.30-123.el8.x86_64                        95/103 
+  Cleanup          : ca-certificates-2023.2.60_v7.0.306-80.0.el8_8.no    96/103 
+  Cleanup          : libstdc++-8.5.0-22.el8_10.x86_64                    97/103 
+  Running scriptlet: libstdc++-8.5.0-22.el8_10.x86_64                    97/103 
+  Cleanup          : libcap-2.48-6.el8_9.x86_64                          98/103 
+  Cleanup          : curl-7.61.1-34.el8.x86_64                           99/103 
+  Cleanup          : libcurl-minimal-7.61.1-34.el8.x86_64               100/103 
+  Cleanup          : libgcc-8.5.0-22.el8_10.x86_64                      101/103 
+  Running scriptlet: libgcc-8.5.0-22.el8_10.x86_64                      101/103 
+  Running scriptlet: tar-2:1.30-9.el8.x86_64                            102/103 
+  Cleanup          : tar-2:1.30-9.el8.x86_64                            102/103 
+  Cleanup          : gnupg2-2.2.20-3.el8_6.x86_64                       103/103 
+  Running scriptlet: ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.n   103/103 
+  Running scriptlet: gnupg2-2.2.20-3.el8_6.x86_64                       103/103 
+  Verifying        : autoconf-2.69-29.el8_10.1.noarch                     1/103 
+  Verifying        : cpp-8.5.0-28.el8_10.x86_64                           2/103 
+  Verifying        : gcc-8.5.0-28.el8_10.x86_64                           3/103 
+  Verifying        : gcc-c++-8.5.0-28.el8_10.x86_64                       4/103 
+  Verifying        : git-2.43.7-1.el8_10.x86_64                           5/103 
+  Verifying        : git-core-2.43.7-1.el8_10.x86_64                      6/103 
+  Verifying        : git-core-doc-2.43.7-1.el8_10.noarch                  7/103 
+  Verifying        : isl-0.16.1-6.el8.x86_64                              8/103 
+  Verifying        : jq-1.6-12.el8_10.x86_64                              9/103 
+  Verifying        : libmpc-1.1.0-9.1.el8.x86_64                         10/103 
+  Verifying        : libstdc++-devel-8.5.0-28.el8_10.x86_64              11/103 
+  Verifying        : oniguruma-6.8.2-3.el8.x86_64                        12/103 
+  Verifying        : perl-Digest-1.17-395.el8.noarch                     13/103 
+  Verifying        : perl-Digest-MD5-2.55-396.el8.x86_64                 14/103 
+  Verifying        : perl-Error-1:0.17025-2.el8.noarch                   15/103 
+  Verifying        : perl-Git-2.43.7-1.el8_10.noarch                     16/103 
+  Verifying        : perl-IO-Socket-IP-0.39-5.el8.noarch                 17/103 
+  Verifying        : perl-IO-Socket-SSL-2.066-4.module+el8.9.0+1517+e    18/103 
+  Verifying        : perl-Mozilla-CA-20160104-7.module+el8.9.0+1521+0    19/103 
+  Verifying        : perl-Net-SSLeay-1.88-2.module+el8.9.0+1517+e71a7    20/103 
+  Verifying        : perl-TermReadKey-2.37-7.el8.x86_64                  21/103 
+  Verifying        : perl-URI-1.73-3.el8.noarch                          22/103 
+  Verifying        : perl-libnet-3.11-3.el8.noarch                       23/103 
+  Verifying        : diffutils-3.6-6.el8.x86_64                          24/103 
+  Verifying        : emacs-filesystem-1:26.1-15.el8_10.noarch            25/103 
+  Verifying        : findutils-1:4.6.0-24.el8_10.x86_64                  26/103 
+  Verifying        : glibc-devel-2.28-251.el8_10.2.x86_64                27/103 
+  Verifying        : glibc-headers-2.28-251.el8_10.2.x86_64              28/103 
+  Verifying        : groff-base-1.22.3-18.el8.x86_64                     29/103 
+  Verifying        : kernel-headers-4.18.0-553.158.1.el8_10.x86_64       30/103 
+  Verifying        : libcap-devel-2.48-6.el8_10.1.x86_64                 31/103 
+  Verifying        : libedit-3.1-23.20170329cvs.el8.x86_64               32/103 
+  Verifying        : libgomp-8.5.0-28.el8_10.x86_64                      33/103 
+  Verifying        : libpkgconf-1.4.2-1.el8.x86_64                       34/103 
+  Verifying        : libxcrypt-devel-4.1.1-6.el8.x86_64                  35/103 
+  Verifying        : m4-1.4.18-7.el8.x86_64                              36/103 
+  Verifying        : make-1:4.2.1-11.el8.x86_64                          37/103 
+  Verifying        : ncurses-6.1-10.20180224.el8.x86_64                  38/103 
+  Verifying        : ncurses-c++-libs-6.1-10.20180224.el8.x86_64         39/103 
+  Verifying        : ncurses-devel-6.1-10.20180224.el8.x86_64            40/103 
+  Verifying        : openssh-8.0p1-30.el8_10.x86_64                      41/103 
+  Verifying        : openssh-clients-8.0p1-30.el8_10.x86_64              42/103 
+  Verifying        : openssl-1:1.1.1k-12.el8_9.x86_64                    43/103 
+  Verifying        : patch-2.7.6-11.el8.x86_64                           44/103 
+  Verifying        : pcre2-devel-10.32-3.el8_6.x86_64                    45/103 
+  Verifying        : pcre2-utf16-10.32-3.el8_6.x86_64                    46/103 
+  Verifying        : pcre2-utf32-10.32-3.el8_6.x86_64                    47/103 
+  Verifying        : perl-Carp-1.42-396.el8.noarch                       48/103 
+  Verifying        : perl-Data-Dumper-2.167-399.el8.x86_64               49/103 
+  Verifying        : perl-Encode-4:2.97-3.el8.x86_64                     50/103 
+  Verifying        : perl-Errno-1.28-423.el8_10.x86_64                   51/103 
+  Verifying        : perl-Exporter-5.72-396.el8.noarch                   52/103 
+  Verifying        : perl-File-Path-2.15-2.el8.noarch                    53/103 
+  Verifying        : perl-File-Temp-0.230.600-1.el8.noarch               54/103 
+  Verifying        : perl-Getopt-Long-1:2.50-4.el8.noarch                55/103 
+  Verifying        : perl-HTTP-Tiny-0.074-3.el8.noarch                   56/103 
+  Verifying        : perl-IO-1.38-423.el8_10.x86_64                      57/103 
+  Verifying        : perl-MIME-Base64-3.15-396.el8.x86_64                58/103 
+  Verifying        : perl-PathTools-3.74-1.el8.x86_64                    59/103 
+  Verifying        : perl-Pod-Escapes-1:1.07-395.el8.noarch              60/103 
+  Verifying        : perl-Pod-Perldoc-3.28-396.el8.noarch                61/103 
+  Verifying        : perl-Pod-Simple-1:3.35-395.el8.noarch               62/103 
+  Verifying        : perl-Pod-Usage-4:1.69-395.el8.noarch                63/103 
+  Verifying        : perl-Scalar-List-Utils-3:1.49-2.el8.x86_64          64/103 
+  Verifying        : perl-Socket-4:2.027-3.el8.x86_64                    65/103 
+  Verifying        : perl-Storable-1:3.11-3.el8.x86_64                   66/103 
+  Verifying        : perl-Term-ANSIColor-4.06-396.el8.noarch             67/103 
+  Verifying        : perl-Term-Cap-1.17-395.el8.noarch                   68/103 
+  Verifying        : perl-Text-ParseWords-3.30-395.el8.noarch            69/103 
+  Verifying        : perl-Text-Tabs+Wrap-2013.0523-395.el8.noarch        70/103 
+  Verifying        : perl-Time-Local-1:1.280-1.el8.noarch                71/103 
+  Verifying        : perl-Unicode-Normalize-1.25-396.el8.x86_64          72/103 
+  Verifying        : perl-constant-1.33-396.el8.noarch                   73/103 
+  Verifying        : perl-interpreter-4:5.26.3-423.el8_10.x86_64         74/103 
+  Verifying        : perl-libs-4:5.26.3-423.el8_10.x86_64                75/103 
+  Verifying        : perl-macros-4:5.26.3-423.el8_10.x86_64              76/103 
+  Verifying        : perl-parent-1:0.237-1.el8.noarch                    77/103 
+  Verifying        : perl-podlators-4.11-1.el8.noarch                    78/103 
+  Verifying        : perl-threads-1:2.21-2.el8.x86_64                    79/103 
+  Verifying        : perl-threads-shared-1.58-2.el8.x86_64               80/103 
+  Verifying        : pkgconf-1.4.2-1.el8.x86_64                          81/103 
+  Verifying        : pkgconf-m4-1.4.2-1.el8.noarch                       82/103 
+  Verifying        : pkgconf-pkg-config-1.4.2-1.el8.x86_64               83/103 
+  Verifying        : xz-5.2.4-4.el8_6.x86_64                             84/103 
+  Verifying        : zsh-5.5.1-10.el8.x86_64                             85/103 
+  Verifying        : binutils-2.30-128.el8_10.x86_64                     86/103 
+  Verifying        : binutils-2.30-123.el8.x86_64                        87/103 
+  Verifying        : ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.n    88/103 
+  Verifying        : ca-certificates-2023.2.60_v7.0.306-80.0.el8_8.no    89/103 
+  Verifying        : curl-7.61.1-34.el8_10.13.x86_64                     90/103 
+  Verifying        : curl-7.61.1-34.el8.x86_64                           91/103 
+  Verifying        : gnupg2-2.2.20-4.el8_10.x86_64                       92/103 
+  Verifying        : gnupg2-2.2.20-3.el8_6.x86_64                        93/103 
+  Verifying        : libcap-2.48-6.el8_10.1.x86_64                       94/103 
+  Verifying        : libcap-2.48-6.el8_9.x86_64                          95/103 
+  Verifying        : libcurl-minimal-7.61.1-34.el8_10.13.x86_64          96/103 
+  Verifying        : libcurl-minimal-7.61.1-34.el8.x86_64                97/103 
+  Verifying        : libgcc-8.5.0-28.el8_10.x86_64                       98/103 
+  Verifying        : libgcc-8.5.0-22.el8_10.x86_64                       99/103 
+  Verifying        : libstdc++-8.5.0-28.el8_10.x86_64                   100/103 
+  Verifying        : libstdc++-8.5.0-22.el8_10.x86_64                   101/103 
+  Verifying        : tar-2:1.30-11.el8_10.x86_64                        102/103 
+  Verifying        : tar-2:1.30-9.el8.x86_64                            103/103 
+
+Upgraded:
+  binutils-2.30-128.el8_10.x86_64                                               
+  ca-certificates-2025.2.80_v9.0.304-80.2.el8_10.noarch                         
+  curl-7.61.1-34.el8_10.13.x86_64                                               
+  gnupg2-2.2.20-4.el8_10.x86_64                                                 
+  libcap-2.48-6.el8_10.1.x86_64                                                 
+  libcurl-minimal-7.61.1-34.el8_10.13.x86_64                                    
+  libgcc-8.5.0-28.el8_10.x86_64                                                 
+  libstdc++-8.5.0-28.el8_10.x86_64                                              
+  tar-2:1.30-11.el8_10.x86_64                                                   
+Installed:
+  autoconf-2.69-29.el8_10.1.noarch                                              
+  cpp-8.5.0-28.el8_10.x86_64                                                    
+  diffutils-3.6-6.el8.x86_64                                                    
+  emacs-filesystem-1:26.1-15.el8_10.noarch                                      
+  findutils-1:4.6.0-24.el8_10.x86_64                                            
+  gcc-8.5.0-28.el8_10.x86_64                                                    
+  gcc-c++-8.5.0-28.el8_10.x86_64                                                
+  git-2.43.7-1.el8_10.x86_64                                                    
+  git-core-2.43.7-1.el8_10.x86_64                                               
+  git-core-doc-2.43.7-1.el8_10.noarch                                           
+  glibc-devel-2.28-251.el8_10.2.x86_64                                          
+  glibc-headers-2.28-251.el8_10.2.x86_64                                        
+  groff-base-1.22.3-18.el8.x86_64                                               
+  isl-0.16.1-6.el8.x86_64                                                       
+  jq-1.6-12.el8_10.x86_64                                                       
+  kernel-headers-4.18.0-553.158.1.el8_10.x86_64                                 
+  libcap-devel-2.48-6.el8_10.1.x86_64                                           
+  libedit-3.1-23.20170329cvs.el8.x86_64                                         
+  libgomp-8.5.0-28.el8_10.x86_64                                                
+  libmpc-1.1.0-9.1.el8.x86_64                                                   
+  libpkgconf-1.4.2-1.el8.x86_64                                                 
+  libstdc++-devel-8.5.0-28.el8_10.x86_64                                        
+  libxcrypt-devel-4.1.1-6.el8.x86_64                                            
+  m4-1.4.18-7.el8.x86_64                                                        
+  make-1:4.2.1-11.el8.x86_64                                                    
+  ncurses-6.1-10.20180224.el8.x86_64                                            
+  ncurses-c++-libs-6.1-10.20180224.el8.x86_64                                   
+  ncurses-devel-6.1-10.20180224.el8.x86_64                                      
+  oniguruma-6.8.2-3.el8.x86_64                                                  
+  openssh-8.0p1-30.el8_10.x86_64                                                
+  openssh-clients-8.0p1-30.el8_10.x86_64                                        
+  openssl-1:1.1.1k-12.el8_9.x86_64                                              
+  patch-2.7.6-11.el8.x86_64                                                     
+  pcre2-devel-10.32-3.el8_6.x86_64                                              
+  pcre2-utf16-10.32-3.el8_6.x86_64                                              
+  pcre2-utf32-10.32-3.el8_6.x86_64                                              
+  perl-Carp-1.42-396.el8.noarch                                                 
+  perl-Data-Dumper-2.167-399.el8.x86_64                                         
+  perl-Digest-1.17-395.el8.noarch                                               
+  perl-Digest-MD5-2.55-396.el8.x86_64                                           
+  perl-Encode-4:2.97-3.el8.x86_64                                               
+  perl-Errno-1.28-423.el8_10.x86_64                                             
+  perl-Error-1:0.17025-2.el8.noarch                                             
+  perl-Exporter-5.72-396.el8.noarch                                             
+  perl-File-Path-2.15-2.el8.noarch                                              
+  perl-File-Temp-0.230.600-1.el8.noarch                                         
+  perl-Getopt-Long-1:2.50-4.el8.noarch                                          
+  perl-Git-2.43.7-1.el8_10.noarch                                               
+  perl-HTTP-Tiny-0.074-3.el8.noarch                                             
+  perl-IO-1.38-423.el8_10.x86_64                                                
+  perl-IO-Socket-IP-0.39-5.el8.noarch                                           
+  perl-IO-Socket-SSL-2.066-4.module+el8.9.0+1517+e71a7a62.noarch                
+  perl-MIME-Base64-3.15-396.el8.x86_64                                          
+  perl-Mozilla-CA-20160104-7.module+el8.9.0+1521+0101edce.noarch                
+  perl-Net-SSLeay-1.88-2.module+el8.9.0+1517+e71a7a62.x86_64                    
+  perl-PathTools-3.74-1.el8.x86_64                                              
+  perl-Pod-Escapes-1:1.07-395.el8.noarch                                        
+  perl-Pod-Perldoc-3.28-396.el8.noarch                                          
+  perl-Pod-Simple-1:3.35-395.el8.noarch                                         
+  perl-Pod-Usage-4:1.69-395.el8.noarch                                          
+  perl-Scalar-List-Utils-3:1.49-2.el8.x86_64                                    
+  perl-Socket-4:2.027-3.el8.x86_64                                              
+  perl-Storable-1:3.11-3.el8.x86_64                                             
+  perl-Term-ANSIColor-4.06-396.el8.noarch                                       
+  perl-Term-Cap-1.17-395.el8.noarch                                             
+  perl-TermReadKey-2.37-7.el8.x86_64                                            
+  perl-Text-ParseWords-3.30-395.el8.noarch                                      
+  perl-Text-Tabs+Wrap-2013.0523-395.el8.noarch                                  
+  perl-Time-Local-1:1.280-1.el8.noarch                                          
+  perl-URI-1.73-3.el8.noarch                                                    
+  perl-Unicode-Normalize-1.25-396.el8.x86_64                                    
+  perl-constant-1.33-396.el8.noarch                                             
+  perl-interpreter-4:5.26.3-423.el8_10.x86_64                                   
+  perl-libnet-3.11-3.el8.noarch                                                 
+  perl-libs-4:5.26.3-423.el8_10.x86_64                                          
+  perl-macros-4:5.26.3-423.el8_10.x86_64                                        
+  perl-parent-1:0.237-1.el8.noarch                                              
+  perl-podlators-4.11-1.el8.noarch                                              
+  perl-threads-1:2.21-2.el8.x86_64                                              
+  perl-threads-shared-1.58-2.el8.x86_64                                         
+  pkgconf-1.4.2-1.el8.x86_64                                                    
+  pkgconf-m4-1.4.2-1.el8.noarch                                                 
+  pkgconf-pkg-config-1.4.2-1.el8.x86_64                                         
+  xz-5.2.4-4.el8_6.x86_64                                                       
+  zsh-5.5.1-10.el8.x86_64                                                       
+
+Complete!
+25 files removed
+--> 2184e54942a6
+STEP 4/4: LABEL org.wakamex.wsh.glibc-floor="2.28"
+COMMIT wsh-glibc-2.28-builder:development
+--> 0af9b040ea4f
+Successfully tagged localhost/wsh-glibc-2.28-builder:development
+0af9b040ea4fea0fc88e335c76acefc077433062d6fc27dccf572eeb940f8460
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 1292k    0 1292k    0     0  2392k      0 --:--:-- --:--:-- --:--:-- 2392k100 4088k    0 4088k    0     0  4662k      0 --:--:-- --:--:-- --:--:-- 8323k
+cd . && ./.preconfig
+cp: cannot stat './Doc/help.txt': No such file or directory
+fatal: not a git repository: /code/wsh/.git/worktrees/worker-a
+params.c: In function 'assignstrvalue.part.20':
+params.c:2788:6: warning: 'strncpy' output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+      strncpy(new + v->start, val, vallen);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+params.c:2733:47: note: length computed here
+      const int oldlen = strlen(old), vallen = strlen(val);
+                                               ^~~~~~~~~~~
+utils.o: In function `gettempname':
+utils.c:(.text+0x15e2): warning: the use of `mktemp' is dangerous, better use `mkstemp' or `mkdtemp'
+sh: man: command not found
+helpfiles: man and nroff -man both failed for zshbuiltins.1
+fatal: not a git repository: /code/wsh/.git/worktrees/worker-a
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded adler2 v2.0.1
+  Downloaded crypto-common v0.1.7
+  Downloaded cpubits v0.1.1
+  Downloaded cfg-if v1.0.4
+  Downloaded cpufeatures v0.2.17
+  Downloaded crypto-common v0.2.2
+  Downloaded errno v0.3.14
+  Downloaded base64ct v1.8.3
+  Downloaded autocfg v1.5.1
+  Downloaded flagset v0.4.7
+  Downloaded xattr v1.6.1
+  Downloaded wnaf v0.14.0
+  Downloaded serdect v0.4.3
+  Downloaded zmij v1.0.23
+  Downloaded toml_parser v1.1.3+spec-1.1.0
+  Downloaded unicode-ident v1.0.24
+  Downloaded tar v0.4.46
+  Downloaded typenum v1.20.1
+  Downloaded attestation-verify v0.1.0
+  Downloaded serde_json v1.0.151
+  Downloaded hashbrown v0.17.1
+  Downloaded winnow v1.0.4
+  Downloaded zlib-rs v0.6.7
+  Downloaded winnow v0.7.15
+  Downloaded memchr v2.8.3
+  Downloaded crypto-bigint v0.7.5
+  Downloaded indexmap v2.14.1
+  Downloaded syn v3.0.4
+  Downloaded syn v2.0.119
+  Downloaded der v0.8.1
+  Downloaded serde v1.0.229
+  Downloaded p256 v0.14.0
+  Downloaded rustix v1.1.4
+  Downloaded flate2 v1.1.10
+  Downloaded serde_core v1.0.229
+  Downloaded proc-macro2 v1.0.107
+  Downloaded p384 v0.14.0
+  Downloaded num-traits v0.2.19
+  Downloaded miniz_oxide v0.9.1
+  Downloaded cc v1.4.4
+  Downloaded base64 v0.23.1
+  Downloaded toml v0.9.12+spec-1.1.0
+  Downloaded thiserror-impl v2.0.20
+  Downloaded spki v0.8.0
+  Downloaded sha2 v0.11.0
+  Downloaded lzma-sys v0.1.20
+  Downloaded serde_derive v1.0.229
+  Downloaded semver v1.0.28
+  Downloaded libc v0.2.189
+  Downloaded primefield v0.14.0
+  Downloaded pkcs8 v0.11.0
+  Downloaded hybrid-array v0.4.14
+  Downloaded hmac v0.13.0
+  Downloaded group v0.14.0
+  Downloaded elliptic-curve v0.14.1
+  Downloaded ecdsa v0.17.0
+  Downloaded zeroize v1.9.0
+  Downloaded xz2 v0.1.7
+  Downloaded toml_writer v1.1.2+spec-1.1.0
+  Downloaded toml_datetime v0.7.5+spec-1.1.0
+  Downloaded thiserror v2.0.20
+  Downloaded simd-adler32 v0.3.10
+  Downloaded shlex v2.0.1
+  Downloaded sha2 v0.10.9
+  Downloaded sec1 v0.8.1
+  Downloaded digest v0.11.3
+  Downloaded der_derive v0.8.0
+  Downloaded const-oid v0.10.2
+  Downloaded rfc6979 v0.6.0
+  Downloaded rand_core v0.10.1
+  Downloaded quote v1.0.47
+  Downloaded primeorder v0.14.0
+  Downloaded pkg-config v0.3.34
+  Downloaded find-msvc-tools v0.1.11
+  Downloaded ff v0.14.0
+  Downloaded digest v0.10.7
+  Downloaded subtle v2.6.1
+  Downloaded signature v3.0.0
+  Downloaded generic-array v0.14.7
+  Downloaded filetime v0.2.29
+  Downloaded version_check v0.9.5
+  Downloaded serde_spanned v1.1.1
+  Downloaded itoa v1.0.18
+  Downloaded hex v0.4.3
+  Downloaded crc32fast v1.5.1
+  Downloaded bitflags v2.13.1
+  Downloaded equivalent v1.0.2
+  Downloaded ctutils v0.4.2
+  Downloaded cmov v0.5.4
+  Downloaded cpufeatures v0.3.1
+  Downloaded block-buffer v0.12.1
+  Downloaded base16ct v1.0.0
+  Downloaded block-buffer v0.10.4
+  Downloaded linux-raw-sys v0.12.1
+  Downloaded x509-cert v0.3.0
+   Compiling proc-macro2 v1.0.107
+   Compiling typenum v1.20.1
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
+   Compiling zeroize v1.9.0
+   Compiling subtle v2.6.1
+   Compiling hybrid-array v0.4.14
+   Compiling rand_core v0.10.1
+   Compiling const-oid v0.10.2
+   Compiling cmov v0.5.4
+   Compiling ctutils v0.4.2
+   Compiling cfg-if v1.0.4
+   Compiling crypto-common v0.2.2
+   Compiling syn v2.0.119
+   Compiling autocfg v1.5.1
+   Compiling serde_core v1.0.229
+   Compiling num-traits v0.2.19
+   Compiling der_derive v0.8.0
+   Compiling block-buffer v0.12.1
+   Compiling flagset v0.4.7
+   Compiling der v0.8.1
+   Compiling digest v0.11.3
+   Compiling ff v0.14.0
+   Compiling syn v3.0.4
+   Compiling version_check v0.9.5
+   Compiling cpubits v0.1.1
+   Compiling crypto-bigint v0.7.5
+   Compiling generic-array v0.14.7
+   Compiling spki v0.8.0
+   Compiling libc v0.2.189
+   Compiling zmij v1.0.23
+   Compiling group v0.14.0
+   Compiling serde v1.0.229
+   Compiling base16ct v1.0.0
+   Compiling serde_json v1.0.151
+   Compiling sec1 v0.8.1
+   Compiling pkcs8 v0.11.0
+   Compiling serde_derive v1.0.229
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling elliptic-curve v0.14.1
+   Compiling hmac v0.13.0
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.11
+   Compiling cc v1.4.4
+   Compiling rfc6979 v0.6.0
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling wnaf v0.14.0
+   Compiling primefield v0.14.0
+   Compiling signature v3.0.0
+   Compiling cpufeatures v0.3.1
+   Compiling rustix v1.1.4
+   Compiling pkg-config v0.3.34
+   Compiling lzma-sys v0.1.20
+   Compiling sha2 v0.11.0
+   Compiling ecdsa v0.17.0
+   Compiling primeorder v0.14.0
+   Compiling digest v0.10.7
+   Compiling cpufeatures v0.2.17
+   Compiling crc32fast v1.5.1
+   Compiling bitflags v2.13.1
+   Compiling thiserror v2.0.20
+   Compiling linux-raw-sys v0.12.1
+   Compiling sha2 v0.10.9
+   Compiling thiserror-impl v2.0.20
+   Compiling winnow v1.0.4
+   Compiling simd-adler32 v0.3.10
+   Compiling adler2 v2.0.1
+   Compiling miniz_oxide v0.9.1
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling wsh v0.1.3 (/workspace/crates/wsh)
+   Compiling xattr v1.6.1
+   Compiling p384 v0.14.0
+   Compiling p256 v0.14.0
+   Compiling filetime v0.2.29
+   Compiling x509-cert v0.3.0
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling serde_spanned v1.1.1
+   Compiling winnow v0.7.15
+   Compiling hex v0.4.3
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling base64 v0.23.1
+   Compiling attestation-verify v0.1.0
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling tar v0.4.46
+   Compiling flate2 v1.1.10
+   Compiling xz2 v0.1.7
+   Compiling semver v1.0.28
+   Compiling wsh-install v0.1.3 (/workspace/crates/wsh-install)
+   Compiling wsh-runtime v0.1.3 (/workspace/crates/wsh-runtime)
+    Finished `release` profile [optimized] target(s) in 1m 13s
+ Downloading crates ...
+  Downloaded tempfile v3.27.0
+  Downloaded once_cell v1.21.4
+  Downloaded getrandom v0.4.3
+  Downloaded fastrand v2.5.0
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling typenum v1.20.1
+   Compiling zeroize v1.9.0
+   Compiling subtle v2.6.1
+   Compiling cfg-if v1.0.4
+   Compiling hybrid-array v0.4.14
+   Compiling rand_core v0.10.1
+   Compiling const-oid v0.10.2
+   Compiling serde_core v1.0.229
+   Compiling cmov v0.5.4
+   Compiling libc v0.2.189
+   Compiling ctutils v0.4.2
+   Compiling syn v3.0.4
+   Compiling crypto-common v0.2.2
+   Compiling syn v2.0.119
+   Compiling autocfg v1.5.1
+   Compiling zmij v1.0.23
+   Compiling num-traits v0.2.19
+   Compiling der_derive v0.8.0
+   Compiling block-buffer v0.12.1
+   Compiling version_check v0.9.5
+   Compiling rustix v1.1.4
+   Compiling serde_json v1.0.151
+   Compiling flagset v0.4.7
+   Compiling serde v1.0.229
+   Compiling der v0.8.1
+   Compiling generic-array v0.14.7
+   Compiling digest v0.11.3
+   Compiling serde_derive v1.0.229
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling linux-raw-sys v0.12.1
+   Compiling bitflags v2.13.1
+   Compiling ff v0.14.0
+   Compiling cpubits v0.1.1
+   Compiling crypto-bigint v0.7.5
+   Compiling spki v0.8.0
+   Compiling group v0.14.0
+   Compiling base16ct v1.0.0
+   Compiling sec1 v0.8.1
+   Compiling pkcs8 v0.11.0
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling elliptic-curve v0.14.1
+   Compiling hmac v0.13.0
+   Compiling cpufeatures v0.2.17
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.11
+   Compiling cc v1.4.4
+   Compiling sha2 v0.10.9
+   Compiling rfc6979 v0.6.0
+   Compiling wnaf v0.14.0
+   Compiling primefield v0.14.0
+   Compiling signature v3.0.0
+   Compiling cpufeatures v0.3.1
+   Compiling pkg-config v0.3.34
+   Compiling lzma-sys v0.1.20
+   Compiling sha2 v0.11.0
+   Compiling ecdsa v0.17.0
+   Compiling primeorder v0.14.0
+   Compiling thiserror v2.0.20
+   Compiling wsh v0.1.3 (/workspace/crates/wsh)
+   Compiling thiserror-impl v2.0.20
+   Compiling getrandom v0.4.3
+   Compiling p384 v0.14.0
+   Compiling p256 v0.14.0
+   Compiling x509-cert v0.3.0
+   Compiling xattr v1.6.1
+   Compiling filetime v0.2.29
+   Compiling hex v0.4.3
+   Compiling base64 v0.23.1
+   Compiling attestation-verify v0.1.0
+   Compiling tar v0.4.46
+   Compiling xz2 v0.1.7
+   Compiling semver v1.0.28
+   Compiling crc32fast v1.5.1
+   Compiling fastrand v2.5.0
+   Compiling once_cell v1.21.4
+   Compiling tempfile v3.27.0
+   Compiling winnow v1.0.4
+   Compiling adler2 v2.0.1
+   Compiling simd-adler32 v0.3.10
+   Compiling miniz_oxide v0.9.1
+   Compiling toml_parser v1.1.3+spec-1.1.0
+   Compiling wsh-install v0.1.3 (/workspace/crates/wsh-install)
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling serde_spanned v1.1.1
+   Compiling winnow v0.7.15
+   Compiling toml_writer v1.1.2+spec-1.1.0
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling flate2 v1.1.10
+   Compiling wsh-runtime v0.1.3 (/workspace/crates/wsh-runtime)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 45.52s
+     Running unittests src/lib.rs (build/portable/glibc-2.28/target/debug/deps/wsh-c1c2652f5d64b276)
+
+running 8 tests
+test tests::rejects_traversal_and_absolute_paths ... ok
+test tests::rejects_unknown_manifest_fields ... ok
+test tests::verifies_release_status_as_a_structural_manifest_property ... ok
+test tests::rejects_unlisted_files_and_symbolic_links ... ok
+test tests::verifies_an_exact_development_payload_and_detects_tampering ... ok
+test tests::launch_trusts_activation_while_explicit_verification_detects_later_tampering ... ok
+test tests::detects_swapped_entrypoints_and_manifest_mutation ... ok
+test tests::atomically_activates_and_rolls_back_from_a_broken_active_bundle ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running unittests src/main.rs (build/portable/glibc-2.28/target/debug/deps/wsh-4284f119dfc60903)
+
+running 11 tests
+test doctor::tests::rejects_partial_or_inconsistent_reports ... ok
+test doctor::tests::renders_only_supported_findings ... ok
+test doctor::tests::treats_missing_adapter_state_as_an_unsupported_bundle ... ok
+test tests::preserves_explicit_user_zdotdir ... ok
+test tests::recovers_user_zdotdir_inherited_from_an_older_wsh_session ... ok
+test tests::uses_home_when_zdotdir_is_unset_or_only_the_old_bundle_is_known ... ok
+test update::tests::accepts_and_orders_canonical_release_tags ... ok
+test update::tests::accepts_only_the_exact_github_latest_release_path ... ok
+test doctor::tests::terminates_a_diagnostic_child_at_its_deadline ... ok
+test update::tests::constructs_only_exact_release_bootstrap_urls ... ok
+test update::tests::private_temporary_directory_is_removed_on_drop ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (build/portable/glibc-2.28/target/debug/deps/wsh_install-f99cb835842010cd)
+
+running 7 tests
+test tests::archive_paths_are_relative_normal_paths ... ok
+test tests::bundle_roots_are_lowercase_sha256 ... ok
+test tests::release_tags_are_canonical ... ok
+test tests::invalid_provenance_does_not_create_install_state ... ok
+test tests::unsafe_archive_does_not_change_activation ... ok
+test tests::authenticated_archive_is_atomic_and_rollback_stays_offline ... ok
+test tests::candidate_contract_rejects_mismatches_before_activation ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running unittests src/main.rs (build/portable/glibc-2.28/target/debug/deps/wsh_install-32a9f84a2809b775)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/external_attestation.rs (build/portable/glibc-2.28/target/debug/deps/external_attestation-2639a4e9e6d27831)
+
+running 1 test
+test verifies_real_github_actions_provenance_and_rejects_substitution ... ignored, run through tests/external-attestation.zsh with the pinned public fixture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (build/portable/glibc-2.28/target/debug/deps/wsh_runtime-89cfcfedd1b40769)
+
+running 15 tests
+test tests::escapes_zsh_prompt_substitution_and_terminal_controls ... ok
+test tests::final_generation_check_rejects_completed_but_superseded_work ... ok
+test tests::rejects_oversized_protocol_lines_without_unbounded_read ... ok
+test tests::detects_each_repository_operation_marker ... ok
+test tests::rejects_control_characters_in_literals ... ok
+test tests::rejects_unknown_theme_fields ... ok
+test tests::trace_is_versioned_bounded_private_and_rejects_symlinks ... ok
+test tests::serves_versioned_ping_and_shutdown ... ok
+test tests::wakamex_port_preserves_changed_only_and_compact_state ... ok
+test tests::parses_the_bundled_minimal_theme ... ok
+test tests::cancellation_kills_the_git_process_group ... ok
+test tests::publishes_one_complete_snapshot_and_rejects_stale_generations ... ok
+test tests::resolves_common_refs_and_tags_in_a_linked_worktree ... ok
+test tests::parses_real_git_status_and_exact_annotated_tag ... ok
+test tests::parses_ahead_and_behind_from_a_diverged_upstream ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running unittests src/main.rs (build/portable/glibc-2.28/target/debug/deps/wsh_runtime-174c9077dc863734)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests wsh
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests wsh_install
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests wsh_runtime
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+zsh 5.9.999.3-test [] (x86_64-pc-linux-gnu)
+minimal
+PASS: hidden isolated internal job, restored job control, prompt interrupt survival, unchanged repaint suppression, runtime crash fallback, and shell-exit cleanup
+PASS: user startup configuration present under managed wsh
+PASS: history substring search candidate behavior
+PASS: autosuggestion display, acceptance, ownership, configuration, composition, custom widgets, and cancellation
+PASS: syntax highlighting ownership, semantics, configuration, hooks, and editing-default composition
+PASS: plugin doctor diagnoses exact and unknown implementations without modifying startup files
+PASS: structured foreground startup preserves argv, job control, signals, terminal state, startup files, and repeated launch behavior
+add8b54a86385ef57c7141a98a720bc8205e1986fa25bc7290edc85c6004c6d8  /workspace/build/portable/glibc-2.28/archives/wsh-development-x86_64-unknown-linux-gnu-25e4f757a85e0929cf126e832df1eccc309a6bb22db0ad3998c46a72aedbd17d.tar.xz
+PASS: relocated development bundle 25e4f757a85e0929cf126e832df1eccc309a6bb22db0ad3998c46a72aedbd17d on glibc floor; newest imported symbol GLIBC_2.28

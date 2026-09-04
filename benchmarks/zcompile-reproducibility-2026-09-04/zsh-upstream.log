@@ -1,0 +1,2055 @@
+  % Total    % Received % Xferd  Average Speed  Time    Time    Time   Current
+                                 Dload  Upload  Total   Spent   Left   Speed
+  0      0   0      0   0      0      0      0                              0  0      0   0      0   0      0      0      0                              0  0      0   0      0   0      0      0      0                              0
+  0      0   0      0   0      0      0      0                              0100  3.99M 100  3.99M   0      0  6.14M      0                              0100  3.99M 100  3.99M   0      0  6.14M      0                              0100  3.99M 100  3.99M   0      0  6.13M      0                              0
+patching file Src/Zle/termquery.c
+patching file Src/Zle/zle_main.c
+patching file Src/parse.c
+Hunk #1 succeeded at 3335 (offset 1 line).
+cd . && ./.preconfig
+configuring for zsh 5.9.999.3-test
+checking build system type... x86_64-pc-linux-gnu
+checking host system type... x86_64-pc-linux-gnu
+checking for pcre2-config... pcre2-config
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether the compiler supports GNU C... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to enable C11 features... none needed
+checking for gcc option to enable large file support... none needed
+checking how to run the C preprocessor... gcc -E
+checking for an ANSI C-conforming const... yes
+checking for stdio.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for strings.h... yes
+checking for sys/stat.h... yes
+checking for sys/types.h... yes
+checking for unistd.h... yes
+checking for sys/param.h... yes
+checking for size_t... yes
+checking for working alloca.h... yes
+checking for alloca... yes
+checking if the compiler supports union initialisation... yes
+checking if the compiler supports variable-length arrays... yes
+checking whether make sets $(MAKE)... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for gawk... gawk
+checking whether ln works... yes
+checking whether ln -s works... yes
+checking for grep that handles long lines and -e... /usr/bin/grep
+checking for egrep... /usr/bin/grep -E
+checking for yodl... no
+checking for texi2dvi... no
+checking for texi2pdf... no
+checking for texi2any... no
+checking for texi2html... no
+checking for dirent.h that defines DIR... yes
+checking for library containing opendir... none required
+checking whether stat file-mode macros are broken... no
+checking for sys/wait.h that is POSIX.1 compatible... yes
+checking for pcre2.h... yes
+checking for sys/time.h... yes
+checking for sys/times.h... yes
+checking for sys/select.h... yes
+checking for termcap.h... yes
+checking for termio.h... no
+checking for termios.h... yes
+checking for sys/param.h... (cached) yes
+checking for sys/filio.h... no
+checking for limits.h... yes
+checking for fcntl.h... yes
+checking for libc.h... no
+checking for sys/utsname.h... yes
+checking for sys/resource.h... yes
+checking for sys/sysctl.h... no
+checking for sys/random.h... yes
+checking for locale.h... yes
+checking for errno.h... yes
+checking for stdio.h... (cached) yes
+checking for stdarg.h... yes
+checking for varargs.h... no
+checking for stdlib.h... (cached) yes
+checking for unistd.h... (cached) yes
+checking for sys/capability.h... yes
+checking for utmp.h... yes
+checking for utmpx.h... yes
+checking for sys/types.h... (cached) yes
+checking for pwd.h... yes
+checking for grp.h... yes
+checking for poll.h... yes
+checking for sys/mman.h... yes
+checking for netinet/in_systm.h... yes
+checking for langinfo.h... yes
+checking for wchar.h... yes
+checking for stddef.h... yes
+checking for sys/stropts.h... no
+checking for iconv.h... yes
+checking for ncurses.h... yes
+checking for ncursesw/ncurses.h... yes
+checking for ncurses/ncurses.h... yes
+checking for dlfcn.h... yes
+checking for dl.h... no
+checking for conflicts in sys/time.h and sys/select.h... no
+checking TIOCGWINSZ in termios.h... no
+checking TIOCGWINSZ in sys/ioctl.h... yes
+checking for streams headers including struct winsize... no
+checking for printf in -lc... yes
+checking for pow in -lm... yes
+checking for clock_gettime in -lrt... yes
+checking if _XOPEN_SOURCE_EXTENDED should not be defined... no
+checking for library containing tigetstr... -lncursesw
+checking for library containing tigetflag... none required
+checking for library containing tgetent... none required
+checking for curses.h... yes
+checking if we need to ignore ncurses... no
+checking for library containing getpwnam... none required
+checking for dlopen in -ldl... yes
+checking for cap_get_proc in -lcap... yes
+checking for socket in -lsocket... no
+checking for library containing gethostbyname2... none required
+checking for iconv... yes
+checking for gcc options needed to detect all undeclared functions... none needed
+checking whether _libiconv_version is declared... no
+checking for iconv declaration... 
+checking if an include file defines ospeed... yes
+checking for sys/xattr.h... yes
+checking for pid_t... yes
+checking for off_t... yes
+checking for ino_t... yes
+checking for mode_t... yes
+checking for uid_t... yes
+checking for gid_t... yes
+checking for size_t... (cached) yes
+checking if long is 64 bits... yes
+checking for %lld printf support... yes
+checking for sigset_t... yes
+checking for struct stat.st_atim.tv_nsec... yes
+checking for struct stat.st_atimespec.tv_nsec... no
+checking for struct stat.st_atimensec... no
+checking for struct stat.st_mtim.tv_nsec... yes
+checking for struct stat.st_mtimespec.tv_nsec... no
+checking for struct stat.st_mtimensec... no
+checking for struct stat.st_ctim.tv_nsec... yes
+checking for struct stat.st_ctimespec.tv_nsec... no
+checking for struct stat.st_ctimensec... no
+checking for struct timezone... yes
+checking for struct timespec... yes
+checking for struct utmp... yes
+checking for struct utmpx... yes
+checking for ut_host in struct utmp... yes
+checking for ut_host in struct utmpx... yes
+checking for ut_xtime in struct utmpx... no
+checking for ut_tv in struct utmpx... yes
+checking for d_ino in struct dirent... yes
+checking for d_stat in struct dirent... no
+checking for d_ino in struct direct... no
+checking for d_stat in struct direct... no
+checking for sin6_scope_id in struct sockaddr_in6... yes
+checking if we need our own h_errno... yes
+checking for strftime... yes
+checking for strptime... yes
+checking for mktime... yes
+checking for timelocal... yes
+checking for difftime... yes
+checking for gettimeofday... yes
+checking for clock_gettime... yes
+checking for select... yes
+checking for poll... yes
+checking for readlink... yes
+checking for faccessx... no
+checking for fchdir... yes
+checking for ftruncate... yes
+checking for fstat... yes
+checking for lstat... yes
+checking for lchown... yes
+checking for fchown... yes
+checking for fchmod... yes
+checking for fseeko... yes
+checking for ftello... yes
+checking for mkfifo... yes
+checking for _mktemp... no
+checking for mkstemp... yes
+checking for waitpid... yes
+checking for wait3... yes
+checking for sigqueue... yes
+checking for killpg... yes
+checking for setpgid... yes
+checking for setpgrp... yes
+checking for tcsetpgrp... yes
+checking for tcgetattr... yes
+checking for nice... yes
+checking for gethostname... yes
+checking for gethostbyname2... yes
+checking for getipnodebyname... no
+checking for inet_aton... yes
+checking for inet_pton... yes
+checking for inet_ntop... yes
+checking for getlogin... yes
+checking for getpwent... yes
+checking for getpwnam... yes
+checking for getpwuid... yes
+checking for getgrgid... yes
+checking for getgrnam... yes
+checking for initgroups... yes
+checking for setuid... yes
+checking for seteuid... yes
+checking for setreuid... yes
+checking for setresuid... yes
+checking for setsid... yes
+checking for setgid... yes
+checking for setegid... yes
+checking for setregid... yes
+checking for setresgid... yes
+checking for memccpy... yes
+checking for memcpy... yes
+checking for memmove... yes
+checking for strstr... yes
+checking for strerror... yes
+checking for strtoul... yes
+checking for getrlimit... yes
+checking for getrusage... yes
+checking for setlocale... yes
+checking for isblank... yes
+checking for iswblank... yes
+checking for uname... yes
+checking for signgam... yes
+checking for tgamma... yes
+checking for log2... yes
+checking for scalbn... yes
+checking for putenv... yes
+checking for getenv... yes
+checking for setenv... yes
+checking for unsetenv... yes
+checking for brk... yes
+checking for sbrk... yes
+checking for pathconf... yes
+checking for sysconf... yes
+checking for tgetent... yes
+checking for tigetflag... yes
+checking for tigetnum... yes
+checking for tigetstr... yes
+checking for setupterm... yes
+checking for initscr... yes
+checking for resize_term... yes
+checking for getcchar... yes
+checking for setcchar... yes
+checking for waddwstr... yes
+checking for wget_wch... yes
+checking for win_wch... yes
+checking for use_default_colors... yes
+checking for nl_langinfo... yes
+checking for erand48... yes
+checking for open_memstream... yes
+checking for posix_openpt... yes
+checking for wctomb... yes
+checking for iconv... (cached) yes
+checking for grantpt... yes
+checking for unlockpt... yes
+checking for ptsname... yes
+checking for htons... yes
+checking for ntohs... yes
+checking for regcomp... yes
+checking for regexec... yes
+checking for regerror... yes
+checking for regfree... yes
+checking for getxattr... yes
+checking for realpath... yes
+checking for canonicalize_file_name... yes
+checking for symlink... yes
+checking for getcwd... yes
+checking for cygwin_conv_path... no
+checking for nanosleep... yes
+checking for srand_deterministic... no
+checking for getrandom... yes
+checking for arc4random_buf... yes
+checking for setutxent... yes
+checking for getutxent... yes
+checking for endutxent... yes
+checking for getutent... yes
+checking for working strcoll... yes
+checking whether fpurge is declared... no
+checking for isinf... yes
+checking for isnan... yes
+checking if realpath accepts NULL... yes
+checking for pcre2_compile_8... yes
+checking for cap_get_proc... yes
+checking if tgetent accepts NULL... yes
+checking if tgetent returns 0 on success... no
+checking for getpagesize... yes
+checking for working mmap... yes
+checking for munmap... yes
+checking for msync... yes
+checking whether getpgrp requires zero arguments... yes
+checking for dlopen... yes
+checking for dlerror... yes
+checking for dlsym... yes
+checking for dlclose... yes
+checking for load... no
+checking for loadquery... no
+checking for loadbind... no
+checking for unload... no
+checking for shl_load... no
+checking for shl_unload... no
+checking for shl_findsym... no
+checking if getxattr etc. are Linux-like... yes
+checking if getxattr etc. are usable... yes
+checking where signal.h is located...  /usr/include/bits/signum-arch.h /usr/include/bits/signum-generic.h
+checking where error names are located...  /usr/include/asm-generic/errno.h /usr/include/bits/errno.h /usr/include/asm-generic/errno-base.h
+checking location of curses header... ncursesw/ncurses.h
+checking where curses key definitions are located... /usr/include/curses.h
+checking for ncursesw/term.h... yes
+checking for ncurses/term.h... yes
+checking for term.h... yes
+checking where term.h is located... ncursesw/term.h
+checking if boolcodes is available... yes
+checking if numcodes is available... yes
+checking if strcodes is available... yes
+checking if boolnames is available... yes
+checking if numnames is available... yes
+checking if strnames is available... yes
+checking if tgoto prototype is missing... no
+checking where the RLIMIT macros are located... /usr/include/bits/resource.h
+checking if rlim_t is longer than a long... no
+checking if the rlim_t is unsigned... yes
+checking for rlim_t... yes
+checking for limit RLIMIT_AIO_MEM... no
+checking for limit RLIMIT_AIO_OPS... no
+checking for limit RLIMIT_AS... yes
+checking for limit RLIMIT_LOCKS... yes
+checking for limit RLIMIT_MEMLOCK... yes
+checking for limit RLIMIT_NPROC... yes
+checking for limit RLIMIT_NTHR... no
+checking for limit RLIMIT_NOFILE... yes
+checking for limit RLIMIT_PTHREAD... no
+checking for limit RLIMIT_THREADS... no
+checking for limit RLIMIT_RSS... yes
+checking for limit RLIMIT_SBSIZE... no
+checking for limit RLIMIT_TCACHE... no
+checking for limit RLIMIT_VMEM... no
+checking for limit RLIMIT_SIGPENDING... yes
+checking for limit RLIMIT_MSGQUEUE... yes
+checking for limit RLIMIT_NICE... yes
+checking for limit RLIMIT_RTPRIO... yes
+checking for limit RLIMIT_RTTIME... yes
+checking for limit RLIMIT_POSIXLOCKS... no
+checking for limit RLIMIT_NPTS... no
+checking for limit RLIMIT_SWAP... no
+checking for limit RLIMIT_KQUEUES... no
+checking for limit RLIMIT_UMTXP... no
+checking for limit RLIMIT_PIPEBUF... no
+checking for limit RLIMIT_NOVMON... no
+checking if RLIMIT_VMEM and RLIMIT_RSS are the same... no
+checking if RLIMIT_VMEM and RLIMIT_AS are the same... no
+checking if RLIMIT_RSS and RLIMIT_AS are the same... no
+checking for struct rusage.ru_maxrss... yes
+checking for struct rusage.ru_ixrss... yes
+checking for struct rusage.ru_idrss... yes
+checking for struct rusage.ru_isrss... yes
+checking for struct rusage.ru_minflt... yes
+checking for struct rusage.ru_majflt... yes
+checking for struct rusage.ru_nswap... yes
+checking for struct rusage.ru_inblock... yes
+checking for struct rusage.ru_oublock... yes
+checking for struct rusage.ru_msgsnd... yes
+checking for struct rusage.ru_msgrcv... yes
+checking for struct rusage.ru_nsignals... yes
+checking for struct rusage.ru_nvcsw... yes
+checking for struct rusage.ru_nivcsw... yes
+checking for /dev/fd filesystem... /proc/self/fd
+checking for symlink to the current executable in /proc... /proc/self/exe
+checking for RFS superroot directory... no
+checking whether we should use the native getcwd... yes
+checking whether getcwd calls malloc to allocate memory... yes
+checking for setproctitle... no
+checking for library containing setproctitle... no
+checking for prctl... yes
+checking for utmp file... /var/run/utmp
+checking for wtmp file... /var/log/wtmp
+checking for utmpx file... no
+checking for wtmpx file... no
+checking for brk() prototype in <unistd.h>... yes
+checking for sbrk() prototype in <unistd.h>... yes
+checking for mknod prototype in <sys/stat.h>... yes
+checking for ioctl prototype in <unistd.h> or <termios.h>... no
+checking for ioctl prototype in <sys/ioctl.h>... yes
+checking if named FIFOs work... yes
+checking if lseek() correctly reports seekability... yes
+checking if link() works... yes
+checking base type of the third argument to accept... socklen_t
+checking if your system has /dev/ptmx... yes
+checking if /dev/ptmx is usable... yes
+configure: checking for functions supporting multibyte characters
+checking for iswalnum... yes
+checking for iswcntrl... yes
+checking for iswdigit... yes
+checking for iswgraph... yes
+checking for iswlower... yes
+checking for iswprint... yes
+checking for iswpunct... yes
+checking for iswspace... yes
+checking for iswupper... yes
+checking for iswxdigit... yes
+checking for mbrlen... yes
+checking for mbrtowc... yes
+checking for towupper... yes
+checking for towlower... yes
+checking for wcschr... yes
+checking for wcscpy... yes
+checking for wcslen... yes
+checking for wcsncmp... yes
+checking for wcsncpy... yes
+checking for wcrtomb... yes
+checking for wcwidth... yes
+checking for wmemchr... yes
+checking for wmemcmp... yes
+checking for wmemcpy... yes
+checking for wmemmove... yes
+checking for wmemset... yes
+configure: all functions found, multibyte support enabled
+checking if the wcwidth() and/or iswprint() functions are broken... no
+checking if the isprint() function is broken... no
+checking if your system uses ELF binaries... yes
+checking if we can use -rdynamic... yes
+checking if your dlsym() needs a leading underscore... no
+checking if environ is available in shared libraries... yes
+checking if tgetent is available in shared libraries... yes
+checking if tigetstr is available in shared libraries... yes
+checking if name clashes in shared objects are OK... yes
+checking for working RTLD_GLOBAL... yes
+checking whether symbols in the executable are available... yes
+checking whether executables can be stripped... yes
+checking whether libraries can be stripped... yes
+configure: creating ./config.status
+config.status: creating Config/defs.mk
+config.status: creating Makefile
+config.status: creating Doc/Makefile
+config.status: creating Etc/Makefile
+config.status: creating Src/Makefile
+config.status: creating Test/Makefile
+config.status: creating config.h
+config.status: executing config.modules commands
+creating ./config.modules
+config.status: executing stamp-h commands
+cp: cannot stat './Doc/help.txt': No such file or directory
+
+zsh configuration
+-----------------
+zsh version               : 5.9.999.3-test
+host operating system     : x86_64-pc-linux-gnu
+source code location      : .
+compiler                  : gcc
+preprocessor flags        :  
+executable compiler flags :  -Wall -Wmissing-prototypes -O2
+module compiler flags     :  -Wall -Wmissing-prototypes -O2 -fPIC
+executable linker flags   :   -s -rdynamic
+module linker flags       :   -s -shared
+library flags             : -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc
+installation basename     : zsh
+binary install path       : /var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin
+man page install path     : /var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/man
+info install path         : /var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/info
+functions install path    : /var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions
+See config.modules for installed modules and functions.
+
+make[1]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+cd .. && /bin/sh $top_srcdir/Src/mkmakemod.sh Src Makemod
+creating Src/Makemod.in
+config.status: creating Src/Makemod
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+gawk -f ./signames1.awk  /usr/include/bits/signum-arch.h /usr/include/bits/signum-generic.h >sigtmp.c
+case "`gcc -E --version </dev/null 2>&1`" in \
+*"Free Software Foundation"*) \
+gcc -E -P sigtmp.c >sigtmp.out;; \
+*) \
+gcc -E sigtmp.c >sigtmp.out;; \
+esac
+gawk -f ./signames2.awk sigtmp.out > signames.c
+rm -f sigtmp.c sigtmp.out
+grep 'define.*SIGCOUNT' signames.c > sigcount.h
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+Updated `zsh.mdh'.
+echo 'timestamp for zsh.mdh against zsh.mdd' > zsh.mdhs
+gawk -f ../Src/makepro.awk builtin.c Src > builtin.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < builtin.syms) \
+	> builtin.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < builtin.syms) \
+	> `echo builtin.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk compat.c Src > compat.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < compat.syms) \
+	> compat.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < compat.syms) \
+	> `echo compat.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk cond.c Src > cond.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < cond.syms) \
+	> cond.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < cond.syms) \
+	> `echo cond.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk context.c Src > context.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < context.syms) \
+	> context.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < context.syms) \
+	> `echo context.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk exec.c Src > exec.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < exec.syms) \
+	> exec.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < exec.syms) \
+	> `echo exec.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk glob.c Src > glob.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < glob.syms) \
+	> glob.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < glob.syms) \
+	> `echo glob.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk hashtable.c Src > hashtable.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < hashtable.syms) \
+	> hashtable.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < hashtable.syms) \
+	> `echo hashtable.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk hashnameddir.c Src > hashnameddir.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < hashnameddir.syms) \
+	> hashnameddir.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < hashnameddir.syms) \
+	> `echo hashnameddir.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk hist.c Src > hist.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < hist.syms) \
+	> hist.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < hist.syms) \
+	> `echo hist.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk init.c Src > init.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < init.syms) \
+	> init.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < init.syms) \
+	> `echo init.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk input.c Src > input.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < input.syms) \
+	> input.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < input.syms) \
+	> `echo input.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk jobs.c Src > jobs.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < jobs.syms) \
+	> jobs.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < jobs.syms) \
+	> `echo jobs.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk lex.c Src > lex.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < lex.syms) \
+	> lex.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < lex.syms) \
+	> `echo lex.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk linklist.c Src > linklist.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < linklist.syms) \
+	> linklist.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < linklist.syms) \
+	> `echo linklist.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk loop.c Src > loop.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < loop.syms) \
+	> loop.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < loop.syms) \
+	> `echo loop.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk math.c Src > math.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < math.syms) \
+	> math.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < math.syms) \
+	> `echo math.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk mem.c Src > mem.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < mem.syms) \
+	> mem.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < mem.syms) \
+	> `echo mem.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk module.c Src > module.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < module.syms) \
+	> module.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < module.syms) \
+	> `echo module.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk options.c Src > options.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < options.syms) \
+	> options.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < options.syms) \
+	> `echo options.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk params.c Src > params.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < params.syms) \
+	> params.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < params.syms) \
+	> `echo params.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk parse.c Src > parse.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < parse.syms) \
+	> parse.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < parse.syms) \
+	> `echo parse.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk pattern.c Src > pattern.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < pattern.syms) \
+	> pattern.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < pattern.syms) \
+	> `echo pattern.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk prompt.c Src > prompt.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < prompt.syms) \
+	> prompt.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < prompt.syms) \
+	> `echo prompt.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk signals.c Src > signals.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < signals.syms) \
+	> signals.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < signals.syms) \
+	> `echo signals.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk signames.c Src > signames.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < signames.syms) \
+	> signames.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < signames.syms) \
+	> `echo signames.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk sort.c Src > sort.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < sort.syms) \
+	> sort.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < sort.syms) \
+	> `echo sort.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk string.c Src > string.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < string.syms) \
+	> string.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < string.syms) \
+	> `echo string.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk subst.c Src > subst.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < subst.syms) \
+	> subst.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < subst.syms) \
+	> `echo subst.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk text.c Src > text.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < text.syms) \
+	> text.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < text.syms) \
+	> `echo text.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk utils.c Src > utils.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < utils.syms) \
+	> utils.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < utils.syms) \
+	> `echo utils.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../Src/makepro.awk openssh_bsd_setres_id.c Src > openssh_bsd_setres_id.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < openssh_bsd_setres_id.syms) \
+	> openssh_bsd_setres_id.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < openssh_bsd_setres_id.syms) \
+	> `echo openssh_bsd_setres_id.epro | sed 's/\.epro$/.pro/'`
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+Updated `zsh.mdh'.
+make -f Makemod prefix='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2' exec_prefix='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2' bindir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin' libdir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib' MODDIR='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test' infodir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/info' mandir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/man' datadir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share' fndir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions' htmldir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/htmldoc' runhelpdir='/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/help' CC='gcc' CPPFLAGS='' DEFS='-DHAVE_CONFIG_H' CFLAGS='-Wall -Wmissing-prototypes -O2' LDFLAGS='' EXTRA_LDFLAGS='-rdynamic' DLCFLAGS='-fPIC' DLLDFLAGS='-shared' LIBLDFLAGS='-s' EXELDFLAGS='-s' LIBS='-lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc' DL_EXT='so' DLLD='gcc' AWK='gawk' YODL=': yodl ' YODL2TXT=': yodl2txt' YODL2HTML=': yodl2html' FUNCTIONS_INSTALL='' tzsh='zsh' prep
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+creating Src/Builtins/Makefile.in
+config.status: creating Src/Builtins/Makefile
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+creating Src/Modules/Makefile.in
+config.status: creating Src/Modules/Makefile
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+creating Src/Zle/Makefile.in
+config.status: creating Src/Zle/Makefile
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+echo 'timestamp for *.mdd files' > ../Src/modules.stamp
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+Updated `rlimits.mdh'.
+echo 'timestamp for rlimits.mdh against rlimits.mdd' > rlimits.mdhs
+gawk -f ../../Src/makepro.awk rlimits.c Src/Builtins > rlimits.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < rlimits.syms) \
+	> rlimits.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < rlimits.syms) \
+	> `echo rlimits.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+Updated `rlimits.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+Updated `sched.mdh'.
+echo 'timestamp for sched.mdh against sched.mdd' > sched.mdhs
+gawk -f ../../Src/makepro.awk sched.c Src/Builtins > sched.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < sched.syms) \
+	> sched.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < sched.syms) \
+	> `echo sched.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+Updated `sched.mdh'.
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `attr.mdh'.
+echo 'timestamp for attr.mdh against attr.mdd' > attr.mdhs
+gawk -f ../../Src/makepro.awk attr.c Src/Modules > attr.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < attr.syms) \
+	> attr.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < attr.syms) \
+	> `echo attr.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `attr.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `cap.mdh'.
+echo 'timestamp for cap.mdh against cap.mdd' > cap.mdhs
+gawk -f ../../Src/makepro.awk cap.c Src/Modules > cap.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < cap.syms) \
+	> cap.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < cap.syms) \
+	> `echo cap.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `cap.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `clone.mdh'.
+echo 'timestamp for clone.mdh against clone.mdd' > clone.mdhs
+gawk -f ../../Src/makepro.awk clone.c Src/Modules > clone.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < clone.syms) \
+	> clone.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < clone.syms) \
+	> `echo clone.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `clone.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `curses.mdh'.
+echo 'timestamp for curses.mdh against curses.mdd' > curses.mdhs
+gawk -f ../../Src/makepro.awk curses.c Src/Modules > curses.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < curses.syms) \
+	> curses.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < curses.syms) \
+	> `echo curses.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `curses.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `datetime.mdh'.
+echo 'timestamp for datetime.mdh against datetime.mdd' > datetime.mdhs
+gawk -f ../../Src/makepro.awk datetime.c Src/Modules > datetime.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < datetime.syms) \
+	> datetime.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < datetime.syms) \
+	> `echo datetime.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `datetime.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `example.mdh'.
+echo 'timestamp for example.mdh against example.mdd' > example.mdhs
+gawk -f ../../Src/makepro.awk example.c Src/Modules > example.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < example.syms) \
+	> example.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < example.syms) \
+	> `echo example.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `example.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `files.mdh'.
+echo 'timestamp for files.mdh against files.mdd' > files.mdhs
+gawk -f ../../Src/makepro.awk files.c Src/Modules > files.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < files.syms) \
+	> files.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < files.syms) \
+	> `echo files.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `files.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `hlgroup.mdh'.
+echo 'timestamp for hlgroup.mdh against hlgroup.mdd' > hlgroup.mdhs
+gawk -f ../../Src/makepro.awk hlgroup.c Src/Modules > hlgroup.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < hlgroup.syms) \
+	> hlgroup.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < hlgroup.syms) \
+	> `echo hlgroup.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `hlgroup.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+( \
+    echo '/** thingies.list                            **/'; \
+    echo '/** thingy structures for the known thingies **/'; \
+    echo; \
+    echo '/* format: T("name", TH_FLAGS, w_widget, t_nextthingy) */'; \
+    echo; \
+    sed -e 's/#.*//; /^$/d; s/" *,.*/"/' \
+	-e 's/^"/T("/; s/$/, 0,/; h' \
+	-e 's/-//g; s/^.*"\(.*\)".*/w_\1, t_D\1)/' \
+	-e 'H; g; s/\n/ /' \
+	< ./iwidgets.list; \
+    sed -e 's/#.*//; /^$/d; s/" *,.*/"/' \
+	-e 's/^"/T("./; s/$/, TH_IMMORTAL,/; h' \
+	-e 's/-//g; s/^.*"\.\(.*\)".*/w_\1, t_\1)/' \
+	-e 'H; g; s/\n/ /' \
+	< ./iwidgets.list; \
+) > thingies.list
+( \
+    echo '/** zle_things.h                              **/'; \
+    echo '/** indices of and pointers to known thingies **/'; \
+    echo; \
+    echo 'enum {'; \
+    sed -n -f ./zle_things.sed < thingies.list; \
+    echo '    ZLE_BUILTIN_THINGY_COUNT'; \
+    echo '};'; \
+) > zle_things.h
+make[5]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[5]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `zle.mdh'.
+echo 'timestamp for zle.mdh against zle.mdd' > zle.mdhs
+gawk -f ../../Src/makepro.awk zle_bindings.c Src/Zle > zle_bindings.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_bindings.syms) \
+	> zle_bindings.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_bindings.syms) \
+	> `echo zle_bindings.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_hist.c Src/Zle > zle_hist.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_hist.syms) \
+	> zle_hist.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_hist.syms) \
+	> `echo zle_hist.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_keymap.c Src/Zle > zle_keymap.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_keymap.syms) \
+	> zle_keymap.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_keymap.syms) \
+	> `echo zle_keymap.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_main.c Src/Zle > zle_main.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_main.syms) \
+	> zle_main.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_main.syms) \
+	> `echo zle_main.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_misc.c Src/Zle > zle_misc.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_misc.syms) \
+	> zle_misc.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_misc.syms) \
+	> `echo zle_misc.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_move.c Src/Zle > zle_move.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_move.syms) \
+	> zle_move.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_move.syms) \
+	> `echo zle_move.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_params.c Src/Zle > zle_params.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_params.syms) \
+	> zle_params.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_params.syms) \
+	> `echo zle_params.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_refresh.c Src/Zle > zle_refresh.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_refresh.syms) \
+	> zle_refresh.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_refresh.syms) \
+	> `echo zle_refresh.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_thingy.c Src/Zle > zle_thingy.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_thingy.syms) \
+	> zle_thingy.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_thingy.syms) \
+	> `echo zle_thingy.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_tricky.c Src/Zle > zle_tricky.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_tricky.syms) \
+	> zle_tricky.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_tricky.syms) \
+	> `echo zle_tricky.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_utils.c Src/Zle > zle_utils.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_utils.syms) \
+	> zle_utils.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_utils.syms) \
+	> `echo zle_utils.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_vi.c Src/Zle > zle_vi.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_vi.syms) \
+	> zle_vi.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_vi.syms) \
+	> `echo zle_vi.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk zle_word.c Src/Zle > zle_word.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zle_word.syms) \
+	> zle_word.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zle_word.syms) \
+	> `echo zle_word.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk termquery.c Src/Zle > termquery.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < termquery.syms) \
+	> termquery.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < termquery.syms) \
+	> `echo termquery.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk textobjects.c Src/Zle > textobjects.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < textobjects.syms) \
+	> textobjects.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < textobjects.syms) \
+	> `echo textobjects.epro | sed 's/\.epro$/.pro/'`
+make[5]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[5]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `zle.mdh'.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `ksh93.mdh'.
+echo 'timestamp for ksh93.mdh against ksh93.mdd' > ksh93.mdhs
+gawk -f ../../Src/makepro.awk ksh93.c Src/Modules > ksh93.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < ksh93.syms) \
+	> ksh93.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < ksh93.syms) \
+	> `echo ksh93.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `ksh93.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `langinfo.mdh'.
+echo 'timestamp for langinfo.mdh against langinfo.mdd' > langinfo.mdhs
+gawk -f ../../Src/makepro.awk langinfo.c Src/Modules > langinfo.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < langinfo.syms) \
+	> langinfo.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < langinfo.syms) \
+	> `echo langinfo.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `langinfo.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `mapfile.mdh'.
+echo 'timestamp for mapfile.mdh against mapfile.mdd' > mapfile.mdhs
+gawk -f ../../Src/makepro.awk mapfile.c Src/Modules > mapfile.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < mapfile.syms) \
+	> mapfile.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < mapfile.syms) \
+	> `echo mapfile.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `mapfile.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `mathfunc.mdh'.
+echo 'timestamp for mathfunc.mdh against mathfunc.mdd' > mathfunc.mdhs
+gawk -f ../../Src/makepro.awk mathfunc.c Src/Modules > mathfunc.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < mathfunc.syms) \
+	> mathfunc.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < mathfunc.syms) \
+	> `echo mathfunc.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `mathfunc.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `nearcolor.mdh'.
+echo 'timestamp for nearcolor.mdh against nearcolor.mdd' > nearcolor.mdhs
+gawk -f ../../Src/makepro.awk nearcolor.c Src/Modules > nearcolor.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < nearcolor.syms) \
+	> nearcolor.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < nearcolor.syms) \
+	> `echo nearcolor.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `nearcolor.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `newuser.mdh'.
+echo 'timestamp for newuser.mdh against newuser.mdd' > newuser.mdhs
+gawk -f ../../Src/makepro.awk newuser.c Src/Modules > newuser.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < newuser.syms) \
+	> newuser.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < newuser.syms) \
+	> `echo newuser.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `newuser.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `param_private.mdh'.
+echo 'timestamp for param_private.mdh against param_private.mdd' > param_private.mdhs
+gawk -f ../../Src/makepro.awk param_private.c Src/Modules > param_private.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < param_private.syms) \
+	> param_private.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < param_private.syms) \
+	> `echo param_private.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `param_private.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `parameter.mdh'.
+echo 'timestamp for parameter.mdh against parameter.mdd' > parameter.mdhs
+gawk -f ../../Src/makepro.awk parameter.c Src/Modules > parameter.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < parameter.syms) \
+	> parameter.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < parameter.syms) \
+	> `echo parameter.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `parameter.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `pcre.mdh'.
+echo 'timestamp for pcre.mdh against pcre.mdd' > pcre.mdhs
+gawk -f ../../Src/makepro.awk pcre.c Src/Modules > pcre.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < pcre.syms) \
+	> pcre.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < pcre.syms) \
+	> `echo pcre.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `pcre.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `random.mdh'.
+echo 'timestamp for random.mdh against random.mdd' > random.mdhs
+gawk -f ../../Src/makepro.awk random.c Src/Modules > random.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < random.syms) \
+	> random.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < random.syms) \
+	> `echo random.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk random_real.c Src/Modules > random_real.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < random_real.syms) \
+	> random_real.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < random_real.syms) \
+	> `echo random_real.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `random.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `regex.mdh'.
+echo 'timestamp for regex.mdh against regex.mdd' > regex.mdhs
+gawk -f ../../Src/makepro.awk regex.c Src/Modules > regex.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < regex.syms) \
+	> regex.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < regex.syms) \
+	> `echo regex.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `regex.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `socket.mdh'.
+echo 'timestamp for socket.mdh against socket.mdd' > socket.mdhs
+gawk -f ../../Src/makepro.awk socket.c Src/Modules > socket.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < socket.syms) \
+	> socket.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < socket.syms) \
+	> `echo socket.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `socket.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `stat.mdh'.
+echo 'timestamp for stat.mdh against stat.mdd' > stat.mdhs
+gawk -f ../../Src/makepro.awk stat.c Src/Modules > stat.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < stat.syms) \
+	> stat.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < stat.syms) \
+	> `echo stat.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `stat.mdh'.
+if [ x" /usr/include/asm-generic/errno.h /usr/include/bits/errno.h /usr/include/asm-generic/errno-base.h" = x ]; then \
+	touch errtmp.out; \
+   else \
+	gawk -f ./errnames1.awk  /usr/include/asm-generic/errno.h /usr/include/bits/errno.h /usr/include/asm-generic/errno-base.h >errtmp.c; \
+	case "`gcc -E --version </dev/null 2>&1`" in \
+	*"Free Software Foundation"*) \
+	gcc -E -P errtmp.c >errtmp.out;; \
+	*) \
+	gcc -E errtmp.c >errtmp.out;; \
+	esac; \
+   fi
+gawk -f ./errnames2.awk errtmp.out > errnames.c
+rm -f errtmp.c errtmp.out
+grep 'define.*ERRCOUNT' errnames.c > errcount.h
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `system.mdh'.
+echo 'timestamp for system.mdh against system.mdd' > system.mdhs
+gawk -f ../../Src/makepro.awk system.c Src/Modules > system.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < system.syms) \
+	> system.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < system.syms) \
+	> `echo system.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk errnames.c Src/Modules > errnames.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < errnames.syms) \
+	> errnames.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < errnames.syms) \
+	> `echo errnames.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `system.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `tcp.mdh'.
+echo 'timestamp for tcp.mdh against tcp.mdd' > tcp.mdhs
+gawk -f ../../Src/makepro.awk tcp.c Src/Modules > tcp.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < tcp.syms) \
+	> tcp.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < tcp.syms) \
+	> `echo tcp.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `tcp.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `termcap.mdh'.
+echo 'timestamp for termcap.mdh against termcap.mdd' > termcap.mdhs
+gawk -f ../../Src/makepro.awk termcap.c Src/Modules > termcap.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < termcap.syms) \
+	> termcap.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < termcap.syms) \
+	> `echo termcap.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `termcap.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `terminfo.mdh'.
+echo 'timestamp for terminfo.mdh against terminfo.mdd' > terminfo.mdhs
+gawk -f ../../Src/makepro.awk terminfo.c Src/Modules > terminfo.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < terminfo.syms) \
+	> terminfo.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < terminfo.syms) \
+	> `echo terminfo.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `terminfo.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `watch.mdh'.
+echo 'timestamp for watch.mdh against watch.mdd' > watch.mdhs
+gawk -f ../../Src/makepro.awk watch.c Src/Modules > watch.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < watch.syms) \
+	> watch.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < watch.syms) \
+	> `echo watch.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `watch.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zftp.mdh'.
+echo 'timestamp for zftp.mdh against zftp.mdd' > zftp.mdhs
+gawk -f ../../Src/makepro.awk zftp.c Src/Modules > zftp.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zftp.syms) \
+	> zftp.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zftp.syms) \
+	> `echo zftp.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zftp.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zprof.mdh'.
+echo 'timestamp for zprof.mdh against zprof.mdd' > zprof.mdhs
+gawk -f ../../Src/makepro.awk zprof.c Src/Modules > zprof.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zprof.syms) \
+	> zprof.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zprof.syms) \
+	> `echo zprof.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zprof.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zpty.mdh'.
+echo 'timestamp for zpty.mdh against zpty.mdd' > zpty.mdhs
+gawk -f ../../Src/makepro.awk zpty.c Src/Modules > zpty.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zpty.syms) \
+	> zpty.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zpty.syms) \
+	> `echo zpty.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zpty.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zselect.mdh'.
+echo 'timestamp for zselect.mdh against zselect.mdd' > zselect.mdhs
+gawk -f ../../Src/makepro.awk zselect.c Src/Modules > zselect.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zselect.syms) \
+	> zselect.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zselect.syms) \
+	> `echo zselect.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zselect.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[5]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[5]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `complete.mdh'.
+echo 'timestamp for complete.mdh against complete.mdd' > complete.mdhs
+gawk -f ../../Src/makepro.awk complete.c Src/Zle > complete.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < complete.syms) \
+	> complete.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < complete.syms) \
+	> `echo complete.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk compcore.c Src/Zle > compcore.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < compcore.syms) \
+	> compcore.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < compcore.syms) \
+	> `echo compcore.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk compmatch.c Src/Zle > compmatch.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < compmatch.syms) \
+	> compmatch.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < compmatch.syms) \
+	> `echo compmatch.epro | sed 's/\.epro$/.pro/'`
+gawk -f ../../Src/makepro.awk compresult.c Src/Zle > compresult.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < compresult.syms) \
+	> compresult.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < compresult.syms) \
+	> `echo compresult.epro | sed 's/\.epro$/.pro/'`
+make[5]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[5]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `complete.mdh'.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zutil.mdh'.
+echo 'timestamp for zutil.mdh against zutil.mdd' > zutil.mdhs
+gawk -f ../../Src/makepro.awk zutil.c Src/Modules > zutil.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zutil.syms) \
+	> zutil.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zutil.syms) \
+	> `echo zutil.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+Updated `zutil.mdh'.
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `compctl.mdh'.
+echo 'timestamp for compctl.mdh against compctl.mdd' > compctl.mdhs
+gawk -f ../../Src/makepro.awk compctl.c Src/Zle > compctl.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < compctl.syms) \
+	> compctl.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < compctl.syms) \
+	> `echo compctl.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `compctl.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `complist.mdh'.
+echo 'timestamp for complist.mdh against complist.mdd' > complist.mdhs
+gawk -f ../../Src/makepro.awk complist.c Src/Zle > complist.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < complist.syms) \
+	> complist.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < complist.syms) \
+	> `echo complist.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `complist.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `computil.mdh'.
+echo 'timestamp for computil.mdh against computil.mdd' > computil.mdhs
+gawk -f ../../Src/makepro.awk computil.c Src/Zle > computil.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < computil.syms) \
+	> computil.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < computil.syms) \
+	> `echo computil.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `computil.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `deltochar.mdh'.
+echo 'timestamp for deltochar.mdh against deltochar.mdd' > deltochar.mdhs
+gawk -f ../../Src/makepro.awk deltochar.c Src/Zle > deltochar.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < deltochar.syms) \
+	> deltochar.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < deltochar.syms) \
+	> `echo deltochar.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `deltochar.mdh'.
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `zleparameter.mdh'.
+echo 'timestamp for zleparameter.mdh against zleparameter.mdd' > zleparameter.mdhs
+gawk -f ../../Src/makepro.awk zleparameter.c Src/Zle > zleparameter.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < zleparameter.syms) \
+	> zleparameter.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < zleparameter.syms) \
+	> `echo zleparameter.epro | sed 's/\.epro$/.pro/'`
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+Updated `zleparameter.mdh'.
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+rm -f stamp-modobjs.tmp
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o builtin.o builtin.c
+builtin.c: In function ‘bin_print’:
+builtin.c:4830:18: warning: variable ‘wptr’ set but not used [-Wunused-but-set-variable=]
+ 4830 |             int *wptr;
+      |                  ^~~~
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o compat.o compat.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o cond.o cond.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o context.o context.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o exec.o exec.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o glob.o glob.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o hashtable.o hashtable.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o hashnameddir.o hashnameddir.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o hist.o hist.c
+srcdir='.' CFMOD='../config.modules' \
+  /bin/sh ./mkbltnmlst.sh bltinmods.list
+Updated `zshpaths.h'.
+Creating `zshxmods.h'.
+fatal: not a git repository (or any of the parent directories): .git
+echo '#define ZSH_VERSION "'5.9.999.3-test'"' > version.h
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o init.o init.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o input.o input.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o jobs.o jobs.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o lex.o lex.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o linklist.o linklist.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o loop.o loop.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o math.o math.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o mem.o mem.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o module.o module.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o options.o options.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o params.o params.c
+params.c: In function ‘assignstrvalue.part.0’:
+params.c:2788:13: warning: ‘strncpy’ output truncated before terminating nul copying as many bytes from a string as its length [-Wstringop-truncation]
+ 2788 |             strncpy(new + v->start, val, vallen);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+params.c:2733:54: note: length computed here
+ 2733 |             const int oldlen = strlen(old), vallen = strlen(val);
+      |                                                      ^~~~~~~~~~~
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o parse.o parse.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o pattern.o pattern.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o prompt.o prompt.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o signals.o signals.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o signames.o signames.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o sort.o sort.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o string.o string.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o subst.o subst.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o text.o text.c
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o utils.o utils.c
+utils.c: In function ‘spdist’:
+utils.c:4739:21: warning: assignment discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+ 4739 |             if (!(z = strchr(keymap, p[0])) || *z == '\n' || *z == '\t')
+      |                     ^
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o openssh_bsd_setres_id.o openssh_bsd_setres_id.c
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+Updated `stamp-modobjs'.
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+gawk -f ../Src/makepro.awk main.c Src > main.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < main.syms) \
+	> main.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < main.syms) \
+	> `echo main.epro | sed 's/\.epro$/.pro/'`
+gcc -c -I. -I../Src  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2 -o main.o ./main.c
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+rm -f zsh
+gcc  -s -rdynamic -o zsh main.o  `cat stamp-modobjs`   -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc
+/usr/bin/ld.bfd: utils.o: in function `gettempname':
+utils.c:(.text+0x17ec): warning: the use of `mktemp' is dangerous, better use `mkstemp' or `mkdtemp'
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o rlimits..o rlimits.c
+rm -f rlimits.so
+gcc  -s -shared -o rlimits.so   rlimits..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o sched..o sched.c
+rm -f sched.so
+gcc  -s -shared -o sched.so   sched..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o attr..o attr.c
+rm -f attr.so
+gcc  -s -shared -o attr.so   attr..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o cap..o cap.c
+rm -f cap.so
+gcc  -s -shared -o cap.so   cap..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o clone..o clone.c
+rm -f clone.so
+gcc  -s -shared -o clone.so   clone..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gawk -f ./curses_keys.awk /usr/include/curses.h /dev/null >curses_keys.h
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o curses..o curses.c
+rm -f curses.so
+gcc  -s -shared -o curses.so   curses..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o datetime..o datetime.c
+rm -f datetime.so
+gcc  -s -shared -o datetime.so   datetime..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o example..o example.c
+rm -f example.so
+gcc  -s -shared -o example.so   example..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o files..o files.c
+rm -f files.so
+gcc  -s -shared -o files.so   files..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o hlgroup..o hlgroup.c
+rm -f hlgroup.so
+gcc  -s -shared -o hlgroup.so   hlgroup..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'zle.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o ksh93..o ksh93.c
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+rm -f ksh93.so
+gcc  -s -shared -o ksh93.so   ksh93..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o langinfo..o langinfo.c
+rm -f langinfo.so
+gcc  -s -shared -o langinfo.so   langinfo..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o mapfile..o mapfile.c
+rm -f mapfile.so
+gcc  -s -shared -o mapfile.so   mapfile..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o mathfunc..o mathfunc.c
+rm -f mathfunc.so
+gcc  -s -shared -o mathfunc.so   mathfunc..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o nearcolor..o nearcolor.c
+rm -f nearcolor.so
+gcc  -s -shared -o nearcolor.so   nearcolor..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o newuser..o newuser.c
+rm -f newuser.so
+gcc  -s -shared -o newuser.so   newuser..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o param_private..o param_private.c
+rm -f param_private.so
+gcc  -s -shared -o param_private.so   param_private..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o parameter..o parameter.c
+rm -f parameter.so
+gcc  -s -shared -o parameter.so   parameter..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o pcre..o pcre.c
+rm -f pcre.so
+gcc  -s -shared -o pcre.so   pcre..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o random..o random.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o random_real..o random_real.c
+rm -f random.so
+gcc  -s -shared -o random.so   random..o random_real..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o regex..o regex.c
+rm -f regex.so
+gcc  -s -shared -o regex.so   regex..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o socket..o socket.c
+rm -f socket.so
+gcc  -s -shared -o socket.so   socket..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o stat..o stat.c
+rm -f stat.so
+gcc  -s -shared -o stat.so   stat..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o system..o system.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o errnames..o errnames.c
+rm -f system.so
+gcc  -s -shared -o system.so   system..o errnames..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o tcp..o tcp.c
+rm -f tcp.so
+gcc  -s -shared -o tcp.so   tcp..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o termcap..o termcap.c
+rm -f termcap.so
+gcc  -s -shared -o termcap.so   termcap..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o terminfo..o terminfo.c
+rm -f terminfo.so
+gcc  -s -shared -o terminfo.so   terminfo..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o watch..o watch.c
+rm -f watch.so
+gcc  -s -shared -o watch.so   watch..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zftp..o zftp.c
+rm -f zftp.so
+gcc  -s -shared -o zftp.so   zftp..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zprof..o zprof.c
+rm -f zprof.so
+gcc  -s -shared -o zprof.so   zprof..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zpty..o zpty.c
+rm -f zpty.so
+gcc  -s -shared -o zpty.so   zpty..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zselect..o zselect.c
+rm -f zselect.so
+gcc  -s -shared -o zselect.so   zselect..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'complete.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zutil..o zutil.c
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+rm -f zutil.so
+gcc  -s -shared -o zutil.so   zutil..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o compctl..o compctl.c
+compctl.c: In function ‘ccmakehookfn’:
+compctl.c:1782:13: warning: variable ‘n’ set but not used [-Wunused-but-set-variable=]
+ 1782 |         int n;
+      |             ^
+rm -f compctl.so
+gcc  -s -shared -o compctl.so   compctl..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o complete..o complete.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o compcore..o compcore.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o compmatch..o compmatch.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o compresult..o compresult.c
+rm -f complete.so
+gcc  -s -shared -o complete.so   complete..o compcore..o compmatch..o compresult..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o complist..o complist.c
+rm -f complist.so
+gcc  -s -shared -o complist.so   complist..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o computil..o computil.c
+rm -f computil.so
+gcc  -s -shared -o computil.so   computil..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o deltochar..o deltochar.c
+rm -f deltochar.so
+gcc  -s -shared -o deltochar.so   deltochar..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+( \
+    echo '/** widgets.list                               **/'; \
+    echo '/** widget structures for the internal widgets **/'; \
+    echo; \
+    echo '/* format: W(ZLE_FLAGS, t_firstname, functionname) */'; \
+    echo; \
+    sed -e 's/#.*//; /^$/d; s/-//g' \
+	-e 's/^"\(.*\)" *, *\([^ ]*\) *, *\(.*\)/W(\3, t_\1, \2)/' \
+	< ./iwidgets.list; \
+) > widgets.list
+( \
+    echo '/** zle_widget.h                                **/'; \
+    echo '/** indices of and pointers to internal widgets **/'; \
+    echo; \
+    echo 'enum {'; \
+    sed -n -f ./zle_widget.sed < widgets.list; \
+    echo '    ZLE_BUILTIN_WIDGET_COUNT'; \
+    echo '};'; \
+) > zle_widget.h
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_bindings..o zle_bindings.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_hist..o zle_hist.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_keymap..o zle_keymap.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_main..o zle_main.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_misc..o zle_misc.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_move..o zle_move.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_params..o zle_params.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_refresh..o zle_refresh.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_thingy..o zle_thingy.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_tricky..o zle_tricky.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_utils..o zle_utils.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_vi..o zle_vi.c
+zle_vi.c: In function ‘visetbuffer’:
+zle_vi.c:1034:16: warning: assignment discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+ 1034 |     if ((found = ZS_strchr(match, ch))) {
+      |                ^
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zle_word..o zle_word.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o termquery..o termquery.c
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o textobjects..o textobjects.c
+rm -f zle.so
+gcc  -s -shared -o zle.so   zle_bindings..o zle_hist..o zle_keymap..o zle_main..o zle_misc..o zle_move..o zle_params..o zle_refresh..o zle_thingy..o zle_tricky..o zle_utils..o zle_vi..o zle_word..o termquery..o textobjects..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+gcc -c -I. -I../../Src -I../../Src -I../../Src/Zle -I.  -DHAVE_CONFIG_H -DMODULE -Wall -Wmissing-prototypes -O2 -fPIC -o zleparameter..o zleparameter.c
+rm -f zleparameter.so
+gcc  -s -shared -o zleparameter.so   zleparameter..o    -lpcre2-8 -lcap -ldl -lncursesw -lrt -lm  -lc  
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[1]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[1]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Doc'
+( \
+  echo 'IFDEF(INCWSLEVEL)(INCWSLEVEL())(STARTDEF())'; \
+  echo 'def(version)(0)('5.9.999.3-test')'; \
+  echo 'def(date)(0)(''May 27, 2026'')'; \
+  echo 'def(zshenv)(0)(/etc/zshenv)'; \
+  echo 'def(zprofile)(0)(/etc/zprofile)'; \
+  echo 'def(zshrc)(0)(/etc/zshrc)'; \
+  echo 'def(zlogin)(0)(/etc/zlogin)'; \
+  echo 'def(zlogout)(0)(/etc/zlogout)'; \
+  echo 'IFDEF(DECWSLEVEL)(DECWSLEVEL())(ENDDEF())#' | tr '#' '\\'; \
+) > ./version.yo
+( \
+    echo "startitem()"; \
+    for modfile in Zsh/mod_attr.yo Zsh/mod_cap.yo Zsh/mod_clone.yo Zsh/mod_compctl.yo Zsh/mod_complete.yo Zsh/mod_complist.yo Zsh/mod_computil.yo Zsh/mod_curses.yo Zsh/mod_datetime.yo Zsh/mod_db_gdbm.yo Zsh/mod_deltochar.yo Zsh/mod_example.yo Zsh/mod_files.yo Zsh/mod_hlgroup.yo Zsh/mod_langinfo.yo Zsh/mod_ksh93.yo Zsh/mod_mapfile.yo Zsh/mod_mathfunc.yo Zsh/mod_nearcolor.yo Zsh/mod_newuser.yo Zsh/mod_parameter.yo Zsh/mod_pcre.yo Zsh/mod_private.yo Zsh/mod_regex.yo Zsh/mod_random.yo Zsh/mod_sched.yo Zsh/mod_socket.yo Zsh/mod_stat.yo  Zsh/mod_system.yo Zsh/mod_tcp.yo Zsh/mod_termcap.yo Zsh/mod_terminfo.yo Zsh/mod_watch.yo Zsh/mod_zftp.yo Zsh/mod_zle.yo Zsh/mod_zleparameter.yo Zsh/mod_zprof.yo Zsh/mod_zpty.yo Zsh/mod_zselect.yo Zsh/mod_zutil.yo; do \
+	sed -n -e '1{s|^COMMENT(!MOD!\(.*\)$|item(tt(\1))(|;p;d;}' \
+	    -e '/^!MOD!)$/q;p' \
+	    < ./$modfile; \
+	echo ")"; \
+    done; \
+    echo "enditem()"; \
+    echo "includefile(Zsh/modmenu.yo)"; \
+    set '' Zsh/mod_attr.yo Zsh/mod_cap.yo Zsh/mod_clone.yo Zsh/mod_compctl.yo Zsh/mod_complete.yo Zsh/mod_complist.yo Zsh/mod_computil.yo Zsh/mod_curses.yo Zsh/mod_datetime.yo Zsh/mod_db_gdbm.yo Zsh/mod_deltochar.yo Zsh/mod_example.yo Zsh/mod_files.yo Zsh/mod_hlgroup.yo Zsh/mod_langinfo.yo Zsh/mod_ksh93.yo Zsh/mod_mapfile.yo Zsh/mod_mathfunc.yo Zsh/mod_nearcolor.yo Zsh/mod_newuser.yo Zsh/mod_parameter.yo Zsh/mod_pcre.yo Zsh/mod_private.yo Zsh/mod_regex.yo Zsh/mod_random.yo Zsh/mod_sched.yo Zsh/mod_socket.yo Zsh/mod_stat.yo  Zsh/mod_system.yo Zsh/mod_tcp.yo Zsh/mod_termcap.yo Zsh/mod_terminfo.yo Zsh/mod_watch.yo Zsh/mod_zftp.yo Zsh/mod_zle.yo Zsh/mod_zleparameter.yo Zsh/mod_zprof.yo Zsh/mod_zpty.yo Zsh/mod_zselect.yo Zsh/mod_zutil.yo; \
+    mod1= mod2= mod3=; \
+    test ".$2" = . || \
+	mod2=`sed -n '1{s|^COMMENT(!MOD!||;p;q;}' < ./$2`; \
+    while test ".$2" != .; do \
+	mod3=; \
+	test ".$3" = . || \
+	    mod3=`sed -n '1{s|^COMMENT(!MOD!||;p;q;}' < ./$3`; \
+	echo "texinode(The $mod2 Module)(${mod3:+The $mod3 Module})(${mod1:+The $mod1 Module})(Zsh Modules)"; \
+	echo "sect(The $mod2 Module)"; \
+	echo "includefile(${2})"; \
+	shift; \
+	mod1=$mod2; \
+	mod2=$mod3; \
+    done \
+) > ./Zsh/modlist.yo
+( \
+    echo "startmenu()"; \
+    for modfile in Zsh/mod_attr.yo Zsh/mod_cap.yo Zsh/mod_clone.yo Zsh/mod_compctl.yo Zsh/mod_complete.yo Zsh/mod_complist.yo Zsh/mod_computil.yo Zsh/mod_curses.yo Zsh/mod_datetime.yo Zsh/mod_db_gdbm.yo Zsh/mod_deltochar.yo Zsh/mod_example.yo Zsh/mod_files.yo Zsh/mod_hlgroup.yo Zsh/mod_langinfo.yo Zsh/mod_ksh93.yo Zsh/mod_mapfile.yo Zsh/mod_mathfunc.yo Zsh/mod_nearcolor.yo Zsh/mod_newuser.yo Zsh/mod_parameter.yo Zsh/mod_pcre.yo Zsh/mod_private.yo Zsh/mod_regex.yo Zsh/mod_random.yo Zsh/mod_sched.yo Zsh/mod_socket.yo Zsh/mod_stat.yo  Zsh/mod_system.yo Zsh/mod_tcp.yo Zsh/mod_termcap.yo Zsh/mod_terminfo.yo Zsh/mod_watch.yo Zsh/mod_zftp.yo Zsh/mod_zle.yo Zsh/mod_zleparameter.yo Zsh/mod_zprof.yo Zsh/mod_zpty.yo Zsh/mod_zselect.yo Zsh/mod_zutil.yo; do \
+	sed -n '1{s|^COMMENT(!MOD!\(.*\)$|menu(The \1 Module)|;p;q;}' \
+	    < ./$modfile; \
+    done; \
+    echo "endmenu()" \
+) > ./Zsh/modmenu.yo
+case zshall.1 in \
+  */*) target=zshall.1 ;; \
+  *) target=zshall.1 ;; \
+esac; \
+case ': yodl ' in :*) touch $target ;; *) \
+    echo : yodl  -o $target -I. -DZSHALL -w zman.yo version.yo zsh.yo; \
+    : yodl  -I. -DZSHALL -w zman.yo version.yo zsh.yo | sed -e '1s/\\-/-/g' -e '/^\.'\''/d' > $target \
+;; esac; \
+
+perl ../Util/helpfiles \
+    zshbuiltins.1 help help.txt \
+    || rm -f help.txt help/*
+helpfiles: attempting man ./zshbuiltins.1 >help/man.tmp
+grotty:<standard input>:(<standard input>):8: fatal error: 'V' command invalid before first 'p' command
+man: command exited with status 1: /usr/libexec/man-db/zsoelim | /usr/libexec/man-db/manconv -f UTF-8:ISO-8859-1 -t UTF-8//IGNORE | preconv -e UTF-8 | tbl | nroff -mandoc -rLL=79n -rLT=79n -Tascii
+helpfiles: attempting nroff -man ./zshbuiltins.1 >help/man.tmp
+helpfiles: man and nroff -man both failed for zshbuiltins.1
+( \
+    for modfile in Zsh/mod_attr.yo Zsh/mod_cap.yo Zsh/mod_clone.yo Zsh/mod_compctl.yo Zsh/mod_complete.yo Zsh/mod_complist.yo Zsh/mod_computil.yo Zsh/mod_curses.yo Zsh/mod_datetime.yo Zsh/mod_db_gdbm.yo Zsh/mod_deltochar.yo Zsh/mod_example.yo Zsh/mod_files.yo Zsh/mod_hlgroup.yo Zsh/mod_langinfo.yo Zsh/mod_ksh93.yo Zsh/mod_mapfile.yo Zsh/mod_mathfunc.yo Zsh/mod_nearcolor.yo Zsh/mod_newuser.yo Zsh/mod_parameter.yo Zsh/mod_pcre.yo Zsh/mod_private.yo Zsh/mod_regex.yo Zsh/mod_random.yo Zsh/mod_sched.yo Zsh/mod_socket.yo Zsh/mod_stat.yo  Zsh/mod_system.yo Zsh/mod_tcp.yo Zsh/mod_termcap.yo Zsh/mod_terminfo.yo Zsh/mod_watch.yo Zsh/mod_zftp.yo Zsh/mod_zle.yo Zsh/mod_zleparameter.yo Zsh/mod_zprof.yo Zsh/mod_zpty.yo Zsh/mod_zselect.yo Zsh/mod_zutil.yo; do \
+	sed -n '1{s|^COMMENT(!MOD!\(.*\)$|menu(The \1 Module)|;p;q;}' \
+	    < ./$modfile; \
+    done \
+) > ./Zsh/manmodmenu.yo
+case ': yodl ' in :*) touch zsh.texi ;; *) \
+    : yodl  -o zsh.texi -I. -w ztexi.yo version.yo zsh.yo; \
+    test -f zsh.texi \
+;; esac
+case ': yodl ' in :*) touch ../META-FAQ ;; *) \
+    : yodl  -I. META-FAQ.yo | sed -e '/NEXTLINE/N' -e '/DELLINE/d' -e '/^SECTHEAD$/{N;s/^SECTHEAD.//;h;s/./-/g;H;g;}' -e 's/  *$//' -e '/comment(.*)/d' > ../META-FAQ \
+;; esac
+make[1]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Doc'
+patching file Test/A02alias.ztst
+patching file Test/B06fc.ztst
+patching file Test/D04parameter.ztst
+patching file Test/K01nameref.ztst
+patching file Test/W01history.ztst
+cd Test ; make check
+make[1]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Test'
+if test -n "gcc"; then \
+  cd .. && DESTDIR= \
+  make MODDIR=`pwd`/Test/Modules install.modules > /dev/null; \
+fi
+if test -z "$ZTST_handler"; then \
+  ZTST_handler=runtests.zsh; \
+fi; \
+if ZTST_testlist="`for f in ./*.ztst; \
+           do echo $f; done`" \
+ ZTST_srcdir="." \
+ ZTST_exe=../Src/zsh \
+ ../Src/zsh +Z -f ./$ZTST_handler; then \
+ stat=0; \
+else \
+ stat=1; \
+fi; \
+sleep 1; \
+rm -rf Modules .zcompdump; \
+exit $stat
+A01grammar.ztst: starting.
+This test hangs the shell when it fails...
+A01grammar.ztst: all tests successful.
+
+A02alias.ztst: starting.
+This test hangs the shell when it fails...
+A02alias.ztst: all tests successful.
+
+A03quoting.ztst: starting.
+A03quoting.ztst: all tests successful.
+
+A04redirect.ztst: starting.
+A04redirect.ztst: all tests successful.
+
+A05execution.ztst: starting.
+This test takes 5 seconds to fail...
+This test takes 3 seconds and hangs the shell when it fails...
+A05execution.ztst: all tests successful.
+
+A06assign.ztst: starting.
+A06assign.ztst: all tests successful.
+
+A07control.ztst: starting.
+A07control.ztst: all tests successful.
+
+A08time.ztst: starting.
+This test takes 2 seconds
+A08time.ztst: all tests successful.
+
+A09zwc.ztst: starting.
+A09zwc.ztst: all tests successful.
+
+B01cd.ztst: starting.
+B01cd.ztst: all tests successful.
+
+B02typeset.ztst: starting.
+B02typeset.ztst: all tests successful.
+
+B03print.ztst: starting.
+B03print.ztst: all tests successful.
+
+B04read.ztst: starting.
+B04read.ztst: all tests successful.
+
+B05eval.ztst: starting.
+B05eval.ztst: all tests successful.
+
+B06fc.ztst: starting.
+B06fc.ztst: all tests successful.
+
+B07emulate.ztst: starting.
+B07emulate.ztst: all tests successful.
+
+B08shift.ztst: starting.
+B08shift.ztst: all tests successful.
+
+B09hash.ztst: starting.
+B09hash.ztst: all tests successful.
+
+B10getopts.ztst: starting.
+B10getopts.ztst: all tests successful.
+
+B11kill.ztst: starting.
+B11kill.ztst: all tests successful.
+
+B12limit.ztst: starting.
+B12limit.ztst: all tests successful.
+
+B13whence.ztst: starting.
+B13whence.ztst: all tests successful.
+
+C01arith.ztst: starting.
+C01arith.ztst: all tests successful.
+
+C02cond.ztst: starting.
+C02cond.ztst: all tests successful.
+
+C03traps.ztst: starting.
+This test takes at least three seconds...
+This test, too, takes at least three seconds...
+Another test that takes three seconds
+C03traps.ztst: all tests successful.
+
+C04funcdef.ztst: starting.
+C04funcdef.ztst: all tests successful.
+
+C05debug.ztst: starting.
+C05debug.ztst: all tests successful.
+
+D01prompt.ztst: starting.
+Test case skipped: Missing terminfo module or non-colour terminal
+Test case skipped: Missing terminfo module or non-colour terminal
+D01prompt.ztst: all tests successful.
+
+D02glob.ztst: starting.
+D02glob.ztst: all tests successful.
+
+D03procsubst.ztst: starting.
+This test hangs the shell when it fails...
+D03procsubst.ztst: all tests successful.
+
+D04parameter.ztst: starting.
+D04parameter.ztst: all tests successful.
+
+D05array.ztst: starting.
+D05array.ztst: all tests successful.
+
+D06subscript.ztst: starting.
+D06subscript.ztst: all tests successful.
+
+D07multibyte.ztst: starting.
+Testing multibyte with locale en_US.UTF-8
+D07multibyte.ztst: all tests successful.
+
+D08cmdsubst.ztst: starting.
+D08cmdsubst.ztst: all tests successful.
+
+D09brace.ztst: starting.
+D09brace.ztst: all tests successful.
+
+D10nofork.ztst: starting.
+D10nofork.ztst: all tests successful.
+
+E01options.ztst: starting.
+This test hangs the shell when it fails...
+E01options.ztst: all tests successful.
+
+E02xtrace.ztst: starting.
+E02xtrace.ztst: all tests successful.
+
+E03posix.ztst: starting.
+E03posix.ztst: all tests successful.
+
+K01nameref.ztst: starting.
+K01nameref.ztst: all tests successful.
+
+K02parameter.ztst: starting.
+K02parameter.ztst: all tests successful.
+
+P01privileged.ztst: starting.
+P01privileged.ztst: skipped (PRIVILEGED tests require super-user privileges (or env var))
+
+V01zmodload.ztst: starting.
+V01zmodload.ztst: all tests successful.
+
+V02zregexparse.ztst: starting.
+V02zregexparse.ztst: all tests successful.
+
+V03mathfunc.ztst: starting.
+V03mathfunc.ztst: all tests successful.
+
+V04features.ztst: starting.
+V04features.ztst: all tests successful.
+
+V05styles.ztst: starting.
+V05styles.ztst: all tests successful.
+
+V06parameter.ztst: starting.
+V06parameter.ztst: all tests successful.
+
+V07pcre.ztst: starting.
+Testing PCRE multibyte with locale en_US.UTF-8
+V07pcre.ztst: all tests successful.
+
+V08zpty.ztst: starting.
+V08zpty.ztst: all tests successful.
+
+V09datetime.ztst: starting.
+Test case skipped: Japanese UTF-8 locale not supported
+V09datetime.ztst: all tests successful.
+
+V10private.ztst: starting.
+V10private.ztst: all tests successful.
+
+V11db_gdbm.ztst: starting.
+V11db_gdbm.ztst: skipped (can't load zsh/db/gdbm module for testing)
+
+V12zparseopts.ztst: starting.
+V12zparseopts.ztst: all tests successful.
+
+V13zformat.ztst: starting.
+V13zformat.ztst: all tests successful.
+
+V14system.ztst: starting.
+V14system.ztst: all tests successful.
+
+V15nearcolor.ztst: starting.
+88-color terminal:  xterm-88color
+256-color terminal: xterm-256color
+V15nearcolor.ztst: all tests successful.
+
+W01history.ztst: starting.
+History tests write to /dev/tty
+W01history.ztst: all tests successful.
+
+W02jobs.ztst: starting.
+W02jobs.ztst: all tests successful.
+
+W03jobparameters.ztst: starting.
+W03jobparameters.ztst: all tests successful.
+
+X02zlevi.ztst: starting.
+This test may hang the shell when it fails...
+X02zlevi.ztst: all tests successful.
+
+X03zlebindkey.ztst: starting.
+X03zlebindkey.ztst: all tests successful.
+
+X04zlehighlight.ztst: starting.
+X04zlehighlight.ztst: all tests successful.
+
+X05zleincarg.ztst: starting.
+X05zleincarg.ztst: all tests successful.
+
+X06termquery.ztst: starting.
+X06termquery.ztst: all tests successful.
+
+Y01completion.ztst: starting.
+Y01completion.ztst: all tests successful.
+
+Y02compmatch.ztst: starting.
+Y02compmatch.ztst: all tests successful.
+
+Y03arguments.ztst: starting.
+Y03arguments.ztst: all tests successful.
+
+Y04regexargs.ztst: starting.
+Y04regexargs.ztst: all tests successful.
+
+Y05describe.ztst: starting.
+Y05describe.ztst: all tests successful.
+
+Y06values.ztst: starting.
+Y06values.ztst: all tests successful.
+
+Y07call_program.ztst: starting.
+Y07call_program.ztst: all tests successful.
+
+Z01is-at-least.ztst: starting.
+Z01is-at-least.ztst: all tests successful.
+
+Z02zmathfunc.ztst: starting.
+Z02zmathfunc.ztst: all tests successful.
+
+Z03run-help.ztst: starting.
+Z03run-help.ztst: all tests successful.
+
+Z04zgetopt.ztst: starting.
+Z04zgetopt.ztst: all tests successful.
+
+*************************************************
+75 successful test scripts, 0 failures, 2 skipped
+*************************************************
+make[1]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Test'
+make[1]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'zle.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'complete.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+rm -f stamp-modobjs.tmp
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+fatal: not a git repository (or any of the parent directories): .git
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+/bin/sh ../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin
+/usr/bin/install -c  zsh /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh-5.9.999.3-test
+if test -f /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh; then \
+    rm -f /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh.old; \
+    ln /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh.old; \
+else :; fi
+rm -f /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh.new
+ln /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh-5.9.999.3-test /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh.new
+mv /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh.new /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/bin/zsh
+make[1]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[1]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[2]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  rlimits.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/rlimits.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  sched.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/sched.so
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  attr.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/attr.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  cap.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/cap.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  clone.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/clone.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  curses.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/curses.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  datetime.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/datetime.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  example.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/example.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  files.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/files.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  hlgroup.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/hlgroup.so
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'zle.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'zle.export' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  ksh93.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/ksh93.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  langinfo.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/langinfo.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  mapfile.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/mapfile.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  mathfunc.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/mathfunc.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  nearcolor.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/nearcolor.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  newuser.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/newuser.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/param
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/param
+/usr/bin/install -c  param_private.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/param/private.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  parameter.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/parameter.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  pcre.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/pcre.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  random.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/random.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  regex.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/regex.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/net
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/net
+/usr/bin/install -c  socket.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/net/socket.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  stat.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/stat.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  system.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/system.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/net
+/usr/bin/install -c  tcp.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/net/tcp.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  termcap.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/termcap.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  terminfo.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/terminfo.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  watch.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/watch.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zftp.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zftp.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zprof.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zprof.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zpty.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zpty.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zselect.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zselect.so
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'complete.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[4]: 'complete.export' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zutil.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zutil.so
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  compctl.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/compctl.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  complete.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/complete.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  complist.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/complist.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  computil.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/computil.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  deltochar.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/deltochar.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zle.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zle.so
+/bin/sh ../../mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh
+/usr/bin/install -c  zleparameter.so /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/lib/zsh/5.9.999.3-test/zsh/zleparameter.so
+make[3]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+make[1]: Leaving directory '/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/source/Src'
+if test x/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions != x && test x/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions != xno; then \
+  test x/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/site-functions != xno && \
+    /bin/sh ./mkinstalldirs /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/site-functions; \
+  sdir_top="." fndir="/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions" dir_top="." \
+  scriptdir="/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/scripts" runhelpdir="/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/help" \
+  FUNCTIONS_SUBDIRS="no" \
+  INSTALL_DATA="/usr/bin/install -c -m 644" \
+  INSTALL_PROGRAM="/usr/bin/install -c" \
+  DESTDIR="/var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest" VERSION="5.9.999.3-test" \
+  /bin/sh ./Config/installfns.sh || exit 1; \
+fi; \
+exit 0
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/site-functions
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/functions
+mkdir -m 755 -p -- /var/tmp/wsh-zsh-upstream-45c220a/.zsh-cad0d67c-wsh2.Qsj38G/dest/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2/share/zsh/5.9.999.3-test/scripts
+/var/tmp/wsh-zsh-upstream-45c220a/zsh-cad0d67c-wsh2
