@@ -1,0 +1,72 @@
+name: builder-image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/builder-image.yml
+      - build/Containerfile.glibc-2.28-builder
+      - build/rocky-8.10-packages.lock
+
+permissions:
+  contents: read
+
+concurrency:
+  group: builder-image-main
+  cancel-in-progress: false
+
+env:
+  BUILDER_IMAGE: ghcr.io/wakamex/wsh-builder-glibc-2.28
+
+jobs:
+  publish:
+    name: Publish the locked builder image
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      attestations: write
+      id-token: write
+      packages: write
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Authenticate to the container registry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: printf '%s' "$GH_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+      - name: Build and publish the committed package set
+        id: publish
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="source-${GITHUB_SHA}"
+          docker build \
+            --file build/Containerfile.glibc-2.28-builder \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            --tag "${BUILDER_IMAGE}:${tag}" \
+            .
+          docker push "${BUILDER_IMAGE}:${tag}"
+          digest=$(docker buildx imagetools inspect "${BUILDER_IMAGE}:${tag}" --format '{{json .Manifest.Digest}}' | tr -d '"')
+          [[ $digest =~ ^sha256:[0-9a-f]{64}$ ]]
+          printf 'digest=%s\n' "$digest" >> "$GITHUB_OUTPUT"
+          printf '%s@%s\n' "$BUILDER_IMAGE" "$digest" > builder-image.txt
+          {
+            printf 'Builder image: `%s@%s`\n\n' "$BUILDER_IMAGE" "$digest"
+            printf 'Source: `%s`\n' "$GITHUB_SHA"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Attest the published image
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.1.0
+        with:
+          subject-name: ${{ env.BUILDER_IMAGE }}
+          subject-digest: ${{ steps.publish.outputs.digest }}
+          push-to-registry: true
+      - name: Retain the immutable image reference
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: glibc-2.28-builder-image
+          path: builder-image.txt
+          if-no-files-found: error
+          retention-days: 30
