@@ -107,6 +107,11 @@ WSH_EXPECT_NATIVE_TERMINAL_PASS=1 \
 
 zsh_version=$(${bundle}/bin/zsh -fc 'print -r -- $ZSH_VERSION')
 if [[ $zsh_version == 5.9.999.3-test ]]; then
+  if jq -e '.zsh.patches | index("d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6") != null' ${bundle}/manifest.json >/dev/null; then
+    ${test_zsh} ${repository_root}/tests/zcompile-reproducibility.zsh \
+      ${bundle}/bin/zsh \
+      ${bundle}/share/wsh/defaults/zsh-syntax-highlighting/highlighters/line/line-highlighter.zsh
+  fi
   terminal_policy_zdotdir=${test_root}/terminal-policy-zdotdir
   mkdir -p -- $terminal_policy_zdotdir
   terminal_policy_default=$(HOME=$terminal_policy_zdotdir ZDOTDIR=$terminal_policy_zdotdir WSH_STATE_ROOT=$state_root TERM=dumb \

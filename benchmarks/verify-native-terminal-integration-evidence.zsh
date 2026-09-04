@@ -22,6 +22,15 @@ verify_hash() {
   }
 }
 
+verify_git_object_hash() {
+  local key=$1 revision=$2 file=$3
+  local actual=$(git -C $root show ${revision}:${file} | sha256sum)
+  [[ ${actual%% *} == $(metadata_value $key) ]] || {
+    print -u2 -- "error: retained native-terminal Git object hash mismatch: ${key}"
+    exit 1
+  }
+}
+
 verify_hash baseline_native_counts_sha256 $evidence/baseline-native-counts.tsv
 verify_hash baseline_duplicate_counts_sha256 $evidence/baseline-duplicate-counts.tsv
 verify_hash baseline_coexist_counts_sha256 $evidence/baseline-coexist-counts.tsv
@@ -44,14 +53,15 @@ verify_hash plan_sha256 $root/benchmarks/native-terminal-integration-plan-2026-0
 verify_hash correctness_test_sha256 $root/tests/native-terminal-integration.zsh
 verify_hash foreground_test_sha256 $root/tests/foreground-startup.zsh
 verify_hash zsh_source_patch_sha256 $root/build/zsh-patches/cad0d67c-terminal-integration.patch
-verify_hash zsh_source_lock_sha256 $root/build/zsh-sources/zsh-cad0d67c.json
 verify_hash manager_source_sha256 $root/crates/wsh/src/main.rs
 verify_hash zshrc_source_sha256 $root/integration/zdotdir.zshrc
 verify_hash build_zsh_source_sha256 $root/build/build-zsh.zsh
 verify_hash build_bundle_source_sha256 $root/build/build-development-bundle.zsh
-verify_hash floor_test_source_sha256 $root/build/test-development-bundle.zsh
+readonly accepted_revision=7fefaa6b7083c3fd174536b240a2dc94005a79d3
+verify_git_object_hash zsh_source_lock_sha256 $accepted_revision build/zsh-sources/zsh-cad0d67c.json
+verify_git_object_hash floor_test_source_sha256 $accepted_revision build/test-development-bundle.zsh
 
-[[ $(jq -r '.source_patches[0].sha256' $root/build/zsh-sources/zsh-cad0d67c.json) == $(metadata_value zsh_source_patch_sha256) ]]
+[[ $(git -C $root show ${accepted_revision}:build/zsh-sources/zsh-cad0d67c.json | jq -r '.source_patches[0].sha256') == $(metadata_value zsh_source_patch_sha256) ]]
 
 $root/benchmarks/summarize-native-terminal-integration.zsh $evidence/prompt-cycle.tsv $temporary/summary.tsv >/dev/null
 diff -u $evidence/prompt-cycle-summary.tsv $temporary/summary.tsv

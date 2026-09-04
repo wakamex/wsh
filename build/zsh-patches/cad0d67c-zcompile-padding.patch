@@ -1,0 +1,31 @@
+diff --git a/Src/parse.c b/Src/parse.c
+index 27de93828..82f97d488 100644
+--- a/Src/parse.c
++++ b/Src/parse.c
+@@ -3334,7 +3334,8 @@ write_dump(int dfd, LinkList progs, int map, int hlen, int tlen)
+ {
+     LinkNode node;
+     WCFunc wcf;
+-    int other = 0, ohlen, tmp;
++    int other = 0, ohlen, tmp, len, padding;
++    const wordcode zero = 0;
+     wordcode pre[FD_PRELEN];
+     char *tail, *n;
+     struct fdhead head;
+@@ -3380,11 +3381,13 @@ write_dump(int dfd, LinkList progs, int map, int hlen, int tlen)
+ 	}
+ 	for (node = firstnode(progs); node; incnode(node)) {
+ 	    prog = ((WCFunc) getdata(node))->prog;
+-	    tmp = (prog->len - (prog->npats * sizeof(Patprog)) +
+-		   sizeof(wordcode) - 1) / sizeof(wordcode);
++	    len = prog->len - (prog->npats * sizeof(Patprog));
++	    tmp = (len + sizeof(wordcode) - 1) / sizeof(wordcode);
+ 	    if (other)
+ 		fdswap(prog->prog, (((Wordcode) prog->strs) - prog->prog));
+-	    write_loop(dfd, (char *)prog->prog, tmp * sizeof(wordcode));
++	    write_loop(dfd, (char *)prog->prog, len);
++	    if ((padding = tmp * sizeof(wordcode) - len))
++		write_loop(dfd, (char *)&zero, padding);
+ 	}
+ 	if (other)
+ 	    break;

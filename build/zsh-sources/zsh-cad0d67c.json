@@ -3,7 +3,7 @@
   "id": "zsh-cad0d67c",
   "mode": "canonical-commit",
   "version": "5.9.999.3-test",
-  "output_name": "zsh-cad0d67c-wsh1",
+  "output_name": "zsh-cad0d67c-wsh2",
   "repository": "https://github.com/zsh-users/zsh",
   "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
   "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
@@ -18,6 +18,10 @@
     {
       "path": "build/zsh-patches/cad0d67c-terminal-integration.patch",
       "sha256": "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8"
+    },
+    {
+      "path": "build/zsh-patches/cad0d67c-zcompile-padding.patch",
+      "sha256": "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
     }
   ],
   "test_patches": [
