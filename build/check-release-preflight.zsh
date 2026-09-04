@@ -16,6 +16,11 @@ readonly repository=${GITHUB_REPOSITORY:-wakamex/wsh}
   print -u2 -- "error: release preflight is fixed to wakamex/wsh, not $repository"
   exit 1
 }
+readonly notes_file=${repository_root}/release-notes/${tag}.md
+[[ -f $notes_file && ! -L $notes_file && -s $notes_file ]] || {
+  print -u2 -- "error: release notes must be a non-empty regular file: release-notes/${tag}.md"
+  exit 1
+}
 for command in cargo gh git jq; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"

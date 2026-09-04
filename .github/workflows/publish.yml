@@ -46,7 +46,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
-        run: ./build/check-release-eligibility.zsh "$RELEASE_TAG"
+        run: |
+          ./build/check-release-eligibility.zsh "$RELEASE_TAG"
+          test -f "release-notes/${RELEASE_TAG}.md"
+          test ! -L "release-notes/${RELEASE_TAG}.md"
+          test -s "release-notes/${RELEASE_TAG}.md"
 
   build:
     name: Canonical build ${{ matrix.worker }}
@@ -120,6 +124,12 @@ jobs:
       contents: write
       id-token: write
     steps:
+      - name: Check out the annotated tag
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          persist-credentials: false
       - name: Download canonical build a
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
@@ -225,8 +235,9 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          notes_file="release-notes/${RELEASE_TAG}.md"
           if release=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>release-error.txt); then
-            jq -e --arg tag "$RELEASE_TAG" '.tag_name == $tag and .draft == false and .prerelease == false' <<<"$release" >/dev/null
+            jq -e --arg tag "$RELEASE_TAG" --rawfile notes "$notes_file" '.tag_name == $tag and .draft == false and .prerelease == false and (.body | rtrimstr("\n")) == ($notes | rtrimstr("\n"))' <<<"$release" >/dev/null
             find release-assets -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > expected-assets.txt
             jq -r '.assets[].name' <<<"$release" | LC_ALL=C sort > published-assets.txt
             cmp --silent expected-assets.txt published-assets.txt
@@ -236,7 +247,7 @@ jobs:
               cmp --silent "release-assets/$asset" "existing-release/$asset"
             done < expected-assets.txt
           elif grep -F '(HTTP 404)' release-error.txt >/dev/null; then
-            gh release create "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes --title "$RELEASE_TAG"
+            gh release create "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY" --verify-tag --notes-file "$notes_file" --title "$RELEASE_TAG"
           else
             cat release-error.txt >&2
             exit 1
