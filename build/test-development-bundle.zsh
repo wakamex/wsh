@@ -30,13 +30,18 @@ test_zsh=${bundle}/bin/zsh
 manager=${cargo_target_dir}/release/wsh
 installer=${cargo_target_dir}/release/wsh-install
 theme=${bundle}/share/wsh/themes/minimal.toml
+manager_version=$(cargo metadata --locked --no-deps --format-version 1 | jq -er '.packages[] | select(.name == "wsh") | .version')
 
 cargo test --locked --workspace
 [[ -x $installer ]] || {
   print -u2 -- 'error: release installer was not built'
   exit 1
 }
-${manager} bundle verify ${bundle} >/dev/null
+[[ $(${manager} --version) == "wsh ${manager_version}" ]] || {
+  print -u2 -- 'error: manager did not report its package version'
+  exit 1
+}
+verified_identity=$(${manager} bundle verify ${bundle})
 ${bundle}/bin/zsh --version
 WSH_BUNDLE_ROOT=${bundle} \
 ZDOTDIR=${bundle}/share/wsh/zdotdir \
@@ -44,6 +49,19 @@ ZDOTDIR=${bundle}/share/wsh/zdotdir \
 ${runtime} validate-theme ${theme}
 state_root=${test_root}/state
 ${manager} bundle activate ${bundle} --state-root ${state_root} >/dev/null
+typeset -a version_lines
+version_lines=("${(@f)$(${manager} version --state-root ${state_root})}")
+(( ${#version_lines} == 7 )) || {
+  print -u2 -- 'error: detailed version output did not contain seven fields'
+  exit 1
+}
+[[ ${version_lines[1]} == "wsh ${manager_version}" ]]
+[[ ${version_lines[2]} == "bundle: $(jq -er '.release_id' ${bundle}/manifest.json) (${bundle_status})" ]]
+[[ ${version_lines[3]} == "wsh source: $(jq -er '.rust.source_revision' ${bundle}/manifest.json)" ]]
+[[ ${version_lines[4]} == "zsh: $(jq -er '.zsh.version' ${bundle}/manifest.json)" ]]
+[[ ${version_lines[5]} == "zsh source: $(jq -er '.zsh.source_revision' ${bundle}/manifest.json)" ]]
+[[ ${version_lines[6]} == "target: $(jq -er '.target' ${bundle}/manifest.json)" ]]
+[[ ${version_lines[7]} == "bundle sha256: ${verified_identity}" ]]
 launched_pid_file=${test_root}/launched.pid
 ${manager} run --state-root ${state_root} -- -c 'zmodload zsh/datetime; print -r -- $$' > ${launched_pid_file} &
 launcher_pid=$!

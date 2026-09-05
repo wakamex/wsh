@@ -5,15 +5,15 @@ use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
 use wsh::{
-    BundleStatus, activate_bundle, active_bundle, active_bundle_for_launch, entrypoints,
-    rollback_bundle, verify_bundle,
+    BundleStatus, activate_bundle, active_bundle, active_bundle_for_launch, active_verified_bundle,
+    entrypoints, rollback_bundle, verify_bundle,
 };
 
 mod doctor;
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
+    "usage:\n  wsh\n  wsh --version\n  wsh version [--state-root <directory>]\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -81,6 +81,30 @@ fn run() -> Result<(), String> {
         requested_action.as_deref().unwrap_or("run")
     };
     match action {
+        "--version" => {
+            if args.next().is_some() {
+                return Err(usage().into());
+            }
+            println!("wsh {}", env!("CARGO_PKG_VERSION"));
+            Ok(())
+        }
+        "version" => {
+            let remaining: Vec<_> = args.collect();
+            let state_root = parse_state_root(&remaining)?;
+            let (_, verified) = active_verified_bundle(&state_root)?;
+            let status = match verified.manifest.status {
+                BundleStatus::Development => "development",
+                BundleStatus::Release => "release",
+            };
+            println!("wsh {}", env!("CARGO_PKG_VERSION"));
+            println!("bundle: {} ({status})", verified.manifest.release_id);
+            println!("wsh source: {}", verified.manifest.rust.source_revision);
+            println!("zsh: {}", verified.manifest.zsh.version);
+            println!("zsh source: {}", verified.manifest.zsh.source_revision);
+            println!("target: {}", verified.manifest.target);
+            println!("bundle sha256: {}", verified.manifest_sha256);
+            Ok(())
+        }
         "bundle" => {
             let action = args
                 .next()

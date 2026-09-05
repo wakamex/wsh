@@ -210,9 +210,13 @@ pub fn rollback_bundle(state_root: &Path) -> Result<String, String> {
 }
 
 pub fn active_bundle(state_root: &Path) -> Result<PathBuf, String> {
+    active_verified_bundle(state_root).map(|(path, _)| path)
+}
+
+pub fn active_verified_bundle(state_root: &Path) -> Result<(PathBuf, VerifiedBundle), String> {
     let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
-    verify_reference(&state.active)?;
-    Ok(state.active.path)
+    let verified = verify_reference(&state.active)?;
+    Ok((state.active.path, verified))
 }
 
 pub fn active_bundle_for_launch(state_root: &Path) -> Result<LaunchBundle, String> {
@@ -311,7 +315,7 @@ fn verified_reference(bundle: &Path) -> Result<BundleReference, String> {
     })
 }
 
-fn verify_reference(reference: &BundleReference) -> Result<(), String> {
+fn verify_reference(reference: &BundleReference) -> Result<VerifiedBundle, String> {
     let verified = verify_bundle(&reference.path)?;
     if verified.manifest_sha256 != reference.manifest_sha256 {
         return Err(format!(
@@ -325,7 +329,7 @@ fn verify_reference(reference: &BundleReference) -> Result<(), String> {
             reference.path.display()
         ));
     }
-    Ok(())
+    Ok(verified)
 }
 
 fn read_state(state_root: &Path) -> Result<Option<BundleState>, String> {

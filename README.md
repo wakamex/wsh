@@ -42,6 +42,8 @@ Then start Wsh with `wsh`. The explicit `wsh run` form accepts Zsh arguments aft
 
 Use `wsh update --check` to check without changing anything, `wsh update` to install a newer current release, or `wsh update --to vX.Y.Z` to select an exact version. `wsh bundle rollback` returns to the previously active verified bundle without a network request.
 
+`wsh --version` reports the installed launcher version. `wsh version` also reports the active bundle's release or development identity, Wsh source revision, bundled Zsh version and source revision, target, and bundle digest.
+
 ## Current status
 
 The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
