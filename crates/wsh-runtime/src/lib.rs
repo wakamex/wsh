@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc::{self, Receiver, SyncSender};
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use flate2::read::ZlibDecoder;
 use serde::{Deserialize, Serialize};
@@ -22,6 +22,7 @@ const GIT_POLL_INTERVAL: Duration = Duration::from_micros(100);
 const MAX_PENDING_EVENTS: usize = 32;
 const WORKER_STOP_TIMEOUT: Duration = Duration::from_millis(2500);
 const MAX_TRACE_BYTES: u64 = 8 * 1024 * 1024;
+const MAX_PROFILE_RUNTIME_BYTES: u64 = 7 * 1024 * 1024;
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields, rename_all = "kebab-case")]
@@ -265,6 +266,7 @@ struct RefreshRequest {
     duration_ms: Option<u64>,
     privileged: bool,
     reset_transient: bool,
+    deferred_trace_received_us: Option<u128>,
 }
 
 struct ActiveWorker {
@@ -277,6 +279,15 @@ struct WorkerResult {
     result: Result<GitSnapshot, String>,
     cancelled: bool,
     elapsed: Duration,
+    metrics: WorkerMetrics,
+}
+
+#[derive(Default)]
+struct WorkerMetrics {
+    repository_discovery: Duration,
+    git_process: Option<Duration>,
+    parsing: Option<Duration>,
+    child_processes: u64,
 }
 
 struct Renderer {
@@ -301,6 +312,10 @@ struct RenderInput<'a> {
 struct Trace {
     file: Option<File>,
     started: Instant,
+    profile_started_unix_us: Option<u128>,
+    buffered: bool,
+    pending: Vec<Vec<u8>>,
+    max_bytes: u64,
     bytes: u64,
 }
 
@@ -311,10 +326,22 @@ impl Trace {
             return Ok(Self {
                 file: None,
                 started,
+                profile_started_unix_us: None,
+                buffered: false,
+                pending: Vec::new(),
+                max_bytes: MAX_TRACE_BYTES,
                 bytes: 0,
             });
         };
-        Self::from_path(&path, started)
+        let mut trace = Self::from_path(&path, started)?;
+        trace.profile_started_unix_us = std::env::var("WSH_PROFILE_STARTED_UNIX_US")
+            .ok()
+            .and_then(|value| value.parse().ok());
+        if trace.profile_started_unix_us.is_some() {
+            trace.buffered = true;
+            trace.max_bytes = MAX_PROFILE_RUNTIME_BYTES;
+        }
+        Ok(trace)
     }
 
     fn from_path(path: &Path, started: Instant) -> Result<Self, String> {
@@ -353,6 +380,10 @@ impl Trace {
         Ok(Self {
             file: Some(file),
             started,
+            profile_started_unix_us: None,
+            buffered: false,
+            pending: Vec::new(),
+            max_bytes: MAX_TRACE_BYTES,
             bytes,
         })
     }
@@ -363,16 +394,25 @@ impl Trace {
         generation: Option<u64>,
         fields: &[(&str, serde_json::Value)],
     ) -> Result<(), String> {
+        let elapsed_us = self.elapsed_us();
+        self.record_at(event, elapsed_us, generation, fields)
+    }
+
+    fn record_at(
+        &mut self,
+        event: &str,
+        elapsed_us: u128,
+        generation: Option<u64>,
+        fields: &[(&str, serde_json::Value)],
+    ) -> Result<(), String> {
         let Some(file) = &mut self.file else {
             return Ok(());
         };
         let mut object = serde_json::Map::new();
         object.insert("schema_version".into(), serde_json::json!(1));
+        object.insert("source".into(), serde_json::json!("runtime"));
         object.insert("event".into(), serde_json::json!(event));
-        object.insert(
-            "elapsed_us".into(),
-            serde_json::json!(self.started.elapsed().as_micros()),
-        );
+        object.insert("elapsed_us".into(), serde_json::json!(elapsed_us));
         if let Some(generation) = generation {
             object.insert("generation".into(), serde_json::json!(generation));
         }
@@ -382,14 +422,94 @@ impl Trace {
         let mut line = serde_json::to_vec(&object)
             .map_err(|error| format!("could not encode trace event: {error}"))?;
         line.push(b'\n');
-        if self.bytes + line.len() as u64 > MAX_TRACE_BYTES {
+        if self.bytes + line.len() as u64 > self.max_bytes {
+            return Ok(());
+        }
+        self.bytes += line.len() as u64;
+        if self.buffered {
+            self.pending.push(line);
             return Ok(());
         }
         file.write_all(&line)
             .and_then(|()| file.flush())
             .map_err(|error| format!("could not write trace: {error}"))?;
-        self.bytes += line.len() as u64;
         Ok(())
+    }
+
+    fn record_deferred_refresh(&mut self, request: &RefreshRequest) -> Result<(), String> {
+        if let Some(elapsed_us) = request.deferred_trace_received_us {
+            self.record_at(
+                "refresh-received",
+                elapsed_us,
+                Some(request.generation),
+                &[],
+            )?;
+        }
+        Ok(())
+    }
+
+    fn flush_pending(&mut self) -> Result<(), String> {
+        if self.pending.is_empty() {
+            return Ok(());
+        }
+        let Some(file) = &mut self.file else {
+            self.pending.clear();
+            return Ok(());
+        };
+        for line in self.pending.drain(..) {
+            file.write_all(&line)
+                .map_err(|error| format!("could not write trace: {error}"))?;
+        }
+        file.flush()
+            .map_err(|error| format!("could not flush trace: {error}"))
+    }
+
+    fn elapsed_us(&self) -> u128 {
+        if let Some(started) = self.profile_started_unix_us {
+            return SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .map(|value| value.as_micros().saturating_sub(started))
+                .unwrap_or(0);
+        }
+        self.started.elapsed().as_micros()
+    }
+
+    fn record_worker(
+        &mut self,
+        event: &str,
+        generation: u64,
+        elapsed: Duration,
+        metrics: &WorkerMetrics,
+    ) -> Result<(), String> {
+        self.record(
+            event,
+            Some(generation),
+            &[
+                ("duration_us", serde_json::json!(elapsed.as_micros())),
+                (
+                    "repository_discovery_us",
+                    serde_json::json!(metrics.repository_discovery.as_micros()),
+                ),
+                (
+                    "git_process_us",
+                    metrics
+                        .git_process
+                        .map(|value| serde_json::json!(value.as_micros()))
+                        .unwrap_or(serde_json::Value::Null),
+                ),
+                (
+                    "parse_duration_us",
+                    metrics
+                        .parsing
+                        .map(|value| serde_json::json!(value.as_micros()))
+                        .unwrap_or(serde_json::Value::Null),
+                ),
+                (
+                    "child_processes",
+                    serde_json::json!(metrics.child_processes),
+                ),
+            ],
+        )
     }
 }
 
@@ -427,7 +547,11 @@ pub fn serve<R: BufRead + Send + 'static, W: Write>(
             theme: &theme.id,
         },
     )?;
-    trace.record("runtime-ready", None, &[])?;
+    trace.record(
+        "runtime-ready",
+        None,
+        &[("theme", serde_json::json!(&theme.id))],
+    )?;
     let (events_tx, events_rx) = mpsc::sync_channel(MAX_PENDING_EVENTS);
     spawn_reader(input, events_tx.clone());
     run_event_loop(theme, &mut output, events_tx, events_rx, trace)
@@ -473,7 +597,12 @@ fn run_event_loop<W: Write>(
                         continue;
                     }
                     latest_generation = generation;
-                    trace.record("refresh-received", Some(generation), &[])?;
+                    let deferred_trace_received_us = if trace.buffered {
+                        Some(trace.elapsed_us())
+                    } else {
+                        trace.record("refresh-received", Some(generation), &[])?;
+                        None
+                    };
                     let request = RefreshRequest {
                         id,
                         generation,
@@ -482,6 +611,7 @@ fn run_event_loop<W: Write>(
                         duration_ms,
                         privileged,
                         reset_transient,
+                        deferred_trace_received_us,
                     };
                     if let Some(worker) = &active {
                         worker.cancel.store(true, Ordering::Release);
@@ -529,6 +659,7 @@ fn run_event_loop<W: Write>(
                     },
                 )?;
                 trace.record("runtime-stopping", None, &[])?;
+                trace.flush_pending()?;
                 return Ok(());
             }
             Event::Request(request) => {
@@ -538,6 +669,7 @@ fn run_event_loop<W: Write>(
             Event::InputError(error) => return Err(error),
             Event::End => {
                 stop_worker(&mut active, &events_rx)?;
+                trace.flush_pending()?;
                 return Ok(());
             }
             Event::Worker(worker) => {
@@ -546,57 +678,75 @@ fn run_event_loop<W: Write>(
                     .is_some_and(|item| item.generation == worker.request.generation);
                 if is_current {
                     active = None;
+                    let WorkerResult {
+                        request,
+                        result,
+                        cancelled,
+                        elapsed,
+                        metrics,
+                    } = worker;
                     let publish = should_publish_result(
-                        worker.request.generation,
+                        request.generation,
                         latest_generation,
                         cancelled_through,
-                        worker.cancelled,
+                        cancelled,
                     );
-                    trace.record(
-                        if worker.cancelled || !publish {
-                            "worker-cancelled"
-                        } else if worker.result.is_ok() {
-                            "worker-completed"
-                        } else {
-                            "worker-failed"
-                        },
-                        Some(worker.request.generation),
-                        &[("duration_us", serde_json::json!(worker.elapsed.as_micros()))],
-                    )?;
+                    if !publish {
+                        trace.record_deferred_refresh(&request)?;
+                        trace.record_worker(
+                            "worker-cancelled",
+                            request.generation,
+                            elapsed,
+                            &metrics,
+                        )?;
+                    }
                     if publish {
-                        match worker.result {
+                        match result {
                             Ok(snapshot) => {
-                                if worker.request.reset_transient {
+                                if request.reset_transient {
                                     renderer.reset_transient();
                                 }
+                                let render_started = Instant::now();
                                 let (prompt, rprompt) = renderer.render(
                                     &snapshot,
-                                    worker.request.exit_status,
-                                    worker.request.duration_ms,
-                                    worker.request.privileged,
+                                    request.exit_status,
+                                    request.duration_ms,
+                                    request.privileged,
                                 );
+                                let render_duration = render_started.elapsed();
                                 let rendered_bytes = prompt.len() + rprompt.len();
                                 let prompt_changed =
                                     last_rendered.as_ref().is_none_or(|(left, right)| {
                                         left != &prompt || right != &rprompt
                                     });
+                                let response_write_started = Instant::now();
                                 write_json(
                                     output,
                                     &SnapshotResponse {
                                         version: 1,
                                         message_type: "snapshot",
-                                        id: worker.request.id,
-                                        generation: worker.request.generation,
+                                        id: request.id,
+                                        generation: request.generation,
                                         prompt_hex: encode_hex(prompt.as_bytes()),
                                         rprompt_hex: encode_hex(rprompt.as_bytes()),
                                         snapshot: &snapshot,
                                     },
                                 )?;
+                                let response_write_duration = response_write_started.elapsed();
+                                trace.record_deferred_refresh(&request)?;
                                 trace.record(
                                     "snapshot-published",
-                                    Some(worker.request.generation),
+                                    Some(request.generation),
                                     &[
                                         ("rendered_bytes", serde_json::json!(rendered_bytes)),
+                                        (
+                                            "render_duration_us",
+                                            serde_json::json!(render_duration.as_micros()),
+                                        ),
+                                        (
+                                            "response_write_duration_us",
+                                            serde_json::json!(response_write_duration.as_micros()),
+                                        ),
                                         ("prompt_changed", serde_json::json!(prompt_changed)),
                                         (
                                             "repaint_cause",
@@ -608,9 +758,24 @@ fn run_event_loop<W: Write>(
                                         ),
                                     ],
                                 )?;
+                                trace.record_worker(
+                                    "worker-completed",
+                                    request.generation,
+                                    elapsed,
+                                    &metrics,
+                                )?;
                                 last_rendered = Some((prompt, rprompt));
                             }
-                            Err(error) => write_error(output, Some(worker.request.id), &error)?,
+                            Err(error) => {
+                                trace.record_deferred_refresh(&request)?;
+                                trace.record_worker(
+                                    "worker-failed",
+                                    request.generation,
+                                    elapsed,
+                                    &metrics,
+                                )?;
+                                write_error(output, Some(request.id), &error)?;
+                            }
                         }
                     }
                     if let Some(request) = pending.take() {
@@ -618,6 +783,9 @@ fn run_event_loop<W: Write>(
                     }
                 }
             }
+        }
+        if active.is_none() {
+            trace.flush_pending()?;
         }
     }
     Ok(())
@@ -681,18 +849,24 @@ fn spawn_git_worker(request: RefreshRequest, events: SyncSender<Event>) -> Activ
     let generation = request.generation;
     thread::spawn(move || {
         let started = Instant::now();
-        let (result, cancelled) =
-            collect_git_snapshot(&request.cwd, request.generation, &worker_cancel);
+        let (result, cancelled, metrics) = collect_git_snapshot_detailed(
+            &request.cwd,
+            request.generation,
+            &worker_cancel,
+            Path::new("git"),
+        );
         let _ = events.send(Event::Worker(WorkerResult {
             request,
             result,
             cancelled,
             elapsed: started.elapsed(),
+            metrics,
         }));
     });
     ActiveWorker { generation, cancel }
 }
 
+#[cfg(test)]
 fn collect_git_snapshot(
     cwd: &Path,
     generation: u64,
@@ -701,14 +875,31 @@ fn collect_git_snapshot(
     collect_git_snapshot_with_command(cwd, generation, cancel, Path::new("git"))
 }
 
+#[cfg(test)]
 fn collect_git_snapshot_with_command(
     cwd: &Path,
     generation: u64,
     cancel: &AtomicBool,
     git: &Path,
 ) -> (Result<GitSnapshot, String>, bool) {
-    let Some(identity) = discover_repository(cwd) else {
-        return (Ok(empty_snapshot(cwd, generation)), false);
+    let (result, cancelled, _) = collect_git_snapshot_detailed(cwd, generation, cancel, git);
+    (result, cancelled)
+}
+
+fn collect_git_snapshot_detailed(
+    cwd: &Path,
+    generation: u64,
+    cancel: &AtomicBool,
+    git: &Path,
+) -> (Result<GitSnapshot, String>, bool, WorkerMetrics) {
+    let discovery_started = Instant::now();
+    let identity = discover_repository(cwd);
+    let mut metrics = WorkerMetrics {
+        repository_discovery: discovery_started.elapsed(),
+        ..WorkerMetrics::default()
+    };
+    let Some(identity) = identity else {
+        return (Ok(empty_snapshot(cwd, generation)), false, metrics);
     };
     let mut command = Command::new(git);
     command
@@ -735,8 +926,15 @@ fn collect_git_snapshot_with_command(
     }
     let mut child = match command.spawn() {
         Ok(child) => child,
-        Err(error) => return (Err(format!("could not start Git status: {error}")), false),
+        Err(error) => {
+            return (
+                Err(format!("could not start Git status: {error}")),
+                false,
+                metrics,
+            );
+        }
     };
+    metrics.child_processes = 1;
     let stdout = child.stdout.take().expect("piped Git stdout");
     let reader = thread::spawn(move || read_git_output(stdout));
     let started = Instant::now();
@@ -757,24 +955,35 @@ fn collect_git_snapshot_with_command(
         .join()
         .map_err(|_| "Git output reader panicked".to_owned())
         .and_then(|result| result);
+    metrics.git_process = Some(started.elapsed());
     if cancelled {
-        return (Err("Git request cancelled".into()), true);
+        return (Err("Git request cancelled".into()), true, metrics);
     }
     match status {
         Ok(status) if status.success() => {}
-        Ok(status) => return (Err(format!("Git status exited with {status}")), false),
+        Ok(status) => {
+            return (
+                Err(format!("Git status exited with {status}")),
+                false,
+                metrics,
+            );
+        }
         Err(error) => {
             return (
                 Err(format!("could not wait for Git status: {error}")),
                 false,
+                metrics,
             );
         }
     }
     let output = match output {
         Ok(output) => output,
-        Err(error) => return (Err(error), false),
+        Err(error) => return (Err(error), false, metrics),
     };
-    (parse_git_status(cwd, generation, identity, &output), false)
+    let parsing_started = Instant::now();
+    let result = parse_git_status(cwd, generation, identity, &output);
+    metrics.parsing = Some(parsing_started.elapsed());
+    (result, false, metrics)
 }
 
 fn kill_git_child(child: &mut std::process::Child) {

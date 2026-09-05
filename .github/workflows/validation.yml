@@ -95,6 +95,7 @@ jobs:
           ./benchmarks/verify-plugin-doctor-evidence.zsh
           ./benchmarks/verify-foreground-startup-evidence.zsh
           ./benchmarks/verify-native-terminal-integration-evidence.zsh
+          ./benchmarks/verify-profile-evidence.zsh
 
   validate:
     name: validate

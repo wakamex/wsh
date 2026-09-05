@@ -64,6 +64,7 @@ cargo test --workspace
 ./build/build-zsh.zsh
 ./build/build-development-bundle.zsh
 ./tests/runtime-pty.zsh
+./tests/profile.zsh target/release/wsh <bundle-path>
 ```
 
 The bundle command prints a local bundle path. Verify it with `cargo run -p wsh -- bundle verify <bundle-path>`. These host commands support iteration; the glibc 2.28 build below is the canonical complete target experiment.

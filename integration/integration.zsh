@@ -97,6 +97,8 @@ _wsh_runtime_failed() {
 _wsh_runtime_apply_snapshot() {
   emulate -L zsh
   setopt extendedglob
+  local -F profile_started=0
+  (( $+WSH_PROFILE_FD )) && profile_started=$EPOCHREALTIME
   local line=$1 generation prompt_hex rprompt_hex next_prompt next_rprompt
   [[ $line == '{"version":1,"type":"snapshot","id":'* ]] || return 0
   generation=${${line#*\"generation\":}%%,*}
@@ -109,13 +111,20 @@ _wsh_runtime_apply_snapshot() {
   next_prompt=$REPLY
   _wsh_hex_decode "$rprompt_hex"
   next_rprompt=$REPLY
-  [[ $next_prompt == $WSH_LAST_PROMPT && $next_rprompt == $WSH_LAST_RPROMPT ]] && return 0
+  if [[ $next_prompt == $WSH_LAST_PROMPT && $next_rprompt == $WSH_LAST_RPROMPT ]]; then
+    return 0
+  fi
   WSH_LAST_PROMPT=$next_prompt
   WSH_LAST_RPROMPT=$next_rprompt
   PROMPT=$WSH_LAST_PROMPT
   RPROMPT=$WSH_LAST_RPROMPT
   (( WSH_RUNTIME_REPAINTS++ ))
   zle reset-prompt 2>/dev/null || true
+  if (( $+WSH_PROFILE_FD && WSH_PROFILE_SNAPSHOT_APPLIED_AT_US < 0 )); then
+    WSH_PROFILE_SNAPSHOT_APPLIED_AT_US=$(( (EPOCHREALTIME - WSH_PROFILE_STARTED_AT) * 1000000 + 0.5 ))
+    WSH_PROFILE_SNAPSHOT_APPLIED_DURATION_US=$(( (EPOCHREALTIME - profile_started) * 1000000 + 0.5 ))
+    WSH_PROFILE_SNAPSHOT_APPLIED_GENERATION=$generation
+  fi
 }
 
 _wsh_runtime_read() {
@@ -133,17 +142,20 @@ _wsh_runtime_read() {
 
 _wsh_runtime_preexec() {
   emulate -L zsh
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event preexec-start
   WSH_COMMAND_STARTED_AT=$EPOCHREALTIME
   [[ $1 == clear || $1 == 'clear '* ]] && WSH_RESET_TRANSIENT=1
   if (( WSH_RUNTIME_READY )); then
     (( WSH_RUNTIME_REQUEST_ID++ ))
     print -r -u $WSH_RUNTIME_INPUT_FD -- "{\"type\":\"cancel\",\"version\":1,\"id\":${WSH_RUNTIME_REQUEST_ID},\"generation\":${WSH_RUNTIME_GENERATION}}" 2>/dev/null || _wsh_runtime_failed
   fi
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event preexec-end
 }
 
 _wsh_runtime_precmd() {
   local -i exit_status=$?
   emulate -L zsh
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event precmd-start
   local duration_json=null
   local -F now
   local -i duration_ms
@@ -155,7 +167,10 @@ _wsh_runtime_precmd() {
   fi
   PROMPT=$WSH_LAST_PROMPT
   RPROMPT=$WSH_LAST_RPROMPT
-  (( WSH_RUNTIME_READY )) || return 0
+  if (( ! WSH_RUNTIME_READY )); then
+    (( $+functions[_wsh_profile_event] )) && _wsh_profile_event precmd-end
+    return 0
+  fi
   _wsh_hex_encode "$PWD"
   (( WSH_RUNTIME_GENERATION++ ))
   (( WSH_RUNTIME_REQUEST_ID++ ))
@@ -165,10 +180,12 @@ _wsh_runtime_precmd() {
   (( WSH_RESET_TRANSIENT )) && reset_transient=true
   WSH_RESET_TRANSIENT=0
   print -r -u $WSH_RUNTIME_INPUT_FD -- "{\"type\":\"refresh\",\"version\":1,\"id\":${WSH_RUNTIME_REQUEST_ID},\"generation\":${WSH_RUNTIME_GENERATION},\"cwd_hex\":\"${REPLY}\",\"exit_status\":${exit_status},\"duration_ms\":${duration_json},\"privileged\":${privileged},\"reset_transient\":${reset_transient}}" 2>/dev/null || _wsh_runtime_failed
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event precmd-end
 }
 
 _wsh_runtime_start() {
   emulate -L zsh
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event runtime-start
   if [[ ! -x ${WSH_RUNTIME:-} || ! -f ${WSH_THEME:-} ]]; then
     print -u2 -- 'wsh: WSH_RUNTIME or WSH_THEME is unavailable'
     return 1
@@ -194,6 +211,7 @@ _wsh_runtime_start() {
   fi
   WSH_RUNTIME_READY=1
   zle -F $WSH_RUNTIME_OUTPUT_FD _wsh_runtime_read
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event runtime-ready-zsh
 }
 
 zmodload zsh/datetime

@@ -2,7 +2,9 @@ if (( ${+WSH_STARTUP_BUNDLE_ZDOTDIR} )); then
   ZDOTDIR=$WSH_USER_ZDOTDIR
   typeset -g WSH_STARTUP_FILE=$ZDOTDIR/.zshrc
   if [[ $WSH_STARTUP_RCS == on && $WSH_STARTUP_FILE != $WSH_STARTUP_BUNDLE_ZDOTDIR/.zshrc && ( -e $WSH_STARTUP_FILE || -L $WSH_STARTUP_FILE ) ]]; then
+    (( $+functions[_wsh_profile_event] )) && _wsh_profile_event user-zshrc-start
     source $WSH_STARTUP_FILE
+    (( $+functions[_wsh_profile_event] )) && _wsh_profile_event user-zshrc-end
     WSH_STARTUP_RCS=$options[rcs]
   fi
   WSH_USER_ZDOTDIR=$ZDOTDIR
@@ -49,14 +51,23 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
     add-zsh-hook precmd _wsh_run_foreground_startup
     precmd_functions=(_wsh_run_foreground_startup "${(@)precmd_functions:#_wsh_run_foreground_startup}")
   fi
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event history-start
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/history-substring-search.zsh"
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event history-end
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event autosuggestions-start
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/autosuggestions.zsh"
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event autosuggestions-end
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event syntax-highlighting-start
   if [[ ${WSH_DISABLE_SYNTAX_HIGHLIGHTING:-0} == 1 ]]; then
     typeset -g WSH_SYNTAX_HIGHLIGHTING_OWNER=disabled
   else
     source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/syntax-highlighting.zsh"
   fi
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event syntax-highlighting-end
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event integration-start
   source "${WSH_BUNDLE_ROOT}/share/wsh/integration.zsh"
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event integration-end
+  (( $+functions[_wsh_profile_install] )) && _wsh_profile_install
 fi
 
 if (( ${+WSH_STARTUP_BUNDLE_ZDOTDIR} )); then

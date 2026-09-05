@@ -9,7 +9,7 @@ readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 readonly maximum_glibc=${WSH_MINIMUM_GLIBC:-}
 readonly archive_output_root=${WSH_ARCHIVE_OUTPUT_ROOT:-}
 
-for command in cargo cp diff find git jq mkdir mktemp od readelf rm sed sort tail tr; do
+for command in cargo cp diff find git jq mkdir mktemp od readelf rm sed sort stat tail tr; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
@@ -119,6 +119,7 @@ ${test_zsh} ${repository_root}/tests/history-substring-search.zsh ${manager} ${b
 ${test_zsh} ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/plugin-doctor.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/profile.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
 WSH_EXPECT_NATIVE_TERMINAL_PASS=1 \
   ${test_zsh} ${repository_root}/tests/native-terminal-integration.zsh ${bundle}/bin/zsh /dev/null native ${test_root}/native-terminal.bin >/dev/null

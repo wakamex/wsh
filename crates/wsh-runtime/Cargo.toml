@@ -7,7 +7,7 @@ repository.workspace = true
 
 [dependencies]
 flate2 = "1.1.5"
-libc = "0.2.177"
+libc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 toml.workspace = true

@@ -5,15 +5,16 @@ use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
 use wsh::{
-    BundleStatus, activate_bundle, active_bundle, active_bundle_for_launch, active_verified_bundle,
-    entrypoints, rollback_bundle, verify_bundle,
+    BundleStatus, activate_bundle, active_bundle, active_bundle_for_launch,
+    active_bundle_for_profile, active_verified_bundle, entrypoints, rollback_bundle, verify_bundle,
 };
 
 mod doctor;
+mod profile;
 mod update;
 
 fn usage() -> &'static str {
-    "usage:\n  wsh\n  wsh --version\n  wsh version [--state-root <directory>]\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
+    "usage:\n  wsh\n  wsh --version\n  wsh version [--state-root <directory>]\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh profile [--functions] [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh profile report <profile-directory>\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]"
 }
 
 fn default_state_root() -> Result<PathBuf, String> {
@@ -259,6 +260,99 @@ fn run() -> Result<(), String> {
             let error = command.exec();
             Err(format!(
                 "could not replace the launcher with {}: {error}",
+                paths.shell.display()
+            ))
+        }
+        "profile" => {
+            let remaining: Vec<_> = args.collect();
+            if remaining.first().is_some_and(|value| value == "report") {
+                let [_, directory] = remaining.as_slice() else {
+                    return Err(usage().into());
+                };
+                print!("{}", profile::report(&PathBuf::from(directory))?);
+                return Ok(());
+            }
+            let separator = remaining.iter().position(|arg| arg == "--");
+            let (options, shell_args) = separator.map_or((&remaining[..], &[][..]), |index| {
+                (&remaining[..index], &remaining[index + 1..])
+            });
+            let mut bundle = None;
+            let mut state_root = None;
+            let mut functions = false;
+            let mut index = 0;
+            while index < options.len() {
+                match options[index].to_str() {
+                    Some("--functions") if !functions => {
+                        functions = true;
+                        index += 1;
+                        continue;
+                    }
+                    Some("--bundle") => {
+                        let value = options.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        bundle = Some(PathBuf::from(value));
+                    }
+                    Some("--state-root") => {
+                        let value = options.get(index + 1).ok_or_else(|| usage().to_owned())?;
+                        state_root = Some(PathBuf::from(value));
+                    }
+                    _ => return Err(usage().into()),
+                }
+                index += 2;
+            }
+            let state_root = state_root.unwrap_or(default_state_root()?);
+            let session = profile::create(&state_root, functions)?;
+            eprintln!(
+                "Profiling this shell. Exit to view the report.\nTrace: {}",
+                session.directory.display()
+            );
+            let (bundle, paths, manifest_sha256) = match bundle {
+                Some(bundle) => {
+                    let verified = verify_bundle(&bundle)?;
+                    let paths = entrypoints(&bundle, &verified.manifest);
+                    (bundle, paths, verified.manifest_sha256)
+                }
+                None => {
+                    let selected = active_bundle_for_profile(&state_root)?;
+                    (
+                        selected.root,
+                        selected.entrypoints,
+                        selected.manifest_sha256,
+                    )
+                }
+            };
+            profile::record_manager_metadata(&session, &bundle, &manifest_sha256)?;
+            let reporter = env::current_exe()
+                .map_err(|error| format!("could not resolve the wsh executable: {error}"))?;
+            let mut command = Command::new(&paths.shell);
+            command.arg("-d").args(shell_args);
+            if let Some(user_zdotdir) = user_zdotdir() {
+                command.env("WSH_USER_ZDOTDIR", user_zdotdir);
+            } else {
+                command.env_remove("WSH_USER_ZDOTDIR");
+            }
+            command
+                .env("WSH_BUNDLE_ROOT", &bundle)
+                .env("WSH_RUNTIME", &paths.runtime)
+                .env("WSH_THEME", &paths.default_theme)
+                .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
+                .env("WSH_PROFILE_DIRECTORY", &session.directory)
+                .env("WSH_PROFILE_FILE", &session.trace)
+                .env("WSH_PROFILE_ZPROF_FILE", &session.zprof)
+                .env("WSH_PROFILE_REPORTER", reporter)
+                .env("WSH_PROFILE_FUNCTIONS", if functions { "1" } else { "0" })
+                .env(
+                    "WSH_PROFILE_STARTED_UNIX_US",
+                    session.started_unix_us.to_string(),
+                )
+                .env("WSH_PROFILE_STARTED_AT", profile::started_seconds(&session))
+                .env("WSH_TRACE_FILE", &session.trace)
+                .env("ZDOTDIR", &paths.zdotdir)
+                .env_remove("WSH_RUN_FOREGROUND")
+                .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
+                .env_remove("WSH_STARTUP_RCS");
+            let error = command.exec();
+            Err(format!(
+                "could not replace the profiler with {}: {error}",
                 paths.shell.display()
             ))
         }

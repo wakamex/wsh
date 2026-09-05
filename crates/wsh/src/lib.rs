@@ -143,6 +143,12 @@ pub struct LaunchBundle {
     pub entrypoints: EntrypointPaths,
 }
 
+pub struct ProfileBundle {
+    pub root: PathBuf,
+    pub entrypoints: EntrypointPaths,
+    pub manifest_sha256: String,
+}
+
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(deny_unknown_fields)]
 struct BundleState {
@@ -226,6 +232,30 @@ pub fn active_bundle_for_launch(state_root: &Path) -> Result<LaunchBundle, Strin
         root: state.active.path,
         entrypoints,
     })
+}
+
+pub fn active_bundle_for_profile(state_root: &Path) -> Result<ProfileBundle, String> {
+    let state = read_state(state_root)?.ok_or_else(|| "no active bundle state".to_owned())?;
+    let entrypoints = resolve_launch_reference(&state.active)?;
+    Ok(ProfileBundle {
+        root: state.active.path,
+        entrypoints,
+        manifest_sha256: state.active.manifest_sha256,
+    })
+}
+
+pub fn bundle_manifest_for_profile(
+    root: &Path,
+    expected_sha256: &str,
+) -> Result<BundleManifest, String> {
+    let (manifest, manifest_sha256) = read_manifest(root)?;
+    if manifest_sha256 != expected_sha256 {
+        return Err(format!(
+            "profile bundle manifest changed: {}",
+            root.display()
+        ));
+    }
+    Ok(manifest)
 }
 
 pub fn verify_bundle(root: &Path) -> Result<VerifiedBundle, String> {

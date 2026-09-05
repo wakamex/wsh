@@ -897,6 +897,7 @@ dependencies = [
 name = "wsh"
 version = "0.2.0"
 dependencies = [
+ "libc",
  "serde",
  "serde_json",
  "sha2 0.10.9",

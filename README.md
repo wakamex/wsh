@@ -27,7 +27,7 @@ The [`zsh-theme-bench` benchmark](https://github.com/wakamex/zsh-theme-bench/blo
 - Exact foreground application startup with native Zsh job control and one prompt afterward
 - Immutable bundles that pair one exact Zsh build with its tested Wsh runtime
 - Explicit, signed, reproducible, atomic, and reversible updates with no update work during shell startup
-- Built-in profiling and tracing for startup, prompts, providers, child processes, repaints, completion, history, and terminal events
+- Built-in profiling and tracing for startup, prompts, providers, child processes, and repaints
 - Reproducible correctness fixtures and benchmarks for performance claims and new feature decisions
 
 ## Install
@@ -44,9 +44,11 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 
 `wsh --version` reports the installed launcher version. `wsh version` also reports the active bundle's release or development identity, Wsh source revision, bundled Zsh version and source revision, target, and bundle digest.
 
+Run `wsh profile` to start a normal interactive session that reports launcher, startup-file, built-in, provider, rendering, and first-editor timing when you exit. `wsh profile --functions` adds Zsh function-level timing. [PROFILING.md](PROFILING.md) defines the captured data, privacy limits, and recovery command.
+
 ## Current status
 
-The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
 
@@ -67,6 +69,7 @@ Zsh remains the shell engine. Applications remain authoritative for their comman
 - [MOTIVATION.md](MOTIVATION.md) explains the benchmark evidence and product direction.
 - [DESIGN.md](DESIGN.md) defines the provider, renderer, theme, runtime, and distribution contracts.
 - [IMPLEMENTATION.md](IMPLEMENTATION.md) records the current implementation, accepted results, target, bundle format, and performance gates.
+- [PROFILING.md](PROFILING.md) defines the user-facing profile command, report, captured spans, privacy limits, and retained evidence.
 - [DEVELOPMENT.md](DEVELOPMENT.md) defines the local workflow, CI, testing, benchmarking, and evidence-retention rules.
 - [FEATURES.md](FEATURES.md) ranks later investigations and links their detailed experiment specifications.
 - [SECURITY.md](SECURITY.md) and [RELEASES.md](RELEASES.md) define theme authority, official artifacts, reproducibility, attestations, activation, and rollback.
