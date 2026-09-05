@@ -6,6 +6,7 @@ readonly root=${0:A:h:h}
 readonly evidence=$root/benchmarks/native-terminal-integration-2026-09-04
 readonly metadata=$evidence/metadata.txt
 readonly temporary=$(mktemp -d /var/tmp/wsh-native-terminal-evidence.XXXXXX)
+readonly accepted_revision=7fefaa6b7083c3fd174536b240a2dc94005a79d3
 trap 'command rm -rf -- $temporary' EXIT INT TERM
 
 metadata_value() {
@@ -53,11 +54,10 @@ verify_hash plan_sha256 $root/benchmarks/native-terminal-integration-plan-2026-0
 verify_hash correctness_test_sha256 $root/tests/native-terminal-integration.zsh
 verify_hash foreground_test_sha256 $root/tests/foreground-startup.zsh
 verify_hash zsh_source_patch_sha256 $root/build/zsh-patches/cad0d67c-terminal-integration.patch
-verify_hash manager_source_sha256 $root/crates/wsh/src/main.rs
+verify_git_object_hash manager_source_sha256 $accepted_revision crates/wsh/src/main.rs
 verify_hash zshrc_source_sha256 $root/integration/zdotdir.zshrc
 verify_hash build_zsh_source_sha256 $root/build/build-zsh.zsh
 verify_hash build_bundle_source_sha256 $root/build/build-development-bundle.zsh
-readonly accepted_revision=7fefaa6b7083c3fd174536b240a2dc94005a79d3
 verify_git_object_hash zsh_source_lock_sha256 $accepted_revision build/zsh-sources/zsh-cad0d67c.json
 verify_git_object_hash floor_test_source_sha256 $accepted_revision build/test-development-bundle.zsh
 
