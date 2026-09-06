@@ -10,7 +10,7 @@
 - Update explicitly and roll back offline if needed.
 - Navigate prompts and command output in compatible terminals.
 
-These features describe current development source; some await the next release and are not included in v0.2.0.
+These features are included in v0.3.0.
 
 ## Motivation
 
@@ -50,7 +50,7 @@ Run `wsh profile` to start a normal interactive session that reports launcher, s
 
 ## Directory jumping
 
-Current development source supplies `z` when your configuration has not already defined a directory-jump command. Visit a directory, then use part of its name to return:
+Wsh supplies `z` when your configuration has not already defined a directory-jump command. Visit a directory, then use part of its name to return:
 
 ```sh
 cd /code/my-project
@@ -58,11 +58,11 @@ cd /tmp
 z my-project
 ```
 
-The pinned Zsh-z implementation ranks visited directories by frequency and recency and persists them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. This default is not included in v0.2.0. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
+The pinned Zsh-z implementation ranks visited directories by frequency and recency and persists them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
 
 ## Prompt selection
 
-Current development source preserves your existing prompt when `WSH_THEME` is unset or empty. Select a Wsh theme to enable its prompt and asynchronous Git collector:
+Wsh preserves your existing prompt when `WSH_THEME` is unset or empty. Select a Wsh theme to enable its prompt and asynchronous Git collector:
 
 ```sh
 WSH_THEME=wakamex wsh
@@ -72,7 +72,7 @@ WSH_THEME=agnoster wsh
 WSH_THEME=/path/to/theme.toml wsh
 ```
 
-These are terminal commands. All four bundled names and explicit theme-definition paths are supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt. Theme selection is not available in v0.2.0.
+These are terminal commands. All four bundled names and explicit theme-definition paths are supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt.
 
 In a shared `.zshrc`, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
 
