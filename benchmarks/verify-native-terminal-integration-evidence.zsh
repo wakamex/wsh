@@ -52,12 +52,12 @@ verify_hash summarizer_script_sha256 $root/benchmarks/summarize-native-terminal-
 verify_hash trace_script_sha256 $root/benchmarks/trace-native-terminal-integration.zsh
 verify_hash plan_sha256 $root/benchmarks/native-terminal-integration-plan-2026-09-04.md
 verify_hash correctness_test_sha256 $root/tests/native-terminal-integration.zsh
-verify_hash foreground_test_sha256 $root/tests/foreground-startup.zsh
+verify_git_object_hash foreground_test_sha256 $accepted_revision tests/foreground-startup.zsh
 verify_hash zsh_source_patch_sha256 $root/build/zsh-patches/cad0d67c-terminal-integration.patch
 verify_git_object_hash manager_source_sha256 $accepted_revision crates/wsh/src/main.rs
-verify_hash zshrc_source_sha256 $root/integration/zdotdir.zshrc
+verify_git_object_hash zshrc_source_sha256 $accepted_revision integration/zdotdir.zshrc
 verify_hash build_zsh_source_sha256 $root/build/build-zsh.zsh
-verify_hash build_bundle_source_sha256 $root/build/build-development-bundle.zsh
+verify_git_object_hash build_bundle_source_sha256 $accepted_revision build/build-development-bundle.zsh
 verify_git_object_hash zsh_source_lock_sha256 $accepted_revision build/zsh-sources/zsh-cad0d67c.json
 verify_git_object_hash floor_test_source_sha256 $accepted_revision build/test-development-bundle.zsh
 

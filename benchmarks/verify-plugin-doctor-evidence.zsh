@@ -37,12 +37,13 @@ verify_hash startup_summary_sha256 $evidence/startup-summary.tsv
 verify_hash discarded_host_config_baseline_sha256 $evidence/discarded-host-config-baseline.tsv
 verify_hash discarded_host_config_candidate_sha256 $evidence/discarded-host-config-candidate.tsv
 verify_hash correctness_log_sha256 $evidence/correctness.log
-verify_hash doctor_source_sha256 $root/crates/wsh/src/doctor.rs
-verify_hash doctor_test_sha256 $root/tests/plugin-doctor.zsh
 verify_hash benchmark_sha256 $root/benchmarks/benchmark-first-editable.zsh
 verify_hash summarizer_sha256 $root/benchmarks/summarize-plugin-doctor.zsh
 verify_hash plan_sha256 $root/benchmarks/plugin-doctor-plan-2026-09-03.md
 readonly previous_accepted_revision=9037627f6622c5d0b90e873fc67a954c33e0d253
+# Later doctor features have separate evidence; retain the measured source bytes here.
+verify_git_object_hash doctor_source_sha256 $previous_accepted_revision crates/wsh/src/doctor.rs
+verify_git_object_hash doctor_test_sha256 $previous_accepted_revision tests/plugin-doctor.zsh
 verify_git_object_hash manager_source_sha256 $previous_accepted_revision crates/wsh/src/main.rs
 verify_git_object_hash floor_test_sha256 $previous_accepted_revision build/test-development-bundle.zsh
 

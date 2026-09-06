@@ -59,9 +59,9 @@ verify_hash ordinary_summarizer_sha256 $root/benchmarks/summarize-managed-builds
 verify_hash trace_script_sha256 $root/benchmarks/trace-foreground-startup.zsh
 verify_hash plan_sha256 $root/benchmarks/foreground-startup-plan-2026-09-03.md
 verify_hash probe_source_sha256 $root/tests/fixtures/foreground-probe.c
-verify_hash doctor_source_sha256 $root/crates/wsh/src/doctor.rs
-verify_hash zshenv_source_sha256 $root/integration/zdotdir.zshenv
 readonly accepted_revision=9037627f6622c5d0b90e873fc67a954c33e0d253
+verify_git_object_hash doctor_source_sha256 $accepted_revision crates/wsh/src/doctor.rs
+verify_git_object_hash zshenv_source_sha256 $accepted_revision integration/zdotdir.zshenv
 verify_git_object_hash correctness_test_sha256 $accepted_revision tests/foreground-startup.zsh
 verify_git_object_hash manager_source_sha256 $accepted_revision crates/wsh/src/main.rs
 verify_git_object_hash zshrc_source_sha256 $accepted_revision integration/zdotdir.zshrc
