@@ -1,0 +1,406 @@
+[
+  {
+    "variant": "baseline",
+    "branch": "git switch wsh-native-",
+    "jump": "z alpha",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "eager-cold",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "eager-warm",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "multiword": "z project\\ alpha",
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "deferred-cold",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "deferred-warm",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "existing",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "0",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "custom-tab",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "custom": "xCUSTOMTAB"
+  },
+  {
+    "variant": "vi",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  },
+  {
+    "variant": "z-first",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-completion-unique ",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "first_jump": "z /var/tmp/wsh-completion-costs-2026-09-06/work/fixture/project\\ alpha ",
+    "multiword": "z project\\ alpha",
+    "custom": "ACUSTOM",
+    "suggestion": [
+      "SUGGEST_COMPLETE",
+      "5",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "accepted": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "history": "print -r -- DEFER_AUTOSUGGEST_COMPLETE",
+    "highlighted": [
+      "",
+      "4",
+      "1",
+      "1",
+      "wsh",
+      "wsh",
+      "_zshz",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  }
+]

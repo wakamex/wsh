@@ -1,0 +1,19 @@
+Completed variance rounds: 10
+Completed variance rounds: 20
+Completed variance rounds: 30
+Completed variance rounds: 40
+Completed variance rounds: 50
+{
+  "cold": {
+    "pairs": 50,
+    "paired_difference_median_ms": 0.4065479999999866,
+    "paired_difference_p95_ms": 6.2736030000000085,
+    "exceeds_3_ms_without_clocks": true
+  },
+  "warm": {
+    "pairs": 50,
+    "paired_difference_median_ms": -0.4446000000000083,
+    "paired_difference_p95_ms": 5.678840000000008,
+    "exceeds_3_ms_without_clocks": true
+  }
+}

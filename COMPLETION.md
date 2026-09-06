@@ -2,7 +2,7 @@
 
 ## Native initialization exceeds startup or first-Tab budgets
 
-Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [eager experiment](benchmarks/native-completion-2026-09-06/report.md) enables Git branch and `z` completion but exceeds startup budgets. The [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) passes its correctness and startup gates but takes 256.865 ms p95 on first Tab without a completion dump and 115.254 ms with one, exceeding the 100 ms budget. Completion defaults remain unchanged. The next investigation must attribute and reduce first-use work before proposing another initialization strategy.
+Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [eager experiment](benchmarks/native-completion-2026-09-06/report.md) enables Git branch and `z` completion but exceeds startup budgets. The [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) passes its correctness and startup gates but takes 256.865 ms p95 on first Tab without a completion dump and 115.254 ms with one, exceeding the 100 ms budget. The [component experiment](benchmarks/completion-costs-2026-09-06/report.md) identifies native initialization and first native completion as the large diagnostic spans. Split compinit's audit, registration scan, and dump generation before selecting an optimization. Completion defaults remain unchanged.
 
 ## Wakterm dynamic completion comparison
 

@@ -29,5 +29,6 @@ python3 ./benchmarks/verify-builtins-themes-evidence.py
 python3 ./benchmarks/verify-profile-order-evidence.py
 python3 ./benchmarks/verify-native-completion-evidence.py
 python3 ./benchmarks/verify-deferred-completion-evidence.py
+python3 ./benchmarks/verify-completion-cost-evidence.py
 
 print -r -- 'PASS: complete retained-evidence suite'

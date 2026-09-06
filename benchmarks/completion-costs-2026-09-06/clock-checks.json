@@ -1,0 +1,70 @@
+[
+  {
+    "variant": "deferred-control-cold",
+    "startup_ms": 28.513698,
+    "first_tab_ms": 241.591212,
+    "second_tab_ms": 25.449448,
+    "buffer": "git switch wsh-native-completion-unique ",
+    "clocks": []
+  },
+  {
+    "variant": "deferred-timed-cold",
+    "startup_ms": 28.035647,
+    "first_tab_ms": 243.650729,
+    "second_tab_ms": 26.053812,
+    "buffer": "git switch wsh-native-completion-unique ",
+    "clocks": [
+      "1788670710.8020310402",
+      "1788670710.8020467758",
+      "1788670710.9605562687",
+      "1788670710.9606423378",
+      "1788670710.9612281322",
+      "1788670710.9715111256",
+      "1788670711.0358979702"
+    ],
+    "spans_ms": {
+      "autoload": 0.0157356,
+      "compinit": 158.5094929,
+      "directory_jump": 0.0860691,
+      "tab_delegate": 0.5857944,
+      "autosuggestion_rebind": 10.2829934,
+      "native_completion": 64.3868446
+    },
+    "internal_ms": 233.86693,
+    "outer_ms": 9.783799000000016
+  },
+  {
+    "variant": "deferred-control-warm",
+    "startup_ms": 28.053348,
+    "first_tab_ms": 240.713182,
+    "second_tab_ms": 25.777336,
+    "buffer": "git switch wsh-native-completion-unique ",
+    "clocks": []
+  },
+  {
+    "variant": "deferred-timed-warm",
+    "startup_ms": 28.014927,
+    "first_tab_ms": 241.805357,
+    "second_tab_ms": 25.598952,
+    "buffer": "git switch wsh-native-completion-unique ",
+    "clocks": [
+      "1788670711.3999533653",
+      "1788670711.3999705315",
+      "1788670711.5569274426",
+      "1788670711.5570096970",
+      "1788670711.5575981140",
+      "1788670711.5681648254",
+      "1788670711.6321103573"
+    ],
+    "spans_ms": {
+      "autoload": 0.0171662,
+      "compinit": 156.9569111,
+      "directory_jump": 0.0822544,
+      "tab_delegate": 0.588417,
+      "autosuggestion_rebind": 10.5667114,
+      "native_completion": 63.9455319
+    },
+    "internal_ms": 232.156992,
+    "outer_ms": 9.648364999999984
+  }
+]

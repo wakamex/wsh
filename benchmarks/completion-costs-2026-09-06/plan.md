@@ -1,0 +1,13 @@
+# Attribute deferred completion first-use cost
+
+The accepted investigation at 478628e rejects deferred initialization: first Git-branch Tab p95 takes 256.865 ms with a missing completion dump and 115.254 ms with a reusable dump. Measure where that time is spent before selecting another intervention. This experiment changes instrumentation only and does not optimize or enable completion.
+
+Use the exact manager and unsigned development bundle from the previous experiment, verified by their retained hashes. Reuse its real PTY fixture, capture widget, nine correctness cases, three Wsh editing defaults, empty WSH_THEME, CPU affinity, and Git-branch workload. Compare the unchanged deferred prototype with an instrumented copy. Load zsh/datetime in both fixture configurations so module loading is not confused with instrumentation overhead. Native compinit and its security audit remain intact.
+
+The instrumented copy takes seven in-memory timestamps around autoload, compinit, directory-jump registration, Tab delegate restoration, autosuggestion rebinding, and actual native completion. A separate widget exports those timestamps after the parent has received the measured editor-buffer marker. No trace formatting or trace output occurs inside the measured operation. Take the normal first and second Tab measurements before exporting the stored first-use spans.
+
+Run the reused correctness matrix before timing, plus check that exported timestamps are ordered and that exactly one initialization was recorded. After correctness, run 50 pairs per cache state, alternating normal/instrumented order and reversing cache-state order on alternate rounds. Missing-cache shells delete only the compdump; reusable-cache shells retain an earlier generated dump. This produces 200 shells and 400 Tab observations. Keep all samples and transcripts; do not rerun to pass. Do not overlap local tools, builds, tests, or verification with timing.
+
+Instrumentation passes only if nearest-rank p95 of paired first-Tab overhead is at most 3 ms in each cache state. Check that each span is nonnegative, sums match the measured internal total, and the internal total fits inside the parent-observed first-Tab interval. Report both instruments' absolute timings, paired overhead, stage medians and p95, and the remaining outer interval. Do not sum stage quantiles. If the overhead gate fails, report diagnostic spans without accepting precise attribution; permit at most one new instrumentation hypothesis after identifying the cause.
+
+Stop after attribution and a concrete next-step recommendation. A further optimization must have its own correctness and user-latency gates; a large span alone does not justify a new cache, background worker, or framework.

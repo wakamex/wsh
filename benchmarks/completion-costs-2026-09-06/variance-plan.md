@@ -1,0 +1,7 @@
+# Check the uninstrumented comparison floor
+
+The first clock comparison produced paired first-Tab p95 differences of 7.855 ms without a dump and 3.073 ms with a reusable dump, failing the 3 ms instrumentation gate. Timed absolute first-Tab p95 was lower than control in both states, while paired median differences were 0.395 ms and effectively zero. This suggests ordinary run-to-run variation may be counted as instrumentation overhead, but the first matrix cannot establish that cause.
+
+The cheapest counterfactual is the same unchanged prototype versus itself. Run 50 pairs per cache state, reusing the identical environment, fixture, parent observer, first and second Tab workload, CPU affinity, and fixed forward/reverse order. Both labels use byte-identical control prototype files; neither records component timestamps. Delete only the compdump in missing-cache cases. Retain all 200 shells and 400 Tab observations, with no concurrent local work and no retries.
+
+The hypothesis is that uninstrumented paired p95 itself exceeds 3 ms in each cache state. If it does, the original p95 gate cannot distinguish clock cost from the observed run-to-run variation in this matrix. Do not retroactively mark the instrumentation gate passed or change its threshold. Keep component spans diagnostic, report rounded dominant costs, and preserve both matrices. Stop after this variance audit. If the hypothesis fails, leave the instrumentation cause unresolved rather than retrying the clock comparison.
