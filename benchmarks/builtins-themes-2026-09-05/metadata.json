@@ -1,0 +1,67 @@
+{
+  "source_revision": "3decf521a13d98b9e0f50c64c666766406800205",
+  "source_state": "dirty worktree; exact source and evidence hashes retained; tracked diff includes prior-turn changes",
+  "artifact_status": "unsigned development artifact",
+  "bundle_identity": "ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe",
+  "manager_sha256": "7b1dd2ed99a84eedffb0052f64137adfe00e1cdd553a55ab90c78dcfb49300f1",
+  "runtime_sha256": "3348390f387131d9ebdd2c1e42f31ecc1fdb135aa78775671cbb94803a215dd2",
+  "zsh_binary_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "zsh": {
+    "version": "5.9.999.3-test",
+    "source_mode": "canonical-commit",
+    "source_repository": "https://github.com/zsh-users/zsh",
+    "source_archive": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "source_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+    "signer_fingerprint": null,
+    "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+    "patches": [
+      "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8",
+      "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
+    ],
+    "configure_args": [
+      "--enable-cap",
+      "--enable-multibyte",
+      "--enable-pcre"
+    ],
+    "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "linker": "GNU ld version 2.46.1-1.fc44"
+  },
+  "target": "x86_64-unknown-linux-gnu",
+  "build_configuration": {
+    "source_revision": "3decf521a13d98b9e0f50c64c666766406800205+dirty",
+    "lockfile_sha256": "5412f8fb7a58d64c01ec6236c778b79ecb0a3645ab234bb2d88a56a48eb7b4fc",
+    "target": "x86_64-unknown-linux-gnu",
+    "compiler": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "profile": "release"
+  },
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "path_sha256": "d28637166f2020d79e6cd68536039587b7e74c3860c4e42d3acd09aa15274263",
+  "path_entries": 33,
+  "private_environment_record": "/var/tmp/wsh-builtins-themes-private.json",
+  "private_environment_sha256": "5564607c353268ec1393dae94cf6e82fb848ff8d1a178beb943500775fcec6d5",
+  "zsh_z_pin": "ohmyzsh/ohmyzsh 9112b53fa8b5ab556c7c893aa8be8a247ac512a0 plugins/z; hashes in third_party/zsh-z/PROVENANCE.md",
+  "omz_test_directory": "/var/tmp/wsh-real-config-2026-09-05/omz",
+  "startup_fixture": "fresh HOME and ZDOTDIR; clean 1,000-file Git main fixture; z database defaults to isolated HOME/.z; no compinit or extra user configuration during timing",
+  "startup_order": "50 forward plus 50 reverse enabled/disabled pairs after five warmups per variant; CPU 0 affinity; other host services remain active; no samples excluded",
+  "profile_trace_mode": "normal untraced versus buffered default end-to-end profile, without function instrumentation; native OSC133 B after all ZLE init hooks; minimal theme and all defaults enabled",
+  "runtime_trace_mode": "Fresh 20 paired observations in each of clean/dirty/untracked states; measured before adapter lookup optimization; runtime digest unchanged in final bundle",
+  "render_trace_mode": "60 alternating clean/dirty real Git refreshes per theme through the runtime protocol; WSH_TRACE_FILE enabled, no Wsh shell; microsecond render spans exclude provider collection",
+  "commands": [
+    "./build/test-development-bundle.zsh",
+    "./tests/directory-jump.zsh target/release/wsh bundles/ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe /var/tmp/wsh-real-config-2026-09-05/omz",
+    "./tests/named-themes.zsh target/release/wsh bundles/ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe",
+    "./benchmarks/benchmark-directory-jump.zsh benchmarks/builtins-themes-2026-09-05/accepted-directory-samples.tsv target/release/wsh bundles/ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe 50",
+    "./benchmarks/benchmark-profile.zsh benchmarks/builtins-themes-2026-09-05/accepted-profile-samples.tsv target/release/wsh bundles/ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe 50",
+    "WSH_TRACE_RUNTIME=bundles/356854088b88d9c261f59054c770c0295a08c0380a94aac84583d30ca3e48981/bin/wsh-runtime WSH_TRACE_THEME=benchmarks/wsh-benchmark.toml WSH_TRACE_ITERATIONS=20 ./benchmarks/benchmark-trace-overhead.zsh",
+    "python3 benchmarks/benchmark-theme-render.py bundles/ac511dda378ed8d5ba9e4a10d33e6a49269b54f137ebc3e1e40391d2d87d86fe benchmarks/builtins-themes-2026-09-05/render-traces"
+  ],
+  "observed_counterfactuals": {
+    "initial_adapter_bundle": "356854088b88d9c261f59054c770c0295a08c0380a94aac84583d30ca3e48981",
+    "whence_adapter_bundle": "5c105bee33dc37caf439c8707047c3b8afb1cc5cbeccdb34f0ab16a3dca53f64",
+    "no_recording": "ZSHZ_EXCLUDE_DIRS=(/var/tmp) in the benchmark startup fixture, 10 forward and 10 reverse pairs",
+    "command_lookup": "20 fresh zsh -dfc processes per lookup, alternating order. Timed after zmodload zsh/datetime with EPOCHREALTIME: (( $+commands[z] )) versus whence -w -- z >/dev/null; isolated HOME/ZDOTDIR, host PATH."
+  },
+  "test_harness_correction": "The first functional probe enabled err_return inside upstream code; removed that artificial option and used explicit assertions with native Zsh options. No vendor change was made for the probe.",
+  "portability": "Full host suite passed. Canonical glibc 2.28 container, exact-head remote CI, and two-build reproduction not rerun."
+}

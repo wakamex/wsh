@@ -1,0 +1,5 @@
+--- private actual .zshrc
++++ private actual .zshrc with OMZ theme off
+@@ -21 +21 @@
+-ZSH_THEME="wakamex"
++ZSH_THEME=""

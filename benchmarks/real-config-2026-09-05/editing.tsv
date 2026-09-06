@@ -1,0 +1,13 @@
+config	variant	substring_history	autosuggestion	highlight_regions	result
+empty	normal	True	True	5	pass
+plain	normal	True	True	5	pass
+omz-none	normal	True	True	5	pass
+robbyrussell	normal	True	True	5	pass
+agnoster	normal	True	True	5	pass
+wakamex	normal	True	True	5	pass
+plugins	direct	True	True	5	pass
+plugins	normal	True	True	5	pass
+wakamex-plugins	direct	True	True	5	pass
+wakamex-plugins	normal	True	True	5	pass
+actual	direct	True	True	5	pass
+actual	normal	True	True	5	pass

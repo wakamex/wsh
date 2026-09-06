@@ -51,3 +51,4 @@ correctness_log_sha256=87779054537c37b7152f3782600e71a62e80432878e663a8ef586fde1
 first_editable_p90_limit_ms=3.000
 runtime_ready_p90_limit_ms=3.000
 runtime_refresh_p90_limit_ms=0.500
+accepted_source_revision=3decf521a13d98b9e0f50c64c666766406800205

@@ -2,6 +2,7 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
+export WSH_THEME=minimal
 
 (( $# == 4 )) || {
   print -u2 -- 'usage: benchmark-profile.zsh OUTPUT MANAGER BUNDLE ITERATIONS'
@@ -18,7 +19,7 @@ readonly profile_functions=${WSH_PROFILE_BENCH_FUNCTIONS:-0}
 [[ $repetitions -gt 0 && ! -e $output && ! -L $output ]]
 [[ $profile_functions == 0 || $profile_functions == 1 ]]
 
-for command in date git mkdir mktemp mv rm sed taskset; do
+for command in cp date git mkdir mktemp mv rm sed taskset; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
@@ -40,6 +41,10 @@ trap cleanup EXIT INT TERM
 
 $manager bundle activate $bundle --state-root $state_root >/dev/null
 command mkdir -p -- $fixture $home
+if [[ -n ${WSH_PROFILE_BENCH_ZSHRC:-} ]]; then
+  [[ -f $WSH_PROFILE_BENCH_ZSHRC && -r $WSH_PROFILE_BENCH_ZSHRC ]] || return 2
+  command cp -- $WSH_PROFILE_BENCH_ZSHRC $home/.zshrc
+fi
 command git init -q -b main $fixture
 command git -C $fixture config user.name 'wsh profile benchmark'
 command git -C $fixture config user.email profile-benchmark@wsh.invalid
@@ -78,7 +83,7 @@ measure_variant() {
   while (( EPOCHREALTIME < deadline )); do
     while zpty -r -t $current_pty chunk 2>/dev/null; do
       output_buffer+=$chunk
-      if [[ -z $first_ms && $output_buffer == *'% '* ]]; then
+      if [[ -z $first_ms && $output_buffer == *$'\e]133;B\e\\'* ]]; then
         first_ms=$(( (EPOCHREALTIME - started) * 1000 ))
       fi
       if [[ -n $first_ms && $output_buffer == *'git:main'* ]]; then

@@ -1,0 +1,26 @@
+{
+  "minimal": {
+    "samples": 60,
+    "median_us": 6.0,
+    "p90_us": 11,
+    "maximum_us": 31
+  },
+  "wakamex": {
+    "samples": 60,
+    "median_us": 5.0,
+    "p90_us": 7,
+    "maximum_us": 17
+  },
+  "robbyrussell": {
+    "samples": 60,
+    "median_us": 6.5,
+    "p90_us": 10,
+    "maximum_us": 19
+  },
+  "agnoster": {
+    "samples": 60,
+    "median_us": 8.5,
+    "p90_us": 14,
+    "maximum_us": 22
+  }
+}

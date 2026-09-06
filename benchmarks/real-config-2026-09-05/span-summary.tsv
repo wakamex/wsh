@@ -1,0 +1,163 @@
+config	span_or_milestone	samples	median_ms
+actual	First editable prompt	40	1042.573
+actual	Launcher to Zsh startup	40	2.476
+actual	User .zshenv	40	700.273
+actual	User .zshrc	40	272.607
+actual	History substring search	40	3.141
+actual	Autosuggestions	40	0.364
+actual	Syntax highlighting	40	0.399
+actual	Wsh integration	40	2.500
+actual	First precmd	40	0.357
+actual	Runtime ready	40	982.253
+actual	Repository discovery	40	0.028
+actual	Git process	40	11.267
+actual	Git output parsing	40	0.032
+actual	Provider total	40	11.911
+actual	Prompt rendering	40	0.009
+actual	Response write	40	0.010
+actual	Snapshot published	40	1056.827
+actual	Snapshot applied and repainted	40	1057.831
+agnoster	First editable prompt	40	70.864
+agnoster	Launcher to Zsh startup	40	2.570
+agnoster	User .zshenv	40	0.120
+agnoster	User .zshrc	40	40.178
+agnoster	History substring search	40	3.186
+agnoster	Autosuggestions	40	0.663
+agnoster	Syntax highlighting	40	0.399
+agnoster	Wsh integration	40	2.163
+agnoster	First precmd	40	0.631
+agnoster	Runtime ready	40	50.892
+agnoster	Repository discovery	40	0.027
+agnoster	Git process	40	3.845
+agnoster	Git output parsing	40	0.030
+agnoster	Provider total	40	5.206
+agnoster	Prompt rendering	40	0.009
+agnoster	Response write	40	0.009
+agnoster	Snapshot published	40	75.391
+agnoster	Snapshot applied and repainted	40	76.314
+empty	First editable prompt	40	27.900
+empty	Launcher to Zsh startup	40	2.574
+empty	User .zshenv	40	0.120
+empty	User .zshrc	40	0.234
+empty	History substring search	40	3.446
+empty	Autosuggestions	40	0.699
+empty	Syntax highlighting	40	0.395
+empty	Wsh integration	40	2.069
+empty	First precmd	40	0.621
+empty	Runtime ready	40	11.201
+empty	Repository discovery	40	0.027
+empty	Git process	40	3.836
+empty	Git output parsing	40	0.030
+empty	Provider total	40	4.979
+empty	Prompt rendering	40	0.009
+empty	Response write	40	0.009
+empty	Snapshot published	40	32.388
+empty	Snapshot applied and repainted	40	33.348
+omz-none	First editable prompt	40	69.940
+omz-none	Launcher to Zsh startup	40	2.561
+omz-none	User .zshenv	40	0.120
+omz-none	User .zshrc	40	39.264
+omz-none	History substring search	40	3.200
+omz-none	Autosuggestions	40	0.660
+omz-none	Syntax highlighting	40	0.399
+omz-none	Wsh integration	40	2.171
+omz-none	First precmd	40	0.623
+omz-none	Runtime ready	40	50.023
+omz-none	Repository discovery	40	0.027
+omz-none	Git process	40	3.854
+omz-none	Git output parsing	40	0.030
+omz-none	Provider total	40	5.210
+omz-none	Prompt rendering	40	0.009
+omz-none	Response write	40	0.010
+omz-none	Snapshot published	40	74.413
+omz-none	Snapshot applied and repainted	40	75.368
+plain	First editable prompt	40	28.011
+plain	Launcher to Zsh startup	40	2.571
+plain	User .zshenv	40	0.120
+plain	User .zshrc	40	0.243
+plain	History substring search	40	3.447
+plain	Autosuggestions	40	0.700
+plain	Syntax highlighting	40	0.392
+plain	Wsh integration	40	2.072
+plain	First precmd	40	0.627
+plain	Runtime ready	40	11.171
+plain	Repository discovery	40	0.027
+plain	Git process	40	3.845
+plain	Git output parsing	40	0.030
+plain	Provider total	40	4.992
+plain	Prompt rendering	40	0.009
+plain	Response write	40	0.009
+plain	Snapshot published	40	32.569
+plain	Snapshot applied and repainted	40	33.555
+plugins	First editable prompt	40	80.454
+plugins	Launcher to Zsh startup	40	2.592
+plugins	User .zshenv	40	0.120
+plugins	User .zshrc	40	50.224
+plugins	History substring search	40	2.845
+plugins	Autosuggestions	40	1.087
+plugins	Syntax highlighting	40	1.719
+plugins	Wsh integration	40	2.293
+plugins	First precmd	40	0.658
+plugins	Runtime ready	40	62.437
+plugins	Repository discovery	40	0.028
+plugins	Git process	40	3.857
+plugins	Git output parsing	40	0.031
+plugins	Provider total	40	5.287
+plugins	Prompt rendering	40	0.009
+plugins	Response write	40	0.009
+plugins	Snapshot published	40	85.257
+plugins	Snapshot applied and repainted	40	85.944
+robbyrussell	First editable prompt	40	87.230
+robbyrussell	Launcher to Zsh startup	40	2.540
+robbyrussell	User .zshenv	40	0.120
+robbyrussell	User .zshrc	40	39.454
+robbyrussell	History substring search	40	3.188
+robbyrussell	Autosuggestions	40	0.660
+robbyrussell	Syntax highlighting	40	0.390
+robbyrussell	Wsh integration	40	2.163
+robbyrussell	First precmd	40	0.642
+robbyrussell	Runtime ready	40	50.407
+robbyrussell	Repository discovery	40	0.026
+robbyrussell	Git process	40	3.608
+robbyrussell	Git output parsing	40	0.030
+robbyrussell	Provider total	40	5.235
+robbyrussell	Prompt rendering	40	0.009
+robbyrussell	Response write	40	0.010
+robbyrussell	Snapshot published	40	92.162
+robbyrussell	Snapshot applied and repainted	40	92.708
+wakamex-plugins	First editable prompt	40	87.999
+wakamex-plugins	Launcher to Zsh startup	40	2.567
+wakamex-plugins	User .zshenv	40	0.120
+wakamex-plugins	User .zshrc	40	52.403
+wakamex-plugins	History substring search	40	7.146
+wakamex-plugins	Autosuggestions	40	1.122
+wakamex-plugins	Syntax highlighting	40	2.423
+wakamex-plugins	Wsh integration	40	2.292
+wakamex-plugins	First precmd	40	0.647
+wakamex-plugins	Runtime ready	40	69.388
+wakamex-plugins	Repository discovery	40	0.027
+wakamex-plugins	Git process	40	3.793
+wakamex-plugins	Git output parsing	40	0.031
+wakamex-plugins	Provider total	40	5.242
+wakamex-plugins	Prompt rendering	40	0.009
+wakamex-plugins	Response write	40	0.010
+wakamex-plugins	Snapshot published	40	92.743
+wakamex-plugins	Snapshot applied and repainted	40	93.374
+wakamex	First editable prompt	40	77.492
+wakamex	Launcher to Zsh startup	40	2.572
+wakamex	User .zshenv	40	0.120
+wakamex	User .zshrc	40	41.382
+wakamex	History substring search	40	6.274
+wakamex	Autosuggestions	40	0.671
+wakamex	Syntax highlighting	40	0.392
+wakamex	Wsh integration	40	2.252
+wakamex	First precmd	40	0.625
+wakamex	Runtime ready	40	56.934
+wakamex	Repository discovery	40	0.026
+wakamex	Git process	40	3.820
+wakamex	Git output parsing	40	0.031
+wakamex	Provider total	40	5.204
+wakamex	Prompt rendering	40	0.009
+wakamex	Response write	40	0.010
+wakamex	Snapshot published	40	82.112
+wakamex	Snapshot applied and repainted	40	82.960

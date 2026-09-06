@@ -1,0 +1,17 @@
+RUN zsh-config-coexistence
+PASS: user startup configuration present under managed wsh
+RUN profile
+PASS: private end-to-end profile attributes startup, Zsh functions, provider work, rendering, IPC, and first editor readiness without command or path capture
+RUN history-substring-search
+PASS: history substring search candidate behavior
+RUN autosuggestions
+PASS: autosuggestion display, acceptance, ownership, configuration, composition, custom widgets, and cancellation
+RUN syntax-highlighting
+PASS: syntax highlighting ownership, semantics, configuration, hooks, and editing-default composition
+RUN plugin-doctor
+PASS: plugin doctor diagnoses exact and unknown implementations without modifying startup files
+RUN foreground-startup
+usage: foreground-startup.zsh MANAGER BUNDLE baseline|candidate
+PASS: structured foreground startup preserves argv, job control, signals, terminal state, startup files, and repeated launch behavior
+variant	prompt_starts	valid_prompt_starts	prompt_ends	command_starts	command_ends	cwd_reports	local_cwd_reports	child_cwd_reset	user_precmds	user_preexecs
+native	10	10	10	7	6	11	10	1	9	7

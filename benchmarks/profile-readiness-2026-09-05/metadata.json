@@ -1,0 +1,97 @@
+{
+  "source_revision": "3decf521a13d98b9e0f50c64c666766406800205+working-tree-report-labels-and-readiness-tests",
+  "artifact_status": "unsigned development artifact",
+  "bundle_sha256": "3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04",
+  "manager_sha256": "892df2d3928843d48eb116cb72665c39f484c21a21501aa0b9633a1c5081ea47",
+  "runtime_sha256": "f97ad8e32ba45695855cb75b49d830d691d83fd49d60ef24be97c887b81df268",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "build": {
+    "schema_version": 1,
+    "status": "development",
+    "release_id": "development-3decf521a13d98b9e0f50c64c666766406800205+dirty",
+    "target": "x86_64-unknown-linux-gnu",
+    "minimum_manager_version": "0.1.0",
+    "builder": {
+      "base_image": null,
+      "package_lock_sha256": null,
+      "rust_toolchain_sha256": null,
+      "source_date_epoch": null,
+      "environment": {
+        "lang": "C.UTF-8",
+        "lc_all": "C.UTF-8",
+        "tz": "UTC",
+        "build_jobs": "auto"
+      }
+    },
+    "zsh": {
+      "version": "5.9.999.3-test",
+      "source_mode": "canonical-commit",
+      "source_repository": "https://github.com/zsh-users/zsh",
+      "source_archive": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+      "source_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+      "signer_fingerprint": null,
+      "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+      "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+      "patches": [
+        "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8",
+        "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
+      ],
+      "configure_args": [
+        "--enable-cap",
+        "--enable-multibyte",
+        "--enable-pcre"
+      ],
+      "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+      "linker": "GNU ld version 2.46.1-1.fc44"
+    },
+    "rust": {
+      "source_revision": "3decf521a13d98b9e0f50c64c666766406800205+dirty",
+      "lockfile_sha256": "5412f8fb7a58d64c01ec6236c778b79ecb0a3645ab234bb2d88a56a48eb7b4fc",
+      "target": "x86_64-unknown-linux-gnu",
+      "compiler": "rustc 1.95.0 (59807616e 2026-04-14)",
+      "profile": "release"
+    },
+    "api_versions": {
+      "runtime_protocol": 1,
+      "provider_schema": 1,
+      "theme_schema": 1,
+      "integration_api": 1
+    },
+    "entrypoints": {
+      "shell": "bin/zsh",
+      "runtime": "bin/wsh-runtime",
+      "integration": "share/wsh/integration.zsh",
+      "default_theme": "share/wsh/themes/minimal.toml"
+    },
+    "requirements": {
+      "dynamic_libraries": [
+        "ld-linux-x86-64.so.2",
+        "libc.so.6",
+        "libcap.so.2",
+        "libgcc_s.so.1",
+        "libm.so.6",
+        "libncursesw.so.6",
+        "libpcre2-8.so.0",
+        "libtinfo.so.6"
+      ],
+      "minimum_glibc": null
+    }
+  },
+  "host": "Linux-7.1.9-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "cpu_affinity": 0,
+  "host_exclusivity": "affinity only; other services remained active",
+  "configuration": "normal default Wsh; no user startup file in latency comparison; synthetic delayed file only in regression",
+  "workload": "PTY startup to native OSC 133 B, then initial asynchronous Git prompt; 1,000 tracked files; branch main; no remotes",
+  "trace_modes": [
+    "normal",
+    "default profile"
+  ],
+  "pairs": 100,
+  "warmups_per_variant": 5,
+  "benchmark_command": "./benchmarks/benchmark-profile.zsh benchmarks/profile-readiness-2026-09-05/native-samples.tsv target/release/wsh bundles/3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04 50",
+  "correctness_command": "zsh tests/profile-readiness.zsh target/release/wsh bundles/3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04",
+  "profile_test_command": "zsh tests/profile.zsh target/release/wsh bundles/3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04",
+  "runtime_gate_evidence": "benchmarks/profile-2026-09-05/runtime-trace.tsv",
+  "runtime_gate_evidence_sha256": "a801c759a705fc3e880f441caf003971a6dbe3aca638329b2d707d077b4bf01e",
+  "runtime_gate_reuse": "Runtime executable is byte-identical by SHA-256 to the accepted runtime; no runtime tracing or integration code changed."
+}

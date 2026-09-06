@@ -1,0 +1,1 @@
+PASS: hashes, 1,080 timing samples, summaries, 360 production-parser trace replays, component spans, process counts, and 12 editing results agree. The recorded profiling-overhead gates remain failed.

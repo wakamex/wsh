@@ -1,0 +1,33 @@
+# Real-configuration compatibility and startup profiling
+
+The experiment tests whether current Wsh preserves usable existing configuration and identifies startup or duplicate-owner costs worth a separate intervention. It changes no product code or user configuration. A passing result does not require an optimization.
+
+## Fixed workload and comparisons
+
+Use source `3decf52`, an unsigned host development bundle built from that clean revision, its exact Zsh binary, and the release manager. Compare empty configuration, a plain `.zshrc`, pinned Oh My Zsh with no theme, robbyrussell, agnoster, Wakamex, all three recognized editing plugins, Wakamex with those plugins, and a private snapshot of the user's current startup files. Each configuration runs under direct bundled Zsh and managed Wsh; Wsh additionally runs default profiling. The direct control sets the same bundled module/function paths and disables the unanswered native terminal query. It preserves native sourcing of the user's `.zshrc`. Wsh's minimal configuration establishes distribution overhead, not a functionality-equivalent competitor to a complete OMZ setup.
+
+Use a fresh local Git repository with 1,000 tracked files and no remotes. Keep completion caches and command history in experiment storage. Snapshot actual startup files privately, retain their hashes publicly, and leave their external installed dependencies intact. Record those dependencies' identities. Raw actual-configuration terminal and process output stays private; publish only reviewed timings, ownership, function names, and executable counts.
+
+## Correctness and materiality gates
+
+Run existing startup-order, profile privacy/recovery, plugin ownership/editing/adversarial, foreground job-control, and native terminal tests before timing. For every matrix configuration, require startup completion, usable command execution, filename TAB completion, Ctrl-C recovery, prompt return, expected aliases and editing widget availability, and no duplicated Wsh lifecycle hooks. Record legacy presentation replacement and remaining competing theme workers as compatibility findings rather than silently calling them preserved. Exact recognized editing copies must have one effective owner; unknown installed copies must remain external.
+
+A competing Git collector whose result does not own the displayed prompt is material whenever it adds a Git process on a no-op transition. A new Wsh-added startup cost beyond the empty-configuration increment is a follow-up candidate when its p90 exceeds 5 ms or 10% of direct startup, whichever is larger. This is an investigation trigger, not a claim that all configuration costs must match minimal Wsh. Default-profile paired first-editable overhead retains the existing 3 ms p90 gate. Findings do not authorize optimization in this experiment.
+
+## Measurement and stop rules
+
+Use identical PTY readiness observation in all variants: a bounded marker at the end of ZLE line initialization, registered from the first `precmd` so it follows startup-installed hooks. Time with a monotonic parent clock, pin children to CPU 0, use five warmups, then 20 forward and 20 reverse interleaved observations per variant/configuration. Retain all measured samples, use nearest-rank p90, and report medians, p90, maximum, and paired profile overhead. Completion caches are warm after warmups; record the first fresh-cache launch separately and do not describe filesystem caches as cold. Observe component spans and optional native `zprof` in separate diagnostic runs. Trace process execution separately from timing, including startup and one no-op transition, and retain successful executable identities and counts.
+
+Allow two harness corrections per failed observation gate before auditing the measurement premise. Allow 30 seconds per shell readiness or interactive response, and at most 90 minutes for the matrix. Stop a broken configuration's dependent timing rather than optimizing it to make the test pass. Preserve failures and explicitly identify any excluded diagnostic runs. Finish with a report, exact commands and build identities, raw samples, reproducible summaries, and hashes. No release, push, user-config edit, or new compatibility mechanism is part of this task.
+
+## Observer correction before measurement
+
+The initial redraw-hook observer emitted no marker on direct Zsh startup, although the native prompt appeared. Its 30-second timeout is retained as `observer-redraw-failed.tsv` and a private transcript. The observer now registers a line-init hook from the first `precmd`, after startup-installed hooks including profile flushing. No timing samples were accepted under the redraw observer.
+
+A second readiness timeout triggered a premise audit. A direct interactive probe showed that the observer function existed but its hook did not: upstream `add-zle-hook-widget` immediately returns when `zsh/zle` is not loaded, and bare Zsh had not loaded it at the first `precmd`. The observer now explicitly loads that module at registration. The same observer runs in every variant. Inherited `FPATH` is removed so a minimal configuration does not accidentally import the parent shell's OMZ plugin paths.
+
+The readiness observer also waits for the native OSC 133 `B` marker after the line-init callback before sending input. The completion observer accepts OSC bytes between command-start and the printed filename. The Ctrl-C probe types a partial command, waits for editor processing, then sends Ctrl-C separately. Earlier harness timeouts are retained and excluded. The recognized syntax-highlighting assertion accepts the implementation's supported `external-exact` owner; demanding the literal owner `wsh` had incorrectly rejected its single-owner activation path. `correctness-initial.tsv` retains the earlier successful matrix rows and `correctness.tsv` retains the completed remaining cases. Their initial-launch timings are diagnostic; retries with already-populated caches are not cold-cache measurements.
+
+## Bounded controls after the profiling gate failed
+
+All nine matrix configurations exceeded the retained 3 ms paired p90 profile limit under the end-of-editor-initialization observer. Before interpreting the full excess as instrumentation cost, run 20 alternating A/A pairs of the identical unprofiled shell for empty and actual configuration, then repeat the existing percent-prompt observer benchmark on this same bundle. The A/A control measures startup variability; it does not change or excuse the gate. The old observer comparison establishes whether the existing acceptance method agrees with the stricter observation. No product intervention or threshold adjustment is authorized by these controls.

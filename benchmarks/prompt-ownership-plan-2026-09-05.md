@@ -1,0 +1,9 @@
+# Prompt selection and conditional cleanup
+
+The accepted private OMZ experiment found five Git executions per no-op prompt with both renderers loaded and four with the OMZ theme skipped. Current Wsh also replaces an existing prompt without an explicit choice. The baseline is source 3decf521a13d98b9e0f50c64c666766406800205 plus the retained profiling changes, unsigned development bundle 3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04.
+
+The smallest intervention is a session-local WSH_PROMPT selector, defaulting to existing, gating only Wsh presentation and its Git collector. Wsh mode requires the user's conditional before OMZ loading. Doctor reports a configured OMZ theme in Wsh mode and suggests that conditional, without editing configuration or unloading arbitrary hooks.
+
+Correctness gates: regular Zsh and default/explicit existing Wsh preserve the same prompt and unrelated hooks; explicit Wsh starts exactly one runtime; a real OMZ theme is skipped only with the documented conditional; selectors are available during startup and absent from nested regular Zsh environments; invalid values preserve the existing prompt with a diagnostic; doctor advises only for the configured overlap and preserves startup bytes. Run the relevant existing PTY, profile, foreground, plugin, and Rust tests before performance comparisons.
+
+Performance gate: run the existing native-readiness profiling benchmark with explicit Wsh mode, 100 paired observations and five warmups per variant, retaining its existing 3 ms p90 instrumentation-overhead threshold. Existing mode must start zero Wsh prompt runtimes. No new latency improvement is claimed from this selector. Stop after two failed interventions at a gate and audit the premise; limit the first implementation experiment to 60 minutes before reassessing scope.

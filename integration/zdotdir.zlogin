@@ -12,3 +12,8 @@ if (( ${+WSH_STARTUP_BUNDLE_ZDOTDIR} )); then
   [[ $WSH_STARTUP_RCS == on ]] || unsetopt rcs
   unset WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
 fi
+
+# Keep the prompt choice local even when user startup exports it.
+if (( ${+WSH_THEME} )); then
+  typeset -g +x WSH_THEME
+fi

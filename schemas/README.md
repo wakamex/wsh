@@ -7,3 +7,5 @@
 `runtime-protocol-v1.md` fixes the bounded request, response, Git snapshot, cancellation, and repaint contract between the bundled Zsh adapter and runtime.
 
 Both schemas reject unknown fields. Theme literals are bounded and cannot contain terminal control characters, and bundle paths are rechecked by the manager with filesystem-aware path and file-type validation.
+
+Optional theme segment styling uses named palette colors and the existing component names. The Rust validator also requires styled components to be enabled and restricts dirty-background to Git. Theme ports and examples are documented in [THEMES.md](../THEMES.md).

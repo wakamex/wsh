@@ -1,0 +1,50 @@
+Wsh profile
+Build: wsh 0.2.0, bundle development-3decf521a13d98b9e0f50c64c666766406800205 (development)
+Zsh: 5.9.999.3-test at cad0d67c76e2
+Source: 3decf521a13d  Target: x86_64-unknown-linux-gnu  Bundle: f2a1bf90a1ff
+
+Startup
+First editable prompt: 1149.415 ms
+Launcher to Zsh startup: 3.269 ms
+User .zshenv: 756.633 ms
+User .zprofile: unavailable
+User .zshrc: 317.154 ms
+User .zlogin: unavailable
+History substring search: 3.289 ms
+Autosuggestions: 0.381 ms
+Syntax highlighting: 0.408 ms
+Wsh integration: 2.612 ms
+First precmd: 0.366 ms
+Runtime ready: 1087.833 ms
+
+Initial asynchronous prompt
+Repository discovery: 0.029 ms
+Git process: 10.551 ms
+Git output parsing: 0.033 ms
+Provider total: 11.195 ms
+Child processes: 1
+Prompt rendering: 0.010 ms
+Response write: 0.010 ms
+Rendered prompt bytes: 55
+Prompt changed: true
+Repaint cause: git-snapshot
+Snapshot published: 1162.797 ms
+Snapshot applied and repainted: 1163.872 ms
+
+Built-in ownership
+History substring search: wsh
+Autosuggestions: external-unknown
+Syntax highlighting: external-unknown
+Theme: minimal
+
+Slowest Zsh functions by self time
+306.230 ms  nvm_auto
+163.010 ms  compinit
+114.600 ms  nvm
+112.040 ms  compdef
+90.840 ms  compdump
+57.700 ms  nvm_ensure_version_installed
+35.740 ms  update_current_git_vars
+35.680 ms  compaudit
+
+Trace: retained privately; default-profile traces are in profile-traces.tar.gz

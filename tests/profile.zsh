@@ -2,6 +2,7 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
+export WSH_THEME=minimal
 
 readonly manager=${1:A}
 readonly bundle=${2:A}
@@ -70,10 +71,10 @@ local live_report=
 local -F report_deadline=$(( EPOCHREALTIME + 2 ))
 while (( EPOCHREALTIME < report_deadline )); do
   live_report=$($manager profile report $profile_directory) || true
-  [[ $live_report == *'First editable prompt:'* && $live_report == *'Snapshot published:'* ]] && break
+  [[ $live_report == *'Wsh ZLE initialization hook:'* && $live_report == *'Snapshot published:'* ]] && break
   zselect -t 1 2>/dev/null || true
 done
-[[ $live_report == *'First editable prompt:'* && $live_report == *'Snapshot published:'* ]] || {
+[[ $live_report == *'Wsh ZLE initialization hook:'* && $live_report == *'Snapshot published:'* ]] || {
   print -u2 -r -- "live profile could not be recovered before shell exit: ${(qqq)live_report}"
   return 1
 }
@@ -101,7 +102,7 @@ readonly zprof=$profile_directory/zprof.txt
 local report
 report=$($manager profile report $profile_directory)
 for expected in \
-  'First editable prompt:' \
+  'Wsh ZLE initialization hook:' \
   'Launcher to Zsh startup:' \
   'User .zshenv:' \
   'User .zshrc:' \
@@ -109,6 +110,7 @@ for expected in \
   'Autosuggestions:' \
   'Syntax highlighting:' \
   'Wsh integration:' \
+  'Wsh first precmd hook:' \
   'Runtime ready:' \
   'Repository discovery:' \
   'Git process:' \

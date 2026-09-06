@@ -1,12 +1,12 @@
 # Wsh profiling
 
-`wsh profile` launches the active bundle through the normal Wsh startup path and records where time is spent through the first editable prompt and the initial asynchronous Git prompt update. Exit the shell to print a report.
+`wsh profile` launches the active bundle through the normal Wsh startup path and records startup costs and the initial asynchronous Git prompt update. Exit the shell to print a report.
 
 ```sh
 wsh profile
 ```
 
-The default profile separates launcher handoff, user startup files, Wsh defaults, runtime startup, the first `precmd`, first ZLE readiness, repository discovery, the Git child process, Git output parsing, prompt rendering, response writing, snapshot publication, and Zsh repaint application. It also reports the exact Wsh bundle and Zsh source identities, active theme, and ownership of the three bundled editing defaults.
+The default profile separates launcher handoff, user startup files, Wsh defaults, runtime startup, Wsh's first runtime `precmd` hook, Wsh's first ZLE initialization callback, repository discovery, the Git child process, Git output parsing, prompt rendering, response writing, snapshot publication, and Zsh repaint application. It also reports the exact Wsh bundle and Zsh source identities, active theme, and ownership of the three bundled editing defaults.
 
 Use function mode when the startup-level spans do not isolate the cost:
 
@@ -37,3 +37,9 @@ Each session directory is created with mode 0700 beneath the Wsh state directory
 The current profile covers Wsh's implemented startup and Git prompt path. It records Zsh lifecycle boundaries around Wsh hooks but does not observe the native OSC byte producer internally. Completion and pane-history attribution will be added only if those features pass their own evidence gates. System-call tracing, stack sampling, and third-party function instrumentation remain developer tools.
 
 The [accepted experiment](benchmarks/profile-2026-09-05/report.md) records the baseline, correctness fixture, instrumentation overhead, exact bundle identity, and retained raw measurements.
+
+The [readiness correction](benchmarks/profile-readiness-2026-09-05/report.md) makes the acceptance benchmark wait for native OSC 133 `B`, after ZLE line-init hooks. It passes the unchanged 3 ms overhead gate at 2.396 ms p90 on the standard fixture. `Wsh ZLE initialization hook` is the profile callback milestone, and `Wsh first precmd hook` measures only the runtime hook; earlier or later user hooks remain outside those named spans. Use function mode to investigate them. The [real-configuration matrix](benchmarks/real-config-2026-09-05/report.md) retains separate workload-specific overhead and attribution results.
+
+Prompt selection also applies to profiling: `wsh profile` preserves the existing prompt by default, while `WSH_THEME=minimal wsh profile` includes Wsh presentation and its Git collector. Existing-prompt sessions have no Wsh runtime spans. Current Wsh-renderer benchmark harnesses select `WSH_THEME=minimal` explicitly; historical evidence retains its original configuration.
+
+The Directory jumping span measures the built-in directory-jump adapter and any plugin initialization it owns. When an existing OMZ or custom command is preserved, that implementation loads within the user startup span instead.

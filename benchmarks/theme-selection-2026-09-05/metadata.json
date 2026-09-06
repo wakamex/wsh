@@ -1,0 +1,60 @@
+{
+  "source_revision": "3decf521a13d98b9e0f50c64c666766406800205",
+  "source_state": "dirty worktree; current implementation and tests are bound by SHA256SUMS; tracked changes include prior experiments",
+  "artifact_status": "unsigned development artifact",
+  "bundle_identity": "33810a1d902cf1ffb4cc56dc803947517541d3c075114aec52d4f59d1979d0ae",
+  "manager_sha256": "73a5e8b739088842897b130150774890fd39f69ccea1351d8690da70504aa408",
+  "runtime_sha256": "f97ad8e32ba45695855cb75b49d830d691d83fd49d60ef24be97c887b81df268",
+  "zsh_binary_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "zsh": {
+    "version": "5.9.999.3-test",
+    "source_mode": "canonical-commit",
+    "source_repository": "https://github.com/zsh-users/zsh",
+    "source_archive": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "source_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+    "signer_fingerprint": null,
+    "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+    "patches": [
+      "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8",
+      "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
+    ],
+    "configure_args": [
+      "--enable-cap",
+      "--enable-multibyte",
+      "--enable-pcre"
+    ],
+    "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "linker": "GNU ld version 2.46.1-1.fc44"
+  },
+  "target": "x86_64-unknown-linux-gnu",
+  "build_configuration": {
+    "source_revision": "3decf521a13d98b9e0f50c64c666766406800205+dirty",
+    "lockfile_sha256": "5412f8fb7a58d64c01ec6236c778b79ecb0a3645ab234bb2d88a56a48eb7b4fc",
+    "target": "x86_64-unknown-linux-gnu",
+    "compiler": "rustc 1.95.0 (59807616e 2026-04-14)",
+    "profile": "release"
+  },
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "omz_revision": "9112b53fa8b5ab556c7c893aa8be8a247ac512a0",
+  "omz_loader_sha256": "50daf0e653934d12a5335d5f2c603d33c632abf6241f3aacda12522c546959bb",
+  "omz_fixture": "Same real OMZ tree used in prompt-ownership-2026-09-05; 1,096 tracked blobs verified there. robbyrussell theme and git plugin.",
+  "correctness_commands": [
+    "./build/test-development-bundle.zsh",
+    "./tests/prompt-ownership.zsh target/release/wsh bundles/33810a1d902cf1ffb4cc56dc803947517541d3c075114aec52d4f59d1979d0ae",
+    "./tests/prompt-ownership.zsh target/release/wsh bundles/33810a1d902cf1ffb4cc56dc803947517541d3c075114aec52d4f59d1979d0ae /var/tmp/wsh-real-config-2026-09-05/omz",
+    "WSH_THEME= ./tests/foreground-startup.zsh target/release/wsh bundles/33810a1d902cf1ffb4cc56dc803947517541d3c075114aec52d4f59d1979d0ae candidate"
+  ],
+  "correctness_cases_per_configuration": 20,
+  "benchmark_command": "./benchmarks/benchmark-profile.zsh benchmarks/theme-selection-2026-09-05/profile-samples.tsv target/release/wsh bundles/33810a1d902cf1ffb4cc56dc803947517541d3c075114aec52d4f59d1979d0ae 50",
+  "workload": "Clean 1,000-file Git main fixture; native OSC133 B readiness; git:main settled prompt",
+  "enabled_components": "Explicit WSH_THEME=minimal, Wsh prompt and Git collector, history substring search, autosuggestions, syntax highlighting",
+  "trace_modes": [
+    "normal: no Wsh tracing",
+    "profile: default buffered profiling without function instrumentation"
+  ],
+  "order": "50 forward and 50 reverse pairs, five warmups per variant; no samples excluded",
+  "affinity": "CPU 0; other host services remain active",
+  "runtime_trace_gate": "Historical isolated-runtime gates reused because runtime binary digest is unchanged",
+  "portability": "Complete host suite passed; glibc 2.28 container and remote CI not rerun."
+}

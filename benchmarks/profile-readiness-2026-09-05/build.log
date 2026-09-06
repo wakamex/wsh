@@ -1,0 +1,6 @@
+   Compiling lzma-sys v0.1.20
+   Compiling wsh v0.2.0 (/code/wsh/crates/wsh)
+   Compiling xz2 v0.1.7
+   Compiling wsh-install v0.2.0 (/code/wsh/crates/wsh-install)
+    Finished `release` profile [optimized] target(s) in 2.33s
+/code/wsh/bundles/3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04

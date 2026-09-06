@@ -1,3 +1,6 @@
+# The launcher setting belongs to this shell, not to child shells.
+(( ${+WSH_THEME} )) && typeset -g +x WSH_THEME
+
 if [[ ${WSH_RUN_FOREGROUND:-0} == 1 ]]; then
   typeset -ga _WSH_FOREGROUND_ARGV=("$@")
   set --

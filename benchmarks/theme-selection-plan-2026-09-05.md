@@ -1,0 +1,7 @@
+# Explicit theme selection owns the prompt
+
+The user selected WSH_THEME as the single public control: unset or empty preserves the existing prompt; an explicit theme enables Wsh presentation. This replaces the WSH_PROMPT selector rather than adding a second authority. Baseline: unsigned development bundle 73780b6195fe92fe85184875da78bd33aee49521e5f12c39dcf650910410b7ac, source 3decf521a13d98b9e0f50c64c666766406800205 plus retained worktree changes. The old launcher always overwrites WSH_THEME, preventing explicit user selection.
+
+Remove launcher theme injection, consume WSH_THEME locally, and resolve bundled minimal/wakamex names or an explicit definition path at runtime startup. No theme means no Wsh prompt runtime. OMZ still needs its conditional before loading. Doctor should recommend that conditional only for an identified configured overlap. Missing or invalid theme definitions should preserve the existing prompt and produce a diagnostic.
+
+Acceptance: real bundled Zsh and OMZ preserve shared configuration, both bundled themes and explicit paths work, empty/unset values disable Wsh presentation, startup exports do not leak into nested regular Zsh, invalid definitions do not replace the existing prompt, and doctor remains read-only. Run Rust and host PTY suites before the existing 100-pair native-readiness profiling benchmark, retaining the 3 ms p90 overhead gate. Preserve raw results and exact identities. Stop after two failed product interventions at a gate and reassess; initial implementation scope limit is 60 minutes.

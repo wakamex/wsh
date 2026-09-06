@@ -85,6 +85,14 @@ install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share
 install -D -m 644 "${repository_root}/integration/zdotdir.zlogin" "${stage}/share/wsh/zdotdir/.zlogin"
 install -D -m 644 "${repository_root}/schemas/bundle.schema.json" "${stage}/share/wsh/schemas/bundle.schema.json"
 install -D -m 644 "${repository_root}/schemas/theme.schema.json" "${stage}/share/wsh/schemas/theme.schema.json"
+install -D -m 644 "${repository_root}/integration/directory-jump.zsh" "${stage}/share/wsh/defaults/directory-jump.zsh"
+cp -R -- "${repository_root}/third_party/zsh-z" "${stage}/share/wsh/defaults/zsh-z"
+mv "${stage}/share/wsh/defaults/zsh-z/_z" "${stage}/share/wsh/defaults/zsh-z/_zshz"
+(cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile z.plugin.zsh.zwc z.plugin.zsh')
+find "${stage}/share/wsh/defaults/zsh-z" -type f -exec chmod 644 {} +
+install -D -m 644 "${repository_root}/themes/OMZ-LICENSE.txt" "${stage}/share/wsh/themes/OMZ-LICENSE.txt"
+install -D -m 644 "${repository_root}/themes/robbyrussell.toml" "${stage}/share/wsh/themes/robbyrussell.toml"
+install -D -m 644 "${repository_root}/themes/agnoster.toml" "${stage}/share/wsh/themes/agnoster.toml"
 install -D -m 644 "${repository_root}/themes/minimal.toml" "${stage}/share/wsh/themes/minimal.toml"
 install -D -m 644 "${repository_root}/themes/wakamex.toml" "${stage}/share/wsh/themes/wakamex.toml"
 

@@ -1,0 +1,50 @@
+Wsh profile
+Build: wsh 0.2.0, bundle development-3decf521a13d98b9e0f50c64c666766406800205 (development)
+Zsh: 5.9.999.3-test at cad0d67c76e2
+Source: 3decf521a13d  Target: x86_64-unknown-linux-gnu  Bundle: f2a1bf90a1ff
+
+Startup
+First editable prompt: 28.805 ms
+Launcher to Zsh startup: 2.753 ms
+User .zshenv: 0.127 ms
+User .zprofile: unavailable
+User .zshrc: 0.245 ms
+User .zlogin: unavailable
+History substring search: 3.586 ms
+Autosuggestions: 0.703 ms
+Syntax highlighting: 0.402 ms
+Wsh integration: 2.137 ms
+First precmd: 0.658 ms
+Runtime ready: 11.577 ms
+
+Initial asynchronous prompt
+Repository discovery: 0.028 ms
+Git process: 4.047 ms
+Git output parsing: 0.038 ms
+Provider total: 5.544 ms
+Child processes: 1
+Prompt rendering: 0.010 ms
+Response write: 0.011 ms
+Rendered prompt bytes: 55
+Prompt changed: true
+Repaint cause: git-snapshot
+Snapshot published: 33.622 ms
+Snapshot applied and repainted: 34.663 ms
+
+Built-in ownership
+History substring search: wsh
+Autosuggestions: wsh
+Syntax highlighting: wsh
+Theme: minimal
+
+Slowest Zsh functions by self time
+7.930 ms  _zsh_autosuggest_bind_widget
+4.660 ms  _zsh_autosuggest_bind_widgets
+1.360 ms  _zsh_autosuggest_incr_bind_count
+1.350 ms  _wsh_runtime_start
+1.330 ms  _wsh_bind_history_substring_search
+0.970 ms  _wsh_syntax_highlighting_start
+0.780 ms  add-zle-hook-widget
+0.780 ms  _wsh_profile_event
+
+Trace: retained privately; default-profile traces are in profile-traces.tar.gz

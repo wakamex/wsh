@@ -1,0 +1,6 @@
+PASS: builtin directory-jump ownership and behavior
+PASS: external directory-jump ownership and behavior
+PASS: custom directory-jump ownership and behavior
+PASS: disabled directory-jump ownership and behavior
+PASS: directory database persists across Wsh sessions
+PASS: real ZLE completion handles spaces and prompt hooks record directory visits

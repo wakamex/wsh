@@ -1,0 +1,21 @@
+PASS: regular non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: default non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: empty non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: minimal non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: wakamex non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: path non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: missing non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: invalid non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-existing non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-wsh non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-wakamex non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-path non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: regular -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: default -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: empty -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: minimal -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: wakamex -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: path -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: missing -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: invalid -l prompt ownership, startup selector, hooks and nested regular Zsh
+Real OMZ checks require the optional directory argument.

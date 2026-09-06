@@ -1,0 +1,74 @@
+schema-version = 1
+id = "agnoster"
+name = "Agnoster"
+left = ["context", "cwd", "git", "prompt-character"]
+right = []
+
+[context]
+enabled = true
+show-local = false
+show-ssh = true
+prefix = ""
+separator = "@"
+suffix = " "
+color = "default"
+
+[cwd]
+enabled = true
+style = "full"
+show-on-change = false
+max-length = 80
+home-symbol = "~"
+color = "black"
+
+[git]
+enabled = true
+compact = false
+hide-branches = []
+prefix = " "
+separator = " "
+color = "black"
+
+[git.symbols]
+branch = " "
+detached = "detached:"
+tag = "tag:"
+clean = "clean"
+staged = "+"
+modified = "!"
+untracked = "?"
+ahead = "ahead"
+behind = "behind"
+diverged = "diverged"
+rebase = "rebase"
+merge = "merge"
+cherry-pick = "cherry-pick"
+revert = "revert"
+bisect = "bisect"
+
+[duration]
+enabled = false
+threshold-ms = 2000
+format = "milliseconds"
+prefix = "took "
+suffix = " "
+color = "yellow"
+
+[prompt-character]
+enabled = true
+success = ""
+failure = "✘"
+privileged = "⚡"
+success-color = "green"
+failure-color = "red"
+privileged-color = "yellow"
+
+[segments.context]
+background = "black"
+
+[segments.cwd]
+background = "blue"
+
+[segments.git]
+background = "green"
+dirty-background = "yellow"

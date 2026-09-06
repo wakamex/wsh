@@ -96,6 +96,10 @@ jobs:
           ./benchmarks/verify-foreground-startup-evidence.zsh
           ./benchmarks/verify-native-terminal-integration-evidence.zsh
           ./benchmarks/verify-profile-evidence.zsh
+          ./benchmarks/verify-profile-readiness-evidence.zsh
+          ./benchmarks/verify-prompt-ownership-evidence.zsh
+          ./benchmarks/verify-theme-selection-evidence.zsh
+          python3 ./benchmarks/verify-builtins-themes-evidence.py
 
   validate:
     name: validate

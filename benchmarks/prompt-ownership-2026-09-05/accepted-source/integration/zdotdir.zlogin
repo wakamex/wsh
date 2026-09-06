@@ -1,0 +1,17 @@
+if (( ${+WSH_STARTUP_BUNDLE_ZDOTDIR} )); then
+  ZDOTDIR=$WSH_USER_ZDOTDIR
+  typeset -g WSH_STARTUP_FILE=$ZDOTDIR/.zlogin
+  if [[ $WSH_STARTUP_RCS == on && $WSH_STARTUP_FILE != $WSH_STARTUP_BUNDLE_ZDOTDIR/.zlogin && ( -e $WSH_STARTUP_FILE || -L $WSH_STARTUP_FILE ) ]]; then
+    (( $+functions[_wsh_profile_event] )) && _wsh_profile_event user-zlogin-start
+    source $WSH_STARTUP_FILE
+    (( $+functions[_wsh_profile_event] )) && _wsh_profile_event user-zlogin-end
+    WSH_STARTUP_RCS=$options[rcs]
+  fi
+  WSH_USER_ZDOTDIR=$ZDOTDIR
+  unset WSH_STARTUP_FILE
+  [[ $WSH_STARTUP_RCS == on ]] || unsetopt rcs
+  unset WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
+fi
+
+# Keep the prompt choice local even when user startup exports it.
+typeset -g +x WSH_PROMPT

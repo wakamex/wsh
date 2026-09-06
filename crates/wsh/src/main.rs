@@ -177,7 +177,6 @@ fn run() -> Result<(), String> {
             command
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
-                .env("WSH_THEME", &paths.default_theme)
                 .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
                 .env("ZDOTDIR", &paths.zdotdir)
                 .env_remove("WSH_RUN_FOREGROUND")
@@ -251,7 +250,6 @@ fn run() -> Result<(), String> {
             command
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
-                .env("WSH_THEME", &paths.default_theme)
                 .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
                 .env("WSH_RUN_FOREGROUND", "1")
                 .env("ZDOTDIR", &paths.zdotdir)
@@ -333,7 +331,6 @@ fn run() -> Result<(), String> {
             command
                 .env("WSH_BUNDLE_ROOT", &bundle)
                 .env("WSH_RUNTIME", &paths.runtime)
-                .env("WSH_THEME", &paths.default_theme)
                 .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
                 .env("WSH_PROFILE_DIRECTORY", &session.directory)
                 .env("WSH_PROFILE_FILE", &session.trace)
@@ -422,7 +419,6 @@ fn run() -> Result<(), String> {
                 executable: &launch.entrypoints.shell,
                 bundle_root: &launch.root,
                 runtime: &launch.entrypoints.runtime,
-                theme: &launch.entrypoints.default_theme,
                 zdotdir: &launch.entrypoints.zdotdir,
                 user_zdotdir: user_zdotdir.as_deref(),
             })

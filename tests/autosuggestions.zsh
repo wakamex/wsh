@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+export WSH_THEME=minimal
+
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silent
 zmodload zsh/datetime zsh/zpty zsh/zselect
 

@@ -1,0 +1,7 @@
+variant	metric	samples	median_ms	p90_ms	maximum_ms
+normal	first_editable_ms	40	934.533171	954.572646	957.712128
+normal	transition_ms	40	58.513766	60.626485	64.602287
+theme-off	first_editable_ms	40	924.826566	949.203791	959.687273
+theme-off	transition_ms	40	56.090360	57.713828	61.465884
+theme-off-minus-normal	first_editable_ms	40	-5.502487	3.694635	14.424624
+theme-off-minus-normal	transition_ms	40	-2.274377	-0.336598	3.139142

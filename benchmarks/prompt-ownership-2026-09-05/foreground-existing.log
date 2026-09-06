@@ -1,0 +1,1 @@
+PASS: structured foreground startup preserves argv, job control, signals, terminal state, startup files, and repeated launch behavior

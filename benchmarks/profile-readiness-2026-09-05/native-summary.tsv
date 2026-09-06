@@ -1,0 +1,7 @@
+metric	variant	samples	median_ms	p90_ms	maximum_ms
+first-editable	normal	100	26.997089	27.699709	28.829336
+first-editable	profile	100	28.906584	29.995680	31.620741
+settled	normal	100	36.644220	37.653923	39.193392
+settled	profile	100	38.675547	39.931774	41.841507
+first-editable-overhead	paired	100	1.909972	2.395630	3.783941
+refresh-overhead-diagnostic	paired	100	0.135660	0.359773	0.808240

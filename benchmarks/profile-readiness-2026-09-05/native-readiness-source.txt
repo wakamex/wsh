@@ -1,0 +1,37 @@
+Src/Zle/zle_main.c sha256=4e8fa974367ddfe4108325587bfe5c18f2c9bdaafee590846d7c9d6944ea4dc5
+1351: 	write_loop(2, *markers, strlen(*markers));
+1352:
+1353:     zrefresh();
+1354:
+1355:     unqueue_signals();	/* Should now be safe to acknowledge SIGWINCH */
+1356:
+1357:     zlecallhook(init, NULL);
+1358:
+1359:     if (zleline && *zleline)
+1360: 	redrawhook();
+1361:
+1362:     start_edit();
+1363:
+1364:     zrefresh();
+1365:
+1366:     zlecore();
+
+Src/Zle/termquery.c sha256=cbd8d9ee15db8acd5e722f1e59efea59029c015cf6f27c52222fa05389d9a2cb
+686: static const struct extension editext[] = {
+687:     { "bracketed-paste", { NULL, NULL}, 0, 1 },
+688:     { "integration-prompt", { "\033]133;B\033\\" }, 11, 1 },
+689: #if 0
+690:     { "modkeys-kitty", { "\033[=5u", "\033[=0u" }, 7, 0 },
+691: #endif
+692:     { "modkeys-xterm", { "\033[>4;1m", "\033[>4m" }, 7, 0 }
+
+Src/Zle/termquery.c sha256=cbd8d9ee15db8acd5e722f1e59efea59029c015cf6f27c52222fa05389d9a2cb
+732:     write_loop(SHTTY, seq, pos - seq);
+733: }
+734:
+735: /**/
+736: void
+737: start_edit(void)
+738: {
+739:     collate_seq(0, 1);
+740: }

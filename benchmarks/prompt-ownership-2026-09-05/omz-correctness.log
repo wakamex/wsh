@@ -1,0 +1,13 @@
+PASS: regular non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: default non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: existing non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: wsh non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: invalid non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-existing non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: profile-wsh non-login prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: regular -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: default -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: existing -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: wsh -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: invalid -l prompt ownership, startup selector, hooks and nested regular Zsh
+PASS: real OMZ overlap advice, conditional resolution, existing-mode silence, unchanged configuration

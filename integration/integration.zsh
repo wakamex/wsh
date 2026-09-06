@@ -9,6 +9,10 @@ if [[ $ZSH_VERSION == 5.9.999.3-test && ${WSH_ENABLE_ZLE_TERMINAL_QUERY:-0} != 1
 fi
 
 typeset -gr WSH_INTEGRATION_LOADED=1
+(( ${+WSH_THEME} )) && typeset -g +x WSH_THEME
+typeset -g WSH_PROMPT_OWNER=existing
+[[ -n ${WSH_THEME:-} ]] || return 0
+
 typeset -g WSH_RUNTIME_PID=''
 typeset -g WSH_RUNTIME_INPUT_FD=''
 typeset -g WSH_RUNTIME_OUTPUT_FD=''
@@ -186,13 +190,17 @@ _wsh_runtime_precmd() {
 _wsh_runtime_start() {
   emulate -L zsh
   (( $+functions[_wsh_profile_event] )) && _wsh_profile_event runtime-start
-  if [[ ! -x ${WSH_RUNTIME:-} || ! -f ${WSH_THEME:-} ]]; then
+  local theme=$WSH_THEME
+  case $theme in
+    minimal|wakamex|robbyrussell|agnoster) theme=${WSH_BUNDLE_ROOT}/share/wsh/themes/${theme}.toml ;;
+  esac
+  if [[ ! -x ${WSH_RUNTIME:-} || ! -f $theme ]]; then
     print -u2 -- 'wsh: WSH_RUNTIME or WSH_THEME is unavailable'
     return 1
   fi
 
   unsetopt monitor
-  coproc "$WSH_RUNTIME" serve --theme "$WSH_THEME"
+  coproc "$WSH_RUNTIME" serve --theme "$theme"
   WSH_RUNTIME_PID=$!
   exec {WSH_RUNTIME_INPUT_FD}>&p
   exec {WSH_RUNTIME_OUTPUT_FD}<&p
@@ -212,11 +220,16 @@ _wsh_runtime_start() {
   WSH_RUNTIME_READY=1
   zle -F $WSH_RUNTIME_OUTPUT_FD _wsh_runtime_read
   (( $+functions[_wsh_profile_event] )) && _wsh_profile_event runtime-ready-zsh
+  return 0
 }
 
 zmodload zsh/datetime
 autoload -Uz add-zsh-hook
+if ! _wsh_runtime_start; then
+  print -u2 -- 'wsh: could not start the selected theme; preserving the existing prompt'
+  return 0
+fi
+typeset -gr WSH_PROMPT_OWNER=wsh
 add-zsh-hook preexec _wsh_runtime_preexec
 add-zsh-hook precmd _wsh_runtime_precmd
 add-zsh-hook zshexit _wsh_runtime_stop
-_wsh_runtime_start

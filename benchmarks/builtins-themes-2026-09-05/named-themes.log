@@ -1,0 +1,4 @@
+PASS: minimal resolves through the launcher and validated runtime
+PASS: wakamex resolves through the launcher and validated runtime
+PASS: robbyrussell resolves through the launcher and validated runtime
+PASS: agnoster resolves through the launcher and validated runtime

@@ -119,7 +119,11 @@ ${test_zsh} ${repository_root}/tests/history-substring-search.zsh ${manager} ${b
 ${test_zsh} ${repository_root}/tests/autosuggestions.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/syntax-highlighting.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/plugin-doctor.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/prompt-ownership.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/directory-jump.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/named-themes.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/profile.zsh ${manager} ${bundle}
+${test_zsh} ${repository_root}/tests/profile-readiness.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
 WSH_EXPECT_NATIVE_TERMINAL_PASS=1 \
   ${test_zsh} ${repository_root}/tests/native-terminal-integration.zsh ${bundle}/bin/zsh /dev/null native ${test_root}/native-terminal.bin >/dev/null

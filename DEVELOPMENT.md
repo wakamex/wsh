@@ -40,6 +40,8 @@ External contracts are tested against their authoritative parser, schema, or no-
 
 The first runnable bundle must turn the existing benchmark evidence into explicit pass thresholds before optimization begins. The benchmark specification records the raw Zsh control, first-editable latency, settled-state latency, external process count, optional-lock behavior, repaint count, state correctness, theme validation and render cost, disabled tracing overhead, enabled tracing overhead, and retained memory where relevant.
 
+The profiling acceptance benchmark observes native OSC 133 `B` after ZLE line-init hooks, rather than matching visible prompt text. `tests/profile-readiness.zsh` inserts a 200 ms line-init delay and requires that delay in every normal and profiled readiness measurement. The profile report separately names its own ZLE callback milestone and runtime `precmd` hook span.
+
 Thresholds use a stated statistic and retained-sample rule rather than the most favorable observation. Cold and warm work are separated when they exercise different mechanisms. A threshold can change only through a documented benchmark-design correction or a new product requirement, not because an implementation missed it.
 
 ## Results identify exact builds and workloads
@@ -88,3 +90,11 @@ Before tagging, `./build/check-release-preflight.zsh vMAJOR.MINOR.PATCH` require
 A downstream job verifies the exact committed notes, immutable Release metadata, and every asset, checks the stable latest-bootstrap URL when the tag is still the latest release, installs through the anonymous public versioned URL into fresh state, verifies the installed tag and source commit, and launches the installed shell through its first prompt under a bounded timeout. Rerunning a failed downstream job does not recreate the Release. If the publication job itself is rerun, it accepts an existing Release only after the six deterministic product files match the new builds and the original published checksums, build records, build provenance, metadata, notes, and complete asset set validate. It then passes the immutable published assets to downstream verification instead of replacing execution-specific evidence with bytes from the rerun.
 
 The two jobs test reproducibility and detect execution-specific contamination or tampering. They share the GitHub Actions trust domain, pinned source inputs, toolchain, and builder image, so their agreement is not evidence that those shared inputs are benign. A builder on separately administered infrastructure is required before claiming independent trust domains.
+
+## Prompt ownership checks
+
+`tests/prompt-ownership.zsh MANAGER BUNDLE` tests shared native configuration, login startup, both prompt owners, profiling, and nested regular Zsh. Pass a real Oh My Zsh checkout as a third argument to repeat the cases against its loader and verify doctor advice before and after the conditional. `tests/foreground-startup.zsh` also accepts `WSH_THEME=` to exercise foreground return with the preserved renderer.
+
+Historical renderer benchmarks require `WSH_THEME=minimal` when run against current source. The current profile benchmark and real-configuration Python harness set it explicitly; prefix other renderer benchmark invocations with the setting. Recorded experiments bind their original source bytes; accepted-source snapshots preserve inputs when a harness subsequently changes.
+
+`tests/directory-jump.zsh MANAGER BUNDLE [OMZ_DIRECTORY]` tests the pinned directory-jump implementation, optional real OMZ coexistence, and actual ZLE completion. `tests/named-themes.zsh MANAGER BUNDLE` verifies every bundled name through the launcher and runtime. The runtime Rust suite covers the new ports, segment transitions, escaping, and rejected definitions.

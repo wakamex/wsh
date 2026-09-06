@@ -6,7 +6,7 @@ use std::process::{Child, Command, ExitStatus, Stdio};
 use std::thread;
 use std::time::{Duration, Instant};
 
-const REPORT_VERSION: &str = "wsh-doctor-v1";
+const REPORT_VERSION: &str = "wsh-doctor-v2";
 const MAX_REPORT_BYTES: u64 = 4096;
 const CHILD_TIMEOUT: Duration = Duration::from_secs(10);
 const REPORT_COMMAND: &str = r#"
@@ -14,14 +14,17 @@ typeset _wsh_doctor_syntax_owner=${WSH_SYNTAX_HIGHLIGHTING_OWNER-unset}
 if [[ $_wsh_doctor_syntax_owner == disabled && ${_WSH_SYNTAX_HIGHLIGHTING_LOAD:-0} == 1 ]]; then
   _wsh_doctor_syntax_owner=wsh
 fi
-builtin print -r -- $'wsh-doctor-v1\t'${WSH_HISTORY_SUBSTRING_SEARCH_OWNER-unset}$'\t'${WSH_HISTORY_SUBSTRING_SEARCH_REPLACED-unset}$'\t'${WSH_AUTOSUGGESTIONS_OWNER-unset}$'\t'${WSH_AUTOSUGGESTIONS_REPLACED-unset}$'\t'$_wsh_doctor_syntax_owner >| "$WSH_DOCTOR_REPORT"
+typeset _wsh_doctor_omz_theme=0
+if (( $+functions[_omz_source] )) && [[ -n ${ZSH_THEME:-} ]]; then
+  _wsh_doctor_omz_theme=1
+fi
+builtin print -r -- $'wsh-doctor-v2\t'${WSH_HISTORY_SUBSTRING_SEARCH_OWNER-unset}$'\t'${WSH_HISTORY_SUBSTRING_SEARCH_REPLACED-unset}$'\t'${WSH_AUTOSUGGESTIONS_OWNER-unset}$'\t'${WSH_AUTOSUGGESTIONS_REPLACED-unset}$'\t'$_wsh_doctor_syntax_owner$'\t'${WSH_PROMPT_OWNER-unset}$'\t'$_wsh_doctor_omz_theme >| "$WSH_DOCTOR_REPORT"
 "#;
 
 pub struct Shell<'a> {
     pub executable: &'a Path,
     pub bundle_root: &'a Path,
     pub runtime: &'a Path,
-    pub theme: &'a Path,
     pub zdotdir: &'a Path,
     pub user_zdotdir: Option<&'a std::ffi::OsStr>,
 }
@@ -78,6 +81,8 @@ struct Report<'a> {
     autosuggestions_owner: &'a str,
     autosuggestions_replaced: &'a str,
     syntax_owner: &'a str,
+    prompt_owner: &'a str,
+    omz_theme: &'a str,
 }
 
 fn parse_report(value: &str) -> Result<Report<'_>, String> {
@@ -89,6 +94,8 @@ fn parse_report(value: &str) -> Result<Report<'_>, String> {
         autosuggestions_owner,
         autosuggestions_replaced,
         syntax_owner,
+        prompt_owner,
+        omz_theme,
     ] = fields.as_slice()
     else {
         return Err("diagnostic shell returned a malformed doctor report".into());
@@ -102,13 +109,15 @@ fn parse_report(value: &str) -> Result<Report<'_>, String> {
         autosuggestions_owner,
         autosuggestions_replaced,
         syntax_owner,
+        prompt_owner,
+        omz_theme,
     })
 }
 
 fn finding(component: &str, owner: &str, replaced: &str) -> Result<Option<String>, String> {
     match (owner, replaced) {
         ("wsh", "1") | ("external-active", "0") | ("external-exact", "0") => Ok(Some(format!(
-            "- {component}: an exact external copy is redundant. Remove its startup declaration; wsh supplies the tested copy."
+            "- {component}: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration."
         ))),
         ("external-unknown", "0") => Ok(Some(format!(
             "- {component}: a modified or unrecognized external implementation was preserved. No removal is suggested."
@@ -126,6 +135,8 @@ fn render_report(report: &Report<'_>) -> Result<String, String> {
             autosuggestions_owner: "unset",
             autosuggestions_replaced: "unset",
             syntax_owner: "unset",
+            prompt_owner: report.prompt_owner,
+            omz_theme: report.omz_theme,
         })
     {
         return Ok(
@@ -152,13 +163,22 @@ fn render_report(report: &Report<'_>) -> Result<String, String> {
     if let Some(value) = finding("zsh-syntax-highlighting", report.syntax_owner, "0")? {
         findings.push(value);
     }
+    let prompt_advice = match (report.prompt_owner, report.omz_theme) {
+        ("wsh", "1") => {
+            "\nPrompt compatibility: Wsh owns the prompt and Oh My Zsh has a theme configured.\nTo keep your theme in regular Zsh, add this after setting ZSH_THEME and before sourcing oh-my-zsh.sh:\n  if [[ -n ${WSH_THEME-} ]]; then\n    ZSH_THEME=\"\"\n  fi\nSetting WSH_THEME alone does not skip the OMZ theme. Alternatively, use WSH_THEME= wsh to keep the existing prompt."
+        }
+        ("wsh" | "existing" | "unset", "0" | "1") => "",
+        _ => return Err("diagnostic shell returned inconsistent prompt ownership".into()),
+    };
     if findings.is_empty() {
-        Ok(
-            "Plugin compatibility: no redundant or unrecognized external implementations detected."
-                .into(),
-        )
+        Ok(format!(
+            "Plugin compatibility: no redundant or unrecognized external implementations detected.{prompt_advice}"
+        ))
     } else {
-        Ok(format!("Plugin compatibility:\n{}", findings.join("\n")))
+        Ok(format!(
+            "Plugin compatibility:\n{}{prompt_advice}",
+            findings.join("\n")
+        ))
     }
 }
 
@@ -193,7 +213,6 @@ pub fn run(shell: Shell<'_>) -> Result<(), String> {
         .arg(REPORT_COMMAND)
         .env("WSH_BUNDLE_ROOT", shell.bundle_root)
         .env("WSH_RUNTIME", shell.runtime)
-        .env("WSH_THEME", shell.theme)
         .env("ZDOTDIR", shell.zdotdir)
         .env("WSH_DOCTOR_REPORT", &report_file.path)
         .env_remove("WSH_RUN_FOREGROUND")
@@ -230,7 +249,8 @@ mod tests {
     #[test]
     fn renders_only_supported_findings() {
         let report =
-            parse_report("wsh-doctor-v1\twsh\t1\texternal-unknown\t0\texternal-exact\n").unwrap();
+            parse_report("wsh-doctor-v2\twsh\t1\texternal-unknown\t0\texternal-exact\twsh\t0\n")
+                .unwrap();
         let rendered = render_report(&report).unwrap();
         assert!(rendered.contains("zsh-history-substring-search: an exact external copy"));
         assert!(rendered.contains("zsh-autosuggestions: a modified or unrecognized"));
@@ -239,7 +259,8 @@ mod tests {
 
     #[test]
     fn treats_missing_adapter_state_as_an_unsupported_bundle() {
-        let report = parse_report("wsh-doctor-v1\tunset\tunset\tunset\tunset\tunset\n").unwrap();
+        let report =
+            parse_report("wsh-doctor-v2\tunset\tunset\tunset\tunset\tunset\tunset\t0\n").unwrap();
         assert_eq!(
             render_report(&report).unwrap(),
             "Plugin compatibility: this bundle does not expose plugin ownership diagnostics."
@@ -248,8 +269,28 @@ mod tests {
 
     #[test]
     fn rejects_partial_or_inconsistent_reports() {
-        assert!(parse_report("wsh-doctor-v1\twsh\t0\n").is_err());
-        let report = parse_report("wsh-doctor-v1\twsh\t2\twsh\t0\twsh\n").unwrap();
+        assert!(parse_report("wsh-doctor-v2\twsh\t0\n").is_err());
+        let report = parse_report("wsh-doctor-v2\twsh\t2\twsh\t0\twsh\texisting\t0\n").unwrap();
+        assert!(render_report(&report).is_err());
+    }
+
+    #[test]
+    fn suggests_conditional_theme_loading_only_with_wsh_ownership() {
+        for (owner, configured, expected) in [
+            ("wsh", "1", true),
+            ("wsh", "0", false),
+            ("existing", "1", false),
+            ("existing", "0", false),
+        ] {
+            let value = format!("wsh-doctor-v2\twsh\t0\twsh\t0\twsh\t{owner}\t{configured}\n");
+            let rendered = render_report(&parse_report(&value).unwrap()).unwrap();
+            assert_eq!(rendered.contains("before sourcing oh-my-zsh.sh"), expected);
+            if expected {
+                assert!(rendered.contains("${WSH_THEME-}"));
+                assert!(rendered.contains("alone does not skip"));
+            }
+        }
+        let report = parse_report("wsh-doctor-v2\twsh\t0\twsh\t0\twsh\twsh\t2\n").unwrap();
         assert!(render_report(&report).is_err());
     }
 

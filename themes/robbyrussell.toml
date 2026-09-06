@@ -1,0 +1,65 @@
+schema-version = 1
+id = "robbyrussell"
+name = "Robbyrussell"
+left = ["prompt-character", "cwd", "git"]
+right = []
+
+[context]
+enabled = false
+show-local = false
+show-ssh = true
+prefix = ""
+separator = "@"
+suffix = " "
+color = "default"
+
+[cwd]
+enabled = true
+style = "short"
+show-on-change = false
+max-length = 80
+home-symbol = "~"
+color = "cyan"
+
+[git]
+label-suffix = ")"
+enabled = true
+compact = false
+hide-branches = []
+prefix = " "
+separator = " "
+color = "blue"
+
+[git.symbols]
+branch = "git:("
+detached = "detached:("
+tag = "tag:("
+clean = "clean"
+staged = "+"
+modified = "✗"
+untracked = "?"
+ahead = "ahead"
+behind = "behind"
+diverged = "diverged"
+rebase = "rebase"
+merge = "merge"
+cherry-pick = "cherry-pick"
+revert = "revert"
+bisect = "bisect"
+
+[duration]
+enabled = false
+threshold-ms = 2000
+format = "milliseconds"
+prefix = "took "
+suffix = " "
+color = "yellow"
+
+[prompt-character]
+enabled = true
+success = "➜"
+failure = "➜"
+privileged = "#"
+success-color = "green"
+failure-color = "red"
+privileged-color = "yellow"

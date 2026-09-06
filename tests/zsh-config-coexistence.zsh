@@ -2,6 +2,7 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
+export WSH_THEME=minimal
 
 (( $# == 3 )) || {
   print -u2 -- 'usage: zsh-config-coexistence.zsh MANAGER BUNDLE present|missing'
@@ -153,7 +154,7 @@ run_interactive() {
   local remainder=${hook_line#*:}
   local -a recorded_preexec=(${(s:,:)${remainder%%:*}})
   local -a recorded_zshexit=(${(s:,:)${hook_line##*:}})
-  [[ ${(j:,:)recorded_precmd} == _wsh_user_precmd,_wsh_runtime_precmd,_zsh_highlight_main__precmd_hook ]] || return 1
+  [[ ${(j:,:)recorded_precmd} == _wsh_user_precmd,_zshz_precmd,_wsh_runtime_precmd,_zsh_highlight_main__precmd_hook ]] || return 1
   [[ ${(j:,:)recorded_preexec} == _wsh_user_preexec,_wsh_runtime_preexec,_zsh_highlight_preexec_hook ]] || return 1
   [[ ${(j:,:)recorded_zshexit} == _wsh_user_zshexit,_wsh_runtime_stop ]] || return 1
 }

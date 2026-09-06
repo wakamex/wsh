@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{BTreeMap, HashSet};
 use std::fs::OpenOptions;
 use std::fs::{self, File};
 use std::io::{BufRead, Read, Write};
@@ -37,9 +37,18 @@ pub struct Theme {
     pub git: GitComponent,
     pub duration: DurationComponent,
     pub prompt_character: PromptCharacterComponent,
+    #[serde(default)]
+    pub segments: BTreeMap<Component, SegmentStyle>,
 }
 
-#[derive(Debug, Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "kebab-case")]
+pub struct SegmentStyle {
+    pub background: Color,
+    pub dirty_background: Option<Color>,
+}
+
+#[derive(Debug, Clone, Copy, Deserialize, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[serde(rename_all = "kebab-case")]
 pub enum Component {
     Context,
@@ -89,6 +98,8 @@ pub struct GitComponent {
     pub separator: String,
     pub color: Color,
     pub symbols: GitSymbols,
+    #[serde(default)]
+    pub label_suffix: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -1304,22 +1315,62 @@ impl Renderer {
 
     fn render_layout(&self, layout: &[Component], input: &RenderInput<'_>) -> String {
         let mut output = String::new();
+        let mut previous_background = None;
         for component in layout {
-            match component {
-                Component::Context => self.render_context(&mut output),
-                Component::Cwd => self.render_cwd(
-                    &mut output,
-                    &decode_display_path(&input.snapshot.cwd_hex),
-                    input.cwd_changed,
-                ),
-                Component::Git => self.render_git(&mut output, input.snapshot, input.git_changed),
-                Component::Duration => self.render_duration(&mut output, input.duration_ms),
-                Component::PromptCharacter => {
-                    self.render_prompt_character(&mut output, input.exit_status, input.privileged)
+            if self.theme.segments.is_empty() {
+                self.render_component(&mut output, *component, input);
+                continue;
+            }
+            let mut body = String::new();
+            self.render_component(&mut body, *component, input);
+            if body.is_empty() {
+                continue;
+            }
+            if let Some(style) = self.theme.segments.get(component) {
+                let dirty =
+                    input.snapshot.staged || input.snapshot.modified || input.snapshot.untracked;
+                let background = if *component == Component::Git && dirty {
+                    style.dirty_background.as_ref().unwrap_or(&style.background)
+                } else {
+                    &style.background
+                };
+                output.push_str(&format!("%K{{{}}}", color_name(background)));
+                if let Some(previous) = previous_background {
+                    push_styled(&mut output, "", previous);
                 }
+                output.push(' ');
+                output.push_str(&body);
+                previous_background = Some(background);
+            } else {
+                if let Some(previous) = previous_background.take() {
+                    output.push_str("%k");
+                    push_styled(&mut output, "", previous);
+                }
+                output.push_str(&body);
             }
         }
+        if let Some(previous) = previous_background {
+            output.push_str("%k");
+            push_styled(&mut output, "", previous);
+            output.push(' ');
+        }
         output
+    }
+
+    fn render_component(&self, output: &mut String, component: Component, input: &RenderInput<'_>) {
+        match component {
+            Component::Context => self.render_context(output),
+            Component::Cwd => self.render_cwd(
+                output,
+                &decode_display_path(&input.snapshot.cwd_hex),
+                input.cwd_changed,
+            ),
+            Component::Git => self.render_git(output, input.snapshot, input.git_changed),
+            Component::Duration => self.render_duration(output, input.duration_ms),
+            Component::PromptCharacter => {
+                self.render_prompt_character(output, input.exit_status, input.privileged)
+            }
+        }
     }
 
     fn render_context(&self, output: &mut String) {
@@ -1371,14 +1422,17 @@ impl Renderer {
         let mut parts = Vec::new();
         let label = if let Some(branch) = &snapshot.branch {
             (!config.hide_branches.contains(branch))
-                .then(|| format!("{}{}", config.symbols.branch, branch))
+                .then(|| format!("{}{}{}", config.symbols.branch, branch, config.label_suffix))
         } else if let Some(tag) = &snapshot.exact_tag {
-            Some(format!("{}{}", config.symbols.tag, tag))
+            Some(format!(
+                "{}{}{}",
+                config.symbols.tag, tag, config.label_suffix
+            ))
         } else {
             snapshot
                 .detached_sha
                 .as_ref()
-                .map(|sha| format!("{}{}", config.symbols.detached, sha))
+                .map(|sha| format!("{}{}{}", config.symbols.detached, sha, config.label_suffix))
         };
         if snapshot.staged {
             parts.push(config.symbols.staged.clone());
@@ -1593,6 +1647,16 @@ fn validate_theme(theme: &Theme) -> Result<(), String> {
             ));
         }
     }
+    for (component, style) in &theme.segments {
+        if !components.contains(component) {
+            return Err(format!(
+                "segment style requires an enabled component: {component:?}"
+            ));
+        }
+        if *component != Component::Git && style.dirty_background.is_some() {
+            return Err("dirty-background is supported only for Git segments".into());
+        }
+    }
     if theme.git.hide_branches.len() > 16 {
         return Err("git.hide-branches exceeds 16 entries".into());
     }
@@ -1615,6 +1679,7 @@ fn literals(theme: &Theme) -> Vec<(&'static str, &str)> {
         ("context.suffix", &theme.context.suffix),
         ("cwd.home-symbol", &theme.cwd.home_symbol),
         ("git.prefix", &theme.git.prefix),
+        ("git.label-suffix", &theme.git.label_suffix),
         ("git.separator", &theme.git.separator),
         ("git.symbols.branch", &theme.git.symbols.branch),
         ("git.symbols.detached", &theme.git.symbols.detached),
@@ -1792,6 +1857,50 @@ mod tests {
     fn parses_the_bundled_minimal_theme() {
         assert_eq!(parse_theme(VALID_THEME).unwrap().id, "minimal");
         assert_eq!(parse_theme(WAKAMEX_THEME).unwrap().id, "wakamex");
+    }
+
+    #[test]
+    fn named_ports_render_labels_segments_and_escape_provider_text() {
+        let mut snapshot = sample_snapshot();
+        snapshot.branch = Some("topic%$(touch owned)".into());
+        let mut robby =
+            Renderer::new(parse_theme(include_str!("../../../themes/robbyrussell.toml")).unwrap());
+        let (prompt, right) = robby.render(&snapshot, 0, None, false);
+        assert!(prompt.starts_with("%F{green}➜%f "));
+        assert!(prompt.contains("git:(topic%%\\$(touch owned))"));
+        assert!(right.is_empty());
+        let (failed, _) = robby.render(&snapshot, 1, None, false);
+        assert!(failed.starts_with("%F{red}➜%f "));
+        let mut agnoster =
+            Renderer::new(parse_theme(include_str!("../../../themes/agnoster.toml")).unwrap());
+        let (clean, _) = agnoster.render(&snapshot, 0, None, false);
+        assert!(clean.contains("%K{blue}"));
+        assert!(clean.contains("%K{green}%F{blue}%f"));
+        assert!(clean.contains("%k%F{green}%f"));
+        snapshot.modified = true;
+        let (dirty, _) = agnoster.render(&snapshot, 1, None, false);
+        assert!(dirty.contains("%K{yellow}%F{blue}%f"));
+        assert!(dirty.contains("%k%F{yellow}%f"));
+        assert!(dirty.contains('✘'));
+        snapshot.found = false;
+        let (outside, _) = agnoster.render(&snapshot, 0, None, false);
+        assert!(!outside.contains("%K{green}"));
+        assert!(!outside.contains("%K{yellow}"));
+        assert!(outside.contains("%k%F{blue}%f"));
+    }
+
+    #[test]
+    fn rejects_executable_or_inconsistent_segment_styles() {
+        for suffix in [
+            "\n[segments.cwd]\nbackground = \"$(touch owned)\"\n",
+            "\n[segments.cwd]\nbackground = \"blue\"\nshell = \"echo unsafe\"\n",
+            "\n[segments.context]\nbackground = \"blue\"\n",
+            "\n[segments.cwd]\nbackground = \"blue\"\ndirty-background = \"yellow\"\n",
+        ] {
+            assert!(parse_theme(&format!("{VALID_THEME}{suffix}")).is_err());
+        }
+        let malicious = VALID_THEME.replace("[git]", "[git]\nlabel-suffix = \"\\u001b[0m\"");
+        assert!(parse_theme(&malicious).is_err());
     }
 
     #[test]

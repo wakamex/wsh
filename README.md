@@ -4,6 +4,7 @@
 
 Currently includes:
 
+- Directory jumping with `z`, preserving an existing OMZ or custom implementation
 - [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
 - [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
 - [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)
@@ -46,9 +47,47 @@ Use `wsh update --check` to check without changing anything, `wsh update` to ins
 
 Run `wsh profile` to start a normal interactive session that reports launcher, startup-file, built-in, provider, rendering, and first-editor timing when you exit. `wsh profile --functions` adds Zsh function-level timing. [PROFILING.md](PROFILING.md) defines the captured data, privacy limits, and recovery command.
 
+## Directory jumping
+
+Current development source supplies `z` when your configuration has not already defined a directory-jump command. Visit a directory, then use part of its name to return:
+
+```sh
+cd /code/my-project
+cd /tmp
+z my-project
+```
+
+The pinned Zsh-z implementation ranks visited directories by frequency and recency and persists them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. This default is not included in v0.2.0. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
+
+## Prompt selection
+
+Current development source preserves your existing prompt when `WSH_THEME` is unset or empty. Select a Wsh theme to enable its prompt and asynchronous Git collector:
+
+```sh
+WSH_THEME=wakamex wsh
+WSH_THEME=minimal wsh
+WSH_THEME=robbyrussell wsh
+WSH_THEME=agnoster wsh
+WSH_THEME=/path/to/theme.toml wsh
+```
+
+These are terminal commands. All four bundled names and explicit theme-definition paths are supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt. Theme selection is not available in v0.2.0.
+
+In a shared `.zshrc`, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
+
+```zsh
+if [[ -n ${WSH_THEME-} ]]; then
+  ZSH_THEME=""
+fi
+```
+
+Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: that would also select it for regular Zsh and trigger the conditional there. Selection takes effect after `.zshrc`; changing it later does not switch an active renderer. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
+
+`WSH_THEME=wakamex wsh doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Theme selection alone does not stop OMZ from loading its theme. Doctor never edits startup files or unloads arbitrary theme hooks. Further cleanup follows identified duplication; retain conditional declarations for plugins you still use in regular Zsh.
+
 ## Current status
 
-The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, two data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
 

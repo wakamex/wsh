@@ -248,7 +248,7 @@ pub fn report(directory: &Path) -> Result<String, String> {
     output.push_str("\nStartup\n");
     push_milestone(
         &mut output,
-        "First editable prompt",
+        "Wsh ZLE initialization hook",
         find(&events, "editor-ready"),
     );
     push_milestone(
@@ -286,6 +286,13 @@ pub fn report(directory: &Path) -> Result<String, String> {
     );
     push_span(
         &mut output,
+        "Directory jumping",
+        &events,
+        "directory-jump-start",
+        "directory-jump-end",
+    );
+    push_span(
+        &mut output,
         "History substring search",
         &events,
         "history-start",
@@ -314,7 +321,7 @@ pub fn report(directory: &Path) -> Result<String, String> {
     );
     push_span(
         &mut output,
-        "First precmd",
+        "Wsh first precmd hook",
         &events,
         "precmd-start",
         "precmd-end",

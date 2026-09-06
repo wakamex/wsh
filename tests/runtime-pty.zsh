@@ -2,6 +2,7 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
+export WSH_THEME=minimal
 
 local root=${0:A:h:h}
 local zsh_binary=${WSH_TEST_ZSH:-$root/build/out/zsh-cad0d67c-wsh1/bin/zsh}

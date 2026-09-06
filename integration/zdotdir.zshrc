@@ -51,6 +51,9 @@ if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
     add-zsh-hook precmd _wsh_run_foreground_startup
     precmd_functions=(_wsh_run_foreground_startup "${(@)precmd_functions:#_wsh_run_foreground_startup}")
   fi
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event directory-jump-start
+  source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/directory-jump.zsh"
+  (( $+functions[_wsh_profile_event] )) && _wsh_profile_event directory-jump-end
   (( $+functions[_wsh_profile_event] )) && _wsh_profile_event history-start
   source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/history-substring-search.zsh"
   (( $+functions[_wsh_profile_event] )) && _wsh_profile_event history-end

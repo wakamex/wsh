@@ -1,0 +1,24 @@
+{
+  "bundle_sha256": "3c9a72bc38696e85ed95ccb61f5f502eaa949b490aaed5796175ef87ecc8fa04",
+  "manager_sha256": "892df2d3928843d48eb116cb72665c39f484c21a21501aa0b9633a1c5081ea47",
+  "runtime_sha256": "f97ad8e32ba45695855cb75b49d830d691d83fd49d60ef24be97c887b81df268",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "source_revision": "3decf521a13d98b9e0f50c64c666766406800205+dirty",
+  "startup_sha256": {
+    ".zshenv": "ab334dfcf138fdf9a6433115d248a6011517f8e0c714133eb747dcd3572c28bb",
+    ".zprofile": "b289a4307add10aecd0931c66fe65340ecf30a2a2ad1c1ede4d05fc41c9543cb",
+    ".zshrc": "c4ec7b2aa4ecd3bffb52da1aac8e5d38ee5aaaf023a9fa1dfa6f4c5ec29b20e6"
+  },
+  "dependencies_sha256": "8274c029b57bc361183692999549051e90b2175b1bed6a5b0eedc7ef8cbdc225",
+  "fixture_tree": "979aa010d0504acc67b80da705b291c47c7fb9dd",
+  "private_rc_sha256": {
+    "normal": "9a6efa533b996d90c35adf6a0ea3b9a82da3ea43cefe732df8d6aa6fea5fbeab",
+    "theme-off": "ffc8fc7edfab4b3773584a53f3bf26792722168726d62032375bb2291ff96f51"
+  },
+  "single_change": "ZSH_THEME=\"wakamex\" -> ZSH_THEME=\"\"",
+  "artifact_status": "unsigned development artifact",
+  "normal_pairs": 20,
+  "order": "20 forward and 20 reverse pairs after five warmups per variant",
+  "readiness": "shared ZLE observer then native OSC 133 B; no Wsh profiling or strace during timing",
+  "host_exclusivity": "CPU 0 affinity only; other host services remain active"
+}

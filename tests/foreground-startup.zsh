@@ -2,6 +2,7 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silent
 zmodload zsh/datetime zsh/zpty zsh/zselect
+export WSH_THEME=${WSH_THEME-minimal}
 
 (( $# == 3 )) || {
   print -u2 -- 'usage: foreground-startup.zsh MANAGER BUNDLE baseline|candidate'
@@ -75,7 +76,8 @@ foreground_child() {
   export WSH_USER_ZDOTDIR=$current_home
   export WSH_BUNDLE_ROOT=$bundle
   export WSH_RUNTIME=$bundle/bin/wsh-runtime
-  export WSH_THEME=$bundle/share/wsh/themes/minimal.toml
+  # Preserve the explicitly selected theme, including empty existing-prompt mode.
+  export WSH_THEME
   export WSH_TEST_STARTUP_LOG=$current_home/startup.log
   export WSH_TEST_TERMIOS_LOG=$current_home/termios.log
   export TERM=xterm-256color

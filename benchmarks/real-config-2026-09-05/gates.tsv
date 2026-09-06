@@ -1,0 +1,10 @@
+config	wsh_minus_direct_p90_ms	excess_over_empty_increment_ms	followup_threshold_ms	startup_followup	paired_profile_median_ms	paired_profile_p90_ms	profile_3ms_gate
+empty	23.604881	0.000000	5.000000	pass	2.498172	3.079495	fail
+plain	23.602502	-0.002379	5.000000	pass	2.519023	3.256780	fail
+omz-none	26.960275	3.355394	5.000000	pass	2.814809	3.427734	fail
+robbyrussell	38.030438	14.425557	5.043926	investigate	3.165013	4.141081	fail
+agnoster	-16.782022	-40.386903	8.991697	pass	2.576761	3.532156	fail
+wakamex	27.790802	4.185921	5.203789	pass	2.573391	3.995084	fail
+plugins	12.269818	-11.335063	7.050377	pass	3.138973	4.584847	fail
+wakamex-plugins	11.726075	-11.878806	7.817167	pass	2.847156	4.574487	fail
+actual	51.176790	27.571909	100.567235	pass	10.014340	33.471694	fail

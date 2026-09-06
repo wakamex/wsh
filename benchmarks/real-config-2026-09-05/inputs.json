@@ -1,0 +1,32 @@
+{
+  "startup_sha256": {
+    ".zshenv": "ab334dfcf138fdf9a6433115d248a6011517f8e0c714133eb747dcd3572c28bb",
+    ".zprofile": "b289a4307add10aecd0931c66fe65340ecf30a2a2ad1c1ede4d05fc41c9543cb",
+    ".zshrc": "c4ec7b2aa4ecd3bffb52da1aac8e5d38ee5aaaf023a9fa1dfa6f4c5ec29b20e6"
+  },
+  "dependencies_sha256": "8274c029b57bc361183692999549051e90b2175b1bed6a5b0eedc7ef8cbdc225",
+  "pins": {
+    "omz": [
+      "/var/tmp/wsh-real-config-2026-09-05/omz-source.git",
+      "9112b53fa8b5ab556c7c893aa8be8a247ac512a0"
+    ],
+    "wakamex": [
+      "/code/wakamex-zsh-theme",
+      "15c7c78214774408a6c007d0401415c7d0cded38"
+    ],
+    "autosuggestions": [
+      "/code/zsh-autosuggestions",
+      "85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5"
+    ],
+    "syntax": [
+      "/code/zsh-syntax-highlighting",
+      "2fc57d63067c18b1100ecdbf684fa5baf49459d1"
+    ]
+  },
+  "bundle": "/code/wsh/bundles/f2a1bf90a1ff0312c2ad6c2389e2f19b8fd1a9de1e706c14ec0b0e34ca667581",
+  "manager_sha256": "ad53a3586f2513e2295f1503a2e73630b0ab3dbd1438d09666a762ae844b3e40",
+  "bundle_sha256": "f2a1bf90a1ff0312c2ad6c2389e2f19b8fd1a9de1e706c14ec0b0e34ca667581",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "runtime_sha256": "f97ad8e32ba45695855cb75b49d830d691d83fd49d60ef24be97c887b81df268",
+  "fixture_tree": "979aa010d0504acc67b80da705b291c47c7fb9dd"
+}

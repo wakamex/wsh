@@ -4,7 +4,7 @@ Wsh commits exact upstream runtime source so a release can build offline, reprod
 
 The current plugin snapshots are byte-identical to their recorded upstream revisions. Wsh compiles additional `.zwc` files during the bundle build, retains the source and license, and loads the source through Wsh-owned adapters. The selected Zsh revision carries two separate digest-pinned source patches with minimal reproducers and explicit reasons the fixes belong in the native producer.
 
-All three interactive defaults come from repositories maintained by `zsh-users`. Oh My Zsh ships an opt-in copy of history substring search. Autosuggestions and syntax highlighting are separate projects commonly installed through Oh My Zsh's custom plugin directory. None is enabled by Oh My Zsh by default.
+History substring search, autosuggestions, and syntax highlighting come from repositories maintained by `zsh-users`. Directory jumping uses the pinned Zsh-z copy distributed by Oh My Zsh. Oh My Zsh ships an opt-in copy of history substring search. Autosuggestions and syntax highlighting are separate projects commonly installed through Oh My Zsh's custom plugin directory. None is enabled by Oh My Zsh by default.
 
 `wsh doctor` reuses the adapters' byte-exact ownership results. It recommends removing an external startup declaration only when that declaration loaded the pinned implementation already supplied by Wsh. Modified and unrecognized implementations stay active and receive no removal recommendation, disabled defaults produce no recommendation, and the command never rewrites startup source. The retained [plugin-doctor result](benchmarks/plugin-doctor-2026-09-03/report.md) tests these cases against the bundled source.
 
@@ -16,6 +16,7 @@ All three interactive defaults come from repositories maintained by `zsh-users`.
 | Zsh `cad0d67c76e2be7371cf3526b79ea2581810d35a` | Two compiled source patches and one test-only fixture correction | Used by current development after passing the complete upstream and Wsh gates; built with `Util/preconfig` and packaged with its executable, modules, and functions | Narrow upstreamable source fixes, distribution build, and compatibility policy |
 | History substring search | None | Loads after user startup, binds advertised Up and Down sequences only when their active-map bindings are ordinary history navigation, replaces exact recognized upstream or Oh My Zsh runtime definitions, and preserves modified code or custom bindings | Product default and compatibility policy |
 | Autosuggestions | None | Selects upstream's documented manual-rebind mode by default, loads after history widgets, replaces only an exact pending copy, and preserves active or modified implementations | Upstream-supported configuration and compatibility policy |
+| Directory jumping | None | Loads pinned Zsh-z only when the selected command is absent, preserves existing implementations, and installs the completion source under the function name used by its widget | Product default, build transformation, and compatibility policy |
 | Syntax highlighting | None | Defers clean loading until the first `precmd`, activates missing redraw hooks around an exact inactive copy, and preserves exact active, modified, incomplete, or custom implementations as described below | Wsh startup-integration fix |
 
 ## The post-5.9 Zsh revision has two source patches and one test correction
@@ -75,3 +76,9 @@ Every vendored update must:
 7. For each Zsh identity, link the exact upstream `NEWS`, incompatibility notes, and commit comparison, then summarize only the capabilities and compatibility treatments Wsh directly tests.
 
 A Wsh workaround should be deleted when an upstream release or a simpler startup contract removes its reproducer. Historical benchmark reports continue to describe the exact revisions they measured.
+
+## Directory jumping preserves an existing command
+
+Wsh vendors OMZ `plugins/z` at commit `9112b53fa8b5ab556c7c893aa8be8a247ac512a0`, derived from agkozak/zsh-z. Runtime, completion source, MIT license, and manual remain byte-identical; [provenance](third_party/zsh-z/PROVENANCE.md) records their hashes. The build precompiles the runtime and installs OMZ's `_z` completion bytes as `_zshz`, the function name called by this snapshot's widget. The adapter registers that completion when compdef is already available. It does not initialize compinit.
+
+The adapter runs after user startup and loads only when the selected command name, zshz function, and legacy _z function are absent. Existing aliases, functions, executables, and OMZ hooks remain active without takeover. `WSH_DISABLE_DIRECTORY_JUMP=1` disables this default. Upstream database ranking, locking, persistence, command options, background visit recording, and tab-widget behavior are unchanged. The selected OMZ snapshot contains no standalone upstream test suite; Wsh's real-component tests exercise ranking, persistence, spaces, literal shell characters, completion, automatic visit recording, disable behavior, and native/OMZ/custom ownership.

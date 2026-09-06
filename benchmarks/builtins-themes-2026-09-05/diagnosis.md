@@ -1,0 +1,7 @@
+# Directory-jump startup diagnosis
+
+The first 100-pair comparison failed the 3 ms p90 gate: median extra startup 5.824 ms, p90 6.278 ms. Excluding the fixture from automatic directory recording reduced a separate 20-pair diagnostic to median 4.686 ms and p90 5.094 ms, so visit recording is not the main cost. Function profiling attributed 5.293 ms to directory-jump startup, with 4.860 ms self time in the adapter. File tracing confirmed that Zsh read the compiled z.plugin.zsh.zwc file.
+
+Hypothesis: querying the special commands associative array populates the command table across PATH. The smallest counterfactual replaces that lookup with the native whence builtin for the single selected command. No upstream source, directory recording, completion, or prompt behavior changes. The original adapter is retained in directory-adapter-baseline.zsh and the original timings remain in directory-samples.tsv. Acceptance uses the original 3 ms paired p90 threshold, after rerunning ownership and functional tests.
+
+The isolated lookup comparison confirmed the hypothesis: command-table access took a median 3.584 ms versus 0.103 ms for whence across 20 observations each. The first end-to-end whence counterfactual passed at 2.748 ms paired p90 extra startup. The final adapter explicitly invokes builtin whence to avoid user function shadowing; its final 100-pair run passed at median 2.364 ms and p90 2.810 ms. Directory recording remains enabled.

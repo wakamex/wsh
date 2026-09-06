@@ -1,0 +1,9 @@
+measured_at_utc	block	position	variant	repetition	first_editable_ms	settled_ms
+2026-09-05T21:16:47Z	forward	1	normal	1	5.521059	230.029821
+2026-09-05T21:16:47Z	forward	2	profile	1	6.495237	232.415676
+2026-09-05T21:16:47Z	reverse	1	profile	1	7.075548	232.845545
+2026-09-05T21:16:47Z	reverse	2	normal	1	6.013393	230.619907
+FAIL: normal readiness 5.521 ms omitted the 200 ms editor-init delay
+FAIL: profile readiness 6.495 ms omitted the 200 ms editor-init delay
+FAIL: profile readiness 7.076 ms omitted the 200 ms editor-init delay
+FAIL: normal readiness 6.013 ms omitted the 200 ms editor-init delay

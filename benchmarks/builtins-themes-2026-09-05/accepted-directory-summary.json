@@ -1,0 +1,7 @@
+{
+  "pairs": 100,
+  "median_extra_ms": 2.3638010000000005,
+  "p90_extra_ms": 2.8097630000000002,
+  "limit_ms": 3,
+  "pass": true
+}
