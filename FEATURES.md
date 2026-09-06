@@ -56,9 +56,11 @@ The selected post-5.9 Zsh already emits OSC 7 and OSC 133 from native ZLE and co
 
 The accepted coexistence path produced the same valid marker and hook counts as native-only, started zero prompt-time Wakterm processes, and completed 100 no-op prompt cycles at 60.500 ms p90 versus 60.552 ms for native-only. [`TERMINAL-INTEGRATION.md`](TERMINAL-INTEGRATION.md) and the [retained result](benchmarks/native-terminal-integration-2026-09-04/report.md) define the boundary. A general event bus remains unjustified.
 
-## Completion starts as a Wakterm endpoint
+## Native initialization and Wakterm completion need separate experiments
 
-The first completion architecture is a Zsh adapter calling a Wakterm-owned mux endpoint backed by Wakterm's live Clap model. The application remains authoritative for command structure, and Zsh remains authoritative for matching, grouping, display, and selection. A generic broker becomes a candidate only after a second application demonstrates the same lifecycle need. [`COMPLETION.md`](COMPLETION.md) defines the comparison.
+The immediate standalone gap is native completion initialization. The [eager `compinit` experiment](benchmarks/native-completion-2026-09-06/report.md) fixes missing Git branch and `z` completion, but exceeds both cached and missing-cache startup budgets. A deferred initializer is the next hypothesis, with native completion and existing user widgets remaining authoritative. No completion default has been added from this rejected experiment.
+
+The separate Wakterm comparison evaluates pruned static completion, direct dynamic completion, and an adapter calling Wakterm's existing mux. The application remains authoritative for command structure, and Zsh remains authoritative for matching, grouping, display, and selection. Choose the smallest passing path; a generic broker requires a second application with an unresolved shared lifecycle need. [`COMPLETION.md`](COMPLETION.md) defines both investigations.
 
 Any dynamic path has hard execution bounds before it can be accepted: one request per editor generation, cancellation when the buffer changes, stale-result rejection, a deadline, candidate and byte limits, provider process limits, bounded caching with explicit invalidation, and immediate native fallback. These are safety properties of the Wakterm experiment, not evidence for a generic broker.
 

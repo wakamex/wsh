@@ -27,5 +27,6 @@ builtin cd -q -- "$root"
 ./benchmarks/verify-theme-selection-evidence.zsh
 python3 ./benchmarks/verify-builtins-themes-evidence.py
 python3 ./benchmarks/verify-profile-order-evidence.py
+python3 ./benchmarks/verify-native-completion-evidence.py
 
 print -r -- 'PASS: complete retained-evidence suite'

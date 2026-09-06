@@ -1,0 +1,20 @@
+[
+  {
+    "variant": "baseline",
+    "branch": "git switch wsh-native-",
+    "jump": "z alpha",
+    "path": "cd path\\ with\\ spaces/"
+  },
+  {
+    "variant": "cold",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-native-completion-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/"
+  },
+  {
+    "variant": "warm",
+    "branch": "git switch wsh-native-completion-unique ",
+    "jump": "z /var/tmp/wsh-native-completion-2026-09-06/work/fixture/project\\ alpha ",
+    "path": "cd path\\ with\\ spaces/"
+  }
+]

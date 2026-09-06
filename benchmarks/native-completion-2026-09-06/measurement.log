@@ -1,0 +1,35 @@
+Completed rounds: 10
+Completed rounds: 20
+Completed rounds: 30
+Completed rounds: 40
+Completed rounds: 50
+{
+  "results": {
+    "baseline": {
+      "samples": 50,
+      "startup_ms_p50": 25.844055,
+      "startup_ms_p95": 27.038662,
+      "tab_ms_p50": 12.096934,
+      "tab_ms_p95": 12.887191
+    },
+    "cold": {
+      "samples": 50,
+      "startup_ms_p50": 170.352884,
+      "startup_ms_p95": 180.910062,
+      "tab_ms_p50": 71.62694,
+      "tab_ms_p95": 76.008149
+    },
+    "warm": {
+      "samples": 50,
+      "startup_ms_p50": 44.666601,
+      "startup_ms_p95": 47.657818,
+      "tab_ms_p50": 71.663081,
+      "tab_ms_p95": 76.434159
+    }
+  },
+  "gates": {
+    "warm_startup": false,
+    "cold_startup": false,
+    "first_tab": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "manager_source": "950bde517bdbb75d3c2a0933293b95f3d013a967",
+  "manager_sha256": "c305118f5a23a27e6240f4e902a27fbe3824cbafb8b1b7803867f9159f408bf0",
+  "bundle_path": "/code/wsh/bundles/ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+  "bundle_sha256": "ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "runtime_sha256": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+  "trace_mode": "off",
+  "theme": "",
+  "editing_defaults": "all enabled",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cpu": 0,
+  "command": "python3 /var/tmp/wsh-native-completion-2026-09-06/run.py",
+  "config_sha256": "8cf54e8beeec34cd31b5f35b5abd1ea5e42a5dc7d92b6264d385851b6f193f95",
+  "harness_sha256": "f2502092af4eaba22fe86e7b78024f6bfbc8ccb34cf0035e34349e14ca8e9c28",
+  "plan_sha256": "08e1de0cefc81ca9ab1aac53450e2984f337ba1511e320410609e3b2b1e20af7",
+  "git_version": "git version 2.55.0"
+}

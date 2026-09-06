@@ -1,4 +1,10 @@
-# Wakterm dynamic completion experiment
+# Completion experiments
+
+## Eager native initialization exceeds the startup budgets
+
+Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [native initialization experiment](benchmarks/native-completion-2026-09-06/report.md) verifies that ordinary `compinit` enables Git branch completion and completion for `z`, but its cached and missing-cache startup costs exceed the fixed budgets. Eager initialization is not enabled by default. The next hypothesis is a small deferred initializer, evaluated against first-Tab latency and existing completion and editing-widget ownership before adoption.
+
+## Wakterm dynamic completion comparison
 
 Wakterm currently ships 9,246 lines of generated completion across Bash, Fish, and Zsh even though its live Clap model remains authoritative. This establishes duplicated generated structure and installed size, but it does not yet establish that a resident endpoint is faster or equally correct. The first experiment compares the current assets with direct dynamic completion and a Wakterm-owned mux endpoint.
 
