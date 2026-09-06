@@ -10,7 +10,7 @@
 - Update explicitly and roll back offline if needed.
 - Navigate prompts and command output in compatible terminals.
 
-These features are included in v0.3.0.
+These features are included in v0.3.1.
 
 ## Motivation
 
