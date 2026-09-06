@@ -2,14 +2,15 @@
 
 `wsh` is a fast, tested Zsh distribution with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
 
-Currently includes:
+- Keep your `.zshrc`, Oh My Zsh setup, and familiar Zsh commands.
+- Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
+- Jump back to frequently used directories with `z`.
+- Keep your existing prompt or choose Minimal, Wakamex, Robbyrussell, or Agnoster with asynchronous Git updates.
+- Find startup slowdowns with `wsh profile` and redundant plugin setup with `wsh doctor`.
+- Update explicitly and roll back offline if needed.
+- Navigate prompts and command output in compatible terminals.
 
-- Directory jumping with `z`, preserving an existing OMZ or custom implementation
-- [`zsh-history-substring-search`](https://github.com/zsh-users/zsh-history-substring-search)
-- [`zsh-autosuggestions`](https://github.com/zsh-users/zsh-autosuggestions)
-- [`zsh-syntax-highlighting`](https://github.com/zsh-users/zsh-syntax-highlighting)
-- Native prompt navigation, output zones, and working-directory reporting for compatible terminals ([OSC 7](https://wezterm.org/shell-integration.html#osc-7-escape-sequence-to-set-the-working-directory), [OSC 133 semantic prompts](https://gitlab.freedesktop.org/Per_Bothner/specifications/-/blob/master/proposals/semantic-prompts.md))
-- A tested, pinned post-5.9 Zsh build incorporating 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md))
+These features describe current development source; some await the next release and are not included in v0.2.0.
 
 ## Motivation
 
@@ -86,6 +87,8 @@ Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keep
 `WSH_THEME=wakamex wsh doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Theme selection alone does not stop OMZ from loading its theme. Doctor never edits startup files or unloads arbitrary theme hooks. Further cleanup follows identified duplication; retain conditional declarations for plugins you still use in regular Zsh.
 
 ## Current status
+
+The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
 
 The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
