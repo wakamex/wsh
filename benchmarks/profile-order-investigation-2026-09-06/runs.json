@@ -1,0 +1,74 @@
+[
+  {
+    "index": 1,
+    "variant": "baseline",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/1-baseline-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/7d39677f7637b076ba2f35a83ab1b621c36fe4848e5f1c465e4fa480c22fd4da",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.376\tpass"
+  },
+  {
+    "index": 2,
+    "variant": "modules",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/2-modules-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/998c4dce9d187072c69b5dbc74de7e616efd229664ad0fc7b888a32ab487d45c",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.537\tpass"
+  },
+  {
+    "index": 3,
+    "variant": "both",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/3-both-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.281\tpass"
+  },
+  {
+    "index": 4,
+    "variant": "both",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/4-both-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.283\tpass"
+  },
+  {
+    "index": 5,
+    "variant": "modules",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/5-modules-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/998c4dce9d187072c69b5dbc74de7e616efd229664ad0fc7b888a32ab487d45c",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.326\tpass"
+  },
+  {
+    "index": 6,
+    "variant": "baseline",
+    "command": [
+      "/code/wsh/benchmarks/benchmark-profile.zsh",
+      "/code/wsh/benchmarks/profile-order-investigation-2026-09-06/6-baseline-samples.tsv",
+      "/code/wsh/target/release/wsh",
+      "/code/wsh/bundles/7d39677f7637b076ba2f35a83ab1b621c36fe4848e5f1c465e4fa480c22fd4da",
+      "50"
+    ],
+    "gate": "profile-first-editable-p90-overhead-ms\t<=3.000\t2.336\tpass"
+  }
+]

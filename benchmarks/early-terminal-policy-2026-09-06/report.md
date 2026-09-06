@@ -6,7 +6,7 @@ The same early-compinit fixture improved from 564.426 ms to 51.969 ms median fir
 
 ## Verification and scope
 
-The complete host bundle suite passed, covering the first commit's empty-module-path regression, end-to-end profiling, delayed readiness, shared configuration, editing, prompt selection, directory jumping, named themes, foreground job control and native terminal integration. All 19 existing retained-evidence verifiers passed. The canonical builder's Python 3.6.8 accepted the new test's syntax and subprocess arguments; the full canonical build, remote CI and two-build reproducibility were not rerun. The earlier profiling-overhead gate remains unresolved as documented in ../profile-module-path-2026-09-06/report.md.
+The complete host bundle suite passed, covering the first commit's empty-module-path regression, end-to-end profiling, delayed readiness, shared configuration, editing, prompt selection, directory jumping, named themes, foreground job control and native terminal integration. All 19 existing retained-evidence verifiers passed. The canonical builder's Python 3.6.8 accepted the new test's syntax and subprocess arguments; the full canonical build, remote CI and two-build reproducibility were not rerun. The later [matched six-run revalidation](../profile-order-investigation-2026-09-06/report.md) passed the unchanged profiling-overhead gate for both fixes.
 
 The only production change is moving the existing terminal-policy block before user startup. The launch-environment opt-in remains supported. Users can replace .term.extensions explicitly in their startup files before loading ZLE. No installed bundle, live user startup file, or release tag was modified.
 

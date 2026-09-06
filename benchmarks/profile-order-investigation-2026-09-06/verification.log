@@ -1,0 +1,22 @@
+PASS: resource gate checker accepts bounded measurements and rejects an exceeded threshold
+PASS: retained resource-gate inputs, implementation digests, and summary agree
+PASS: retained bootstrap inputs, historical implementation digests, and summary agree
+PASS: retained public-install inputs, summaries, and fixed gates agree
+PASS: retained runtime-job inputs, summaries, and fixed gates agree
+PASS: retained update CLI inputs, historical source digests, summaries, and fixed gates agree
+PASS: retained bare-launch inputs, historical source digests, summaries, and fixed gates agree
+PASS: configuration coexistence sample counts, summary, startup gate, ownership, plugins, and Git-process evidence
+PASS: history substring search digests, sample counts, startup gates, and process evidence
+PASS: autosuggestions digests, sample counts, startup, prompt, editing, and process gates
+PASS: syntax-highlighting digests, upstream suite, sample counts, startup, redraw, and process gates
+PASS: pinned edge Zsh evidence and fixed gates
+PASS: plugin-doctor inputs, summaries, correctness results, and startup gate agree
+PASS: foreground-startup inputs, summaries, correctness results, process traces, and latency gates agree
+PASS: native terminal inputs, summaries, transcripts, process traces, and latency gates agree
+PASS: retained profile inputs, summaries, sample counts, and fixed overhead gates agree
+PASS: native editor-readiness samples, fixed gates, delayed-hook regression and source hashes agree
+PASS: prompt ownership evidence hashes, 24 shared-configuration cases, OMZ advice, foreground checks and 100-pair profiling gate agree
+PASS: theme selection evidence hashes, 40 shared-configuration cases, OMZ advice, foreground checks and 100-pair profiling gate agree
+PASS: source hashes, directory-jump ownership, four themes, 100-pair startup and profiling gates, runtime tracing and 240 renderer spans agree
+PASS: matched binaries, historical inputs, 600 profile pairs, six summaries, and unchanged 3 ms gates agree
+PASS: complete retained-evidence suite

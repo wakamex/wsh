@@ -43,3 +43,5 @@ The [readiness correction](benchmarks/profile-readiness-2026-09-05/report.md) ma
 Prompt selection also applies to profiling: `wsh profile` preserves the existing prompt by default, while `WSH_THEME=minimal wsh profile` includes Wsh presentation and its Git collector. Existing-prompt sessions have no Wsh runtime spans. Current Wsh-renderer benchmark harnesses select `WSH_THEME=minimal` explicitly; historical evidence retains its original configuration.
 
 The Directory jumping span measures the built-in directory-jump adapter and any plugin initialization it owns. When an existing OMZ or custom command is preserved, that implementation loads within the user startup span instead.
+
+The [matched startup-order investigation](benchmarks/profile-order-investigation-2026-09-06/report.md) revalidated the module-path and early terminal-policy fixes: all six 100-pair runs passed the unchanged 3 ms p90 profiling-overhead gate. The current code measured 2.281 and 2.283 ms with identical native binaries across the compared revisions. This resolves the earlier confounded timing failures without changing profiling behavior or the threshold.

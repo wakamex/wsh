@@ -1,0 +1,20 @@
+{
+  "source_revision": "2239f59bee65b0a083bfb291c15e17548012f828",
+  "host": "Linux-7.1.9-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "cpu_model": "AMD Ryzen 9 3950X 16-Core Processor",
+  "target_cpu": 0,
+  "cpu_siblings": "0,16",
+  "compiler": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "build_configuration": "release; same pinned local Zsh root; unsigned development artifacts",
+  "components": "minimal theme; default history search, autosuggestions, syntax highlighting, directory jumping and Git runtime; empty user startup",
+  "workload": "1,000-file committed Git repository; first editable prompt observed at native OSC 133 B; ordinary and profiled sessions paired; five warmups per variant; 100 retained pairs per run",
+  "instrumentation": "normal vs default profile; no function profiling; same unchanged benchmark in all six runs; observer affinity and per-run CPU counters retained",
+  "runtime_trace_scope": "Combined gate output reuses historical runtime tracing input. This investigation revalidates first-editable profiling overhead only; runtime tracing was not remeasured.",
+  "build_command": "WSH_ZSH_ROOT=/code/wsh/build/out/zsh-cad0d67c-wsh2 WSH_BUNDLE_OUTPUT_ROOT=/code/wsh/bundles CARGO_TARGET_DIR=/code/wsh/target DETACHED_WORKTREE/build/build-development-bundle.zsh",
+  "inputs": {
+    "benchmarks/benchmark-profile.zsh": "876c35b99c499edcceea8bac1df8d607fe406238f9eb39ba3acd57d5a331d4c6",
+    "benchmarks/summarize-profile.zsh": "8168630de8feb7f00fc078884e80711b52b63bbd00368d4dd7fb35fc73ad7527",
+    "benchmarks/check-profile-gates.zsh": "d9cc97d22a0ea736d15935eadb880f3d8ae276648c2fc0283b7f87ffbe340414",
+    "benchmarks/profile-2026-09-05/runtime-trace.tsv": "a801c759a705fc3e880f441caf003971a6dbe3aca638329b2d707d077b4bf01e"
+  }
+}

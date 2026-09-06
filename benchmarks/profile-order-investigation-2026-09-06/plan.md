@@ -1,0 +1,9 @@
+# Matched profiling startup investigation
+
+Two previous candidate runs exceeded the 3 ms profiling p90 overhead gate. Both overlapped other validation work. The prior control also used a v0.2.0 runtime while the candidates used v0.3.0, although their Zsh binaries matched. Neither observation isolates an ordering regression.
+
+Hypothesis: the two initialization-order fixes do not materially increase profiling overhead when native binaries, benchmark implementation, fixtures and instrumentation match. Build clean detached revisions 2e2651f (v0.3.0), 2d69d55 (module-path fix), and 2239f59 (both fixes) using the same pinned local Zsh build and Rust toolchain. Require identical manager, runtime and Zsh binary hashes. Validate profiling correctness before measurements; use the baseline revision's own profile test because the new empty-module-path test intentionally fails there.
+
+Run the unchanged benchmark on CPU 0 in a fixed A-B-C-C-B-A sequence, where each entry retains 100 normal/profile pairs after the standard warmup. Run no other agent validation, builds, or diagnostic tracing concurrently. Record host load and CPU counters outside each measured invocation without changing unrelated services. Retain all results. Compare the same instrumentation mode and paired overhead per revision and round against the unchanged 3 ms p90 gate. Do not rerun selectively until a pass appears.
+
+If these runs resolve the failure, retain the result without changing production code. If failures persist, inspect timing distributions and use at most one separately instrumented diagnostic experiment to attribute them before proposing any intervention. Bound this investigation to 30 minutes and two causal hypotheses. Do not change the gate or revert either proven correctness fix to improve a score.

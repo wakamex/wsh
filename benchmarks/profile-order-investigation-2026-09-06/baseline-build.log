@@ -1,0 +1,4 @@
+   Compiling wsh-runtime v0.3.0 (/var/tmp/wsh-profile-order-3g18nf28/baseline/crates/wsh-runtime)
+   Compiling wsh v0.3.0 (/var/tmp/wsh-profile-order-3g18nf28/baseline/crates/wsh)
+   Compiling wsh-install v0.3.0 (/var/tmp/wsh-profile-order-3g18nf28/baseline/crates/wsh-install)
+    Finished `release` profile [optimized] target(s) in 3.08s
