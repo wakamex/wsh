@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/code/wsh/benchmarks/deferred-completion-2026-09-06/run.py", line 259, in <module>
+    correctness()
+    ~~~~~~~~~~~^^
+  File "/code/wsh/benchmarks/deferred-completion-2026-09-06/run.py", line 168, in correctness
+    assert shlex.split(first_jump) == ['z', str(OUT / 'work/fixture/project alpha')], first_jump
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: z project\ alpha

@@ -8,7 +8,7 @@ An empty Wsh configuration lacks Git branch completion and completion for the bu
 | Native `compinit`, missing completion dump | 50 | 170.353 ms | 180.910 ms | 76.008 ms | Startup exceeds the allowed 100 ms increase |
 | Native `compinit`, reusable completion dump | 50 | 44.667 ms | 47.658 ms | 76.434 ms | Startup exceeds the allowed 20 ms increase |
 
-The first-Tab budget of 100 ms passes in both initialized cases. Wsh's shipped behavior is unchanged. A subsequent experiment should test whether a small deferred initializer can preserve startup latency and user widget ownership without creating an excessive first-Tab delay. Moving the measured cold initialization onto Tab could exceed that interaction budget, so deferral needs its own evidence before implementation is accepted.
+The first-Tab budget of 100 ms passes in both initialized cases. Wsh's shipped behavior is unchanged. The subsequent [deferred initialization experiment](../deferred-completion-2026-09-06/report.md) preserves startup speed and passes correctness checks, but first-Tab p95 exceeds 100 ms with both missing and reusable completion dumps. Further work must reduce first-use cost before another initialization strategy is selected.
 
 ## Workload and fixed gates
 

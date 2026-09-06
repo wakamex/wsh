@@ -5,7 +5,7 @@ b6fcb013930d47ddb641a25cf019994f4a81ddf39d4f4cc780646f270a5e21c1  benchmarks/nat
 77b81a5741c0ab688d8c2fef04d0c2fc43f5e3f12570e6249af99579fc2973e2  benchmarks/native-completion-2026-09-06/metadata.json
 bbfc018ab77a1e3afb81dd7fb96f6f30f30c2a458d72826496d24f855644b4b6  benchmarks/native-completion-2026-09-06/original-bundle-manifest.json.gz
 08e1de0cefc81ca9ab1aac53450e2984f337ba1511e320410609e3b2b1e20af7  benchmarks/native-completion-2026-09-06/plan.md
-d5b3bfbf068aa6fa891fdb974dfbf118e0fe502dc1ff6baf9a6b1a26289a0f51  benchmarks/native-completion-2026-09-06/report.md
+d9312d171b11dba281792db4a4aa7f4c8d5ba41785a5dded1ac47e319e657b1c  benchmarks/native-completion-2026-09-06/report.md
 f2502092af4eaba22fe86e7b78024f6bfbc8ccb34cf0035e34349e14ca8e9c28  benchmarks/native-completion-2026-09-06/run.py
 e9541147530367586fd4659733ebb5f83b8818ed8d3b5b3560e54ee718961ae3  benchmarks/native-completion-2026-09-06/samples.json
 1022040e1692fa720bc62a41ba7302e1ee95752a5c7a198ccfe44dab2c8d26f9  benchmarks/native-completion-2026-09-06/summary.json

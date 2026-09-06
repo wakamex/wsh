@@ -1,0 +1,2002 @@
+[
+  {
+    "round": 0,
+    "variant": "baseline",
+    "startup_ms": 28.398235,
+    "tab_ms": 12.982265,
+    "second_tab_ms": 10.479218,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 0,
+    "variant": "eager-cold",
+    "startup_ms": 182.645742,
+    "tab_ms": 77.285617,
+    "second_tab_ms": 27.388562,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 0,
+    "variant": "eager-warm",
+    "startup_ms": 48.341499,
+    "tab_ms": 76.99625,
+    "second_tab_ms": 27.25351,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 0,
+    "variant": "deferred-cold",
+    "startup_ms": 28.945358,
+    "tab_ms": 257.022063,
+    "second_tab_ms": 27.729941,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 0,
+    "variant": "deferred-warm",
+    "startup_ms": 28.903087,
+    "tab_ms": 109.055889,
+    "second_tab_ms": 26.889952,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 1,
+    "variant": "deferred-warm",
+    "startup_ms": 28.324704,
+    "tab_ms": 108.733202,
+    "second_tab_ms": 27.569817,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 1,
+    "variant": "deferred-cold",
+    "startup_ms": 28.779425,
+    "tab_ms": 255.412186,
+    "second_tab_ms": 27.28128,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 1,
+    "variant": "eager-warm",
+    "startup_ms": 46.837225,
+    "tab_ms": 73.89312,
+    "second_tab_ms": 25.94881,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 1,
+    "variant": "eager-cold",
+    "startup_ms": 171.288624,
+    "tab_ms": 71.998456,
+    "second_tab_ms": 25.434778,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 1,
+    "variant": "baseline",
+    "startup_ms": 26.543064,
+    "tab_ms": 12.194917,
+    "second_tab_ms": 9.729521,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 2,
+    "variant": "baseline",
+    "startup_ms": 26.226517,
+    "tab_ms": 12.240499,
+    "second_tab_ms": 9.986167,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 2,
+    "variant": "eager-cold",
+    "startup_ms": 171.872717,
+    "tab_ms": 73.782497,
+    "second_tab_ms": 25.374246,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 2,
+    "variant": "eager-warm",
+    "startup_ms": 45.069335,
+    "tab_ms": 71.874564,
+    "second_tab_ms": 25.731265,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 2,
+    "variant": "deferred-cold",
+    "startup_ms": 27.323292,
+    "tab_ms": 237.923938,
+    "second_tab_ms": 25.399987,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 2,
+    "variant": "deferred-warm",
+    "startup_ms": 26.853971,
+    "tab_ms": 101.515388,
+    "second_tab_ms": 25.450488,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 3,
+    "variant": "deferred-warm",
+    "startup_ms": 27.106706,
+    "tab_ms": 101.387135,
+    "second_tab_ms": 25.210963,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 3,
+    "variant": "deferred-cold",
+    "startup_ms": 26.897571,
+    "tab_ms": 239.861693,
+    "second_tab_ms": 25.321376,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 3,
+    "variant": "eager-warm",
+    "startup_ms": 45.127096,
+    "tab_ms": 72.10459,
+    "second_tab_ms": 25.321146,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 3,
+    "variant": "eager-cold",
+    "startup_ms": 171.959,
+    "tab_ms": 73.737547,
+    "second_tab_ms": 25.340256,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 3,
+    "variant": "baseline",
+    "startup_ms": 27.26898,
+    "tab_ms": 12.246708,
+    "second_tab_ms": 10.064639,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 4,
+    "variant": "baseline",
+    "startup_ms": 26.872391,
+    "tab_ms": 12.122905,
+    "second_tab_ms": 9.943716,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 4,
+    "variant": "eager-cold",
+    "startup_ms": 172.726087,
+    "tab_ms": 72.519068,
+    "second_tab_ms": 25.611202,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 4,
+    "variant": "eager-warm",
+    "startup_ms": 46.234411,
+    "tab_ms": 72.900958,
+    "second_tab_ms": 25.734895,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 4,
+    "variant": "deferred-cold",
+    "startup_ms": 27.093306,
+    "tab_ms": 240.585009,
+    "second_tab_ms": 25.829017,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 4,
+    "variant": "deferred-warm",
+    "startup_ms": 27.333552,
+    "tab_ms": 101.590619,
+    "second_tab_ms": 25.746755,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 5,
+    "variant": "deferred-warm",
+    "startup_ms": 27.195888,
+    "tab_ms": 101.579679,
+    "second_tab_ms": 25.285865,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 5,
+    "variant": "deferred-cold",
+    "startup_ms": 27.70685,
+    "tab_ms": 241.978611,
+    "second_tab_ms": 25.891089,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 5,
+    "variant": "eager-warm",
+    "startup_ms": 45.170877,
+    "tab_ms": 72.217961,
+    "second_tab_ms": 25.794526,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 5,
+    "variant": "eager-cold",
+    "startup_ms": 172.697336,
+    "tab_ms": 71.922945,
+    "second_tab_ms": 25.544271,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 5,
+    "variant": "baseline",
+    "startup_ms": 26.506423,
+    "tab_ms": 12.142086,
+    "second_tab_ms": 10.08679,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 6,
+    "variant": "baseline",
+    "startup_ms": 26.112074,
+    "tab_ms": 12.125856,
+    "second_tab_ms": 10.287074,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 6,
+    "variant": "eager-cold",
+    "startup_ms": 172.144683,
+    "tab_ms": 71.886514,
+    "second_tab_ms": 25.205803,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 6,
+    "variant": "eager-warm",
+    "startup_ms": 44.787808,
+    "tab_ms": 71.474934,
+    "second_tab_ms": 25.280924,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 6,
+    "variant": "deferred-cold",
+    "startup_ms": 26.876481,
+    "tab_ms": 238.87743,
+    "second_tab_ms": 25.96623,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 6,
+    "variant": "deferred-warm",
+    "startup_ms": 27.314301,
+    "tab_ms": 102.853938,
+    "second_tab_ms": 25.801536,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 7,
+    "variant": "deferred-warm",
+    "startup_ms": 27.068636,
+    "tab_ms": 100.898673,
+    "second_tab_ms": 25.286614,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 7,
+    "variant": "deferred-cold",
+    "startup_ms": 27.360262,
+    "tab_ms": 239.969585,
+    "second_tab_ms": 25.417137,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 7,
+    "variant": "eager-warm",
+    "startup_ms": 44.804559,
+    "tab_ms": 71.489795,
+    "second_tab_ms": 25.645783,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 7,
+    "variant": "eager-cold",
+    "startup_ms": 172.607044,
+    "tab_ms": 72.903227,
+    "second_tab_ms": 25.149141,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 7,
+    "variant": "baseline",
+    "startup_ms": 26.642486,
+    "tab_ms": 12.655728,
+    "second_tab_ms": 9.894035,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 8,
+    "variant": "baseline",
+    "startup_ms": 26.278478,
+    "tab_ms": 12.78072,
+    "second_tab_ms": 10.167361,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 8,
+    "variant": "eager-cold",
+    "startup_ms": 175.9537,
+    "tab_ms": 73.823788,
+    "second_tab_ms": 26.175875,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 8,
+    "variant": "eager-warm",
+    "startup_ms": 45.542695,
+    "tab_ms": 73.258786,
+    "second_tab_ms": 26.738888,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 8,
+    "variant": "deferred-cold",
+    "startup_ms": 27.930275,
+    "tab_ms": 246.648737,
+    "second_tab_ms": 27.356112,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 8,
+    "variant": "deferred-warm",
+    "startup_ms": 27.552506,
+    "tab_ms": 103.563655,
+    "second_tab_ms": 26.329799,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 9,
+    "variant": "deferred-warm",
+    "startup_ms": 27.913555,
+    "tab_ms": 103.850911,
+    "second_tab_ms": 26.40268,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 9,
+    "variant": "deferred-cold",
+    "startup_ms": 27.644718,
+    "tab_ms": 245.489061,
+    "second_tab_ms": 26.424341,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 9,
+    "variant": "eager-warm",
+    "startup_ms": 47.150852,
+    "tab_ms": 72.911527,
+    "second_tab_ms": 26.183935,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 9,
+    "variant": "eager-cold",
+    "startup_ms": 178.12013,
+    "tab_ms": 73.596963,
+    "second_tab_ms": 26.781968,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 9,
+    "variant": "baseline",
+    "startup_ms": 27.385552,
+    "tab_ms": 12.613026,
+    "second_tab_ms": 10.202642,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 10,
+    "variant": "baseline",
+    "startup_ms": 26.567554,
+    "tab_ms": 12.540886,
+    "second_tab_ms": 10.043828,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 10,
+    "variant": "eager-cold",
+    "startup_ms": 174.268252,
+    "tab_ms": 72.722873,
+    "second_tab_ms": 25.973661,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 10,
+    "variant": "eager-warm",
+    "startup_ms": 45.116006,
+    "tab_ms": 74.123415,
+    "second_tab_ms": 26.248477,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 10,
+    "variant": "deferred-cold",
+    "startup_ms": 27.27839,
+    "tab_ms": 241.627762,
+    "second_tab_ms": 25.860998,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 10,
+    "variant": "deferred-warm",
+    "startup_ms": 26.991214,
+    "tab_ms": 113.94944,
+    "second_tab_ms": 27.014555,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 11,
+    "variant": "deferred-warm",
+    "startup_ms": 31.25476,
+    "tab_ms": 111.996096,
+    "second_tab_ms": 29.681815,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 11,
+    "variant": "deferred-cold",
+    "startup_ms": 33.716227,
+    "tab_ms": 256.218764,
+    "second_tab_ms": 25.758535,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 11,
+    "variant": "eager-warm",
+    "startup_ms": 45.628557,
+    "tab_ms": 77.816209,
+    "second_tab_ms": 26.764728,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 11,
+    "variant": "eager-cold",
+    "startup_ms": 196.217691,
+    "tab_ms": 82.520896,
+    "second_tab_ms": 29.390458,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 11,
+    "variant": "baseline",
+    "startup_ms": 30.529774,
+    "tab_ms": 12.498244,
+    "second_tab_ms": 10.245073,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 12,
+    "variant": "baseline",
+    "startup_ms": 28.909707,
+    "tab_ms": 13.483667,
+    "second_tab_ms": 11.533052,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 12,
+    "variant": "eager-cold",
+    "startup_ms": 177.006054,
+    "tab_ms": 74.117405,
+    "second_tab_ms": 25.898059,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 12,
+    "variant": "eager-warm",
+    "startup_ms": 46.523977,
+    "tab_ms": 73.109122,
+    "second_tab_ms": 25.717344,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 12,
+    "variant": "deferred-cold",
+    "startup_ms": 28.075299,
+    "tab_ms": 247.526287,
+    "second_tab_ms": 26.219386,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 12,
+    "variant": "deferred-warm",
+    "startup_ms": 28.387385,
+    "tab_ms": 107.298829,
+    "second_tab_ms": 27.258429,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 13,
+    "variant": "deferred-warm",
+    "startup_ms": 27.446334,
+    "tab_ms": 103.253637,
+    "second_tab_ms": 25.827457,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 13,
+    "variant": "deferred-cold",
+    "startup_ms": 26.917962,
+    "tab_ms": 242.028322,
+    "second_tab_ms": 26.166225,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 13,
+    "variant": "eager-warm",
+    "startup_ms": 45.609436,
+    "tab_ms": 72.725563,
+    "second_tab_ms": 26.059042,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 13,
+    "variant": "eager-cold",
+    "startup_ms": 172.768507,
+    "tab_ms": 72.515749,
+    "second_tab_ms": 25.859708,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 13,
+    "variant": "baseline",
+    "startup_ms": 26.458282,
+    "tab_ms": 12.482984,
+    "second_tab_ms": 10.078129,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 14,
+    "variant": "baseline",
+    "startup_ms": 26.471032,
+    "tab_ms": 12.150646,
+    "second_tab_ms": 9.964407,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 14,
+    "variant": "eager-cold",
+    "startup_ms": 174.341223,
+    "tab_ms": 72.492518,
+    "second_tab_ms": 26.282988,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 14,
+    "variant": "eager-warm",
+    "startup_ms": 45.655518,
+    "tab_ms": 73.049871,
+    "second_tab_ms": 25.812597,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 14,
+    "variant": "deferred-cold",
+    "startup_ms": 26.963833,
+    "tab_ms": 243.437274,
+    "second_tab_ms": 26.142515,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 14,
+    "variant": "deferred-warm",
+    "startup_ms": 27.388813,
+    "tab_ms": 104.787532,
+    "second_tab_ms": 26.465862,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 15,
+    "variant": "deferred-warm",
+    "startup_ms": 27.585217,
+    "tab_ms": 107.075034,
+    "second_tab_ms": 27.508465,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 15,
+    "variant": "deferred-cold",
+    "startup_ms": 28.238262,
+    "tab_ms": 244.316294,
+    "second_tab_ms": 26.746568,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 15,
+    "variant": "eager-warm",
+    "startup_ms": 46.061577,
+    "tab_ms": 73.89789,
+    "second_tab_ms": 25.933099,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 15,
+    "variant": "eager-cold",
+    "startup_ms": 178.337434,
+    "tab_ms": 76.08951,
+    "second_tab_ms": 27.540436,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 15,
+    "variant": "baseline",
+    "startup_ms": 27.446404,
+    "tab_ms": 12.858893,
+    "second_tab_ms": 10.716573,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 16,
+    "variant": "baseline",
+    "startup_ms": 27.997336,
+    "tab_ms": 12.814351,
+    "second_tab_ms": 10.790396,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 16,
+    "variant": "eager-cold",
+    "startup_ms": 178.907847,
+    "tab_ms": 72.900027,
+    "second_tab_ms": 25.95637,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 16,
+    "variant": "eager-warm",
+    "startup_ms": 46.60996,
+    "tab_ms": 74.408181,
+    "second_tab_ms": 26.220246,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 16,
+    "variant": "deferred-cold",
+    "startup_ms": 28.17715,
+    "tab_ms": 244.635002,
+    "second_tab_ms": 26.574784,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 16,
+    "variant": "deferred-warm",
+    "startup_ms": 28.323734,
+    "tab_ms": 103.78532,
+    "second_tab_ms": 26.157565,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 17,
+    "variant": "deferred-warm",
+    "startup_ms": 27.692129,
+    "tab_ms": 102.369707,
+    "second_tab_ms": 25.380057,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 17,
+    "variant": "deferred-cold",
+    "startup_ms": 28.342004,
+    "tab_ms": 243.213619,
+    "second_tab_ms": 25.809727,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 17,
+    "variant": "eager-warm",
+    "startup_ms": 45.284149,
+    "tab_ms": 71.857564,
+    "second_tab_ms": 24.614009,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 17,
+    "variant": "eager-cold",
+    "startup_ms": 171.225442,
+    "tab_ms": 72.115149,
+    "second_tab_ms": 25.266824,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 17,
+    "variant": "baseline",
+    "startup_ms": 26.240517,
+    "tab_ms": 12.057024,
+    "second_tab_ms": 9.734361,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 18,
+    "variant": "baseline",
+    "startup_ms": 25.884839,
+    "tab_ms": 12.021803,
+    "second_tab_ms": 9.736222,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 18,
+    "variant": "eager-cold",
+    "startup_ms": 171.10769,
+    "tab_ms": 72.384296,
+    "second_tab_ms": 25.706445,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 18,
+    "variant": "eager-warm",
+    "startup_ms": 45.324121,
+    "tab_ms": 72.524629,
+    "second_tab_ms": 25.644053,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 18,
+    "variant": "deferred-cold",
+    "startup_ms": 27.683949,
+    "tab_ms": 241.252325,
+    "second_tab_ms": 25.94996,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 18,
+    "variant": "deferred-warm",
+    "startup_ms": 27.379152,
+    "tab_ms": 100.936175,
+    "second_tab_ms": 25.400718,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 19,
+    "variant": "deferred-warm",
+    "startup_ms": 26.977973,
+    "tab_ms": 100.439563,
+    "second_tab_ms": 25.47286,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 19,
+    "variant": "deferred-cold",
+    "startup_ms": 26.888841,
+    "tab_ms": 239.453723,
+    "second_tab_ms": 25.647543,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 19,
+    "variant": "eager-warm",
+    "startup_ms": 45.286869,
+    "tab_ms": 72.12986,
+    "second_tab_ms": 25.358367,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 19,
+    "variant": "eager-cold",
+    "startup_ms": 170.744282,
+    "tab_ms": 71.099936,
+    "second_tab_ms": 25.214184,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 19,
+    "variant": "baseline",
+    "startup_ms": 26.691517,
+    "tab_ms": 12.378241,
+    "second_tab_ms": 9.931546,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 20,
+    "variant": "baseline",
+    "startup_ms": 25.93787,
+    "tab_ms": 12.107115,
+    "second_tab_ms": 9.993997,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 20,
+    "variant": "eager-cold",
+    "startup_ms": 171.137891,
+    "tab_ms": 72.14148,
+    "second_tab_ms": 25.481859,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 20,
+    "variant": "eager-warm",
+    "startup_ms": 45.266739,
+    "tab_ms": 72.98793,
+    "second_tab_ms": 25.5229,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 20,
+    "variant": "deferred-cold",
+    "startup_ms": 27.187938,
+    "tab_ms": 241.773606,
+    "second_tab_ms": 25.839968,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 20,
+    "variant": "deferred-warm",
+    "startup_ms": 26.957453,
+    "tab_ms": 101.436326,
+    "second_tab_ms": 25.114131,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 21,
+    "variant": "deferred-warm",
+    "startup_ms": 27.243539,
+    "tab_ms": 101.956458,
+    "second_tab_ms": 25.680634,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 21,
+    "variant": "deferred-cold",
+    "startup_ms": 27.312571,
+    "tab_ms": 240.358424,
+    "second_tab_ms": 25.765466,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 21,
+    "variant": "eager-warm",
+    "startup_ms": 45.648207,
+    "tab_ms": 72.13059,
+    "second_tab_ms": 25.362806,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 21,
+    "variant": "eager-cold",
+    "startup_ms": 173.623497,
+    "tab_ms": 72.090369,
+    "second_tab_ms": 25.724765,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 21,
+    "variant": "baseline",
+    "startup_ms": 26.305658,
+    "tab_ms": 12.426502,
+    "second_tab_ms": 10.152571,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 22,
+    "variant": "baseline",
+    "startup_ms": 26.247196,
+    "tab_ms": 12.278779,
+    "second_tab_ms": 10.079339,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 22,
+    "variant": "eager-cold",
+    "startup_ms": 172.160784,
+    "tab_ms": 72.140849,
+    "second_tab_ms": 25.51763,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 22,
+    "variant": "eager-warm",
+    "startup_ms": 45.287809,
+    "tab_ms": 72.036808,
+    "second_tab_ms": 25.915119,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 22,
+    "variant": "deferred-cold",
+    "startup_ms": 27.754371,
+    "tab_ms": 243.376403,
+    "second_tab_ms": 26.008541,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 22,
+    "variant": "deferred-warm",
+    "startup_ms": 27.228059,
+    "tab_ms": 102.406698,
+    "second_tab_ms": 25.139652,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 23,
+    "variant": "deferred-warm",
+    "startup_ms": 26.936023,
+    "tab_ms": 102.307745,
+    "second_tab_ms": 25.5378,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 23,
+    "variant": "deferred-cold",
+    "startup_ms": 27.006024,
+    "tab_ms": 238.096932,
+    "second_tab_ms": 25.326415,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 23,
+    "variant": "eager-warm",
+    "startup_ms": 44.990543,
+    "tab_ms": 71.505345,
+    "second_tab_ms": 25.447388,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 23,
+    "variant": "eager-cold",
+    "startup_ms": 174.677021,
+    "tab_ms": 72.941368,
+    "second_tab_ms": 26.359199,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 23,
+    "variant": "baseline",
+    "startup_ms": 26.618665,
+    "tab_ms": 12.394011,
+    "second_tab_ms": 10.034908,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 24,
+    "variant": "baseline",
+    "startup_ms": 26.3819,
+    "tab_ms": 12.187037,
+    "second_tab_ms": 9.854174,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 24,
+    "variant": "eager-cold",
+    "startup_ms": 174.717922,
+    "tab_ms": 72.028208,
+    "second_tab_ms": 25.604392,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 24,
+    "variant": "eager-warm",
+    "startup_ms": 44.384809,
+    "tab_ms": 71.335042,
+    "second_tab_ms": 25.263065,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 24,
+    "variant": "deferred-cold",
+    "startup_ms": 27.233449,
+    "tab_ms": 241.05423,
+    "second_tab_ms": 26.211125,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 24,
+    "variant": "deferred-warm",
+    "startup_ms": 27.261699,
+    "tab_ms": 106.317317,
+    "second_tab_ms": 25.288585,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 25,
+    "variant": "deferred-warm",
+    "startup_ms": 26.863531,
+    "tab_ms": 101.111088,
+    "second_tab_ms": 25.558151,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 25,
+    "variant": "deferred-cold",
+    "startup_ms": 27.149857,
+    "tab_ms": 240.568269,
+    "second_tab_ms": 26.024802,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 25,
+    "variant": "eager-warm",
+    "startup_ms": 45.827552,
+    "tab_ms": 71.978016,
+    "second_tab_ms": 25.429859,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 25,
+    "variant": "eager-cold",
+    "startup_ms": 173.671778,
+    "tab_ms": 75.18914,
+    "second_tab_ms": 26.603395,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 25,
+    "variant": "baseline",
+    "startup_ms": 27.081166,
+    "tab_ms": 12.487614,
+    "second_tab_ms": 12.690239,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 26,
+    "variant": "baseline",
+    "startup_ms": 27.931665,
+    "tab_ms": 12.054124,
+    "second_tab_ms": 9.833013,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 26,
+    "variant": "eager-cold",
+    "startup_ms": 172.082582,
+    "tab_ms": 71.966276,
+    "second_tab_ms": 25.492449,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 26,
+    "variant": "eager-warm",
+    "startup_ms": 45.112485,
+    "tab_ms": 71.920735,
+    "second_tab_ms": 25.348006,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 26,
+    "variant": "deferred-cold",
+    "startup_ms": 27.199558,
+    "tab_ms": 244.717003,
+    "second_tab_ms": 25.874328,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 26,
+    "variant": "deferred-warm",
+    "startup_ms": 27.454264,
+    "tab_ms": 105.841356,
+    "second_tab_ms": 27.26388,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 27,
+    "variant": "deferred-warm",
+    "startup_ms": 29.190643,
+    "tab_ms": 107.642607,
+    "second_tab_ms": 27.023805,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 27,
+    "variant": "deferred-cold",
+    "startup_ms": 27.871583,
+    "tab_ms": 242.907531,
+    "second_tab_ms": 26.797449,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 27,
+    "variant": "eager-warm",
+    "startup_ms": 46.62574,
+    "tab_ms": 75.310692,
+    "second_tab_ms": 30.271858,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 27,
+    "variant": "eager-cold",
+    "startup_ms": 188.165818,
+    "tab_ms": 79.098188,
+    "second_tab_ms": 27.210558,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 27,
+    "variant": "baseline",
+    "startup_ms": 26.87312,
+    "tab_ms": 12.509115,
+    "second_tab_ms": 10.269304,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 28,
+    "variant": "baseline",
+    "startup_ms": 29.425758,
+    "tab_ms": 12.666468,
+    "second_tab_ms": 10.341976,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 28,
+    "variant": "eager-cold",
+    "startup_ms": 177.039475,
+    "tab_ms": 76.721634,
+    "second_tab_ms": 27.879894,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 28,
+    "variant": "eager-warm",
+    "startup_ms": 52.509994,
+    "tab_ms": 73.869469,
+    "second_tab_ms": 26.144584,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 28,
+    "variant": "deferred-cold",
+    "startup_ms": 30.689147,
+    "tab_ms": 247.796303,
+    "second_tab_ms": 29.827658,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 28,
+    "variant": "deferred-warm",
+    "startup_ms": 30.305649,
+    "tab_ms": 104.960136,
+    "second_tab_ms": 27.201169,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 29,
+    "variant": "deferred-warm",
+    "startup_ms": 29.093922,
+    "tab_ms": 119.20738,
+    "second_tab_ms": 30.892942,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 29,
+    "variant": "deferred-cold",
+    "startup_ms": 35.099368,
+    "tab_ms": 270.180382,
+    "second_tab_ms": 26.088383,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 29,
+    "variant": "eager-warm",
+    "startup_ms": 46.091178,
+    "tab_ms": 73.434169,
+    "second_tab_ms": 25.836488,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 29,
+    "variant": "eager-cold",
+    "startup_ms": 174.898106,
+    "tab_ms": 73.944961,
+    "second_tab_ms": 25.677164,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 29,
+    "variant": "baseline",
+    "startup_ms": 26.084833,
+    "tab_ms": 12.421852,
+    "second_tab_ms": 10.370635,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 30,
+    "variant": "baseline",
+    "startup_ms": 26.374659,
+    "tab_ms": 12.567336,
+    "second_tab_ms": 10.247343,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 30,
+    "variant": "eager-cold",
+    "startup_ms": 182.567601,
+    "tab_ms": 73.581132,
+    "second_tab_ms": 26.455921,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 30,
+    "variant": "eager-warm",
+    "startup_ms": 47.457299,
+    "tab_ms": 75.165408,
+    "second_tab_ms": 27.896794,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 30,
+    "variant": "deferred-cold",
+    "startup_ms": 29.628083,
+    "tab_ms": 256.865179,
+    "second_tab_ms": 28.369495,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 30,
+    "variant": "deferred-warm",
+    "startup_ms": 29.151133,
+    "tab_ms": 111.841012,
+    "second_tab_ms": 30.185856,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 31,
+    "variant": "deferred-warm",
+    "startup_ms": 30.80009,
+    "tab_ms": 115.25377,
+    "second_tab_ms": 27.097966,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 31,
+    "variant": "deferred-cold",
+    "startup_ms": 28.512669,
+    "tab_ms": 251.877525,
+    "second_tab_ms": 27.017154,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 31,
+    "variant": "eager-warm",
+    "startup_ms": 46.505448,
+    "tab_ms": 74.197407,
+    "second_tab_ms": 27.180757,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 31,
+    "variant": "eager-cold",
+    "startup_ms": 181.24105,
+    "tab_ms": 74.493764,
+    "second_tab_ms": 27.939355,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 31,
+    "variant": "baseline",
+    "startup_ms": 28.451657,
+    "tab_ms": 14.310995,
+    "second_tab_ms": 10.898538,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 32,
+    "variant": "baseline",
+    "startup_ms": 29.340257,
+    "tab_ms": 12.663198,
+    "second_tab_ms": 10.359936,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 32,
+    "variant": "eager-cold",
+    "startup_ms": 180.841601,
+    "tab_ms": 77.972993,
+    "second_tab_ms": 27.010004,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 32,
+    "variant": "eager-warm",
+    "startup_ms": 46.554538,
+    "tab_ms": 77.616134,
+    "second_tab_ms": 26.628905,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 32,
+    "variant": "deferred-cold",
+    "startup_ms": 28.301874,
+    "tab_ms": 251.745802,
+    "second_tab_ms": 28.906747,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 32,
+    "variant": "deferred-warm",
+    "startup_ms": 29.652814,
+    "tab_ms": 106.061542,
+    "second_tab_ms": 26.40255,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 33,
+    "variant": "deferred-warm",
+    "startup_ms": 27.480514,
+    "tab_ms": 106.89618,
+    "second_tab_ms": 27.290341,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 33,
+    "variant": "deferred-cold",
+    "startup_ms": 28.524288,
+    "tab_ms": 252.03425,
+    "second_tab_ms": 29.095232,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 33,
+    "variant": "eager-warm",
+    "startup_ms": 47.881039,
+    "tab_ms": 76.674663,
+    "second_tab_ms": 27.080995,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 33,
+    "variant": "eager-cold",
+    "startup_ms": 178.308643,
+    "tab_ms": 75.057287,
+    "second_tab_ms": 27.570027,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 33,
+    "variant": "baseline",
+    "startup_ms": 27.219709,
+    "tab_ms": 12.76109,
+    "second_tab_ms": 10.210222,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 34,
+    "variant": "baseline",
+    "startup_ms": 26.971273,
+    "tab_ms": 12.833332,
+    "second_tab_ms": 10.310854,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 34,
+    "variant": "eager-cold",
+    "startup_ms": 181.582298,
+    "tab_ms": 74.552655,
+    "second_tab_ms": 26.070543,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 34,
+    "variant": "eager-warm",
+    "startup_ms": 46.306463,
+    "tab_ms": 74.302719,
+    "second_tab_ms": 27.029375,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 34,
+    "variant": "deferred-cold",
+    "startup_ms": 28.296094,
+    "tab_ms": 247.494937,
+    "second_tab_ms": 26.655906,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 34,
+    "variant": "deferred-warm",
+    "startup_ms": 27.821772,
+    "tab_ms": 104.345872,
+    "second_tab_ms": 25.766025,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 35,
+    "variant": "deferred-warm",
+    "startup_ms": 27.090146,
+    "tab_ms": 103.049403,
+    "second_tab_ms": 25.999601,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 35,
+    "variant": "deferred-cold",
+    "startup_ms": 27.108446,
+    "tab_ms": 244.005657,
+    "second_tab_ms": 26.443721,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 35,
+    "variant": "eager-warm",
+    "startup_ms": 46.082138,
+    "tab_ms": 73.097481,
+    "second_tab_ms": 25.98071,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 35,
+    "variant": "eager-cold",
+    "startup_ms": 175.054089,
+    "tab_ms": 73.800948,
+    "second_tab_ms": 26.660737,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 35,
+    "variant": "baseline",
+    "startup_ms": 27.220639,
+    "tab_ms": 12.378901,
+    "second_tab_ms": 10.273004,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 36,
+    "variant": "baseline",
+    "startup_ms": 26.378479,
+    "tab_ms": 12.456593,
+    "second_tab_ms": 10.185352,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 36,
+    "variant": "eager-cold",
+    "startup_ms": 178.969108,
+    "tab_ms": 76.306785,
+    "second_tab_ms": 27.493595,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 36,
+    "variant": "eager-warm",
+    "startup_ms": 47.380417,
+    "tab_ms": 73.01739,
+    "second_tab_ms": 25.96152,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 36,
+    "variant": "deferred-cold",
+    "startup_ms": 27.432264,
+    "tab_ms": 244.518359,
+    "second_tab_ms": 27.063085,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 36,
+    "variant": "deferred-warm",
+    "startup_ms": 27.936185,
+    "tab_ms": 106.658165,
+    "second_tab_ms": 27.011414,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 37,
+    "variant": "deferred-warm",
+    "startup_ms": 28.236192,
+    "tab_ms": 107.476503,
+    "second_tab_ms": 27.300771,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 37,
+    "variant": "deferred-cold",
+    "startup_ms": 27.892334,
+    "tab_ms": 241.325496,
+    "second_tab_ms": 26.105223,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 37,
+    "variant": "eager-warm",
+    "startup_ms": 45.714389,
+    "tab_ms": 73.91321,
+    "second_tab_ms": 26.021731,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 37,
+    "variant": "eager-cold",
+    "startup_ms": 174.571238,
+    "tab_ms": 73.653894,
+    "second_tab_ms": 26.568964,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 37,
+    "variant": "baseline",
+    "startup_ms": 26.817599,
+    "tab_ms": 12.811622,
+    "second_tab_ms": 10.344635,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 38,
+    "variant": "baseline",
+    "startup_ms": 26.663146,
+    "tab_ms": 12.485034,
+    "second_tab_ms": 10.231063,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 38,
+    "variant": "eager-cold",
+    "startup_ms": 175.422248,
+    "tab_ms": 74.659097,
+    "second_tab_ms": 26.507303,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 38,
+    "variant": "eager-warm",
+    "startup_ms": 46.057547,
+    "tab_ms": 74.114525,
+    "second_tab_ms": 26.497243,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 38,
+    "variant": "deferred-cold",
+    "startup_ms": 29.375437,
+    "tab_ms": 244.433897,
+    "second_tab_ms": 26.951643,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 38,
+    "variant": "deferred-warm",
+    "startup_ms": 27.185918,
+    "tab_ms": 107.546285,
+    "second_tab_ms": 27.917824,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 39,
+    "variant": "deferred-warm",
+    "startup_ms": 29.48184,
+    "tab_ms": 117.264766,
+    "second_tab_ms": 30.667567,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 39,
+    "variant": "deferred-cold",
+    "startup_ms": 29.775717,
+    "tab_ms": 251.1888,
+    "second_tab_ms": 27.404173,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 39,
+    "variant": "eager-warm",
+    "startup_ms": 51.681595,
+    "tab_ms": 78.835472,
+    "second_tab_ms": 44.553823,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 39,
+    "variant": "eager-cold",
+    "startup_ms": 204.500429,
+    "tab_ms": 75.596389,
+    "second_tab_ms": 26.443401,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 39,
+    "variant": "baseline",
+    "startup_ms": 27.896414,
+    "tab_ms": 13.068597,
+    "second_tab_ms": 10.780285,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 40,
+    "variant": "baseline",
+    "startup_ms": 30.582835,
+    "tab_ms": 13.238061,
+    "second_tab_ms": 10.267173,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 40,
+    "variant": "eager-cold",
+    "startup_ms": 179.210924,
+    "tab_ms": 74.454802,
+    "second_tab_ms": 27.045485,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 40,
+    "variant": "eager-warm",
+    "startup_ms": 46.253661,
+    "tab_ms": 74.424141,
+    "second_tab_ms": 27.476184,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 40,
+    "variant": "deferred-cold",
+    "startup_ms": 28.699993,
+    "tab_ms": 245.942691,
+    "second_tab_ms": 26.069203,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 40,
+    "variant": "deferred-warm",
+    "startup_ms": 27.533286,
+    "tab_ms": 101.972838,
+    "second_tab_ms": 25.603432,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 41,
+    "variant": "deferred-warm",
+    "startup_ms": 27.313471,
+    "tab_ms": 101.984168,
+    "second_tab_ms": 25.658443,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 41,
+    "variant": "deferred-cold",
+    "startup_ms": 26.873831,
+    "tab_ms": 238.912441,
+    "second_tab_ms": 25.621962,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 41,
+    "variant": "eager-warm",
+    "startup_ms": 46.16518,
+    "tab_ms": 72.981419,
+    "second_tab_ms": 25.94544,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 41,
+    "variant": "eager-cold",
+    "startup_ms": 174.013306,
+    "tab_ms": 72.161701,
+    "second_tab_ms": 25.636743,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 41,
+    "variant": "baseline",
+    "startup_ms": 26.896062,
+    "tab_ms": 12.420622,
+    "second_tab_ms": 10.176092,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 42,
+    "variant": "baseline",
+    "startup_ms": 26.636756,
+    "tab_ms": 12.354011,
+    "second_tab_ms": 9.846544,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 42,
+    "variant": "eager-cold",
+    "startup_ms": 173.861022,
+    "tab_ms": 72.12027,
+    "second_tab_ms": 26.012181,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 42,
+    "variant": "eager-warm",
+    "startup_ms": 45.934374,
+    "tab_ms": 73.418679,
+    "second_tab_ms": 26.37533,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 42,
+    "variant": "deferred-cold",
+    "startup_ms": 27.065866,
+    "tab_ms": 244.363255,
+    "second_tab_ms": 26.065083,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 42,
+    "variant": "deferred-warm",
+    "startup_ms": 27.225219,
+    "tab_ms": 103.987104,
+    "second_tab_ms": 25.746426,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 43,
+    "variant": "deferred-warm",
+    "startup_ms": 27.346602,
+    "tab_ms": 103.701567,
+    "second_tab_ms": 25.591332,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 43,
+    "variant": "deferred-cold",
+    "startup_ms": 26.916981,
+    "tab_ms": 242.265488,
+    "second_tab_ms": 26.3908,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 43,
+    "variant": "eager-warm",
+    "startup_ms": 45.877433,
+    "tab_ms": 74.675418,
+    "second_tab_ms": 26.572394,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 43,
+    "variant": "eager-cold",
+    "startup_ms": 175.631443,
+    "tab_ms": 73.566172,
+    "second_tab_ms": 26.141145,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 43,
+    "variant": "baseline",
+    "startup_ms": 27.012145,
+    "tab_ms": 12.495614,
+    "second_tab_ms": 10.349655,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 44,
+    "variant": "baseline",
+    "startup_ms": 27.622198,
+    "tab_ms": 12.216478,
+    "second_tab_ms": 10.069209,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 44,
+    "variant": "eager-cold",
+    "startup_ms": 176.236106,
+    "tab_ms": 72.757744,
+    "second_tab_ms": 25.9395,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 44,
+    "variant": "eager-warm",
+    "startup_ms": 46.731652,
+    "tab_ms": 73.698675,
+    "second_tab_ms": 25.883908,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 44,
+    "variant": "deferred-cold",
+    "startup_ms": 27.177728,
+    "tab_ms": 247.65557,
+    "second_tab_ms": 27.127327,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 44,
+    "variant": "deferred-warm",
+    "startup_ms": 27.612778,
+    "tab_ms": 104.233219,
+    "second_tab_ms": 26.008961,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 45,
+    "variant": "deferred-warm",
+    "startup_ms": 27.693369,
+    "tab_ms": 103.185536,
+    "second_tab_ms": 26.247227,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 45,
+    "variant": "deferred-cold",
+    "startup_ms": 27.869964,
+    "tab_ms": 245.998862,
+    "second_tab_ms": 26.421401,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 45,
+    "variant": "eager-warm",
+    "startup_ms": 45.615777,
+    "tab_ms": 73.695915,
+    "second_tab_ms": 25.368687,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 45,
+    "variant": "eager-cold",
+    "startup_ms": 174.114698,
+    "tab_ms": 72.017117,
+    "second_tab_ms": 26.011371,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 45,
+    "variant": "baseline",
+    "startup_ms": 26.192686,
+    "tab_ms": 12.080484,
+    "second_tab_ms": 9.858874,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 46,
+    "variant": "baseline",
+    "startup_ms": 26.710767,
+    "tab_ms": 12.416133,
+    "second_tab_ms": 10.14709,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 46,
+    "variant": "eager-cold",
+    "startup_ms": 172.02089,
+    "tab_ms": 74.077524,
+    "second_tab_ms": 26.134014,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 46,
+    "variant": "eager-warm",
+    "startup_ms": 45.520145,
+    "tab_ms": 72.122569,
+    "second_tab_ms": 25.94905,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 46,
+    "variant": "deferred-cold",
+    "startup_ms": 26.737168,
+    "tab_ms": 240.375974,
+    "second_tab_ms": 25.577291,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 46,
+    "variant": "deferred-warm",
+    "startup_ms": 27.161517,
+    "tab_ms": 102.48693,
+    "second_tab_ms": 25.817717,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 47,
+    "variant": "deferred-warm",
+    "startup_ms": 27.840602,
+    "tab_ms": 103.945553,
+    "second_tab_ms": 25.936629,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 47,
+    "variant": "deferred-cold",
+    "startup_ms": 27.413783,
+    "tab_ms": 238.198055,
+    "second_tab_ms": 25.51596,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 47,
+    "variant": "eager-warm",
+    "startup_ms": 44.84716,
+    "tab_ms": 71.863304,
+    "second_tab_ms": 25.712394,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 47,
+    "variant": "eager-cold",
+    "startup_ms": 174.474756,
+    "tab_ms": 73.137393,
+    "second_tab_ms": 25.49581,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 47,
+    "variant": "baseline",
+    "startup_ms": 26.41296,
+    "tab_ms": 12.369741,
+    "second_tab_ms": 10.506568,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 48,
+    "variant": "baseline",
+    "startup_ms": 26.789929,
+    "tab_ms": 12.33297,
+    "second_tab_ms": 10.038408,
+    "buffer": "git switch wsh-native-"
+  },
+  {
+    "round": 48,
+    "variant": "eager-cold",
+    "startup_ms": 175.917539,
+    "tab_ms": 72.485827,
+    "second_tab_ms": 26.358139,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 48,
+    "variant": "eager-warm",
+    "startup_ms": 45.134766,
+    "tab_ms": 71.879844,
+    "second_tab_ms": 26.262587,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 48,
+    "variant": "deferred-cold",
+    "startup_ms": 27.450154,
+    "tab_ms": 241.849648,
+    "second_tab_ms": 26.066402,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 48,
+    "variant": "deferred-warm",
+    "startup_ms": 27.172408,
+    "tab_ms": 102.345287,
+    "second_tab_ms": 25.629622,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 49,
+    "variant": "deferred-warm",
+    "startup_ms": 27.311271,
+    "tab_ms": 102.93716,
+    "second_tab_ms": 26.918032,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 49,
+    "variant": "deferred-cold",
+    "startup_ms": 27.547596,
+    "tab_ms": 242.030482,
+    "second_tab_ms": 26.733077,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 49,
+    "variant": "eager-warm",
+    "startup_ms": 45.486754,
+    "tab_ms": 71.460905,
+    "second_tab_ms": 25.638513,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 49,
+    "variant": "eager-cold",
+    "startup_ms": 172.946592,
+    "tab_ms": 71.808742,
+    "second_tab_ms": 25.231433,
+    "buffer": "git switch wsh-native-completion-unique "
+  },
+  {
+    "round": 49,
+    "variant": "baseline",
+    "startup_ms": 26.449301,
+    "tab_ms": 12.186977,
+    "second_tab_ms": 9.775452,
+    "buffer": "git switch wsh-native-"
+  }
+]

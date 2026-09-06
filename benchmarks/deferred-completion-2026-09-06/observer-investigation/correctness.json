@@ -1,0 +1,29 @@
+[
+  {
+    "variant": "baseline",
+    "branch": "git switch wsh-native-",
+    "jump": "z alpha",
+    "path": "cd path\\ with\\ spaces/",
+    "second": "git switch wsh-native-",
+    "before": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ],
+    "after": [
+      "",
+      "0",
+      "0",
+      "0",
+      "wsh",
+      "wsh",
+      "",
+      "\"^I\" _zshz_zle_completion_widget"
+    ]
+  }
+]

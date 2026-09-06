@@ -1,8 +1,8 @@
 # Completion experiments
 
-## Eager native initialization exceeds the startup budgets
+## Native initialization exceeds startup or first-Tab budgets
 
-Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [native initialization experiment](benchmarks/native-completion-2026-09-06/report.md) verifies that ordinary `compinit` enables Git branch completion and completion for `z`, but its cached and missing-cache startup costs exceed the fixed budgets. Eager initialization is not enabled by default. The next hypothesis is a small deferred initializer, evaluated against first-Tab latency and existing completion and editing-widget ownership before adoption.
+Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [eager experiment](benchmarks/native-completion-2026-09-06/report.md) enables Git branch and `z` completion but exceeds startup budgets. The [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) passes its correctness and startup gates but takes 256.865 ms p95 on first Tab without a completion dump and 115.254 ms with one, exceeding the 100 ms budget. Completion defaults remain unchanged. The next investigation must attribute and reduce first-use work before proposing another initialization strategy.
 
 ## Wakterm dynamic completion comparison
 

@@ -58,7 +58,7 @@ The accepted coexistence path produced the same valid marker and hook counts as 
 
 ## Native initialization and Wakterm completion need separate experiments
 
-The immediate standalone gap is native completion initialization. The [eager `compinit` experiment](benchmarks/native-completion-2026-09-06/report.md) fixes missing Git branch and `z` completion, but exceeds both cached and missing-cache startup budgets. A deferred initializer is the next hypothesis, with native completion and existing user widgets remaining authoritative. No completion default has been added from this rejected experiment.
+The immediate standalone gap is native completion initialization. The [eager experiment](benchmarks/native-completion-2026-09-06/report.md) fixes missing Git branch and `z` completion but exceeds startup budgets. The [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) preserves startup speed and passes correctness checks, but its first-Tab p95 exceeds 100 ms with both missing and reusable completion dumps. Attribute and reduce first-use work before selecting another strategy. Completion defaults remain unchanged.
 
 The separate Wakterm comparison evaluates pruned static completion, direct dynamic completion, and an adapter calling Wakterm's existing mux. The application remains authoritative for command structure, and Zsh remains authoritative for matching, grouping, display, and selection. Choose the smallest passing path; a generic broker requires a second application with an unresolved shared lifecycle need. [`COMPLETION.md`](COMPLETION.md) defines both investigations.
 

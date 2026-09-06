@@ -1,0 +1,37 @@
+# Deferred completion exceeds the first-Tab budget
+
+Deferring native completion initialization preserves Wsh startup speed, but first Git-branch completion takes 256.865 ms p95 without a completion dump and 115.254 ms with a reusable dump. Both exceed the fixed 100 ms first-Tab budget. The prototype passed actual ZLE correctness and editing-composition checks before a fixed 250-shell comparison with eager initialization and no initialization. Completion defaults remain unchanged.
+
+| Configuration | Shell starts | Startup median | Startup p95 | First Git-branch Tab median | First Git-branch Tab p95 | Second Git-branch Tab p95 | Fixed gate result |
+|---|---:|---:|---:|---:|---:|---:|---|
+| No completion initialization | 50 | 26.692 ms | 29.426 ms | Unavailable | Unavailable | Unavailable | Baseline reproduces missing Git branch completion |
+| Eager initialization, missing dump | 50 | 174.571 ms | 188.166 ms | 73.137 ms | 77.973 ms | 27.880 ms | Startup fails; both Tab budgets pass |
+| Eager initialization, reusable dump | 50 | 45.714 ms | 48.341 ms | 73.050 ms | 77.616 ms | 27.897 ms | Startup and both Tab budgets pass in this matrix |
+| Deferred initialization, missing dump | 50 | 27.548 ms | 30.689 ms | 243.376 ms | 256.865 ms | 28.907 ms | Startup and second Tab pass; first Tab fails |
+| Deferred initialization, reusable dump | 50 | 27.446 ms | 30.306 ms | 103.785 ms | 115.254 ms | 30.186 ms | Startup and second Tab pass; first Tab fails |
+
+Deferred startup adds 1.263 ms p95 with a missing dump and 0.880 ms with a reusable dump. Compared with eager initialization in this matrix, deferral adds 178.892 ms and 37.638 ms to first-Tab p95, respectively. These are differences between marginal quantiles, not measured component spans. The second-Tab result confirms that most of the first-use delay is paid once in this workload.
+
+The earlier [eager experiment](../native-completion-2026-09-06/report.md) missed its cached startup budget by 0.619 ms; the eager cached control here passes with 18.916 ms overhead against the same 20 ms budget. Both retained matrices still reject missing-cache eager startup. No run is discarded or substituted for another.
+
+## Prototype and correctness
+
+The [prototype](deferred.zsh) is a private `.zshrc` experiment. It installs a first-Tab widget only when native completion and a custom Tab binding are absent. The first invocation runs bundled `compinit -i -d`, registers Wsh-owned directory jumping, refreshes Wsh-owned autosuggestion bindings, and invokes native completion. It preserves the directory-jump Tab wrapper and changes that wrapper's saved delegate back to native completion, so later Tabs bypass initialization. It performs no background initialization or audit bypass.
+
+Nine [correctness cases](correctness.json) cover the five timing variants, preexisting native completion, a custom Tab binding, vi insert mode, and `z` as the first completion. Actual editor-buffer checks cover Git branches, spaced filesystem paths, spaced directory-jump entries, multiword `z` behavior, repeated completion, an unrelated custom widget, history search, and autosuggestion display and acceptance after initialization. Highlighting has active regions, and Wsh's editing ownership remains intact. Existing completion and custom Tab behavior are preserved. The initializer count is exactly one in deferred cases. The [correctness log](correctness.log) and [compressed PTY transcripts](transcripts.tar.gz) retain the results.
+
+Two failed correctness assertions required an observer and expectation audit before timing. The first observer repeatedly sent a state-probe keystroke immediately after typing, keeping input queued and suppressing the autosuggestion fetch it was checking. A passive wait for the displayed suggestion passed on the unchanged baseline. Loading `zsh/parameter` did not fix the active observer, rejecting the initial module hypothesis. The second assertion demanded an absolute path for `z project alpha`, but the ordinary eager control also expanded the matching fixture directory to the relative `project\ alpha`. The corrected test checks that native behavior and separately tests `z alpha` as the first completion of a database entry. The failed harnesses, results, diagnostic transcripts, and logs remain in `observer-investigation/` and `multiword-investigation/`. No timing sample was collected under either failed observer or assertion.
+
+## Measurement and identities
+
+The [plan](plan.md) fixes the five variants, 50 rounds, alternating forward/reverse order, nearest-rank quantiles, and stopping rule. Deferred startup must add at most 20 ms p95 versus baseline in both cache states; first and second Tab must each finish within 100 ms p95. Eager controls retain their 20 ms reusable-dump and 100 ms missing-dump startup budgets. This is one timing matrix with no exclusions or retries. All 250 shells completed both Tab actions with the expected buffer.
+
+Startup is measured from PTY fork through native OSC 133 `B`, after line-init. First and second Tab measurements include submitting the short command line and Tab, then receiving the capture widget's buffer marker. Baseline Tab timings are retained in the raw data but are not equivalent successful completions. Cold means only `.zcompdump` is deleted; operating-system caches are not flushed. No profiling or process tracing is enabled, and no other local build, test, verification, or tool-shell invocation overlaps timing. Only shell children are pinned to CPU 0. The [samples](samples.json), [summary](summary.json), [host observations](host.json), and [measurement log](measurement.log) retain every result.
+
+All variants use the release manager built from `950bde517bdbb75d3c2a0933293b95f3d013a967` and unsigned development bundle `ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698`, built from `2239f59bee65b0a083bfb291c15e17548012f828`. The [metadata](metadata.json) binds manager, native binary, runtime, harness, prototype, plan, and configuration hashes; those native inputs match the earlier eager experiment. The complete compressed bundle manifest binds target, toolchains, build profile, pinned Zsh source and patches, and every payload file. This bundle remains an unsigned local development artifact.
+
+To reproduce with those exact native inputs, run `python3 benchmarks/deferred-completion-2026-09-06/run.py correctness` and then `python3 benchmarks/deferred-completion-2026-09-06/run.py measure`. The harness declares the source and scratch paths near its top and requires a fresh scratch directory. Preserve previous outputs before choosing a new scratch path. Run without concurrent local work. `python3 benchmarks/verify-deferred-completion-evidence.py` checks retained identities, transcripts, samples, quantiles, and gates without rerunning timings.
+
+## Next hypothesis requires less first-use work
+
+Eager and deferred initialization both fail the missing-cache user experience. Moving the same work between startup and Tab is insufficient. Before designing another initializer, measure how much time belongs to native `compinit`, command-specific function loading, directory-jump registration, and autosuggestion rebinding. A smaller initialization or a bundle-generated completion index would need to preserve native audit, user `fpath`, existing completion ownership, and cache invalidation. Neither is established by this experiment, and no new cache or background subsystem has been added.

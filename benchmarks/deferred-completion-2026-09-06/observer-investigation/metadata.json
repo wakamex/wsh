@@ -1,0 +1,20 @@
+{
+  "manager_source": "950bde517bdbb75d3c2a0933293b95f3d013a967",
+  "manager_sha256": "c305118f5a23a27e6240f4e902a27fbe3824cbafb8b1b7803867f9159f408bf0",
+  "bundle_path": "/code/wsh/bundles/ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+  "bundle_sha256": "ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "runtime_sha256": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+  "trace_mode": "off",
+  "theme": "",
+  "editing_defaults": "all enabled",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cpu": 0,
+  "command": "python3 /code/wsh/benchmarks/deferred-completion-2026-09-06/run.py correctness; python3 /code/wsh/benchmarks/deferred-completion-2026-09-06/run.py measure",
+  "config_sha256": "99638bac67855331ab14c7999ae3dc681db431ba1ebae8469033e11c37b82ceb",
+  "harness_sha256": "96e2d5e5788c7df32c5ec3a4155f01c5a3d492e70fee7dff3b3f40b4d1e8c427",
+  "plan_sha256": "a89250c0d0a882e46138a1bb18da3d0910683c8ad87bc4186c3625093b9eac3e",
+  "git_version": "git version 2.55.0",
+  "experiment_source": "9881e463c090c2d7ebf8f7787d6ce8310951679a",
+  "prototype_sha256": "f90e1cd5e76bda4b88d4e7ce32893100553a69747349fafddfd9ef135cf3d24f"
+}

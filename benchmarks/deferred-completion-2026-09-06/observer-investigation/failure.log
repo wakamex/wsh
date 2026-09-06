@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/code/wsh/benchmarks/deferred-completion-2026-09-06/run.py", line 261, in <module>
+    correctness()
+    ~~~~~~~~~~~^^
+  File "/code/wsh/benchmarks/deferred-completion-2026-09-06/run.py", line 198, in correctness
+    assert time.monotonic() < deadline, suggestion
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ['', '835', '0', '0', 'wsh', 'wsh', '', '"^I" _zshz_zle_completion_widget']
