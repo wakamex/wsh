@@ -42,6 +42,8 @@ curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/la
 
 Then start Wsh with `wsh`. The explicit `wsh run` form accepts Zsh arguments after `--`, such as `wsh run -- -f`. The installer uses `~/.local/bin`; add that directory to `PATH` or run `~/.local/bin/wsh` directly if necessary.
 
+Keep system Bash or Zsh as your account login shell and start Wsh from your terminal. Do not set the per-user Wsh launcher as your login shell with `chsh`: it depends on per-user bundle state and an executable in your home directory. A failure there can prevent graphical and TTY login. [Login-shell recovery and limitations](LOGIN.md) describes the development recovery path and the remaining boundaries.
+
 Use `wsh update --check` to check without changing anything, `wsh update` to install a newer current release, or `wsh update --to vX.Y.Z` to select an exact version. `wsh bundle rollback` returns to the previously active verified bundle without a network request.
 
 `wsh --version` reports the installed launcher version. `wsh version` also reports the active bundle's release or development identity, Wsh source revision, bundled Zsh version and source revision, target, and bundle digest.

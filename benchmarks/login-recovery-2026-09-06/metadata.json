@@ -1,0 +1,29 @@
+{
+  "source_revision": "0967a73537d22f37f7ee99cb09c5a38a4ad45dc2",
+  "inputs": {
+    "crates/wsh/src/main.rs": "08b95965d2fb13bd19aba7e3eacabf0fb5cc447b64858f09f9cf81e873df04a5",
+    "crates/wsh/src/login.rs": "2a4628eded0527b766b24e8af96e5b876484a2b801d923ccf01aebd1b4271791",
+    "tests/login-shell.py": "23ea6de8428897bba27bf39e7181f613b89db3c175f69b4bd62e4d9ac7b7ad9f",
+    "build/test-development-bundle.zsh": "c31023e8a56c846fb8582a59c642173de1d8ba17ee296ba7fe5093b3b84671ba",
+    "Cargo.lock": "588483a4503450c63e9ece9f8a45dd776e609a1a5501d6e4f27dc69a1ca57f35"
+  },
+  "managers": {
+    "before": "c305118f5a23a27e6240f4e902a27fbe3824cbafb8b1b7803867f9159f408bf0",
+    "after": "bf69f5bbff0030bfdf5fd4c7e1c95ab0556c5132923733e2062b4e447f92a2f6"
+  },
+  "control_manager_source": "950bde517bdbb75d3c2a0933293b95f3d013a967",
+  "bundle_sha256": "ccf3c17708aae1b1fc23c4170d54ff6e78a919f0adc0e0950f3590c6325c9698",
+  "zsh_sha256": "91348b72be9349465cc4c3c526931123880eff2810ec7c2177667d36d44d91e1",
+  "runtime_sha256": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+  "harness_sha256": "3ba6a0373f2715f282fa3eae2533d5f137f53568fe806ea241166e8409f43155",
+  "fixture_sha256": "1af9cac407206840a765f0d8530680499a9cba36c37bc3be9fe4c80b7e6b2a96",
+  "config": "WSH_THEME=\"\"\nPROMPT=\"STARTUP> \"\n",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "child_cpu": 0,
+  "trace_mode": "off",
+  "enabled_components": "three editing defaults and directory jumping; existing prompt",
+  "command": "python3 benchmarks/login-recovery-2026-09-06/startup.py",
+  "source_dirty": true,
+  "floor_manifest_sha256": "fe71a49b7aeda3456a72ef0142b983bb58a8dd363e6eaa241804834566cf7379",
+  "floor_manager_sha256": "b3c3cc51ea20e3d01fe3d955de8f9f0c454aef0d812fbf96b817e80305e61bf0"
+}

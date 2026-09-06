@@ -1,7 +1,7 @@
 use std::env;
 use std::ffi::OsString;
 use std::os::unix::process::CommandExt;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::process::{Command, ExitCode};
 
 use wsh::{
@@ -10,7 +10,6 @@ use wsh::{
 };
 
 mod doctor;
-mod login;
 mod profile;
 mod update;
 
@@ -69,33 +68,8 @@ fn user_zdotdir() -> Option<OsString> {
     )
 }
 
-fn configured_shell(bundle: &Path, paths: &wsh::EntrypointPaths) -> Command {
-    let mut command = Command::new(&paths.shell);
-    command.arg("-d");
-    if let Some(user_zdotdir) = user_zdotdir() {
-        command.env("WSH_USER_ZDOTDIR", user_zdotdir);
-    } else {
-        command.env_remove("WSH_USER_ZDOTDIR");
-    }
-    command
-        .env("WSH_BUNDLE_ROOT", bundle)
-        .env("WSH_RUNTIME", &paths.runtime)
-        .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
-        .env("ZDOTDIR", &paths.zdotdir)
-        .env_remove("WSH_RUN_FOREGROUND")
-        .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
-        .env_remove("WSH_STARTUP_RCS");
-    command
-}
-
 fn run() -> Result<(), String> {
-    let mut incoming = env::args_os();
-    let program = incoming.next().unwrap_or_default();
-    let remaining: Vec<_> = incoming.collect();
-    if login::is_shell_invocation(&program, &remaining) {
-        return login::run(&program, &remaining);
-    }
-    let mut args = remaining.into_iter();
+    let mut args = env::args_os().skip(1);
     let requested_action = args
         .next()
         .map(|arg| arg.into_string())
@@ -193,8 +167,21 @@ fn run() -> Result<(), String> {
                     (launch.root, launch.entrypoints)
                 }
             };
-            let mut command = configured_shell(&bundle, &paths);
-            command.args(shell_args);
+            let mut command = Command::new(&paths.shell);
+            command.arg("-d").args(shell_args);
+            if let Some(user_zdotdir) = user_zdotdir() {
+                command.env("WSH_USER_ZDOTDIR", user_zdotdir);
+            } else {
+                command.env_remove("WSH_USER_ZDOTDIR");
+            }
+            command
+                .env("WSH_BUNDLE_ROOT", &bundle)
+                .env("WSH_RUNTIME", &paths.runtime)
+                .env("WSH_NATIVE_TERMINAL_INTEGRATION", "1")
+                .env("ZDOTDIR", &paths.zdotdir)
+                .env_remove("WSH_RUN_FOREGROUND")
+                .env_remove("WSH_STARTUP_BUNDLE_ZDOTDIR")
+                .env_remove("WSH_STARTUP_RCS");
             let error = command.exec();
             Err(format!(
                 "could not replace the launcher with {}: {error}",

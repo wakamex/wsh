@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/code/wsh/tests/login-shell.py", line 88, in <module>
+    check_recovery('missing activation state')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/wsh/tests/login-shell.py", line 34, in check_recovery
+    assert result.returncode == 37 and result.stdout == b'RECOVERED:/bin/bash:unset', (label, argv0, args, result.returncode, result.stdout, result.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('missing activation state', '-wsh', ['-c'], 1, b'', b'error: usage:\n  wsh\n  wsh --version\n  wsh version [--state-root <directory>]\n  wsh -- <command> [arguments...]\n  wsh bundle verify <bundle>\n  wsh bundle activate <bundle> [--state-root <directory>]\n  wsh bundle rollback [--state-root <directory>]\n  wsh bundle current [--state-root <directory>]\n  wsh doctor [--state-root <directory>]\n  wsh profile [--functions] [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh profile report <profile-directory>\n  wsh update [--check | --to vMAJOR.MINOR.PATCH] [--state-root <directory>]\n  wsh run [--bundle <bundle>] [--state-root <directory>] [-- <zsh arguments...>]\n  wsh run-foreground [--bundle <bundle>] [--state-root <directory>] [--login] -- <command> [arguments...]\n')

@@ -1,0 +1,7 @@
+{
+  "argv": [
+    "-wsh"
+  ],
+  "status": 1,
+  "stderr": "error: no active bundle state\n"
+}

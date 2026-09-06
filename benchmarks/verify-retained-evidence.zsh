@@ -30,5 +30,6 @@ python3 ./benchmarks/verify-profile-order-evidence.py
 python3 ./benchmarks/verify-native-completion-evidence.py
 python3 ./benchmarks/verify-deferred-completion-evidence.py
 python3 ./benchmarks/verify-completion-cost-evidence.py
+python3 ./benchmarks/verify-login-recovery-evidence.py
 
 print -r -- 'PASS: complete retained-evidence suite'

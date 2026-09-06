@@ -1,0 +1,16 @@
+9581ff24a4e1446e3e68da7a1228563a90d3f97459f8b81cd0efa203948f7ff0  benchmarks/login-recovery-2026-09-06/baseline-login.json
+619dc02468d5f65bef24bb1286f5688640b23a293233393d5ea44261b965eeb1  benchmarks/login-recovery-2026-09-06/baseline.log
+7c5347561be3ed896b1fa0f089d628aeb4dd12413926c059dce5fb81c7e9304b  benchmarks/login-recovery-2026-09-06/bundle-manifest.json.gz
+d7cc8462f48d0cc9c386b77b4eccec494222e735283486185800ca45a0a466f5  benchmarks/login-recovery-2026-09-06/correctness.log
+55eb91956de4b95696ade5d65155f95f16df4757da54d3f4232ca3ceaa13e725  benchmarks/login-recovery-2026-09-06/floor-manifest.json.gz
+7c0cb9e032ad1933dd9aa28b6c207a5f6ac897c7b79fcd56774173fffcd9e233  benchmarks/login-recovery-2026-09-06/floor-suite.log.gz
+d993adc2e6d4d84822ea5c474d4d2ce86f8cf12693a1d53cf9f83f6b5db32472  benchmarks/login-recovery-2026-09-06/host-suite.log.gz
+fc8f8eccccd2d5cee3263d1e149c6d6a0293b94aa04ec72efdcacb2f2434071e  benchmarks/login-recovery-2026-09-06/host.json
+9fe844ef30318c85c3976d1aed2ca93d90e4250093f77bdef3d6b726ecfaa274  benchmarks/login-recovery-2026-09-06/implementation.tar.gz
+ef5778c955a12b44d06e48500df16939e5fcfe9d00a15df720dfe91b1e6c430a  benchmarks/login-recovery-2026-09-06/measurement.log
+4f04c5175e7c47654e0bb9579d74d47e1fb3fc3d546b1c3776b4dfe26d59a01a  benchmarks/login-recovery-2026-09-06/metadata.json
+dabda22d8055f809446e716d2a0d7e7c2e6256c5ff4f9a98a9b7105e98490bf2  benchmarks/login-recovery-2026-09-06/plan.md
+94860a0d2d2da9edfcfd635e64208390db89b1944cbe9f25fd9762d846725ee0  benchmarks/login-recovery-2026-09-06/report.md
+995b052e67c9832b7a0cf7614fb4dc2683478f7bc58f2760ffee74c5a61087df  benchmarks/login-recovery-2026-09-06/samples.json
+3ba6a0373f2715f282fa3eae2533d5f137f53568fe806ea241166e8409f43155  benchmarks/login-recovery-2026-09-06/startup.py
+ef5778c955a12b44d06e48500df16939e5fcfe9d00a15df720dfe91b1e6c430a  benchmarks/login-recovery-2026-09-06/summary.json

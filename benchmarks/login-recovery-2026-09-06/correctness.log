@@ -1,0 +1,13 @@
+PASS: missing activation state preserves login and command access
+PASS: recovery skips poisoned startup files, preserves argv bytes, and leaves manager/script/unsupported-option errors intact
+PASS: login argv[0] reaches a PTY prompt with Ctrl-Z, fg, Ctrl-C and exact exit status
+PASS: changed state-location environment and absent HOME recover without changing existing state
+PASS: incompatible state version preserves login and command access
+PASS: old state version preserves login and command access
+PASS: malformed JSON preserves login and command access
+PASS: unreadable state preserves login and command access
+PASS: symlink state preserves login and command access
+PASS: missing bundle preserves login and command access
+PASS: entrypoint metadata mismatch preserves login and command access
+PASS: exec-time missing interpreter preserves login and command access
+PASS: healthy shell invocations preserve Zsh login startup, non-login -c, and command exit status

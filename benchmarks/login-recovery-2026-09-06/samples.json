@@ -1,0 +1,602 @@
+[
+  {
+    "round": 0,
+    "variant": "before",
+    "startup_ms": 26.874602,
+    "same_pid_exec": true
+  },
+  {
+    "round": 0,
+    "variant": "after",
+    "startup_ms": 26.830571,
+    "same_pid_exec": true
+  },
+  {
+    "round": 1,
+    "variant": "after",
+    "startup_ms": 26.295679,
+    "same_pid_exec": true
+  },
+  {
+    "round": 1,
+    "variant": "before",
+    "startup_ms": 27.022616,
+    "same_pid_exec": true
+  },
+  {
+    "round": 2,
+    "variant": "before",
+    "startup_ms": 26.698018,
+    "same_pid_exec": true
+  },
+  {
+    "round": 2,
+    "variant": "after",
+    "startup_ms": 26.598006,
+    "same_pid_exec": true
+  },
+  {
+    "round": 3,
+    "variant": "after",
+    "startup_ms": 26.76533,
+    "same_pid_exec": true
+  },
+  {
+    "round": 3,
+    "variant": "before",
+    "startup_ms": 26.568425,
+    "same_pid_exec": true
+  },
+  {
+    "round": 4,
+    "variant": "before",
+    "startup_ms": 26.637047,
+    "same_pid_exec": true
+  },
+  {
+    "round": 4,
+    "variant": "after",
+    "startup_ms": 26.592156,
+    "same_pid_exec": true
+  },
+  {
+    "round": 5,
+    "variant": "after",
+    "startup_ms": 26.598626,
+    "same_pid_exec": true
+  },
+  {
+    "round": 5,
+    "variant": "before",
+    "startup_ms": 26.263498,
+    "same_pid_exec": true
+  },
+  {
+    "round": 6,
+    "variant": "before",
+    "startup_ms": 26.012112,
+    "same_pid_exec": true
+  },
+  {
+    "round": 6,
+    "variant": "after",
+    "startup_ms": 26.81538,
+    "same_pid_exec": true
+  },
+  {
+    "round": 7,
+    "variant": "after",
+    "startup_ms": 26.562345,
+    "same_pid_exec": true
+  },
+  {
+    "round": 7,
+    "variant": "before",
+    "startup_ms": 26.945223,
+    "same_pid_exec": true
+  },
+  {
+    "round": 8,
+    "variant": "before",
+    "startup_ms": 27.721282,
+    "same_pid_exec": true
+  },
+  {
+    "round": 8,
+    "variant": "after",
+    "startup_ms": 26.762419,
+    "same_pid_exec": true
+  },
+  {
+    "round": 9,
+    "variant": "after",
+    "startup_ms": 26.621026,
+    "same_pid_exec": true
+  },
+  {
+    "round": 9,
+    "variant": "before",
+    "startup_ms": 27.399154,
+    "same_pid_exec": true
+  },
+  {
+    "round": 10,
+    "variant": "before",
+    "startup_ms": 27.20087,
+    "same_pid_exec": true
+  },
+  {
+    "round": 10,
+    "variant": "after",
+    "startup_ms": 27.942736,
+    "same_pid_exec": true
+  },
+  {
+    "round": 11,
+    "variant": "after",
+    "startup_ms": 27.319142,
+    "same_pid_exec": true
+  },
+  {
+    "round": 11,
+    "variant": "before",
+    "startup_ms": 27.026046,
+    "same_pid_exec": true
+  },
+  {
+    "round": 12,
+    "variant": "before",
+    "startup_ms": 26.456733,
+    "same_pid_exec": true
+  },
+  {
+    "round": 12,
+    "variant": "after",
+    "startup_ms": 26.752399,
+    "same_pid_exec": true
+  },
+  {
+    "round": 13,
+    "variant": "after",
+    "startup_ms": 26.693418,
+    "same_pid_exec": true
+  },
+  {
+    "round": 13,
+    "variant": "before",
+    "startup_ms": 27.165108,
+    "same_pid_exec": true
+  },
+  {
+    "round": 14,
+    "variant": "before",
+    "startup_ms": 26.250648,
+    "same_pid_exec": true
+  },
+  {
+    "round": 14,
+    "variant": "after",
+    "startup_ms": 26.164976,
+    "same_pid_exec": true
+  },
+  {
+    "round": 15,
+    "variant": "after",
+    "startup_ms": 26.171266,
+    "same_pid_exec": true
+  },
+  {
+    "round": 15,
+    "variant": "before",
+    "startup_ms": 26.080564,
+    "same_pid_exec": true
+  },
+  {
+    "round": 16,
+    "variant": "before",
+    "startup_ms": 26.068624,
+    "same_pid_exec": true
+  },
+  {
+    "round": 16,
+    "variant": "after",
+    "startup_ms": 26.015802,
+    "same_pid_exec": true
+  },
+  {
+    "round": 17,
+    "variant": "after",
+    "startup_ms": 26.205007,
+    "same_pid_exec": true
+  },
+  {
+    "round": 17,
+    "variant": "before",
+    "startup_ms": 26.615966,
+    "same_pid_exec": true
+  },
+  {
+    "round": 18,
+    "variant": "before",
+    "startup_ms": 26.538855,
+    "same_pid_exec": true
+  },
+  {
+    "round": 18,
+    "variant": "after",
+    "startup_ms": 26.857452,
+    "same_pid_exec": true
+  },
+  {
+    "round": 19,
+    "variant": "after",
+    "startup_ms": 25.984352,
+    "same_pid_exec": true
+  },
+  {
+    "round": 19,
+    "variant": "before",
+    "startup_ms": 26.139635,
+    "same_pid_exec": true
+  },
+  {
+    "round": 20,
+    "variant": "before",
+    "startup_ms": 26.516494,
+    "same_pid_exec": true
+  },
+  {
+    "round": 20,
+    "variant": "after",
+    "startup_ms": 26.427662,
+    "same_pid_exec": true
+  },
+  {
+    "round": 21,
+    "variant": "after",
+    "startup_ms": 26.229888,
+    "same_pid_exec": true
+  },
+  {
+    "round": 21,
+    "variant": "before",
+    "startup_ms": 26.266948,
+    "same_pid_exec": true
+  },
+  {
+    "round": 22,
+    "variant": "before",
+    "startup_ms": 26.035663,
+    "same_pid_exec": true
+  },
+  {
+    "round": 22,
+    "variant": "after",
+    "startup_ms": 26.422882,
+    "same_pid_exec": true
+  },
+  {
+    "round": 23,
+    "variant": "after",
+    "startup_ms": 26.199307,
+    "same_pid_exec": true
+  },
+  {
+    "round": 23,
+    "variant": "before",
+    "startup_ms": 26.31534,
+    "same_pid_exec": true
+  },
+  {
+    "round": 24,
+    "variant": "before",
+    "startup_ms": 26.056373,
+    "same_pid_exec": true
+  },
+  {
+    "round": 24,
+    "variant": "after",
+    "startup_ms": 26.301739,
+    "same_pid_exec": true
+  },
+  {
+    "round": 25,
+    "variant": "after",
+    "startup_ms": 26.267279,
+    "same_pid_exec": true
+  },
+  {
+    "round": 25,
+    "variant": "before",
+    "startup_ms": 26.250388,
+    "same_pid_exec": true
+  },
+  {
+    "round": 26,
+    "variant": "before",
+    "startup_ms": 26.985344,
+    "same_pid_exec": true
+  },
+  {
+    "round": 26,
+    "variant": "after",
+    "startup_ms": 26.575575,
+    "same_pid_exec": true
+  },
+  {
+    "round": 27,
+    "variant": "after",
+    "startup_ms": 26.410222,
+    "same_pid_exec": true
+  },
+  {
+    "round": 27,
+    "variant": "before",
+    "startup_ms": 26.244688,
+    "same_pid_exec": true
+  },
+  {
+    "round": 28,
+    "variant": "before",
+    "startup_ms": 25.487141,
+    "same_pid_exec": true
+  },
+  {
+    "round": 28,
+    "variant": "after",
+    "startup_ms": 24.800645,
+    "same_pid_exec": true
+  },
+  {
+    "round": 29,
+    "variant": "after",
+    "startup_ms": 25.617094,
+    "same_pid_exec": true
+  },
+  {
+    "round": 29,
+    "variant": "before",
+    "startup_ms": 24.862356,
+    "same_pid_exec": true
+  },
+  {
+    "round": 30,
+    "variant": "before",
+    "startup_ms": 24.694303,
+    "same_pid_exec": true
+  },
+  {
+    "round": 30,
+    "variant": "after",
+    "startup_ms": 24.738023,
+    "same_pid_exec": true
+  },
+  {
+    "round": 31,
+    "variant": "after",
+    "startup_ms": 25.146923,
+    "same_pid_exec": true
+  },
+  {
+    "round": 31,
+    "variant": "before",
+    "startup_ms": 24.775274,
+    "same_pid_exec": true
+  },
+  {
+    "round": 32,
+    "variant": "before",
+    "startup_ms": 24.636501,
+    "same_pid_exec": true
+  },
+  {
+    "round": 32,
+    "variant": "after",
+    "startup_ms": 24.614531,
+    "same_pid_exec": true
+  },
+  {
+    "round": 33,
+    "variant": "after",
+    "startup_ms": 25.399278,
+    "same_pid_exec": true
+  },
+  {
+    "round": 33,
+    "variant": "before",
+    "startup_ms": 26.176636,
+    "same_pid_exec": true
+  },
+  {
+    "round": 34,
+    "variant": "before",
+    "startup_ms": 25.674715,
+    "same_pid_exec": true
+  },
+  {
+    "round": 34,
+    "variant": "after",
+    "startup_ms": 26.248538,
+    "same_pid_exec": true
+  },
+  {
+    "round": 35,
+    "variant": "after",
+    "startup_ms": 25.252395,
+    "same_pid_exec": true
+  },
+  {
+    "round": 35,
+    "variant": "before",
+    "startup_ms": 25.160053,
+    "same_pid_exec": true
+  },
+  {
+    "round": 36,
+    "variant": "before",
+    "startup_ms": 25.383748,
+    "same_pid_exec": true
+  },
+  {
+    "round": 36,
+    "variant": "after",
+    "startup_ms": 25.02203,
+    "same_pid_exec": true
+  },
+  {
+    "round": 37,
+    "variant": "after",
+    "startup_ms": 25.240395,
+    "same_pid_exec": true
+  },
+  {
+    "round": 37,
+    "variant": "before",
+    "startup_ms": 25.156263,
+    "same_pid_exec": true
+  },
+  {
+    "round": 38,
+    "variant": "before",
+    "startup_ms": 25.381778,
+    "same_pid_exec": true
+  },
+  {
+    "round": 38,
+    "variant": "after",
+    "startup_ms": 24.943029,
+    "same_pid_exec": true
+  },
+  {
+    "round": 39,
+    "variant": "after",
+    "startup_ms": 24.786825,
+    "same_pid_exec": true
+  },
+  {
+    "round": 39,
+    "variant": "before",
+    "startup_ms": 24.977959,
+    "same_pid_exec": true
+  },
+  {
+    "round": 40,
+    "variant": "before",
+    "startup_ms": 24.777734,
+    "same_pid_exec": true
+  },
+  {
+    "round": 40,
+    "variant": "after",
+    "startup_ms": 24.992029,
+    "same_pid_exec": true
+  },
+  {
+    "round": 41,
+    "variant": "after",
+    "startup_ms": 24.696282,
+    "same_pid_exec": true
+  },
+  {
+    "round": 41,
+    "variant": "before",
+    "startup_ms": 25.601754,
+    "same_pid_exec": true
+  },
+  {
+    "round": 42,
+    "variant": "before",
+    "startup_ms": 25.04863,
+    "same_pid_exec": true
+  },
+  {
+    "round": 42,
+    "variant": "after",
+    "startup_ms": 24.619691,
+    "same_pid_exec": true
+  },
+  {
+    "round": 43,
+    "variant": "after",
+    "startup_ms": 24.666932,
+    "same_pid_exec": true
+  },
+  {
+    "round": 43,
+    "variant": "before",
+    "startup_ms": 24.996449,
+    "same_pid_exec": true
+  },
+  {
+    "round": 44,
+    "variant": "before",
+    "startup_ms": 25.01128,
+    "same_pid_exec": true
+  },
+  {
+    "round": 44,
+    "variant": "after",
+    "startup_ms": 24.702363,
+    "same_pid_exec": true
+  },
+  {
+    "round": 45,
+    "variant": "after",
+    "startup_ms": 24.417776,
+    "same_pid_exec": true
+  },
+  {
+    "round": 45,
+    "variant": "before",
+    "startup_ms": 24.458497,
+    "same_pid_exec": true
+  },
+  {
+    "round": 46,
+    "variant": "before",
+    "startup_ms": 25.262546,
+    "same_pid_exec": true
+  },
+  {
+    "round": 46,
+    "variant": "after",
+    "startup_ms": 25.44607,
+    "same_pid_exec": true
+  },
+  {
+    "round": 47,
+    "variant": "after",
+    "startup_ms": 25.47123,
+    "same_pid_exec": true
+  },
+  {
+    "round": 47,
+    "variant": "before",
+    "startup_ms": 25.417739,
+    "same_pid_exec": true
+  },
+  {
+    "round": 48,
+    "variant": "before",
+    "startup_ms": 25.357108,
+    "same_pid_exec": true
+  },
+  {
+    "round": 48,
+    "variant": "after",
+    "startup_ms": 25.291726,
+    "same_pid_exec": true
+  },
+  {
+    "round": 49,
+    "variant": "after",
+    "startup_ms": 25.307666,
+    "same_pid_exec": true
+  },
+  {
+    "round": 49,
+    "variant": "before",
+    "startup_ms": 24.856477,
+    "same_pid_exec": true
+  }
+]
