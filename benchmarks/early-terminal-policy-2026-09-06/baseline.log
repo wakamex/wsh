@@ -1,0 +1,9 @@
+{"case": "default", "login": false, "iteration": 0, "first_editable_ms": 726.1179790366441, "queries": true, "policy": ""}
+Traceback (most recent call last):
+  File "/code/wsh/tests/early-terminal-policy.py", line 105, in <module>
+    main()
+    ~~~~^^
+  File "/code/wsh/tests/early-terminal-policy.py", line 97, in main
+    assert result['queries'] == expected_queries, (name, result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('default', {'first_editable_ms': 726.1179790366441, 'queries': True, 'policy': ''})

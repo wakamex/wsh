@@ -1,6 +1,11 @@
 # The launcher setting belongs to this shell, not to child shells.
 (( ${+WSH_THEME} )) && typeset -g +x WSH_THEME
 
+# User startup can load ZLE through completion initialization.
+if [[ $ZSH_VERSION == 5.9.999.3-test && ${WSH_ENABLE_ZLE_TERMINAL_QUERY:-0} != 1 && ! -v .term.extensions ]]; then
+  typeset -ga .term.extensions=(-query)
+fi
+
 if [[ ${WSH_RUN_FOREGROUND:-0} == 1 ]]; then
   typeset -ga _WSH_FOREGROUND_ARGV=("$@")
   set --
@@ -43,7 +48,3 @@ if (( ${+WSH_USER_ZDOTDIR} )); then
 fi
 
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event bundle-zshenv-end
-
-if [[ $ZSH_VERSION == 5.9.999.3-test && ${WSH_ENABLE_ZLE_TERMINAL_QUERY:-0} != 1 && ! -v .term.extensions ]]; then
-  typeset -ga .term.extensions=(-query)
-fi

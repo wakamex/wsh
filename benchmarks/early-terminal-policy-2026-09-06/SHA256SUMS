@@ -1,0 +1,13 @@
+4ecef3313f0796a127b1d98795843900e6a974bf22288a0ed3829a859e874c4c  benchmarks/early-terminal-policy-2026-09-06/baseline-samples.jsonl
+904514e874831f10cc0036cb745a4c5da804e59c82858d999e069f1da604840a  benchmarks/early-terminal-policy-2026-09-06/baseline.log
+2d5694fb348541fae3d68a033b004800c9c79f8f6edb468d5763b1d8f389597a  benchmarks/early-terminal-policy-2026-09-06/build.log
+432fcf942f7595af004f77154d00de7762231c83b3ae9daf44758b49633e4a12  benchmarks/early-terminal-policy-2026-09-06/bundle-manifest.json.gz
+cdd2bd797ad7e2839c383b20cfe5b02a3f749451167ace8ec98b1e9522d208b2  benchmarks/early-terminal-policy-2026-09-06/candidate-samples.jsonl
+52dd9f4b6b98f25a9855e85183215a5b65048cbe9190345d6971e6ad97f1094e  benchmarks/early-terminal-policy-2026-09-06/correctness.log
+86e6b4a80ca0066fda3164c4bdb4fabc19d5df9ffb56d66d1e0fd012c49fb301  benchmarks/early-terminal-policy-2026-09-06/evidence-check.log
+a70bd9f8e10bf61281abec6b5227210dc86f8d8a523488b8f8b6a9f70dc04e60  benchmarks/early-terminal-policy-2026-09-06/host-suite.log.gz
+51e56d256163bee2d652037024e246b9857880b8e16c5e7b3b300b4a72c689b0  benchmarks/early-terminal-policy-2026-09-06/implementation.diff.gz
+e5b81417b95c98639c72b49323b6e8bdee018d5274ffb50ec11dd5a04629a128  benchmarks/early-terminal-policy-2026-09-06/metadata.json
+86848bb3c39ed4610ca023cb067310c74759ab642aedb21b42003b13a4b70b11  benchmarks/early-terminal-policy-2026-09-06/plan.md
+530db3f21972609eba9e07cf39afcd50b188d6fd1bf657f195a7d3b768023a0b  benchmarks/early-terminal-policy-2026-09-06/report.md
+38fa8424340741f22fe376f612f0bb585079b76010bc796a669206941759fe49  benchmarks/early-terminal-policy-2026-09-06/summary.json

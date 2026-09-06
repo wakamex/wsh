@@ -1,0 +1,5 @@
+# Terminal policy before user startup
+
+At source 2d69d55, user .zshenv can initialize completion and load ZLE before Wsh installs its default terminal-query policy. SDKMAN exposed this valid startup sequence. An unanswered query adds about 500 ms in a PTY.
+
+Move only the existing default policy before user .zshenv. Keep the environment opt-in and explicit user .term.extensions assignments authoritative. A real bundled-Zsh PTY fixture will call native compinit in user .zshenv and inspect actual query bytes through first editor readiness. Require no query by default, queries with an inherited opt-in or an explicit user query policy, and preservation of explicit user query suppression and other extension settings. Cover login and non-login startup. The old adapter must fail the default case. Compare the same default fixture against the preceding bundle with five warm samples each, retaining cold starts separately. Run profile correctness, shared-configuration checks, and the complete retained-evidence suite before committing. Stop and reassess after two failed interventions at a gate.

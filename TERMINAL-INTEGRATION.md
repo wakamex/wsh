@@ -4,6 +4,8 @@ The bundled Zsh now owns standard OSC 7 working-directory reporting and OSC 133 
 
 The accepted boundary is small: Zsh emits established terminal protocols from the native command and ZLE paths, Wsh carries two measured corrections and brackets its one synthetic first job, and the terminal consumes those sequences without understanding shell source or job-control mechanics.
 
+Current development source sets the default `-query` policy before loading user `.zshenv`, because completion initialization there can already load ZLE. Set `WSH_ENABLE_ZLE_TERMINAL_QUERY=1` in the launch environment to opt in before startup. An explicit `.term.extensions` assignment in user startup remains authoritative and must precede the first ZLE load to control its queries. This initialization-order correction is not included in v0.3.0.
+
 ## Existing protocols cover the basic contract
 
 | Capability | Existing mechanism | Owner | Terminal feature enabled |

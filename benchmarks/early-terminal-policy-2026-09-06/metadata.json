@@ -1,0 +1,21 @@
+{
+  "base_revision": "2d69d55c85599327edfb331dc094b4dd0bbcf52a",
+  "candidate": "working tree; implementation.diff.gz",
+  "candidate_bundle": "/code/wsh/bundles/2ce7a576c9ad7369bfa96a21436376fdd6c0880024a7c3b702977ad641dd4577",
+  "baseline_bundle": "/code/wsh/bundles/f2fd8964c819af372005ab7696466d67d64f12d2070755294309fdf70ed692a7",
+  "artifact_status": "unsigned local development artifacts",
+  "manifest_sha256": "2ce7a576c9ad7369bfa96a21436376fdd6c0880024a7c3b702977ad641dd4577",
+  "manifest_file": "bundle-manifest.json.gz",
+  "manager_sha256": "50df469f3383e2d35afc75444433052fd6f9e1f20dc4ef8913012dc9b3f5d20e",
+  "test_sha256": "794a750e3197004a0f3ccf7600d0321a765043d8d93fecf5b0771935692e71eb",
+  "host": "Linux-7.1.9-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "instrumentation": "unprofiled PTY; native OSC 133 B; no replies to terminal queries",
+  "fixture": "isolated .zshenv initializes native compinit; empty theme selector; five warm samples after one retained cold start per bundle",
+  "benchmark_command": "python3 tests/early-terminal-policy.py target/release/wsh BUNDLE --measure 5",
+  "correctness_commands": [
+    "python3 tests/early-terminal-policy.py target/release/wsh /code/wsh/bundles/2ce7a576c9ad7369bfa96a21436376fdd6c0880024a7c3b702977ad641dd4577",
+    "./build/test-development-bundle.zsh",
+    "./benchmarks/verify-retained-evidence.zsh"
+  ],
+  "floor_runtime_check": "New test compiled and subprocess Path arguments executed in pinned builder using /usr/libexec/platform-python 3.6.8. Full floor build not rerun."
+}

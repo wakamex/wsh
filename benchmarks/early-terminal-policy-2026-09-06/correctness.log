@@ -1,0 +1,11 @@
+{"case": "default", "login": false, "iteration": 0, "first_editable_ms": 231.55915999086574, "queries": false, "policy": "-query"}
+{"case": "environment-opt-in", "login": false, "iteration": 0, "first_editable_ms": 709.8921589786187, "queries": true, "policy": ""}
+{"case": "user-query", "login": false, "iteration": 0, "first_editable_ms": 713.8882810249925, "queries": true, "policy": "query -color"}
+{"case": "user-no-query", "login": false, "iteration": 0, "first_editable_ms": 202.50407903222367, "queries": false, "policy": "-query -color"}
+{"case": "user-no-color", "login": false, "iteration": 0, "first_editable_ms": 713.0404009949416, "queries": true, "policy": "-color"}
+{"case": "default", "login": true, "iteration": 0, "first_editable_ms": 205.16557898372412, "queries": false, "policy": "-query"}
+{"case": "environment-opt-in", "login": true, "iteration": 0, "first_editable_ms": 735.6233869795687, "queries": true, "policy": ""}
+{"case": "user-query", "login": true, "iteration": 0, "first_editable_ms": 713.1329239928164, "queries": true, "policy": "query -color"}
+{"case": "user-no-query", "login": true, "iteration": 0, "first_editable_ms": 207.07664196379483, "queries": false, "policy": "-query -color"}
+{"case": "user-no-color", "login": true, "iteration": 0, "first_editable_ms": 746.1399359744973, "queries": true, "policy": "-color"}
+PASS: early ZLE loading respects default, opt-in, and explicit user terminal policies

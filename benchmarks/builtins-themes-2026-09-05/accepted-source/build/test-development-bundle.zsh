@@ -124,7 +124,6 @@ ${test_zsh} ${repository_root}/tests/directory-jump.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/named-themes.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/profile.zsh ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/profile-readiness.zsh ${manager} ${bundle}
-${commands[python3]:-/usr/libexec/platform-python} ${repository_root}/tests/early-terminal-policy.py ${manager} ${bundle}
 ${test_zsh} ${repository_root}/tests/foreground-startup.zsh ${manager} ${bundle} candidate
 WSH_EXPECT_NATIVE_TERMINAL_PASS=1 \
   ${test_zsh} ${repository_root}/tests/native-terminal-integration.zsh ${bundle}/bin/zsh /dev/null native ${test_root}/native-terminal.bin >/dev/null

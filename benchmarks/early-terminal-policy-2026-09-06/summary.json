@@ -1,0 +1,14 @@
+{
+  "baseline": {
+    "warm_samples": 5,
+    "median_ms": 564.425562042743,
+    "query_runs": 6,
+    "cold_ms": 729.2948720278218
+  },
+  "candidate": {
+    "warm_samples": 5,
+    "median_ms": 51.96921498281881,
+    "query_runs": 0,
+    "cold_ms": 219.923495023977
+  }
+}
