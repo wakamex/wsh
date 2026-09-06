@@ -16,3 +16,4 @@ Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmar
 - When evidence invalidates a premise, replace the old design or plan instead of preserving contradictory paths.
 - Preserve benchmark inputs, raw results, summaries, exact commands, and relevant hashes needed to reproduce an accepted claim.
 - Before committing, run the relevant tests and benchmarks, run `git diff --check`, and report what was and was not exercised.
+- Before pushing, run `./benchmarks/verify-retained-evidence.zsh` on the final tree. This is the same complete evidence suite CI runs; checking only the changed feature's evidence is insufficient. Add accepted evidence verifiers to this shared entrypoint.

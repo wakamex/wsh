@@ -54,6 +54,10 @@ Reports lead with the motivation, short result, and how it was tested. Detailed 
 
 An accepted intervention retains its reproducer, fixtures, commands, raw measurements, generated summary, and regression test. Generated reports identify their inputs and should be reproducible from retained data. If later evidence invalidates a result or architecture premise, update or replace the old conclusion rather than accumulating mutually inconsistent plans.
 
+Before pushing, run `./benchmarks/verify-retained-evidence.zsh` on the final tree, alongside the relevant correctness tests and `git diff --check`. CI calls this same entrypoint, which runs the resource-gate checker test and every accepted evidence verifier listed there. Add new accepted evidence checks to that script so local and CI coverage stay aligned. This checks retained measurements and source identities; it does not rerun timing experiments or replace the canonical bundle suite.
+
+Changes to prompt ownership exposed historical source-hash mismatches in the plugin-doctor, foreground-startup, and native-terminal evidence that feature-specific verification missed. When measured source changes, preserve the original hash and bind its verifier to a historical commit or retained source snapshot whose bytes match it. Keep current behavior covered by current correctness tests and new evidence. The pre-push gate passes only when the complete retained-evidence suite succeeds.
+
 Every vendored component addition or update also updates [`VENDORED-COMPONENTS.md`](VENDORED-COMPONENTS.md). The review records whether source bytes changed, build-only transformations, selected upstream configuration, Wsh-owned lifecycle and compatibility behavior, upstream-suite results, and the reproducer that still requires each divergence.
 
 ## Reproducible development builds use the release-shaped path
