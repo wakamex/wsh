@@ -1,0 +1,5 @@
+# Installed profiling module lookup
+
+The official v0.3.0 bundle fails to load zsh/datetime, zsh/system, and zsh/stat when profiling because the profile adapter runs before the bundle module path is installed. The compiled /workspace build prefix is absent on the installed host. The baseline is source 2e2651f5bc2782699fcf11c0eb58170e687b5de6 and official bundle 89c84883e2a15295f8ccfae66931e0a1833e7111eec605ae14ae4a7eb4f7edd2.
+
+Move only profile initialization after module_path and fpath setup. Before changing implementation, extend the existing profile test with a real bundled Zsh whose inherited module search path is empty. Require successful module loading, function profiling, and a written event, then retain the existing end-to-end privacy and report checks. The unchanged v0.3.0 adapter must fail this regression. Run the complete retained-evidence suite and the existing profiling overhead gate on the corrected local unsigned development bundle. Stop and reassess if two interventions fail the same gate.

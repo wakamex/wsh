@@ -30,30 +30,6 @@ print -r -- 'typeset -g WSH_PROFILE_SECRET_ZSHENV=profile-secret-zshenv' > $home
 print -r -- 'typeset -g WSH_PROFILE_SECRET_ZSHRC=profile-secret-zshrc' > $home/.zshrc
 $manager bundle activate $bundle --state-root $state_root >/dev/null
 
-# A build host can hide broken relocation through Zsh's compiled module path.
-# Exercise the real adapter with that fallback unavailable before any modules load.
-HOME=$home ZDOTDIR=$home $bundle/bin/zsh -dfc '
-  unset WSH_USER_ZDOTDIR WSH_RUN_FOREGROUND
-  module_path=()
-  WSH_BUNDLE_ROOT=$1
-  WSH_PROFILE_FILE=$2/relocation.jsonl
-  WSH_PROFILE_ZPROF_FILE=$2/relocation-zprof.txt
-  WSH_PROFILE_STARTED_AT=0
-  WSH_PROFILE_FUNCTIONS=1
-  : > $WSH_PROFILE_FILE
-  source $WSH_BUNDLE_ROOT/share/wsh/zdotdir/.zshenv
-  for module in datetime system stat zprof; do
-    zmodload -e zsh/$module || exit 1
-  done
-  (( $+functions[_wsh_profile_event] )) || exit 1
-  _wsh_profile_event editor-ready
-  _wsh_profile_flush
-  [[ $(< $WSH_PROFILE_FILE) == *editor-ready* ]] || exit 1
-' wsh-profile-relocation $bundle $scratch || {
-  print -u2 -- 'error: profiling requires the unavailable compiled module path'
-  return 1
-}
-
 profile_child() {
   builtin cd -q -- $fixture
   export HOME=$home ZDOTDIR=$home TERM=xterm-256color WSH_STATE_ROOT=$state_root

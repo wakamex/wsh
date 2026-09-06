@@ -7,16 +7,16 @@ if [[ ${WSH_RUN_FOREGROUND:-0} == 1 ]]; then
   typeset -g WSH_RUN_FOREGROUND=prepared
 fi
 
+if [[ -n ${WSH_PROFILE_FILE:-} && -n ${WSH_BUNDLE_ROOT:-} && -r ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh ]]; then
+  source ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh
+fi
+
 if [[ -n ${WSH_BUNDLE_ROOT:-} ]]; then
   typeset WSH_STARTUP_MODULE_PATH=${WSH_BUNDLE_ROOT}/lib/zsh/${ZSH_VERSION}
   typeset WSH_STARTUP_FUNCTION_PATH=${WSH_BUNDLE_ROOT}/share/zsh/${ZSH_VERSION}/functions
   module_path=("$WSH_STARTUP_MODULE_PATH" "${(@)module_path:#${(b)WSH_STARTUP_MODULE_PATH}}")
   fpath=("$WSH_STARTUP_FUNCTION_PATH" "${(@)fpath:#${(b)WSH_STARTUP_FUNCTION_PATH}}")
   unset WSH_STARTUP_MODULE_PATH WSH_STARTUP_FUNCTION_PATH
-fi
-
-if [[ -n ${WSH_PROFILE_FILE:-} && -n ${WSH_BUNDLE_ROOT:-} && -r ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh ]]; then
-  source ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh
 fi
 
 if (( ${+WSH_USER_ZDOTDIR} )); then

@@ -1,0 +1,4 @@
+/home/mihai/.local/share/wsh/bundles/89c84883e2a15295f8ccfae66931e0a1833e7111eec605ae14ae4a7eb4f7edd2/share/wsh/profile.zsh:7: failed to load module `zsh/datetime': empty module path
+/home/mihai/.local/share/wsh/bundles/89c84883e2a15295f8ccfae66931e0a1833e7111eec605ae14ae4a7eb4f7edd2/share/wsh/profile.zsh:7: failed to load module `zsh/system': empty module path
+/home/mihai/.local/share/wsh/bundles/89c84883e2a15295f8ccfae66931e0a1833e7111eec605ae14ae4a7eb4f7edd2/share/wsh/profile.zsh:7: failed to load module `zsh/stat': empty module path
+error: profiling requires the unavailable compiled module path

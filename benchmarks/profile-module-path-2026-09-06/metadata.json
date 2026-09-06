@@ -1,0 +1,17 @@
+{
+  "base_revision": "2e2651f5bc2782699fcf11c0eb58170e687b5de6",
+  "candidate": "working tree; implementation.diff.gz",
+  "bundle": "/code/wsh/bundles/f2fd8964c819af372005ab7696466d67d64f12d2070755294309fdf70ed692a7",
+  "artifact_status": "unsigned local development artifact",
+  "manager_sha256": "50df469f3383e2d35afc75444433052fd6f9e1f20dc4ef8913012dc9b3f5d20e",
+  "host": "Linux-7.1.9-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "correctness_commands": [
+    "./tests/profile.zsh target/release/wsh /code/wsh/bundles/f2fd8964c819af372005ab7696466d67d64f12d2070755294309fdf70ed692a7",
+    "./tests/profile-readiness.zsh target/release/wsh /code/wsh/bundles/f2fd8964c819af372005ab7696466d67d64f12d2070755294309fdf70ed692a7"
+  ],
+  "benchmark_command": "./benchmarks/benchmark-profile.zsh OUTPUT target/release/wsh BUNDLE 50",
+  "instrumentation": "normal/profile paired; function mode disabled; CPU 0; 100 retained pairs per run",
+  "runtime_trace": "Historical unchanged runtime evidence reused only by the existing combined gate checker; not remeasured.",
+  "manifest_file": "bundle-manifest.json.gz",
+  "manifest_sha256": "f2fd8964c819af372005ab7696466d67d64f12d2070755294309fdf70ed692a7"
+}

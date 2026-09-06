@@ -1,0 +1,4 @@
+gate	required	observed	result
+profile-first-editable-p90-overhead-ms	<=3.000	3.766	fail
+runtime-ready-p90-overhead-ms	<=3.000	1.688	pass
+runtime-refresh-p90-overhead-ms	<=0.500	0.458	pass

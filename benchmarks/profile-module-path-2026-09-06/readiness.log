@@ -1,0 +1,6 @@
+measured_at_utc	block	position	variant	repetition	first_editable_ms	settled_ms
+2026-09-06T02:36:52Z	forward	1	normal	1	250.309229	251.228094
+2026-09-06T02:36:53Z	forward	2	profile	1	254.329681	255.270720
+2026-09-06T02:36:53Z	reverse	1	profile	1	255.936384	256.872416
+2026-09-06T02:36:53Z	reverse	2	normal	1	248.220682	249.138594
+PASS: readiness waits for delayed ZLE initialization in normal and profiled shells and ignores earlier prompt-like output
