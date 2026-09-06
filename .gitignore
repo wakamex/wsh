@@ -3,3 +3,4 @@
 /build/out/
 /build/portable/
 /bundles/
+__pycache__/
