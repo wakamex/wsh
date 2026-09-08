@@ -38,23 +38,14 @@ wsh_source(char *name)
     lastval = saved_status;
 }
 
-static void
-wsh_profile(char *event)
-{
-    char *command;
-    int saved_status = lastval;
-    if (!wsh_integration || !shfunctab->getnode(shfunctab, "_wsh_profile_event"))
-        return;
-    command = bicat("_wsh_profile_event ", event);
-    execstring(command, 1, 0, "wsh-profile");
-    zsfree(command);
-    lastval = saved_status;
-}
+static void wsh_profile(char *event);
+static void wsh_profile_flush_startup(void);
 
 static void
 wsh_setup(void)
 {
     char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
+    wsh_profile("native-startup-enter");
     if (!exepath || isset(PRIVILEGED))
         return;
     wsh_root = ztrdup(exepath);
@@ -96,6 +87,7 @@ static void
 wsh_finish(void)
 {
     Param theme;
+    wsh_profile_flush_startup();
     if (!wsh_integration)
         return;
     theme = (Param)paramtab->getnode(paramtab, "WSH_THEME");

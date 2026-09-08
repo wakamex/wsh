@@ -14,12 +14,62 @@ static char **wsh_profile_arguments;
 static char wsh_profile_directory[PATH_MAX];
 static pid_t wsh_profile_owner;
 static int wsh_profile_report(const char *directory);
+static long long wsh_profile_started;
+static struct { const char *name; long long elapsed; } wsh_profile_startup[32];
+static size_t wsh_profile_startup_count;
+
+/* Only native startup passes fixed names here. No allocation, parsing or I/O. */
+static void
+wsh_profile(char *event)
+{
+    struct timeval now;
+    long long elapsed;
+    if (!wsh_profile_owner || wsh_profile_owner != getpid() || wsh_profile_startup_count == 32)
+        return;
+    gettimeofday(&now, NULL);
+    elapsed = (long long)now.tv_sec * 1000000 + now.tv_usec - wsh_profile_started;
+    wsh_profile_startup[wsh_profile_startup_count].name = event;
+    wsh_profile_startup[wsh_profile_startup_count++].elapsed = elapsed < 0 ? 0 : elapsed;
+}
+
+static void
+wsh_profile_flush_startup(void)
+{
+    char path[PATH_MAX], buffer[8192];
+    size_t i, used = 0;
+    int fd, length;
+    struct stat st;
+    ssize_t written;
+    if (!wsh_profile_startup_count || wsh_profile_owner != getpid())
+        return;
+    for (i = 0; i < wsh_profile_startup_count; ++i) {
+        length = snprintf(buffer + used, sizeof(buffer) - used,
+                          "{\"schema_version\":1,\"source\":\"zsh\",\"event\":\"%s\",\"elapsed_us\":%lld}\n",
+                          wsh_profile_startup[i].name, wsh_profile_startup[i].elapsed);
+        if (length < 0 || (size_t)length >= sizeof(buffer) - used)
+            return;
+        used += (size_t)length;
+    }
+    if (snprintf(path, sizeof(path), "%s/trace.jsonl", wsh_profile_directory) >= (int)sizeof(path))
+        return;
+    fd = open(path, O_WRONLY | O_APPEND | O_NONBLOCK | O_CLOEXEC | O_NOFOLLOW);
+    if (fd < 0)
+        return;
+    if (!fstat(fd, &st) && S_ISREG(st.st_mode) && st.st_uid == getuid() && !(st.st_mode & 077)) {
+        do { written = write(fd, buffer, used); } while (written < 0 && errno == EINTR);
+        /* A partial append is left visibly truncated; never duplicate a prefix. */
+        wsh_profile_startup_count = 0;
+    }
+    close(fd);
+}
 
 static void
 wsh_profile_at_exit(void)
 {
-    if (wsh_profile_owner == getpid())
+    if (wsh_profile_owner == getpid()) {
+        wsh_profile_flush_startup();
         (void)wsh_profile_report(wsh_profile_directory);
+    }
 }
 
 static int
@@ -141,6 +191,7 @@ wsh_profile_start(int argc, char **argv)
     memmove(argv + 1, argv + first, (size_t)(argc - first + 1) * sizeof(char *));
     wsh_profile_arguments = argv;
     wsh_profile_owner = getpid();
+    wsh_profile_started = started;
     if (atexit(wsh_profile_at_exit))
         goto failure;
     fprintf(stderr, "Profiling this shell. Exit to view the report.\nTrace: %s\n", wsh_profile_directory);

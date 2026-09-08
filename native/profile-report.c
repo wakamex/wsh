@@ -300,7 +300,10 @@ wsh_profile_report(const char *directory)
         printf("Build: wsh %s (recorded legacy identity)\nBundle: %s\n", wsh_profile_string(launch, "wsh_version"), identity);
     puts("Identity is recorded in this profile; installed resources are not verified.\n\nStartup");
     wsh_profile_duration("Wsh ZLE initialization hook", json_object_get(wsh_profile_find(events, "editor-ready", NULL, 0), "elapsed_us"));
-    wsh_profile_duration(schema == 2 ? "Native entry to Zsh startup" : "Launcher to Zsh startup", json_object_get(wsh_profile_find(events, "zsh-startup-enter", NULL, 0), "elapsed_us"));
+    event = schema == 2 ? wsh_profile_find(events, "native-startup-enter", NULL, 0) : NULL;
+    if (!event)
+        event = wsh_profile_find(events, "zsh-startup-enter", NULL, 0);
+    wsh_profile_duration(schema == 2 ? "Native entry to Zsh startup" : "Launcher to Zsh startup", json_object_get(event, "elapsed_us"));
     for (index = 0; index < sizeof(spans) / sizeof(*spans); ++index)
         wsh_profile_span(events, spans[index][0], spans[index][1], spans[index][2]);
     wsh_profile_duration("Runtime ready", json_object_get(wsh_profile_find(events, "runtime-ready", NULL, 0), "elapsed_us"));
