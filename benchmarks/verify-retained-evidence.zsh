@@ -41,4 +41,6 @@ python3 ./benchmarks/verify-native-foreground-evidence.py
 
 python3 ./benchmarks/verify-native-build-evidence.py
 
+python3 ./benchmarks/verify-native-package-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'
