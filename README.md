@@ -92,6 +92,13 @@ Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keep
 
 The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
 
+It also includes two Wsh-maintained Zsh source patches:
+
+- Terminal reporting fixes produce valid OSC 133 prompt identifiers and restore the shell's OSC 7 working directory after foreground applications change the terminal's reported directory, including when the optional terminal query is disabled. See the [terminal integration tests and results](benchmarks/native-terminal-integration-2026-09-04/report.md).
+- The `zcompile` fix zeroes uninitialized alignment padding in compiled functions, making bundle builds reproducible and preventing those bytes from containing stale heap data. See the [reproducibility tests and results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
+
+Both patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
+
 The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
