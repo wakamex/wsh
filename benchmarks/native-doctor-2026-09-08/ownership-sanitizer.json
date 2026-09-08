@@ -1,0 +1,19 @@
+{
+  "cases": 40,
+  "arbitrary_pairs": 10000,
+  "passed": true,
+  "classifier_sha256": "ccaeb0461b5d7eb3755859783f8124fb847f724656fb00979065949eb0548ce6",
+  "command": [
+    "clang",
+    "-std=c99",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-g",
+    "/tmp/wsh-ownership-sanitizer-pu7vj8ow/harness.c",
+    "-o",
+    "/tmp/wsh-ownership-sanitizer-pu7vj8ow/harness"
+  ]
+}

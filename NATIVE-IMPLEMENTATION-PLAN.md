@@ -2,7 +2,7 @@
 
 Wsh will use a native entrypoint in its patched Zsh, expose its tools through one user-facing executable, and use system packages for installation and updates. An all-C implementation is the preferred hypothesis for the remaining functionality. The implementation work below tests whether each transition reduces responsibilities, interfaces, dependencies, or compatibility special cases while preserving user behavior. Existing Rust code, shell adapters, plugins, theme formats, and helper processes provide comparison baselines and can be replaced.
 
-This plan records the decisions agreed on 2026-09-08. The [native-entrypoint experiment](benchmarks/native-entrypoint-2026-09-08/report.md) is complete; the numbered implementation stages are pending. Production still uses the current launcher and distribution workflow. This document defines the selected destination and execution order; [ARCHITECTURE-EVIDENCE.md](ARCHITECTURE-EVIDENCE.md) records the supporting experiments and [DEVELOPMENT.md](DEVELOPMENT.md) defines evidence and release checks.
+This plan records the decisions agreed on 2026-09-08. The [native-entrypoint experiment](benchmarks/native-entrypoint-2026-09-08/report.md) is complete; execution status and completed evidence are tracked in [NATIVE-PROGRESS.md](NATIVE-PROGRESS.md). Production still uses the current launcher and distribution workflow. This document defines the selected destination and execution order; [ARCHITECTURE-EVIDENCE.md](ARCHITECTURE-EVIDENCE.md) records the supporting experiments and [DEVELOPMENT.md](DEVELOPMENT.md) defines evidence and release checks.
 
 ## Selected architecture and open implementation choices
 

@@ -1,0 +1,7 @@
+{
+  "command": "make -C /var/tmp/wsh-native-tools/source-sanitized -j8 CC=clang DLLD=clang CFLAGS=\"-O1 -g -fsanitize=address,undefined -fno-sanitize=function -fno-omit-frame-pointer\" LDFLAGS=\"-fsanitize=address,undefined\"",
+  "binary_sha256": "04e5e7db7602175ecd7d1ba6a80f52f31b7cb7e9dd1a1ec2dfd88fba08c4330f",
+  "doctor_c_sha256": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056",
+  "init_c_sha256": "c5488eaaa14aab028e41c0844b720f934d15151ca6ad19c23b5e75527853f08a",
+  "scope": "all Zsh core translation units; installed dynamic modules use the baseline release build; full-shell leak detection and UBSan function checks excluded as recorded in sanitizer-scope.json"
+}

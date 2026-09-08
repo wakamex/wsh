@@ -1,0 +1,19 @@
+{
+  "pairs": 50,
+  "paired_p95_ms": 7.043870999999999,
+  "gate_ms": 3,
+  "passed": false,
+  "cpu": 0,
+  "native_sha256": "544154dce9aadb5b9f7fd9051317f3e900a3bf8d63f9371126ee4fb6c1e5a5d6",
+  "rust_sha256": "bf69f5bbff0030bfdf5fd4c7e1c95ab0556c5132923733e2062b4e447f92a2f6",
+  "manifest_sha256": "8759e6f094d9ecd8c38b6918f48a2a0451e6166a26452b709da49a105ca63133",
+  "omz_revision": "605a393f1c4734b23c6551370b9d542724e77879"
+}
+Traceback (most recent call last):
+  File "/code/wsh/native/test-doctor.py", line 122, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/code/wsh/native/test-doctor.py", line 119, in main
+    assert summary['passed'],summary
+           ~~~~~~~^^^^^^^^^^
+AssertionError: {'pairs': 50, 'paired_p95_ms': 7.043870999999999, 'gate_ms': 3, 'passed': False, 'cpu': 0, 'native_sha256': '544154dce9aadb5b9f7fd9051317f3e900a3bf8d63f9371126ee4fb6c1e5a5d6', 'rust_sha256': 'bf69f5bbff0030bfdf5fd4c7e1c95ab0556c5132923733e2062b4e447f92a2f6', 'manifest_sha256': '8759e6f094d9ecd8c38b6918f48a2a0451e6166a26452b709da49a105ca63133', 'omz_revision': '605a393f1c4734b23c6551370b9d542724e77879'}

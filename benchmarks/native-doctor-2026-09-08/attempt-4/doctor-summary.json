@@ -1,0 +1,11 @@
+{
+  "pairs": 50,
+  "paired_p95_ms": -2.102748,
+  "gate_ms": 3,
+  "passed": true,
+  "cpu": 0,
+  "native_sha256": "3db7b94c904165d009931ceb4b91758288b47166bd2a4c6e2a1613500e2880f5",
+  "rust_sha256": "bf69f5bbff0030bfdf5fd4c7e1c95ab0556c5132923733e2062b4e447f92a2f6",
+  "manifest_sha256": "bb2e1654cbff96f8c2f73c20d6fe084753a60076ac2f25391344a07169259adf",
+  "omz_revision": "605a393f1c4734b23c6551370b9d542724e77879"
+}

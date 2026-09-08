@@ -4,7 +4,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 
 | Stage | Status | Evidence or next action |
 |---|---|---|
-| 1. Native tools | In progress | Native version slice passes; doctor next. [Evidence](benchmarks/native-tools-2026-09-08/report.md) |
+| 1. Native tools | Complete in native workbench | Version and doctor pass. [Version](benchmarks/native-tools-2026-09-08/report.md), [doctor](benchmarks/native-doctor-2026-09-08/report.md) |
 | 2. Native startup and foreground | Pending | Integrate accepted startup prototype and explicit foreground interface |
 | 3. System package and login | Pending | Real RPM and disposable VM transactions/accounts |
 | 4. Profiling | Pending | Native lifecycle and report comparison |

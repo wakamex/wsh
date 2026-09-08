@@ -11,7 +11,7 @@ import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'benchmarks/native-tools-2026-09-08'
+OUT = Path('/var/tmp/wsh-native-tools/doctor-evidence')
 WORK = Path('/var/tmp/wsh-native-tools')
 NATIVE = WORK / 'installation/bin/wsh'
 CONTROL = Path('/var/tmp/wsh-native-entry-prototype/native/bin/wsh')
@@ -64,7 +64,7 @@ def main():
         passed('native flags, ordinary script names, delimiters, status and argument bytes match baseline')
         harness = home / 'harness.c'
         harness.write_text('#include <stdio.h>\n#include <string.h>\n#include <assert.h>\n'
-            '#define ZSH_VERSION "test"\n#include "tools.c"\n'
+            '#define WSH_CLI_STANDALONE 1\n#define ZSH_VERSION "test"\n#include "tools.c"\n'
             'int main(void) {\n'
             '  unsigned int state = 71031; char bytes[128]; char *args[] = {"wsh", bytes, 0};\n'
             '  for (int i=0; i<10000; ++i) {\n'

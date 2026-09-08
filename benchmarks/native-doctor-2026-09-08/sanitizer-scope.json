@@ -1,0 +1,7 @@
+{
+  "unmodified_params_c_sha256": "d3e3add2074a6a880db474e6ea3fe6a75f974d50345d1e6b58d837975ea8d698",
+  "reproducer": "wsh-sanitized -f -c 'typeset -A a; a[x]=y'",
+  "excluded_check": "function",
+  "reason": "Upstream hashtable callbacks use incompatible C function pointer types; the no-Wsh-startup reproducer triggers params.c:1184. All other address and undefined-behavior checks remain enabled.",
+  "leak_detection": "disabled for full Zsh process lifecycle; enabled in standalone dispatcher harness"
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "fixture": "clean",
+    "status": 0,
+    "output": "Plugin compatibility: no redundant or unrecognized external implementations detected.\n",
+    "configuration": ""
+  },
+  {
+    "fixture": "exact",
+    "status": 0,
+    "output": "Plugin compatibility:\n- zsh-history-substring-search: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n- zsh-autosuggestions: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n- zsh-syntax-highlighting: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n",
+    "configuration": "source /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-history-substring-search.zsh\nsource /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-autosuggestions.zsh\nzmodload zsh/zle\nsource /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\n"
+  },
+  {
+    "fixture": "modified",
+    "status": 0,
+    "output": "Plugin compatibility:\n- zsh-history-substring-search: a modified or unrecognized external implementation was preserved. No removal is suggested.\n- zsh-autosuggestions: a modified or unrecognized external implementation was preserved. No removal is suggested.\n- zsh-syntax-highlighting: a modified or unrecognized external implementation was preserved. No removal is suggested.\n",
+    "configuration": "source /tmp/wsh-c-doctor-yh9zzv8u/changed-history.zsh\nsource /tmp/wsh-c-doctor-yh9zzv8u/changed-auto.zsh\nzmodload zsh/zle\nsource /tmp/wsh-c-doctor-yh9zzv8u/changed-syntax/zsh-syntax-highlighting.zsh\n"
+  },
+  {
+    "fixture": "disabled",
+    "status": 0,
+    "output": "Plugin compatibility: no redundant or unrecognized external implementations detected.\n",
+    "configuration": "WSH_DISABLE_HISTORY_SUBSTRING_SEARCH=1\nWSH_DISABLE_AUTOSUGGESTIONS=1\nWSH_DISABLE_SYNTAX_HIGHLIGHTING=1\nsource /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-history-substring-search.zsh\nsource /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-autosuggestions.zsh\nzmodload zsh/zle\nsource /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\n"
+  },
+  {
+    "fixture": "omz-history",
+    "status": 0,
+    "output": "Plugin compatibility:\n- zsh-history-substring-search: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n",
+    "configuration": "source /var/tmp/wsh-native-tools/installation/share/wsh/defaults/known-oh-my-zsh-history-substring-search.zsh\n"
+  },
+  {
+    "fixture": "active-auto",
+    "status": 0,
+    "output": "Plugin compatibility:\n- zsh-autosuggestions: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n",
+    "configuration": "source /var/tmp/wsh-native-tools/installation/share/wsh/defaults/zsh-autosuggestions.zsh\ntypeset -gA _ZSH_AUTOSUGGEST_BIND_COUNTS=(self-insert 1)\n"
+  },
+  {
+    "fixture": "noisy",
+    "status": 0,
+    "output": "Plugin compatibility: no redundant or unrecognized external implementations detected.\n",
+    "configuration": "print noisy; print -u2 noisy-stderr\n"
+  },
+  {
+    "fixture": "real-omz-overlap",
+    "status": 0,
+    "output": "Plugin compatibility: no redundant or unrecognized external implementations detected.\nPrompt compatibility: Wsh owns the prompt and Oh My Zsh has a theme configured.\nTo keep your theme in regular Zsh, add this after setting ZSH_THEME and before sourcing oh-my-zsh.sh:\n  if [[ -n ${WSH_THEME-} ]]; then\n    ZSH_THEME=\"\"\n  fi\nSetting WSH_THEME alone does not skip the OMZ theme. Alternatively, use WSH_THEME= wsh to keep the existing prompt.\n",
+    "configuration": "ZSH=/home/mihai/.oh-my-zsh\nZSH_CACHE_DIR=$HOME/cache\nZSH_COMPDUMP=$HOME/.zcompdump\nzstyle \":omz:update\" mode disabled\nplugins=(git z)\nZSH_THEME=robbyrussell\nWSH_THEME=minimal\nsource $ZSH/oh-my-zsh.sh\n"
+  },
+  {
+    "fixture": "real-omz-clean",
+    "status": 0,
+    "output": "Plugin compatibility: no redundant or unrecognized external implementations detected.\n",
+    "configuration": "ZSH=/home/mihai/.oh-my-zsh\nZSH_CACHE_DIR=$HOME/cache\nZSH_COMPDUMP=$HOME/.zcompdump\nzstyle \":omz:update\" mode disabled\nplugins=(git z)\nZSH_THEME=robbyrussell\nWSH_THEME=minimal\nif [[ -n ${WSH_THEME-} ]]; then ZSH_THEME=\"\"; fi\nsource $ZSH/oh-my-zsh.sh\n"
+  },
+  {
+    "fixture": "early-success",
+    "status": 1,
+    "elapsed_seconds": 0.012430284055881202,
+    "error": "error: diagnostic shell did not return a complete ownership report\n"
+  },
+  {
+    "fixture": "early-failure",
+    "status": 1,
+    "elapsed_seconds": 0.012771412031725049,
+    "error": "error: diagnostic shell did not return a complete ownership report\n"
+  },
+  {
+    "fixture": "hung",
+    "status": 1,
+    "elapsed_seconds": 10.00536655599717,
+    "error": "error: diagnostic shell did not finish within 10 seconds\nerror: diagnostic shell did not return a complete ownership report\n"
+  },
+  {
+    "fixture": "interrupt",
+    "status": 143
+  },
+  {
+    "fixture": "50 repeated native reports",
+    "status": 0
+  }
+]

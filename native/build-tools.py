@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = Path('/var/tmp/wsh-native-entry-prototype')
 WORK = Path('/var/tmp/wsh-native-tools')
 SOURCE = WORK / 'source'
-EVIDENCE = ROOT / 'benchmarks/native-tools-2026-09-08'
+EVIDENCE = WORK / 'doctor-evidence'
 
 
 def run(arguments, **kwargs):
@@ -21,6 +21,7 @@ def run(arguments, **kwargs):
 
 def main():
     WORK.mkdir(exist_ok=True)
+    EVIDENCE.mkdir(exist_ok=True)
     if not SOURCE.exists():
         shutil.copytree(BASE / 'source', SOURCE)
     destination = WORK / 'installation'
@@ -34,7 +35,14 @@ def main():
         '    int t0;\n    int wsh_result = wsh_cli(argc, argv);\n'
         '    if (wsh_result >= 0)\n        return wsh_result;\n#ifdef USE_LOCALE', 1)
     assert source != original and source.count('wsh_cli(argc, argv)') == 1
+    source = source.replace('    init_jobs(argv, environ);',
+        '    if (wsh_doctor_fd >= 0)\n        argv = wsh_doctor_arguments;\n\n    init_jobs(argv, environ);', 1)
+    source = source.replace('    fdtable[0] = fdtable[1] = fdtable[2] = FDT_EXTERNAL;',
+        '    fdtable[0] = fdtable[1] = fdtable[2] = FDT_EXTERNAL;\n'
+        '    if (wsh_doctor_fd >= 0)\n        fdtable[wsh_doctor_fd] = FDT_INTERNAL;', 1)
+    source = source.replace('    run_init_scripts();', '    run_init_scripts();\n    wsh_doctor_finish();', 1)
     (SOURCE / 'Src/init.c').write_text(source)
+    shutil.copy2(ROOT / 'native/doctor.c', SOURCE / 'Src/wsh-doctor.c')
     shutil.copy2(ROOT / 'native/tools.c', SOURCE / 'Src/wsh-tools.c')
     inputs = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
               for p in sorted((ROOT / 'native').rglob('*')) if p.is_file() and '__pycache__' not in p.parts}

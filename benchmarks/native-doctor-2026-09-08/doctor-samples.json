@@ -1,0 +1,252 @@
+[
+  {
+    "pair": 0,
+    "rust_ms": 12.330112,
+    "native_ms": 10.10112
+  },
+  {
+    "pair": 1,
+    "native_ms": 10.083241,
+    "rust_ms": 12.215209
+  },
+  {
+    "pair": 2,
+    "rust_ms": 12.181758,
+    "native_ms": 10.264315
+  },
+  {
+    "pair": 3,
+    "native_ms": 10.189933,
+    "rust_ms": 12.228439
+  },
+  {
+    "pair": 4,
+    "rust_ms": 12.128337,
+    "native_ms": 10.198133
+  },
+  {
+    "pair": 5,
+    "native_ms": 10.04066,
+    "rust_ms": 12.144817
+  },
+  {
+    "pair": 6,
+    "rust_ms": 12.181538,
+    "native_ms": 10.156822
+  },
+  {
+    "pair": 7,
+    "native_ms": 10.09348,
+    "rust_ms": 12.219629
+  },
+  {
+    "pair": 8,
+    "rust_ms": 12.317872,
+    "native_ms": 11.037912
+  },
+  {
+    "pair": 9,
+    "native_ms": 10.259625,
+    "rust_ms": 12.218079
+  },
+  {
+    "pair": 10,
+    "rust_ms": 12.111167,
+    "native_ms": 10.10143
+  },
+  {
+    "pair": 11,
+    "native_ms": 9.983859,
+    "rust_ms": 12.155997
+  },
+  {
+    "pair": 12,
+    "rust_ms": 12.156428,
+    "native_ms": 9.952767
+  },
+  {
+    "pair": 13,
+    "native_ms": 9.910847,
+    "rust_ms": 12.155288
+  },
+  {
+    "pair": 14,
+    "rust_ms": 12.145477,
+    "native_ms": 10.015509
+  },
+  {
+    "pair": 15,
+    "native_ms": 9.969548,
+    "rust_ms": 12.133687
+  },
+  {
+    "pair": 16,
+    "rust_ms": 12.129167,
+    "native_ms": 9.987408
+  },
+  {
+    "pair": 17,
+    "native_ms": 9.952457,
+    "rust_ms": 12.207569
+  },
+  {
+    "pair": 18,
+    "rust_ms": 12.164688,
+    "native_ms": 9.985548
+  },
+  {
+    "pair": 19,
+    "native_ms": 9.972548,
+    "rust_ms": 12.158268
+  },
+  {
+    "pair": 20,
+    "rust_ms": 12.157787,
+    "native_ms": 9.996329
+  },
+  {
+    "pair": 21,
+    "native_ms": 9.942147,
+    "rust_ms": 12.207889
+  },
+  {
+    "pair": 22,
+    "rust_ms": 12.119147,
+    "native_ms": 9.951727
+  },
+  {
+    "pair": 23,
+    "native_ms": 9.939747,
+    "rust_ms": 12.103747
+  },
+  {
+    "pair": 24,
+    "rust_ms": 12.168758,
+    "native_ms": 9.942927
+  },
+  {
+    "pair": 25,
+    "native_ms": 9.981438,
+    "rust_ms": 12.138028
+  },
+  {
+    "pair": 26,
+    "rust_ms": 12.159837,
+    "native_ms": 10.014659
+  },
+  {
+    "pair": 27,
+    "native_ms": 9.938648,
+    "rust_ms": 12.120586
+  },
+  {
+    "pair": 28,
+    "rust_ms": 12.153518,
+    "native_ms": 9.920727
+  },
+  {
+    "pair": 29,
+    "native_ms": 9.885726,
+    "rust_ms": 12.160408
+  },
+  {
+    "pair": 30,
+    "rust_ms": 12.106216,
+    "native_ms": 9.991528
+  },
+  {
+    "pair": 31,
+    "native_ms": 9.903997,
+    "rust_ms": 12.154068
+  },
+  {
+    "pair": 32,
+    "rust_ms": 12.164697,
+    "native_ms": 10.401218
+  },
+  {
+    "pair": 33,
+    "native_ms": 10.329246,
+    "rust_ms": 12.213149
+  },
+  {
+    "pair": 34,
+    "rust_ms": 12.25469,
+    "native_ms": 10.087441
+  },
+  {
+    "pair": 35,
+    "native_ms": 10.023999,
+    "rust_ms": 12.135357
+  },
+  {
+    "pair": 36,
+    "rust_ms": 12.116907,
+    "native_ms": 10.015159
+  },
+  {
+    "pair": 37,
+    "native_ms": 9.993208,
+    "rust_ms": 12.149298
+  },
+  {
+    "pair": 38,
+    "rust_ms": 12.115577,
+    "native_ms": 10.014548
+  },
+  {
+    "pair": 39,
+    "native_ms": 9.927417,
+    "rust_ms": 12.136468
+  },
+  {
+    "pair": 40,
+    "rust_ms": 12.149517,
+    "native_ms": 10.026149
+  },
+  {
+    "pair": 41,
+    "native_ms": 10.05561,
+    "rust_ms": 12.150548
+  },
+  {
+    "pair": 42,
+    "rust_ms": 12.092206,
+    "native_ms": 10.08405
+  },
+  {
+    "pair": 43,
+    "native_ms": 9.993878,
+    "rust_ms": 12.141327
+  },
+  {
+    "pair": 44,
+    "rust_ms": 12.120617,
+    "native_ms": 10.028589
+  },
+  {
+    "pair": 45,
+    "native_ms": 9.917227,
+    "rust_ms": 12.166708
+  },
+  {
+    "pair": 46,
+    "rust_ms": 12.134637,
+    "native_ms": 10.119372
+  },
+  {
+    "pair": 47,
+    "native_ms": 9.919026,
+    "rust_ms": 12.23931
+  },
+  {
+    "pair": 48,
+    "rust_ms": 12.147377,
+    "native_ms": 10.144832
+  },
+  {
+    "pair": 49,
+    "native_ms": 10.06573,
+    "rust_ms": 12.139378
+  }
+]

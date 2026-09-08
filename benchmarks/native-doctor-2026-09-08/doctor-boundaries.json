@@ -1,0 +1,10 @@
+[
+  "absent activation state ignored",
+  "corrupt activation state ignored",
+  "unreadable activation state ignored",
+  "doctor extra and non-UTF-8 arguments rejected",
+  "inconsistent, huge and control-containing ownership fails without reflecting input",
+  "background child is no longer running after successful doctor",
+  "real global startup is read; empty-file counterfactual fails the startup assertion",
+  "missing installed integration returns an explicit unavailable diagnostic"
+]

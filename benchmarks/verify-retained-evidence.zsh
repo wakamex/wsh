@@ -35,4 +35,6 @@ python3 ./benchmarks/verify-native-entrypoint-evidence.py
 
 python3 ./benchmarks/verify-native-tools-evidence.py
 
+python3 ./benchmarks/verify-native-doctor-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

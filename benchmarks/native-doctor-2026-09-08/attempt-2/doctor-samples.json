@@ -1,0 +1,252 @@
+[
+  {
+    "pair": 0,
+    "rust_ms": 12.349632,
+    "native_ms": 19.026815
+  },
+  {
+    "pair": 1,
+    "native_ms": 19.059156,
+    "rust_ms": 12.226819
+  },
+  {
+    "pair": 2,
+    "rust_ms": 12.194139,
+    "native_ms": 18.999574
+  },
+  {
+    "pair": 3,
+    "native_ms": 19.034725,
+    "rust_ms": 12.24685
+  },
+  {
+    "pair": 4,
+    "rust_ms": 12.130477,
+    "native_ms": 19.127767
+  },
+  {
+    "pair": 5,
+    "native_ms": 19.288041,
+    "rust_ms": 12.189368
+  },
+  {
+    "pair": 6,
+    "rust_ms": 12.120327,
+    "native_ms": 18.986494
+  },
+  {
+    "pair": 7,
+    "native_ms": 19.032235,
+    "rust_ms": 12.169988
+  },
+  {
+    "pair": 8,
+    "rust_ms": 12.116377,
+    "native_ms": 18.917052
+  },
+  {
+    "pair": 9,
+    "native_ms": 18.904032,
+    "rust_ms": 12.123697
+  },
+  {
+    "pair": 10,
+    "rust_ms": 12.126477,
+    "native_ms": 18.981684
+  },
+  {
+    "pair": 11,
+    "native_ms": 18.919032,
+    "rust_ms": 12.142677
+  },
+  {
+    "pair": 12,
+    "rust_ms": 12.118597,
+    "native_ms": 18.988454
+  },
+  {
+    "pair": 13,
+    "native_ms": 18.947453,
+    "rust_ms": 12.114347
+  },
+  {
+    "pair": 14,
+    "rust_ms": 12.099036,
+    "native_ms": 18.890142
+  },
+  {
+    "pair": 15,
+    "native_ms": 18.862961,
+    "rust_ms": 12.108576
+  },
+  {
+    "pair": 16,
+    "rust_ms": 12.108067,
+    "native_ms": 18.900942
+  },
+  {
+    "pair": 17,
+    "native_ms": 18.860161,
+    "rust_ms": 12.129517
+  },
+  {
+    "pair": 18,
+    "rust_ms": 12.116027,
+    "native_ms": 18.895432
+  },
+  {
+    "pair": 19,
+    "native_ms": 18.929172,
+    "rust_ms": 12.191019
+  },
+  {
+    "pair": 20,
+    "rust_ms": 12.130867,
+    "native_ms": 19.002124
+  },
+  {
+    "pair": 21,
+    "native_ms": 18.957753,
+    "rust_ms": 12.139048
+  },
+  {
+    "pair": 22,
+    "rust_ms": 12.142307,
+    "native_ms": 19.009734
+  },
+  {
+    "pair": 23,
+    "native_ms": 18.974194,
+    "rust_ms": 12.173058
+  },
+  {
+    "pair": 24,
+    "rust_ms": 12.148618,
+    "native_ms": 19.193478
+  },
+  {
+    "pair": 25,
+    "native_ms": 19.305131,
+    "rust_ms": 12.267141
+  },
+  {
+    "pair": 26,
+    "rust_ms": 12.176658,
+    "native_ms": 19.094546
+  },
+  {
+    "pair": 27,
+    "native_ms": 18.996484,
+    "rust_ms": 12.200769
+  },
+  {
+    "pair": 28,
+    "rust_ms": 12.179158,
+    "native_ms": 18.987414
+  },
+  {
+    "pair": 29,
+    "native_ms": 19.028965,
+    "rust_ms": 12.25601
+  },
+  {
+    "pair": 30,
+    "rust_ms": 12.163638,
+    "native_ms": 18.969923
+  },
+  {
+    "pair": 31,
+    "native_ms": 18.988274,
+    "rust_ms": 12.171298
+  },
+  {
+    "pair": 32,
+    "rust_ms": 12.185109,
+    "native_ms": 19.076436
+  },
+  {
+    "pair": 33,
+    "native_ms": 19.130527,
+    "rust_ms": 12.170148
+  },
+  {
+    "pair": 34,
+    "rust_ms": 12.127997,
+    "native_ms": 18.987664
+  },
+  {
+    "pair": 35,
+    "native_ms": 18.907602,
+    "rust_ms": 12.170878
+  },
+  {
+    "pair": 36,
+    "rust_ms": 12.126237,
+    "native_ms": 19.035385
+  },
+  {
+    "pair": 37,
+    "native_ms": 18.896272,
+    "rust_ms": 12.191438
+  },
+  {
+    "pair": 38,
+    "rust_ms": 12.153888,
+    "native_ms": 19.058345
+  },
+  {
+    "pair": 39,
+    "native_ms": 19.153048,
+    "rust_ms": 12.25298
+  },
+  {
+    "pair": 40,
+    "rust_ms": 12.172558,
+    "native_ms": 19.036455
+  },
+  {
+    "pair": 41,
+    "native_ms": 18.965073,
+    "rust_ms": 12.170958
+  },
+  {
+    "pair": 42,
+    "rust_ms": 12.179178,
+    "native_ms": 19.223049
+  },
+  {
+    "pair": 43,
+    "native_ms": 18.984204,
+    "rust_ms": 12.142987
+  },
+  {
+    "pair": 44,
+    "rust_ms": 12.119427,
+    "native_ms": 19.072776
+  },
+  {
+    "pair": 45,
+    "native_ms": 18.941743,
+    "rust_ms": 12.194668
+  },
+  {
+    "pair": 46,
+    "rust_ms": 12.195879,
+    "native_ms": 19.026365
+  },
+  {
+    "pair": 47,
+    "native_ms": 19.080016,
+    "rust_ms": 12.204659
+  },
+  {
+    "pair": 48,
+    "rust_ms": 12.137817,
+    "native_ms": 19.101806
+  },
+  {
+    "pair": 49,
+    "native_ms": 18.994634,
+    "rust_ms": 12.202419
+  }
+]

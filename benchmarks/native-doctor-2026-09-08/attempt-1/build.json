@@ -1,0 +1,29 @@
+{
+  "source_revision": "1abf1a9b4624e3f24a4291e1ec62b688fd06fd1e",
+  "inputs": {
+    "native/README.md": "952376bf992c3ce233ee5726a83495240d75e391b943b4cf9326783066416812",
+    "native/build-tools.py": "dc7f0a57ab883ca4d24baf320da6d37eebaa7756e3bcf87c1709ad0b2dfefb60",
+    "native/doctor.c": "9f743080f8e3f6d6a4e3b29fe47c7c6e129e1d27ab3f13e4dea468e8683dbc34",
+    "native/test-doctor.py": "e9a64e3ca0523f0554863884abe6840d5e8f252636f38afa11191c3024b66e30",
+    "native/test-tools.py": "8f2f4d837670a6cae068aeb941e1fe50a8d6e4d34b5c965e148ac57d53b960f1",
+    "native/tools.c": "a701a3af5d17885799dc8bbda597922bd0e4a4c31433a0a268c7ec7705e07271",
+    "baseline-init.c": "8164de1500d39ef709dab637a9c17aed212d095f686d3e8d2532a845d79a50f4"
+  },
+  "build_identity": {
+    "WSH_VERSION": "0.3.1-native-tools",
+    "WSH_SOURCE_REVISION": "1abf1a9b4624e3f24a4291e1ec62b688fd06fd1e",
+    "WSH_INPUTS_SHA256": "820426f49bc77d15a4f3402f9a72d068a2f730d00e596bdb7217931a6bb06053",
+    "WSH_ZSH_SOURCE_REVISION": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "WSH_TARGET": "x86_64-linux-gnu"
+  },
+  "binary_sha256": "b07790b6ad5a539e1de98725c4fe7b574d089c039f0b3d3042bc7a8a7b7c7ef7",
+  "control_sha256": "b810d59d4e5f82a7ec3847ac7aab293e0c452e21eedc72ddb7138718675c2eb4",
+  "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "configure": "--prefix=/var/tmp/wsh-native-entry-prototype/install/usr --enable-cap --enable-multibyte --enable-pcre\n",
+  "build_command": "python3 native/build-tools.py",
+  "environment": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8",
+    "TZ": "UTC"
+  }
+}

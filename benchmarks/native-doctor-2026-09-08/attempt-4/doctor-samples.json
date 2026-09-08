@@ -1,0 +1,252 @@
+[
+  {
+    "pair": 0,
+    "rust_ms": 12.24884,
+    "native_ms": 9.983578
+  },
+  {
+    "pair": 1,
+    "native_ms": 9.971538,
+    "rust_ms": 12.150178
+  },
+  {
+    "pair": 2,
+    "rust_ms": 12.138007,
+    "native_ms": 9.959088
+  },
+  {
+    "pair": 3,
+    "native_ms": 9.904366,
+    "rust_ms": 12.127137
+  },
+  {
+    "pair": 4,
+    "rust_ms": 12.104307,
+    "native_ms": 9.963587
+  },
+  {
+    "pair": 5,
+    "native_ms": 10.056379,
+    "rust_ms": 12.150998
+  },
+  {
+    "pair": 6,
+    "rust_ms": 12.116537,
+    "native_ms": 9.956957
+  },
+  {
+    "pair": 7,
+    "native_ms": 9.899776,
+    "rust_ms": 12.135008
+  },
+  {
+    "pair": 8,
+    "rust_ms": 12.125897,
+    "native_ms": 9.954177
+  },
+  {
+    "pair": 9,
+    "native_ms": 9.911337,
+    "rust_ms": 12.142997
+  },
+  {
+    "pair": 10,
+    "rust_ms": 12.130617,
+    "native_ms": 9.979408
+  },
+  {
+    "pair": 11,
+    "native_ms": 9.993469,
+    "rust_ms": 12.151657
+  },
+  {
+    "pair": 12,
+    "rust_ms": 12.165388,
+    "native_ms": 10.06264
+  },
+  {
+    "pair": 13,
+    "native_ms": 9.922527,
+    "rust_ms": 12.183388
+  },
+  {
+    "pair": 14,
+    "rust_ms": 12.155968,
+    "native_ms": 10.04624
+  },
+  {
+    "pair": 15,
+    "native_ms": 9.878965,
+    "rust_ms": 12.115897
+  },
+  {
+    "pair": 16,
+    "rust_ms": 12.085006,
+    "native_ms": 9.883776
+  },
+  {
+    "pair": 17,
+    "native_ms": 9.857056,
+    "rust_ms": 12.125597
+  },
+  {
+    "pair": 18,
+    "rust_ms": 12.091486,
+    "native_ms": 9.983988
+  },
+  {
+    "pair": 19,
+    "native_ms": 9.906976,
+    "rust_ms": 12.387533
+  },
+  {
+    "pair": 20,
+    "rust_ms": 12.208429,
+    "native_ms": 10.06141
+  },
+  {
+    "pair": 21,
+    "native_ms": 9.991169,
+    "rust_ms": 12.197818
+  },
+  {
+    "pair": 22,
+    "rust_ms": 12.23672,
+    "native_ms": 9.963077
+  },
+  {
+    "pair": 23,
+    "native_ms": 9.928686,
+    "rust_ms": 12.21524
+  },
+  {
+    "pair": 24,
+    "rust_ms": 12.174148,
+    "native_ms": 9.969157
+  },
+  {
+    "pair": 25,
+    "native_ms": 9.848005,
+    "rust_ms": 12.193189
+  },
+  {
+    "pair": 26,
+    "rust_ms": 12.141868,
+    "native_ms": 9.884505
+  },
+  {
+    "pair": 27,
+    "native_ms": 9.850736,
+    "rust_ms": 12.172108
+  },
+  {
+    "pair": 28,
+    "rust_ms": 12.145427,
+    "native_ms": 9.972988
+  },
+  {
+    "pair": 29,
+    "native_ms": 9.901846,
+    "rust_ms": 12.153948
+  },
+  {
+    "pair": 30,
+    "rust_ms": 12.131237,
+    "native_ms": 9.965908
+  },
+  {
+    "pair": 31,
+    "native_ms": 9.833094,
+    "rust_ms": 12.123827
+  },
+  {
+    "pair": 32,
+    "rust_ms": 12.150677,
+    "native_ms": 9.939457
+  },
+  {
+    "pair": 33,
+    "native_ms": 9.835345,
+    "rust_ms": 12.104277
+  },
+  {
+    "pair": 34,
+    "rust_ms": 12.055185,
+    "native_ms": 9.906186
+  },
+  {
+    "pair": 35,
+    "native_ms": 9.774134,
+    "rust_ms": 12.108976
+  },
+  {
+    "pair": 36,
+    "rust_ms": 12.120467,
+    "native_ms": 9.808664
+  },
+  {
+    "pair": 37,
+    "native_ms": 9.799264,
+    "rust_ms": 12.094847
+  },
+  {
+    "pair": 38,
+    "rust_ms": 12.141247,
+    "native_ms": 9.821984
+  },
+  {
+    "pair": 39,
+    "native_ms": 9.882175,
+    "rust_ms": 12.156008
+  },
+  {
+    "pair": 40,
+    "rust_ms": 12.100407,
+    "native_ms": 9.913106
+  },
+  {
+    "pair": 41,
+    "native_ms": 9.916767,
+    "rust_ms": 12.115126
+  },
+  {
+    "pair": 42,
+    "rust_ms": 12.109457,
+    "native_ms": 10.016879
+  },
+  {
+    "pair": 43,
+    "native_ms": 9.973458,
+    "rust_ms": 12.124607
+  },
+  {
+    "pair": 44,
+    "rust_ms": 12.096196,
+    "native_ms": 9.884706
+  },
+  {
+    "pair": 45,
+    "native_ms": 9.907467,
+    "rust_ms": 12.156627
+  },
+  {
+    "pair": 46,
+    "rust_ms": 12.109297,
+    "native_ms": 9.880976
+  },
+  {
+    "pair": 47,
+    "native_ms": 9.872835,
+    "rust_ms": 12.167148
+  },
+  {
+    "pair": 48,
+    "rust_ms": 12.102337,
+    "native_ms": 9.901566
+  },
+  {
+    "pair": 49,
+    "native_ms": 9.977878,
+    "rust_ms": 12.172018
+  }
+]
