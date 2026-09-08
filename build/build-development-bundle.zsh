@@ -47,6 +47,13 @@ fi
   print -u2 -- "error: Zsh root was not built from the selected source lock: ${zsh_root}"
   exit 1
 }
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  native_build_identity=$(python3 "${repository_root}/native/prepare-build.py" "$zsh_source_lock")
+  [[ -r ${zsh_root}/.wsh-native-build.sha256 && $(<${zsh_root}/.wsh-native-build.sha256) == $native_build_identity ]] || {
+    print -u2 -- 'error: native source or compiler identity differs from the selected Zsh build'
+    exit 1
+  }
+fi
 cd "$repository_root"
 cargo build --release --locked --workspace
 
@@ -56,6 +63,9 @@ trap 'rm -rf -- "$stage"' EXIT INT TERM
 chmod 700 "$stage"
 
 install -D -m 755 "${zsh_root}/bin/zsh" "${stage}/bin/zsh"
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  install -D -m 755 "${zsh_root}/bin/wsh" "${stage}/bin/wsh"
+fi
 install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
 cp -R -- "${zsh_root}/lib" "$stage/lib"
 mkdir -p -- "${stage}/share/zsh/${zsh_version}"
@@ -79,10 +89,15 @@ install -D -m 644 "${repository_root}/integration/syntax-highlighting.zsh" "${st
 cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/share/wsh/defaults/zsh-syntax-highlighting"
 (cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/zsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
 find "${stage}/share/wsh/defaults/zsh-syntax-highlighting" -type f -exec chmod 644 {} +
-install -D -m 644 "${repository_root}/integration/zdotdir.zshenv" "${stage}/share/wsh/zdotdir/.zshenv"
-install -D -m 644 "${repository_root}/integration/zdotdir.zprofile" "${stage}/share/wsh/zdotdir/.zprofile"
-install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share/wsh/zdotdir/.zshrc"
-install -D -m 644 "${repository_root}/integration/zdotdir.zlogin" "${stage}/share/wsh/zdotdir/.zlogin"
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  install -D -m 644 "${repository_root}/integration/native-before.zsh" "${stage}/share/wsh/native-before.zsh"
+  install -D -m 644 "${repository_root}/integration/native-after.zsh" "${stage}/share/wsh/native-after.zsh"
+else
+  install -D -m 644 "${repository_root}/integration/zdotdir.zshenv" "${stage}/share/wsh/zdotdir/.zshenv"
+  install -D -m 644 "${repository_root}/integration/zdotdir.zprofile" "${stage}/share/wsh/zdotdir/.zprofile"
+  install -D -m 644 "${repository_root}/integration/zdotdir.zshrc" "${stage}/share/wsh/zdotdir/.zshrc"
+  install -D -m 644 "${repository_root}/integration/zdotdir.zlogin" "${stage}/share/wsh/zdotdir/.zlogin"
+fi
 install -D -m 644 "${repository_root}/schemas/bundle.schema.json" "${stage}/share/wsh/schemas/bundle.schema.json"
 install -D -m 644 "${repository_root}/schemas/theme.schema.json" "${stage}/share/wsh/schemas/theme.schema.json"
 install -D -m 644 "${repository_root}/integration/directory-jump.zsh" "${stage}/share/wsh/defaults/directory-jump.zsh"

@@ -106,6 +106,12 @@ while IFS=$'\t' read -r test_patch_path test_patch_sha256; do
   verify_patch "$test_patch_path" "$test_patch_sha256" test
 done < <(jq -r '.test_patches[] | [.path, .sha256] | @tsv' "$source_lock")
 
+native_build_identity=
+if jq -e 'has("native")' "$source_lock" >/dev/null; then
+  native_build_identity=$(python3 "${repository_root}/native/prepare-build.py" "$source_lock")
+fi
+readonly native_build_identity
+
 mkdir -p -- "$cache_dir" "$output_root"
 
 if [[ -x ${output_dir}/bin/zsh ]]; then
@@ -113,6 +119,12 @@ if [[ -x ${output_dir}/bin/zsh ]]; then
     print -u2 -- "error: existing output was built from a different Zsh source lock: ${output_dir}"
     exit 1
   }
+  if [[ -n $native_build_identity ]]; then
+    [[ -r ${output_dir}/.wsh-native-build.sha256 && $(<${output_dir}/.wsh-native-build.sha256) == $native_build_identity ]] || {
+      print -u2 -- "error: existing native output has a different compiled identity; select a fresh WSH_ZSH_OUTPUT_ROOT: ${output_dir}"
+      exit 1
+    }
+  fi
   actual_version=$(${output_dir}/bin/zsh --version)
   if [[ $actual_version == "zsh ${zsh_version}"* ]]; then
     print -r -- "$output_dir"
@@ -175,6 +187,13 @@ if (( source_patch_count > 0 )); then
     patch --batch --forward --strip=1 < "$source_patch"
   done < <(jq -r '.source_patches[] | [.path, .sha256] | @tsv' "$source_lock")
 fi
+if [[ -n $native_build_identity ]]; then
+  prepared_identity=$(python3 "${repository_root}/native/prepare-build.py" "$source_lock" "$PWD")
+  [[ $prepared_identity == $native_build_identity ]] || {
+    print -u2 -- 'error: native source identity changed during build preparation'
+    exit 1
+  }
+fi
 if [[ $preconfigure == true ]]; then
   ./Util/preconfig
 fi
@@ -200,6 +219,10 @@ if [[ ! -x ${staged_install}/bin/zsh ]]; then
   exit 1
 fi
 print -r -- "$source_lock_sha256" >| "${staged_install}/.wsh-source-lock.sha256"
+if [[ -n $native_build_identity ]]; then
+  print -r -- "$native_build_identity" >| "${staged_install}/.wsh-native-build.sha256"
+  install -m 755 "${staged_install}/bin/zsh" "${staged_install}/bin/wsh"
+fi
 
 mv -- "$staged_install" "$output_dir"
 trap - EXIT INT TERM

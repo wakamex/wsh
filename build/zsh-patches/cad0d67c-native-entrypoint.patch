@@ -1,0 +1,142 @@
+--- a/Src/init.c
++++ b/Src/init.c
+@@ -1476,6 +1476,8 @@
+  * then we source the standard sh/ksh scripts instead of *
+  * the standard zsh scripts                              */
+ 
++#include "wsh-startup.c"
++
+ /**/
+ void
+ run_init_scripts(void)
+@@ -1505,14 +1507,17 @@
+ 	} else
+ 	    source("/etc/suid_profile");
+     } else {
++        wsh_setup();
+ #ifdef GLOBAL_ZSHENV
+ 	source(GLOBAL_ZSHENV);
+ #endif
+ 
+ 	if (isset(RCS) && unset(PRIVILEGED))
+ 	{
+-	    if (interact) {
++	    if (interact && !wsh_integration) {
+ 		/*
++		 * Wsh supplies defaults without creating user startup files.
++		 * Without Wsh integration, retain the upstream newuser behavior.
+ 		 * Always attempt to load the newuser module to perform
+ 		 * checks for new zsh users.  Don't care if we can't load it.
+ 		 */
+@@ -1522,7 +1527,12 @@
+ 		}
+ 	    }
+ 
+-	    sourcehome(".zshenv");
++	    {
++            wsh_profile("user-zshenv-start");
++            sourcehome(".zshenv");
++            wsh_profile("user-zshenv-end");
++            wsh_profile("bundle-zshenv-end");
++        }
+ 	}
+ 	if (islogin) {
+ #ifdef GLOBAL_ZPROFILE
+@@ -1530,7 +1540,11 @@
+ 		    source(GLOBAL_ZPROFILE);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zprofile");
++		{
++            wsh_profile("user-zprofile-start");
++            sourcehome(".zprofile");
++            wsh_profile("user-zprofile-end");
++        }
+ 	}
+ 	if (interact) {
+ #ifdef GLOBAL_ZSHRC
+@@ -1538,17 +1552,30 @@
+ 		source(GLOBAL_ZSHRC);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zshrc");
+-	}
++		{
++            wsh_profile("user-zshrc-start");
++            sourcehome(".zshrc");
++            wsh_profile("user-zshrc-end");
++        }
++	}
++        if (interact && wsh_integration) {
++            wsh_resource_paths();
++            wsh_source("native-after.zsh");
++        }
+ 	if (islogin) {
+ #ifdef GLOBAL_ZLOGIN
+ 	    if (isset(RCS) && isset(GLOBALRCS))
+ 		source(GLOBAL_ZLOGIN);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zlogin");
+-	}
+-    }
++		{
++            wsh_profile("user-zlogin-start");
++            sourcehome(".zlogin");
++            wsh_profile("user-zlogin-end");
++        }
++	}
++    }
++    wsh_finish();
+     noerrexit = 0;
+     nohistsave = 0;
+ }
+@@ -1886,16 +1913,27 @@
+  * so zsh.exe can found it on Cygwin
+  */
+ 
++#include "wsh-tools.c"
++
+ /**/
+ mod_export int
+-zsh_main(UNUSED(int argc), char **argv)
++zsh_main(int argc, char **argv)
+ {
+     char **t, *runscript = NULL, *zsh_name;
+     char *cmd;			/* argument to -c */
+     int t0;
++    int wsh_result = wsh_cli(argc, argv);
++    if (wsh_result >= 0)
++        return wsh_result;
+ #ifdef USE_LOCALE
+     setlocale(LC_ALL, "");
+ #endif
++
++    if (wsh_doctor_fd >= 0)
++        argv = wsh_doctor_arguments;
++
++    if (wsh_foreground_count)
++        argv = wsh_foreground_arguments;
+ 
+     init_jobs(argv, environ);
+ 
+@@ -1934,6 +1972,8 @@
+     fdtable_size = zopenmax();
+     fdtable = zshcalloc(fdtable_size*sizeof(*fdtable));
+     fdtable[0] = fdtable[1] = fdtable[2] = FDT_EXTERNAL;
++    if (wsh_doctor_fd >= 0)
++        fdtable[wsh_doctor_fd] = FDT_INTERNAL;
+ 
+     createoptiontable();
+     /* sets emulation, LOGINSHELL, PRIVILEGED, ZLE, INTERACTIVE,
+@@ -1948,8 +1988,10 @@
+     init_bltinmods();
+     init_builtins();
+     run_init_scripts();
++    wsh_doctor_finish();
+     setupshin(runscript);
+     init_misc(cmd, zsh_name);
++    wsh_foreground_run();
+ 
+     for (;;) {
+ 	/*

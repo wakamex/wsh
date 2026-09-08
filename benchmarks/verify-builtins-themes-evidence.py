@@ -12,7 +12,9 @@ root = Path(__file__).resolve().parent.parent
 out = root / 'benchmarks/builtins-themes-2026-09-05'
 for line in (out / 'SHA256SUMS').read_text().splitlines():
     expected, name = line.split('  ', 1)
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
+    data = (subprocess.check_output(['git', '-C', str(root), 'show', '4dafee9cb740677a50f8fe22677235089c7b311d:' + name])
+            if name in ('build/build-development-bundle.zsh', 'benchmarks/verify-builtins-themes-evidence.py') else (root / name).read_bytes())
+    assert hashlib.sha256(data).hexdigest() == expected, name
 
 pairs = {}
 for r in csv.DictReader((out / 'accepted-directory-samples.tsv').open(), delimiter='\t'):

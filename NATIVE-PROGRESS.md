@@ -4,9 +4,9 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 
 | Stage | Status | Evidence or next action |
 |---|---|---|
-| 1. Native tools | Complete in native workbench | Version and doctor pass. [Version](benchmarks/native-tools-2026-09-08/report.md), [doctor](benchmarks/native-doctor-2026-09-08/report.md) |
-| 2. Native startup and foreground | In progress | [Native foreground action passes](benchmarks/native-foreground-2026-09-08/report.md); integrate startup and tools into the locked build |
-| 3. System package and login | Pending | Real RPM and disposable VM transactions/accounts |
+| 1. Native tools | Complete in locked native build | Version and doctor pass. [Version](benchmarks/native-tools-2026-09-08/report.md), [doctor](benchmarks/native-doctor-2026-09-08/report.md) |
+| 2. Native startup and foreground | Complete in locked native build | [Foreground action](benchmarks/native-foreground-2026-09-08/report.md) and [startup/build comparison](benchmarks/native-build-2026-09-08/report.md) pass |
+| 3. System package and login | In progress | Real RPM and disposable VM transactions/accounts |
 | 4. Profiling | Pending | Native lifecycle and report comparison |
 | 5. C Git collector | Pending | Hold helper boundary fixed |
 | 6. C themes and rendering | Pending | Preserve definition and rendering behavior before simplification |

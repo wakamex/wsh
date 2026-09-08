@@ -1,0 +1,13 @@
+{
+  "command": "python3 native/measure-startup.py /var/tmp/wsh-native-build-matched-control /code/wsh/bundles/1dec372bc0af0158ff0a2f95587ff01f91fb4c71d3dc1de3d866c7c95a2630dc /var/tmp/wsh-native-build-final-tests/timing",
+  "cpu": 0,
+  "trace_mode": "off",
+  "zshrc": "PROMPT=\"NATIVE> \"\nZSHZ_DATA=$HOME/jump-data\n",
+  "zshenv": "unsetopt globalrcs\n",
+  "source_revision": "4dafee9cb740677a50f8fe22677235089c7b311d",
+  "native_sha256": "49b6592c24921751e33bba7c9e358fc09a97165a9ff37fdc154c90e7d90bef97",
+  "control_sha256": "e0dcc03af80fc101532648466155a02f0f998d04cfc3cd37aeab969905aedb04",
+  "runtime_sha256": "40a3303a51cf7e4bea8304b727fdc1a56cc2224f447d841ccd72921e2098872b",
+  "manifest_sha256": "1dec372bc0af0158ff0a2f95587ff01f91fb4c71d3dc1de3d866c7c95a2630dc",
+  "correctness": "primary editable marker and direct native PID; separate startup and contract suites"
+}
