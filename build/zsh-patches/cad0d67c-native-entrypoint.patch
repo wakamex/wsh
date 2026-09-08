@@ -91,7 +91,7 @@
      noerrexit = 0;
      nohistsave = 0;
  }
-@@ -1886,16 +1913,27 @@
+@@ -1886,16 +1913,30 @@
   * so zsh.exe can found it on Cygwin
   */
  
@@ -117,10 +117,13 @@
 +
 +    if (wsh_foreground_count)
 +        argv = wsh_foreground_arguments;
++
++    if (wsh_profile_arguments)
++        argv = wsh_profile_arguments;
  
      init_jobs(argv, environ);
  
-@@ -1934,6 +1972,8 @@
+@@ -1934,6 +1975,8 @@
      fdtable_size = zopenmax();
      fdtable = zshcalloc(fdtable_size*sizeof(*fdtable));
      fdtable[0] = fdtable[1] = fdtable[2] = FDT_EXTERNAL;
@@ -129,7 +132,7 @@
  
      createoptiontable();
      /* sets emulation, LOGINSHELL, PRIVILEGED, ZLE, INTERACTIVE,
-@@ -1948,8 +1988,10 @@
+@@ -1948,8 +1991,10 @@
      init_bltinmods();
      init_builtins();
      run_init_scripts();

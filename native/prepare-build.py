@@ -37,7 +37,7 @@ if len(sys.argv)>2:
     (destination/'wsh-build.h').write_text(header)
 identity = {'header': header,
             'compiler': subprocess.check_output([compiler, '--version'], text=True),
-            'flags': {name: os.environ.get(name, '') for name in ('CC', 'CFLAGS', 'CPPFLAGS', 'LDFLAGS', 'WSH_BUILDER_PACKAGE_LOCK_SHA256')},
+            'flags': {name: os.environ.get(name, '') for name in ('CC', 'CFLAGS', 'CPPFLAGS', 'LDFLAGS', 'LIBS', 'WSH_BUILDER_PACKAGE_LOCK_SHA256')},
             'builder_sha256': hashlib.sha256((ROOT/'build/build-zsh.zsh').read_bytes()).hexdigest(),
             'preparation_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 print(hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest())

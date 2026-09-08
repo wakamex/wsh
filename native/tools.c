@@ -3,6 +3,8 @@
 #ifndef WSH_CLI_STANDALONE
 #include "wsh-doctor.c"
 #include "wsh-foreground.c"
+#include "wsh-profile.c"
+#include "wsh-profile-report.c"
 #endif
 
 static int
@@ -11,6 +13,15 @@ wsh_cli(int argc, char **arguments)
     const char *option = argc > 1 ? arguments[1] : "";
 
 #ifndef WSH_CLI_STANDALONE
+    if (!strcmp(option, "--wsh-profile"))
+        return wsh_profile_start(argc, arguments);
+    if (!strcmp(option, "--wsh-profile-report")) {
+        if (argc != 3) {
+            fputs("usage: wsh --wsh-profile-report <directory>\n", stderr);
+            return 2;
+        }
+        return wsh_profile_report(arguments[2]);
+    }
     if (!strcmp(option, "--wsh-run"))
         return wsh_foreground_parse(argc, arguments);
     if (!strcmp(option, "--wsh-doctor")) {
@@ -45,6 +56,8 @@ wsh_cli(int argc, char **arguments)
         fputs("usage: wsh [native Zsh arguments]\n"
               "       wsh --wsh-version\n"
               "       wsh --wsh-doctor\n"
+              "       wsh --wsh-profile [--functions] -- [Zsh arguments]\n"
+              "       wsh --wsh-profile-report <directory>\n"
               "       wsh --wsh-run [--login] -- <command> [arguments...]\n"
               "       wsh --wsh-help\n"
               "Ordinary script names and -- retain their Zsh meanings.\n",

@@ -26,7 +26,8 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
                               'WSH_CONFIG_STATE:${redirected_zdotdir}:unset:1:off:on:2:2:')
         source=source.replace('user ZDOTDIR was not restored', 'native ZDOTDIR or removed launcher metadata is incorrect')
     if name=='prompt-ownership':
-        source=source.replace('profile-existing profile-wsh profile-wakamex profile-path;', ';')
+        source=source.replace('exec $manager profile --state-root $state', 'exec $bundle/bin/wsh --wsh-profile -- -d')
+        source=source.replace('$manager profile report ', '$bundle/bin/wsh --wsh-profile-report ')
         source=source.replace('export WSH_TEST_ZSH=$bundle/bin/zsh', 'export WSH_TEST_ZSH=/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh')
         source=source.replace('exec $bundle/bin/zsh -di ${=login_flag}', 'exec $WSH_TEST_ZSH -di ${=login_flag}')
     if name=='foreground-startup':
