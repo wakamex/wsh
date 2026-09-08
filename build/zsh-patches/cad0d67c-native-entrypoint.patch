@@ -9,6 +9,14 @@
  /**/
  void
  run_init_scripts(void)
+@@ -1482,6 +1484,7 @@
+ {
+     noerrexit = NOERREXIT_EXIT | NOERREXIT_RETURN | NOERREXIT_SIGNAL;
++    wsh_profile_parameters();
+ 
+     if (EMULATION(EMULATE_KSH|EMULATE_SH)) {
+ 	if (islogin)
+ 	    source("/etc/profile");
 @@ -1505,14 +1507,17 @@
  	} else
  	    source("/etc/suid_profile");

@@ -18,13 +18,19 @@ static long long wsh_profile_started;
 static struct { const char *name; long long elapsed; } wsh_profile_startup[32];
 static size_t wsh_profile_startup_count;
 
+static int
+wsh_profile_active(void)
+{
+    return wsh_profile_owner && wsh_profile_owner == getpid();
+}
+
 /* Only native startup passes fixed names here. No allocation, parsing or I/O. */
 static void
 wsh_profile(char *event)
 {
     struct timeval now;
     long long elapsed;
-    if (!wsh_profile_owner || wsh_profile_owner != getpid() || wsh_profile_startup_count == 32)
+    if (!wsh_profile_active() || wsh_profile_startup_count == 32)
         return;
     gettimeofday(&now, NULL);
     elapsed = (long long)now.tv_sec * 1000000 + now.tv_usec - wsh_profile_started;

@@ -189,6 +189,8 @@ _wsh_runtime_precmd() {
 
 _wsh_runtime_start() {
   emulate -L zsh
+  (( ${+WSH_TRACE_FILE} )) && local -x WSH_TRACE_FILE=$WSH_TRACE_FILE
+  (( ${+WSH_PROFILE_STARTED_UNIX_US} )) && local -x WSH_PROFILE_STARTED_UNIX_US=$WSH_PROFILE_STARTED_UNIX_US
   (( $+functions[_wsh_profile_event] )) && _wsh_profile_event runtime-start
   local theme=$WSH_THEME
   case $theme in

@@ -7,7 +7,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 | 1. Native tools | Complete in locked native build | Version and doctor pass. [Version](benchmarks/native-tools-2026-09-08/report.md), [doctor](benchmarks/native-doctor-2026-09-08/report.md) |
 | 2. Native startup and foreground | Complete in locked native build | [Foreground action](benchmarks/native-foreground-2026-09-08/report.md) and [startup/build comparison](benchmarks/native-build-2026-09-08/report.md) pass |
 | 3. System package and login | Tested RPM prototype; policy decisions retained | [Real Fedora PAM, SELinux, reboot and package tests pass](benchmarks/native-package-2026-09-08/report.md); cross-ABI upgrade and supported removal policy remain open |
-| 4. Profiling | Native invocation/report slice passes; lifecycle work remains | [Invocation/report gates pass](benchmarks/native-profile-2026-09-08/report.md) and [native startup capture fixes early-exit loss](benchmarks/native-lifecycle-2026-09-08/report.md); review remaining profile inheritance before closing stage 4 |
+| 4. Profiling | Native path passes; report migration decisions retained | [Invocation and reporting](benchmarks/native-profile-2026-09-08/report.md), [startup recovery](benchmarks/native-lifecycle-2026-09-08/report.md), and [child isolation](benchmarks/native-profile-isolation-2026-09-08/report.md) pass; shell-owned component/function callbacks remain counted |
 | 5. C Git collector | Pending | Hold helper boundary fixed |
 | 6. C themes and rendering | Pending | Preserve definition and rendering behavior before simplification |
 | 7. Runtime process boundary | Pending | Compare the same C functionality |

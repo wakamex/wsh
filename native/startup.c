@@ -40,12 +40,39 @@ wsh_source(char *name)
 
 static void wsh_profile(char *event);
 static void wsh_profile_flush_startup(void);
+static int wsh_profile_active(void);
+
+static void
+wsh_unexport(char *name)
+{
+    Param parameter = (Param)paramtab->getnode(paramtab, name);
+    if (parameter) {
+        parameter->node.flags &= ~PM_EXPORTED;
+        if (parameter->env)
+            delenv(parameter);
+    }
+}
+
+static void
+wsh_profile_parameters(void)
+{
+    wsh_profile("native-startup-enter");
+    if (wsh_profile_active()) {
+        char **name;
+        static char *names[] = {
+            "WSH_PROFILE_DIRECTORY", "WSH_PROFILE_FILE", "WSH_PROFILE_ZPROF_FILE",
+            "WSH_PROFILE_REPORTER", "WSH_PROFILE_FUNCTIONS", "WSH_PROFILE_STARTED_UNIX_US",
+            "WSH_PROFILE_STARTED_AT", "WSH_TRACE_FILE", NULL
+        };
+        for (name = names; *name; ++name)
+            wsh_unexport(*name);
+    }
+}
 
 static void
 wsh_setup(void)
 {
     char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
-    wsh_profile("native-startup-enter");
     if (!exepath || isset(PRIVILEGED))
         return;
     wsh_root = ztrdup(exepath);
@@ -86,14 +113,8 @@ unavailable:
 static void
 wsh_finish(void)
 {
-    Param theme;
     wsh_profile_flush_startup();
     if (!wsh_integration)
         return;
-    theme = (Param)paramtab->getnode(paramtab, "WSH_THEME");
-    if (theme) {
-        theme->node.flags &= ~PM_EXPORTED;
-        if (theme->env)
-            delenv(theme);
-    }
+    wsh_unexport("WSH_THEME");
 }
