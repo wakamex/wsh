@@ -2,6 +2,8 @@
 
 `wsh` changes enter through reproducible correctness tests and benchmarks. Development starts with the smallest local runnable bundle, fixes acceptance gates before implementation, changes one causal factor at a time, and retains enough evidence to reproduce every accepted performance or correctness claim.
 
+The selected native transition follows [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IMPLEMENTATION-PLAN.md). It authorizes prototypes aimed at reducing code, dependencies, duplicated responsibilities, and compatibility glue, including C replacements for working components. Record those costs and test the resulting simplification alongside correctness and performance. The current build and release contracts below remain applicable until their replacements are implemented and validated.
+
 ## The first vertical slice is local and runnable
 
 The first implementation should prove the complete local path before adding remote distribution or ecosystem infrastructure:

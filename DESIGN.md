@@ -2,6 +2,8 @@
 
 `wsh` provides a measured service and distribution layer around upstream Zsh. It keeps Zsh language semantics, job control, and ZLE editing while supplying curated defaults, tested adapters, shared state providers, and enough profiling to attribute their cost. The first service is a shared structured Git-state runtime between Zsh events and prompt rendering. Its provider adapts the asynchronous precursor worker measured by `zsh-theme-bench`; later provider implementations can change without changing theme definitions. Structured foreground startup and native terminal reporting are accepted features outside the provider boundary. Generic environment state, completion, foreground-job events, pane history, and terminal metadata remain evidence-gated in [`FEATURES.md`](FEATURES.md), [`FOREGROUND.md`](FOREGROUND.md), [`COMPLETION.md`](COMPLETION.md), and [`TERMINAL-INTEGRATION.md`](TERMINAL-INTEGRATION.md).
 
+This document describes the current implementation. The selected native destination and ordered testing stages are in [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IMPLEMENTATION-PLAN.md); the [architecture evidence record](ARCHITECTURE-EVIDENCE.md) retains the comparisons behind those decisions. The transition evaluates C replacements and runtime boundaries while preserving local prompt and shell ownership.
+
 ## State collection and rendering have separate contracts
 
 ```text
@@ -106,7 +108,7 @@ The manager and shared runtime are implemented in Rust. A thin trusted Zsh adapt
 
 Generalizing it requires separating its structured Git result from its current glyph and prompt decisions. The provider publishes the existing field scope while trusted prompt components interpret the active definition's validated choices about whether `main` is hidden, whether a branch appears only after it changes, and which symbols and named styles represent each state.
 
-The first implementation remains above the Zsh engine. The Rust runtime communicates with the thin Zsh adapter through a small versioned protocol. A dynamically loaded Zsh module is justified only if profiling isolates meaningful cost in adapter dispatch, serialization, or copying. External Git latency does not establish that the adapter needs native in-process code.
+The current Rust runtime communicates with the Zsh adapter through a small versioned protocol. The native transition first compares a C runtime under the same process boundary, then compares helper-process and in-process execution. Measure adapter dispatch, serialization, copying, cleanup, and implementation complexity in that comparison. External Git latency alone does not establish that the adapter needs in-process code.
 
 ## Git provider implementations remain replaceable
 
@@ -162,7 +164,7 @@ The exact first application launched with `wsh -- <command> [arguments...]` runs
 
 `wsh` aims to preserve ordinary Zsh startup behavior for existing `.zshrc` files, Oh My Zsh setups, completion functions, and executable plugins. Compatibility does not mean reimplementing every Oh My Zsh plugin as a `wsh` builtin. Existing code continues to run with normal shell authority, while `wsh` can provide measured replacements for common subsystems.
 
-The default experience targets substring history search, autosuggestions, and syntax highlighting. Each enters separately by pinning, bundling, configuring, and testing an established upstream implementation as a trusted executable component. Reimplementation in Rust or a native module requires a reproduced correctness, composition, or performance problem that the established implementation cannot solve cleanly.
+The default experience provides substring history search, autosuggestions, and syntax highlighting through pinned, configured, tested upstream components. The native implementation plan authorizes separate C comparisons for these features and directory jumping. Evaluate simpler configuration changes alongside each port, and accept replacements using behavior, composition, maintenance complexity, and resource measurements. Existing implementations supply executable references for those comparisons.
 
 The first accepted default is history substring search from pinned `zsh-users/zsh-history-substring-search` source. The bundle retains that source byte for byte and precompiles it with the paired Zsh. Its adapter loads after `.zshrc`, binds the terminal's advertised Up and Down keys in the active keymap when their existing behavior is ordinary history navigation, and preserves custom bindings. Exact pinned upstream and Oh My Zsh copies are replaced with the bundled runtime definitions after a bounded in-process comparison. Modified or unknown implementations remain active and are reported as external ownership. The redundant `.zshrc` declaration remains until a later doctor result can identify it as safely removable.
 

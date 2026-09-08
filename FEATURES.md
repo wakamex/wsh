@@ -82,6 +82,7 @@ The resulting boundary remains narrow: Zsh and ZLE own parsing and editing, appl
 |---|---|
 | Lazy provider registration | A second provider whose eager parsing or startup has measurable cost; the counterfactual is conventional Zsh autoloading without a registry service |
 | Resident provider idle expiration | A provider whose repeated cold start dominates direct execution or IPC; compare short-lived execution with measured idle lifetimes, retained memory, cleanup, crash recovery, and protocol migration cost |
+| Git-state sharing across shells | Multiple Wsh shells must first demonstrate material duplicate Git work or aggregate memory cost. Compare same-repository and different-repository panes against the current per-session runtimes, measuring total memory, Git executions, CPU, and prompt freshness. Test simpler per-session request coalescing and caching before a per-user Git service; keep rendering and shell lifecycle local. Any shared prototype must preserve repository and worktree identity, relevant per-shell Git environment, invalidation after external changes, cancellation, mixed-version compatibility, disconnect cleanup, and usable prompts after service failure. Sharing the entire runtime remains deferred without separate evidence |
 | Incremental or reference-backed snapshots | A measured serialization or copy cost for a large accepted provider snapshot; keep the current small complete replacement until that cost appears |
 | Project environment transactions | A reproducible conflict, partial transition, duplicated process, or latency problem that direct `direnv` and `mise` adapters do not solve |
 | General ZLE presentation composition | A concrete autosuggestion, highlighting, selection, search, diagnostic, or modal-editing conflict that the three accepted defaults and current Zsh highlight layers cannot express |
@@ -99,21 +100,13 @@ The resulting boundary remains narrow: Zsh and ZLE own parsing and editing, appl
 
 Mature utilities remain authoritative for their domains. [Atuin](https://docs.atuin.sh/) owns structured history and synchronization, [zoxide](https://zoxide.net/) owns directory ranking, and project environment managers own trust and tool selection. `wsh` can replace duplicated shell hooks when evidence supports it, but it should not absorb their databases, ranking algorithms, or policy.
 
-## Evidence-driven sequence
+## Native implementation sequence
 
-1. Finish the Git-state provider, trusted prompt-component boundary, non-executable theme schema, benchmark comparison, immutable full-bundle layout, and signed reproducible update and rollback contract.
-2. Retain the accepted end-to-end profile, privacy, recovery, and overhead gates, then extend attribution only for features that pass their own admission experiments.
-3. Measure existing `.zshrc`, Oh My Zsh, theme, plugin, and `wsh` coexistence; restore native startup behavior and accept only deterministic compatibility treatment.
-4. Keep the accepted post-5.9 Zsh revision pinned and repeat its complete gates for every later source candidate.
-5. Retain focused doctor diagnosis for exact redundant history-search, autosuggestions, and syntax-highlighting declarations as a regression gate. Keep arbitrary startup rewriting out of scope.
-6. Retain structured foreground startup as a correctness and performance regression gate and integrate it into Wakterm restore.
-7. Retain native OSC 7 and OSC 133 correctness, parser, process, latency, first-job, and disable behavior as regression gates.
-8. Keep Wakterm's cached frontend identity while its exit, consumed-Ctrl-C, stop, continue, and replacement fixture passes. Reopen shell job events only for a remaining gap or removable polling cost.
-9. Persist a logical Wakterm pane token and test bounded and private history across restoration and process exit.
-10. Benchmark static, direct dynamic, and Wakterm-mux completion paths with cancellation and resource limits.
-11. Reduce pane metadata to fields demonstrated by Wakterm UI behavior.
-12. Prototype terminal diagnosis only against recorded lifecycle failures and reproduced compatibility rules.
-13. Investigate another candidate only after recording its baseline reproducer and expected consumer result.
+Follow [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IMPLEMENTATION-PLAN.md) for the ordered work: native version/doctor and command design; startup and exact foreground invocation; system-package login; native profiling; C collector and rendering comparisons; runtime process-boundary comparison; completion; individual interactive components; migration and release qualification. The native shell and system-package direction are selected. An all-C implementation is the preferred hypothesis, with each substantial replacement tested against the existing implementation and the smallest alternative.
+
+This sequence replaces the original launcher's initial-delivery roadmap. Existing configuration, plugin ownership, foreground jobs, terminal markers, measurement privacy, and distribution tests remain behavioral evidence and regression coverage. Their current languages, helper processes, protocols, and file formats can change with tested migration. Maintainability improvements can justify an experiment even when the current implementation passes its performance gates.
+
+Pane history, terminal metadata, application-backed completion, and terminal diagnostics retain the concrete consumer triggers above. Cross-shell Git sharing remains deferred. These candidates do not block the native login and installation work or require a generic framework.
 
 ## Boundaries remain explicit
 
