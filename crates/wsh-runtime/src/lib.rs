@@ -946,51 +946,26 @@ fn collect_git_snapshot_detailed(
         }
     };
     metrics.child_processes = 1;
-    let stdout = child.stdout.take().expect("piped Git stdout");
-    let reader = thread::spawn(move || read_git_output(stdout));
+    let mut stdout = child.stdout.take().expect("piped Git stdout");
     let started = Instant::now();
     let mut cancelled = false;
-    let status = loop {
-        if cancel.load(Ordering::Acquire) || started.elapsed() >= GIT_TIMEOUT {
-            cancelled = cancel.load(Ordering::Acquire);
-            kill_git_child(&mut child);
-            break child.wait();
-        }
-        match child.try_wait() {
-            Ok(Some(status)) => break Ok(status),
-            Ok(None) => thread::sleep(GIT_POLL_INTERVAL),
-            Err(error) => break Err(error),
-        }
-    };
-    let output = reader
-        .join()
-        .map_err(|_| "Git output reader panicked".to_owned())
-        .and_then(|result| result);
+    let collected =
+        read_git_while_waiting(&mut child, &mut stdout, cancel, started, &mut cancelled);
     metrics.git_process = Some(started.elapsed());
     if cancelled {
         return (Err("Git request cancelled".into()), true, metrics);
     }
-    match status {
-        Ok(status) if status.success() => {}
-        Ok(status) => {
-            return (
-                Err(format!("Git status exited with {status}")),
-                false,
-                metrics,
-            );
-        }
-        Err(error) => {
-            return (
-                Err(format!("could not wait for Git status: {error}")),
-                false,
-                metrics,
-            );
-        }
-    }
-    let output = match output {
-        Ok(output) => output,
+    let (status, output) = match collected {
+        Ok(result) => result,
         Err(error) => return (Err(error), false, metrics),
     };
+    if !status.success() {
+        return (
+            Err(format!("Git status exited with {status}")),
+            false,
+            metrics,
+        );
+    }
     let parsing_started = Instant::now();
     let result = parse_git_status(cwd, generation, identity, &output);
     metrics.parsing = Some(parsing_started.elapsed());
@@ -1027,16 +1002,66 @@ fn empty_snapshot(cwd: &Path, generation: u64) -> GitSnapshot {
     }
 }
 
-fn read_git_output(stdout: ChildStdout) -> Result<Vec<u8>, String> {
-    let mut output = Vec::new();
-    stdout
-        .take(MAX_GIT_OUTPUT_BYTES + 1)
-        .read_to_end(&mut output)
-        .map_err(|error| format!("could not read Git status: {error}"))?;
-    if output.len() as u64 > MAX_GIT_OUTPUT_BYTES {
-        return Err(format!("Git status exceeds {MAX_GIT_OUTPUT_BYTES} bytes"));
+fn read_git_while_waiting(
+    child: &mut std::process::Child,
+    stdout: &mut ChildStdout,
+    cancel: &AtomicBool,
+    started: Instant,
+    cancelled: &mut bool,
+) -> Result<(std::process::ExitStatus, Vec<u8>), String> {
+    use std::os::fd::AsRawFd;
+    let result = (|| {
+        let fd = stdout.as_raw_fd();
+        let flags = unsafe { libc::fcntl(fd, libc::F_GETFL) };
+        if flags < 0 || unsafe { libc::fcntl(fd, libc::F_SETFL, flags | libc::O_NONBLOCK) } < 0 {
+            return Err(format!(
+                "could not configure Git stdout: {}",
+                std::io::Error::last_os_error()
+            ));
+        }
+        let mut output = Vec::new();
+        let mut buffer = [0u8; 8192];
+        let mut status = None;
+        let mut eof = false;
+        loop {
+            if cancel.load(Ordering::Acquire) || started.elapsed() >= GIT_TIMEOUT {
+                *cancelled = cancel.load(Ordering::Acquire);
+                return Err("Git output collection interrupted".into());
+            }
+            let mut progress = false;
+            if !eof {
+                match stdout.read(&mut buffer) {
+                    Ok(0) => eof = true,
+                    Ok(count) => {
+                        if output.len() + count > MAX_GIT_OUTPUT_BYTES as usize {
+                            return Err(format!("Git status exceeds {MAX_GIT_OUTPUT_BYTES} bytes"));
+                        }
+                        output.extend_from_slice(&buffer[..count]);
+                        progress = true;
+                    }
+                    Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {}
+                    Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+                    Err(error) => return Err(format!("could not read Git status: {error}")),
+                }
+            }
+            if status.is_none() {
+                status = child
+                    .try_wait()
+                    .map_err(|error| format!("could not wait for Git status: {error}"))?;
+            }
+            if eof && let Some(status) = status {
+                return Ok((status, output));
+            }
+            if !progress {
+                thread::sleep(GIT_POLL_INTERVAL);
+            }
+        }
+    })();
+    if result.is_err() {
+        kill_git_child(child);
+        let _ = child.wait();
     }
-    Ok(output)
+    result
 }
 
 struct RepositoryIdentity {

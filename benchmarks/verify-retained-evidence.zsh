@@ -49,4 +49,6 @@ python3 ./benchmarks/verify-native-lifecycle-evidence.py
 
 python3 ./benchmarks/verify-native-profile-isolation-evidence.py
 
+python3 ./benchmarks/verify-git-pipe-lifetime-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

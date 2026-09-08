@@ -13,7 +13,7 @@ out = root / 'benchmarks/builtins-themes-2026-09-05'
 for line in (out / 'SHA256SUMS').read_text().splitlines():
     expected, name = line.split('  ', 1)
     data = (subprocess.check_output(['git', '-C', str(root), 'show', '4dafee9cb740677a50f8fe22677235089c7b311d:' + name])
-            if name in ('build/build-development-bundle.zsh', 'benchmarks/verify-builtins-themes-evidence.py', 'integration/integration.zsh') else (root / name).read_bytes())
+            if name in ('build/build-development-bundle.zsh', 'benchmarks/verify-builtins-themes-evidence.py', 'integration/integration.zsh', 'crates/wsh-runtime/src/lib.rs') else (root / name).read_bytes())
     assert hashlib.sha256(data).hexdigest() == expected, name
 
 pairs = {}

@@ -8,7 +8,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 | 2. Native startup and foreground | Complete in locked native build | [Foreground action](benchmarks/native-foreground-2026-09-08/report.md) and [startup/build comparison](benchmarks/native-build-2026-09-08/report.md) pass |
 | 3. System package and login | Tested RPM prototype; policy decisions retained | [Real Fedora PAM, SELinux, reboot and package tests pass](benchmarks/native-package-2026-09-08/report.md); cross-ABI upgrade and supported removal policy remain open |
 | 4. Profiling | Native path passes; report migration decisions retained | [Invocation and reporting](benchmarks/native-profile-2026-09-08/report.md), [startup recovery](benchmarks/native-lifecycle-2026-09-08/report.md), and [child isolation](benchmarks/native-profile-isolation-2026-09-08/report.md) pass; shell-owned component/function callbacks remain counted |
-| 5. C Git collector | Pending | Hold helper boundary fixed |
+| 5. C Git collector | Corrected Rust counterfactual passes; C port next | [Inherited stdout now remains cancellable](benchmarks/git-pipe-lifetime-2026-09-08/report.md); compare C at the same helper boundary |
 | 6. C themes and rendering | Pending | Preserve definition and rendering behavior before simplification |
 | 7. Runtime process boundary | Pending | Compare the same C functionality |
 | 8. Completion | Pending | Audit, scan, dump and first-use cost |
