@@ -1,0 +1,67 @@
+{
+  "source_revision": "605a393f1c4734b23c6551370b9d542724e77879",
+  "checkout_tree_sha256_excluding_git": "fe852ca020ffa7d6fb6210496039042df3043888b25cb77e897113dbef5fe809",
+  "tracked_changes": [
+    " M themes/wexm.zsh-theme",
+    " M themes/wezm+.zsh-theme"
+  ],
+  "theme": "robbyrussell",
+  "plugins": [
+    "git",
+    "z"
+  ],
+  "results": [
+    {
+      "variant": "launcher",
+      "test": "prompt-ownership",
+      "status": "pass",
+      "command": [
+        "build/out/zsh-cad0d67c-wsh2/bin/zsh",
+        "tests/prompt-ownership.zsh",
+        "target/release/wsh",
+        "/var/tmp/wsh-native-entry-prototype/launcher",
+        "/home/mihai/.oh-my-zsh"
+      ],
+      "log_sha256": "c6258460643fb416fa6163d18336fa5e951d8e6077083dcb13eb7322eba88329"
+    },
+    {
+      "variant": "launcher",
+      "test": "directory-jump",
+      "status": "pass",
+      "command": [
+        "build/out/zsh-cad0d67c-wsh2/bin/zsh",
+        "tests/directory-jump.zsh",
+        "target/release/wsh",
+        "/var/tmp/wsh-native-entry-prototype/launcher",
+        "/home/mihai/.oh-my-zsh"
+      ],
+      "log_sha256": "8b2194a6ffd12072c7b13d053818ec820e4d137dafef89c1c0660f88312b51c1"
+    },
+    {
+      "variant": "native",
+      "test": "prompt-ownership",
+      "status": "pass",
+      "command": [
+        "build/out/zsh-cad0d67c-wsh2/bin/zsh",
+        "tests/prompt-ownership.zsh",
+        "target/release/wsh",
+        "/var/tmp/wsh-native-entry-prototype/native",
+        "/home/mihai/.oh-my-zsh"
+      ],
+      "log_sha256": "c6258460643fb416fa6163d18336fa5e951d8e6077083dcb13eb7322eba88329"
+    },
+    {
+      "variant": "native",
+      "test": "directory-jump",
+      "status": "pass",
+      "command": [
+        "build/out/zsh-cad0d67c-wsh2/bin/zsh",
+        "tests/directory-jump.zsh",
+        "target/release/wsh",
+        "/var/tmp/wsh-native-entry-prototype/native",
+        "/home/mihai/.oh-my-zsh"
+      ],
+      "log_sha256": "8b2194a6ffd12072c7b13d053818ec820e4d137dafef89c1c0660f88312b51c1"
+    }
+  ]
+}

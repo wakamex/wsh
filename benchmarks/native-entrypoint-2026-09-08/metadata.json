@@ -1,0 +1,59 @@
+{
+  "source_revision": "a3d6c937f5219a0158234c54d4ba7099ba743a05",
+  "command": "python3 benchmarks/native-entrypoint-2026-09-08/interactive.py measure",
+  "cpu": 0,
+  "trace_mode": "off",
+  "config": "PROMPT=\"PROTOTYPE> \"\nZSHZ_DATA=$HOME/jump-data\n",
+  "config_sha256": "55269378d291cf2d425b669bc9d402794151fb74e690451bba484ba03db9fb2b",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "enabled_components": "directory jumping, history substring search, autosuggestions, syntax highlighting; existing prompt or minimal theme with local Rust runtime",
+  "artifacts": "unsigned local development prototypes",
+  "zsh_source_lock": {
+    "schema_version": 1,
+    "id": "zsh-cad0d67c",
+    "mode": "canonical-commit",
+    "version": "5.9.999.3-test",
+    "output_name": "zsh-cad0d67c-wsh2",
+    "repository": "https://github.com/zsh-users/zsh",
+    "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "archive_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+    "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+    "signature_url": null,
+    "signer_fingerprint": null,
+    "key_url": null,
+    "preconfigure": true,
+    "source_patches": [
+      {
+        "path": "build/zsh-patches/cad0d67c-terminal-integration.patch",
+        "sha256": "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8"
+      },
+      {
+        "path": "build/zsh-patches/cad0d67c-zcompile-padding.patch",
+        "sha256": "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
+      }
+    ],
+    "test_patches": [
+      {
+        "path": "build/zsh-test-patches/cad0d67c-prompt-fixture.patch",
+        "sha256": "e5f79c067b6cf470f2f9ee40d821eb1dc2c188efed00ab32d3a7e2d20483f4b7"
+      }
+    ]
+  },
+  "binaries": {
+    "launcher": {
+      "bin/wsh": "fac5b95d1840c4caf7cd4692207035631a5df1e36a3e881d988ab46b40308394",
+      "bin/zsh": "f252bd9e88d275b27f0dc9723270450bb61b34c1fbcac30c3820314a24cee50b",
+      "bin/wsh-runtime": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+      "manifest.json": "17b735cbcc0c25c6de33c394c8a88423ab5a125bd9bd640aa6d7c29d07b3ea45"
+    },
+    "native": {
+      "bin/wsh": "b810d59d4e5f82a7ec3847ac7aab293e0c452e21eedc72ddb7138718675c2eb4",
+      "bin/zsh": "b810d59d4e5f82a7ec3847ac7aab293e0c452e21eedc72ddb7138718675c2eb4",
+      "bin/wsh-runtime": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+      "manifest.json": "23c3d269f0c5efa92f8a9d918d0241079a606b08498a976570619550e8169758"
+    }
+  },
+  "harness_sha256": "20ec3a14989355281bf1e5793aa36eaa9bdec594eda7982d563af7948d4c54e9"
+}

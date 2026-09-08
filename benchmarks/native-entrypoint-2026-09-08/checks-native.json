@@ -1,0 +1,160 @@
+[
+  {
+    "variant": "native",
+    "test": "history-substring-search",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/history-substring-search.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "autosuggestions",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/autosuggestions.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "syntax-highlighting",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/syntax-highlighting.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "plugin-doctor",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/plugin-doctor.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "prompt-ownership",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/prompt-ownership.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "directory-jump",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/directory-jump.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "named-themes",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/named-themes.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "profile",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/benchmarks/native-entrypoint-2026-09-08/profile-native.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "profile-readiness",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/profile-readiness.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "config",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/zsh-config-coexistence.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native",
+      "present"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "foreground",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/foreground-startup.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native",
+      "candidate"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "early-terminal",
+    "status": 0,
+    "command": [
+      "/usr/bin/python3",
+      "/code/wsh/tests/early-terminal-policy.py",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "login-manager",
+    "status": 0,
+    "command": [
+      "/usr/bin/python3",
+      "/code/wsh/tests/login-shell.py",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/native"
+    ]
+  },
+  {
+    "variant": "native",
+    "test": "terminal",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/benchmarks/native-entrypoint-2026-09-08/terminal.zsh",
+      "/var/tmp/wsh-native-entry-prototype/native/bin/zsh",
+      "/dev/null",
+      "native",
+      "/var/tmp/wsh-native-entry-prototype/checks/native-terminal.bin"
+    ]
+  }
+]

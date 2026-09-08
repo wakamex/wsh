@@ -1,0 +1,160 @@
+[
+  {
+    "variant": "launcher",
+    "test": "history-substring-search",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/history-substring-search.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "autosuggestions",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/autosuggestions.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "syntax-highlighting",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/syntax-highlighting.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "plugin-doctor",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/plugin-doctor.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "prompt-ownership",
+    "status": 1,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/prompt-ownership.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "directory-jump",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/directory-jump.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "named-themes",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/named-themes.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "profile",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/profile.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "profile-readiness",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/profile-readiness.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "config",
+    "status": 0,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/zsh-config-coexistence.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher",
+      "present"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "foreground",
+    "status": 1,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/foreground-startup.zsh",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher",
+      "candidate"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "early-terminal",
+    "status": 0,
+    "command": [
+      "/usr/bin/python3",
+      "/code/wsh/tests/early-terminal-policy.py",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "login-manager",
+    "status": 0,
+    "command": [
+      "/usr/bin/python3",
+      "/code/wsh/tests/login-shell.py",
+      "/code/wsh/target/release/wsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher"
+    ]
+  },
+  {
+    "variant": "launcher",
+    "test": "terminal",
+    "status": 1,
+    "command": [
+      "/code/wsh/build/out/zsh-cad0d67c-wsh2/bin/zsh",
+      "/code/wsh/tests/native-terminal-integration.zsh",
+      "/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh",
+      "/dev/null",
+      "native",
+      "/var/tmp/wsh-native-entry-prototype/checks/launcher-terminal.bin"
+    ]
+  }
+]

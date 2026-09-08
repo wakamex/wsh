@@ -1,0 +1,10 @@
+{
+  "control_adapter_lines": 168,
+  "control_launcher_lines": 29,
+  "native_adapter_lines": 102,
+  "native_c_added": 94,
+  "native_c_removed": 6,
+  "launcher_total": 197,
+  "native_total": 190,
+  "net_reduction": 7
+}

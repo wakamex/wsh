@@ -1,1 +1,7 @@
 build/zsh-test-patches/*.patch whitespace=-blank-at-eol,-blank-at-eof
+
+# Preserve measured prototype source, patch context, and raw terminal bytes.
+benchmarks/native-entrypoint-2026-09-08/**/*.patch whitespace=-blank-at-eol,-space-before-tab
+benchmarks/native-entrypoint-2026-09-08/**/native-before.zsh whitespace=-blank-at-eof
+benchmarks/native-entrypoint-2026-09-08/**/native-after.zsh whitespace=-blank-at-eof
+benchmarks/native-entrypoint-2026-09-08/**/*.bin binary

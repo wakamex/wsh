@@ -1,0 +1,18 @@
+[
+  {
+    "variant": "launcher",
+    "status": "pass",
+    "login_argv0": true,
+    "no_activation": true,
+    "runtime": "local theme runtime",
+    "job_control": "Ctrl-Z, fg, Ctrl-C, prompt return, status 130, exit 23"
+  },
+  {
+    "variant": "native",
+    "status": "pass",
+    "login_argv0": true,
+    "no_activation": true,
+    "runtime": "local theme runtime",
+    "job_control": "Ctrl-Z, fg, Ctrl-C, prompt return, status 130, exit 23"
+  }
+]

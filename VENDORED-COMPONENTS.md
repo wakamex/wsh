@@ -31,6 +31,8 @@ Zsh's compiled-function writer rounded each program to a whole word and wrote th
 
 Five upstream tests added after 5.9 attempted to suppress interactive prompts with command-prefix `PS1=` assignments, but both stable 5.9.2 and the pinned revision emit prompt bytes for those invocations. The digest-pinned correction changes only the affected `Test/` expectations, excludes no tests, and does not enter compiled or installed source. The source-patched revision passed 75 scripts with 0 failures and 2 existing skips. Wsh disables only the revision's ZLE terminal query by default when no explicit environment or `.zshenv` policy exists because unanswered queries otherwise add a 500 ms wait. The retained [edge-Zsh result](benchmarks/edge-zsh-2026-09-03/report.md) records the original source-selection experiment, while the terminal-integration report records the later source divergence and complete retest.
 
+The separate [native-entrypoint prototype](benchmarks/native-entrypoint-2026-09-08/report.md) adds startup hooks to `Src/init.c` and replaces redirecting startup files with three setup adapters. Its final host build passed all 75 upstream scripts with zero failures and two existing skips, plus the retained Wsh contract checks. This experimental patch is retained with its source and binary identities under `benchmarks/`; it is not in the production source lock or release patch queue. It tests whether native startup ownership can remove compatibility glue while keeping the Rust manager and runtime unchanged.
+
 ## History substring search adds binding and ownership policy
 
 Pinned source: `zsh-users/zsh-history-substring-search` commit `14c8d2e0ffaee98f2df9850b19944f32546fdea5`.

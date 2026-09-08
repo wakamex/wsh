@@ -1,0 +1,1402 @@
+[
+  {
+    "mode": "existing",
+    "round": 0,
+    "variant": "launcher",
+    "startup_ms": 26.111437,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 0,
+    "variant": "native",
+    "startup_ms": 25.038313,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 1,
+    "variant": "native",
+    "startup_ms": 24.862859,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 1,
+    "variant": "launcher",
+    "startup_ms": 25.896152,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 2,
+    "variant": "launcher",
+    "startup_ms": 25.867182,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 2,
+    "variant": "native",
+    "startup_ms": 24.692485,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 3,
+    "variant": "native",
+    "startup_ms": 24.511951,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 3,
+    "variant": "launcher",
+    "startup_ms": 25.545894,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 4,
+    "variant": "launcher",
+    "startup_ms": 25.632436,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 4,
+    "variant": "native",
+    "startup_ms": 24.954661,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 5,
+    "variant": "native",
+    "startup_ms": 24.373667,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 5,
+    "variant": "launcher",
+    "startup_ms": 25.109215,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 6,
+    "variant": "launcher",
+    "startup_ms": 25.092204,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 6,
+    "variant": "native",
+    "startup_ms": 24.840498,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 7,
+    "variant": "native",
+    "startup_ms": 24.94241,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 7,
+    "variant": "launcher",
+    "startup_ms": 26.479176,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 8,
+    "variant": "launcher",
+    "startup_ms": 26.195339,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 8,
+    "variant": "native",
+    "startup_ms": 25.084354,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 9,
+    "variant": "native",
+    "startup_ms": 25.066244,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 9,
+    "variant": "launcher",
+    "startup_ms": 25.925933,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 10,
+    "variant": "launcher",
+    "startup_ms": 25.867072,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 10,
+    "variant": "native",
+    "startup_ms": 24.862559,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 11,
+    "variant": "native",
+    "startup_ms": 24.91842,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 11,
+    "variant": "launcher",
+    "startup_ms": 26.066326,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 12,
+    "variant": "launcher",
+    "startup_ms": 25.840371,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 12,
+    "variant": "native",
+    "startup_ms": 24.93531,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 13,
+    "variant": "native",
+    "startup_ms": 25.075104,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 13,
+    "variant": "launcher",
+    "startup_ms": 25.608076,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 14,
+    "variant": "launcher",
+    "startup_ms": 25.615826,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 14,
+    "variant": "native",
+    "startup_ms": 25.452173,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 15,
+    "variant": "native",
+    "startup_ms": 24.610113,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 15,
+    "variant": "launcher",
+    "startup_ms": 25.480073,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 16,
+    "variant": "launcher",
+    "startup_ms": 25.501764,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 16,
+    "variant": "native",
+    "startup_ms": 24.48275,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 17,
+    "variant": "native",
+    "startup_ms": 24.379307,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 17,
+    "variant": "launcher",
+    "startup_ms": 25.502764,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 18,
+    "variant": "launcher",
+    "startup_ms": 25.378131,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 18,
+    "variant": "native",
+    "startup_ms": 24.819898,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 19,
+    "variant": "native",
+    "startup_ms": 24.460959,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 19,
+    "variant": "launcher",
+    "startup_ms": 25.248068,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 20,
+    "variant": "launcher",
+    "startup_ms": 25.287718,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 20,
+    "variant": "native",
+    "startup_ms": 24.647284,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 21,
+    "variant": "native",
+    "startup_ms": 24.344876,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 21,
+    "variant": "launcher",
+    "startup_ms": 25.496013,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 22,
+    "variant": "launcher",
+    "startup_ms": 25.415901,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 22,
+    "variant": "native",
+    "startup_ms": 24.742016,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 23,
+    "variant": "native",
+    "startup_ms": 24.759786,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 23,
+    "variant": "launcher",
+    "startup_ms": 25.973514,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 24,
+    "variant": "launcher",
+    "startup_ms": 25.922503,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 24,
+    "variant": "native",
+    "startup_ms": 24.907399,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 25,
+    "variant": "native",
+    "startup_ms": 25.283798,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 25,
+    "variant": "launcher",
+    "startup_ms": 26.21011,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 26,
+    "variant": "launcher",
+    "startup_ms": 26.097027,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 26,
+    "variant": "native",
+    "startup_ms": 25.181006,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 27,
+    "variant": "native",
+    "startup_ms": 25.33727,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 27,
+    "variant": "launcher",
+    "startup_ms": 26.24564,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 28,
+    "variant": "launcher",
+    "startup_ms": 26.147098,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 28,
+    "variant": "native",
+    "startup_ms": 25.83495,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 29,
+    "variant": "native",
+    "startup_ms": 25.131175,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 29,
+    "variant": "launcher",
+    "startup_ms": 26.161669,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 30,
+    "variant": "launcher",
+    "startup_ms": 26.023785,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 30,
+    "variant": "native",
+    "startup_ms": 24.721785,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 31,
+    "variant": "native",
+    "startup_ms": 24.656264,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 31,
+    "variant": "launcher",
+    "startup_ms": 25.464272,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 32,
+    "variant": "launcher",
+    "startup_ms": 24.689675,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 32,
+    "variant": "native",
+    "startup_ms": 23.755043,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 33,
+    "variant": "native",
+    "startup_ms": 23.659201,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 33,
+    "variant": "launcher",
+    "startup_ms": 24.873239,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 34,
+    "variant": "launcher",
+    "startup_ms": 24.277655,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 34,
+    "variant": "native",
+    "startup_ms": 23.514138,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 35,
+    "variant": "native",
+    "startup_ms": 23.505508,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 35,
+    "variant": "launcher",
+    "startup_ms": 24.53009,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 36,
+    "variant": "launcher",
+    "startup_ms": 24.398808,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 36,
+    "variant": "native",
+    "startup_ms": 23.527458,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 37,
+    "variant": "native",
+    "startup_ms": 23.379795,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 37,
+    "variant": "launcher",
+    "startup_ms": 24.620083,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 38,
+    "variant": "launcher",
+    "startup_ms": 24.148032,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 38,
+    "variant": "native",
+    "startup_ms": 23.464646,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 39,
+    "variant": "native",
+    "startup_ms": 23.287512,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 39,
+    "variant": "launcher",
+    "startup_ms": 24.273115,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 40,
+    "variant": "launcher",
+    "startup_ms": 23.992949,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 40,
+    "variant": "native",
+    "startup_ms": 23.372695,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 41,
+    "variant": "native",
+    "startup_ms": 23.286622,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 41,
+    "variant": "launcher",
+    "startup_ms": 24.133262,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 42,
+    "variant": "launcher",
+    "startup_ms": 24.115441,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 42,
+    "variant": "native",
+    "startup_ms": 23.553159,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 43,
+    "variant": "native",
+    "startup_ms": 23.496647,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 43,
+    "variant": "launcher",
+    "startup_ms": 25.188336,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 44,
+    "variant": "launcher",
+    "startup_ms": 24.202543,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 44,
+    "variant": "native",
+    "startup_ms": 23.077758,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 45,
+    "variant": "native",
+    "startup_ms": 23.264842,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 45,
+    "variant": "launcher",
+    "startup_ms": 24.346107,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 46,
+    "variant": "launcher",
+    "startup_ms": 24.095431,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 46,
+    "variant": "native",
+    "startup_ms": 23.293072,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 47,
+    "variant": "native",
+    "startup_ms": 23.305383,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 47,
+    "variant": "launcher",
+    "startup_ms": 24.359117,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 48,
+    "variant": "launcher",
+    "startup_ms": 24.240555,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 48,
+    "variant": "native",
+    "startup_ms": 23.546738,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 49,
+    "variant": "native",
+    "startup_ms": 23.480447,
+    "same_pid": true
+  },
+  {
+    "mode": "existing",
+    "round": 49,
+    "variant": "launcher",
+    "startup_ms": 24.284256,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 0,
+    "variant": "launcher",
+    "startup_ms": 26.22042,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 0,
+    "variant": "native",
+    "startup_ms": 25.331269,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 1,
+    "variant": "native",
+    "startup_ms": 25.470992,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 1,
+    "variant": "launcher",
+    "startup_ms": 26.282101,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 2,
+    "variant": "launcher",
+    "startup_ms": 26.20739,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 2,
+    "variant": "native",
+    "startup_ms": 25.497113,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 3,
+    "variant": "native",
+    "startup_ms": 25.204576,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 3,
+    "variant": "launcher",
+    "startup_ms": 26.160498,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 4,
+    "variant": "launcher",
+    "startup_ms": 26.124567,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 4,
+    "variant": "native",
+    "startup_ms": 25.591775,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 5,
+    "variant": "native",
+    "startup_ms": 25.091924,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 5,
+    "variant": "launcher",
+    "startup_ms": 26.304862,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 6,
+    "variant": "launcher",
+    "startup_ms": 26.007385,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 6,
+    "variant": "native",
+    "startup_ms": 25.403471,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 7,
+    "variant": "native",
+    "startup_ms": 25.261818,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 7,
+    "variant": "launcher",
+    "startup_ms": 26.21668,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 8,
+    "variant": "launcher",
+    "startup_ms": 26.112607,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 8,
+    "variant": "native",
+    "startup_ms": 25.429231,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 9,
+    "variant": "native",
+    "startup_ms": 25.259648,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 9,
+    "variant": "launcher",
+    "startup_ms": 26.102787,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 10,
+    "variant": "launcher",
+    "startup_ms": 26.032625,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 10,
+    "variant": "native",
+    "startup_ms": 25.444522,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 11,
+    "variant": "native",
+    "startup_ms": 25.424412,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 11,
+    "variant": "launcher",
+    "startup_ms": 26.189339,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 12,
+    "variant": "launcher",
+    "startup_ms": 26.052926,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 12,
+    "variant": "native",
+    "startup_ms": 26.880084,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 13,
+    "variant": "native",
+    "startup_ms": 25.3483,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 13,
+    "variant": "launcher",
+    "startup_ms": 25.913113,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 14,
+    "variant": "launcher",
+    "startup_ms": 25.845711,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 14,
+    "variant": "native",
+    "startup_ms": 25.36888,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 15,
+    "variant": "native",
+    "startup_ms": 25.267468,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 15,
+    "variant": "launcher",
+    "startup_ms": 26.106047,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 16,
+    "variant": "launcher",
+    "startup_ms": 25.916803,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 16,
+    "variant": "native",
+    "startup_ms": 25.411351,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 17,
+    "variant": "native",
+    "startup_ms": 24.900799,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 17,
+    "variant": "launcher",
+    "startup_ms": 25.717328,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 18,
+    "variant": "launcher",
+    "startup_ms": 26.021535,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 18,
+    "variant": "native",
+    "startup_ms": 25.322469,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 19,
+    "variant": "native",
+    "startup_ms": 25.169035,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 19,
+    "variant": "launcher",
+    "startup_ms": 26.21652,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 20,
+    "variant": "launcher",
+    "startup_ms": 26.116917,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 20,
+    "variant": "native",
+    "startup_ms": 25.488983,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 21,
+    "variant": "native",
+    "startup_ms": 25.376941,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 21,
+    "variant": "launcher",
+    "startup_ms": 26.21934,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 22,
+    "variant": "launcher",
+    "startup_ms": 26.124018,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 22,
+    "variant": "native",
+    "startup_ms": 25.723708,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 23,
+    "variant": "native",
+    "startup_ms": 25.318609,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 23,
+    "variant": "launcher",
+    "startup_ms": 26.313331,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 24,
+    "variant": "launcher",
+    "startup_ms": 26.165029,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 24,
+    "variant": "native",
+    "startup_ms": 25.311609,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 25,
+    "variant": "native",
+    "startup_ms": 25.149695,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 25,
+    "variant": "launcher",
+    "startup_ms": 26.335173,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 26,
+    "variant": "launcher",
+    "startup_ms": 26.154938,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 26,
+    "variant": "native",
+    "startup_ms": 25.557725,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 27,
+    "variant": "native",
+    "startup_ms": 25.36458,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 27,
+    "variant": "launcher",
+    "startup_ms": 26.193719,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 28,
+    "variant": "launcher",
+    "startup_ms": 26.121337,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 28,
+    "variant": "native",
+    "startup_ms": 25.509114,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 29,
+    "variant": "native",
+    "startup_ms": 25.132194,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 29,
+    "variant": "launcher",
+    "startup_ms": 25.956114,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 30,
+    "variant": "launcher",
+    "startup_ms": 26.21743,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 30,
+    "variant": "native",
+    "startup_ms": 25.602906,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 31,
+    "variant": "native",
+    "startup_ms": 25.775439,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 31,
+    "variant": "launcher",
+    "startup_ms": 26.702391,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 32,
+    "variant": "launcher",
+    "startup_ms": 26.333242,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 32,
+    "variant": "native",
+    "startup_ms": 25.357969,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 33,
+    "variant": "native",
+    "startup_ms": 25.280488,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 33,
+    "variant": "launcher",
+    "startup_ms": 26.008194,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 34,
+    "variant": "launcher",
+    "startup_ms": 25.731828,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 34,
+    "variant": "native",
+    "startup_ms": 25.392491,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 35,
+    "variant": "native",
+    "startup_ms": 25.759229,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 35,
+    "variant": "launcher",
+    "startup_ms": 26.523686,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 36,
+    "variant": "launcher",
+    "startup_ms": 26.197819,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 36,
+    "variant": "native",
+    "startup_ms": 26.044066,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 37,
+    "variant": "native",
+    "startup_ms": 26.404154,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 37,
+    "variant": "launcher",
+    "startup_ms": 26.826573,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 38,
+    "variant": "launcher",
+    "startup_ms": 26.844464,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 38,
+    "variant": "native",
+    "startup_ms": 25.80846,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 39,
+    "variant": "native",
+    "startup_ms": 25.961764,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 39,
+    "variant": "launcher",
+    "startup_ms": 26.272541,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 40,
+    "variant": "launcher",
+    "startup_ms": 26.160298,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 40,
+    "variant": "native",
+    "startup_ms": 25.503793,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 41,
+    "variant": "native",
+    "startup_ms": 25.429702,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 41,
+    "variant": "launcher",
+    "startup_ms": 26.386863,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 42,
+    "variant": "launcher",
+    "startup_ms": 26.115688,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 42,
+    "variant": "native",
+    "startup_ms": 25.305879,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 43,
+    "variant": "native",
+    "startup_ms": 25.251047,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 43,
+    "variant": "launcher",
+    "startup_ms": 26.26116,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 44,
+    "variant": "launcher",
+    "startup_ms": 26.056716,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 44,
+    "variant": "native",
+    "startup_ms": 25.277428,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 45,
+    "variant": "native",
+    "startup_ms": 25.414351,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 45,
+    "variant": "launcher",
+    "startup_ms": 26.359173,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 46,
+    "variant": "launcher",
+    "startup_ms": 26.220679,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 46,
+    "variant": "native",
+    "startup_ms": 25.454672,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 47,
+    "variant": "native",
+    "startup_ms": 25.398491,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 47,
+    "variant": "launcher",
+    "startup_ms": 26.386974,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 48,
+    "variant": "launcher",
+    "startup_ms": 26.156728,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 48,
+    "variant": "native",
+    "startup_ms": 25.335389,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 49,
+    "variant": "native",
+    "startup_ms": 25.322769,
+    "same_pid": true
+  },
+  {
+    "mode": "minimal",
+    "round": 49,
+    "variant": "launcher",
+    "startup_ms": 26.347602,
+    "same_pid": true
+  }
+]

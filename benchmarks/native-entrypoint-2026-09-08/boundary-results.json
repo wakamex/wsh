@@ -1,0 +1,186 @@
+[
+  {
+    "case": "last startup status",
+    "zshenv": null,
+    "theme": null,
+    "outputs": {
+      "raw": "STATUS:0",
+      "launcher": "STATUS:1",
+      "native": "STATUS:0"
+    }
+  },
+  {
+    "case": "last startup status",
+    "zshenv": null,
+    "theme": "",
+    "outputs": {
+      "raw": "STATUS:0",
+      "launcher": "STATUS:1",
+      "native": "STATUS:0"
+    }
+  },
+  {
+    "case": "last startup status",
+    "zshenv": "true",
+    "theme": null,
+    "outputs": {
+      "raw": "STATUS:0",
+      "launcher": "STATUS:1",
+      "native": "STATUS:0"
+    }
+  },
+  {
+    "case": "last startup status",
+    "zshenv": "true",
+    "theme": "",
+    "outputs": {
+      "raw": "STATUS:0",
+      "launcher": "STATUS:1",
+      "native": "STATUS:0"
+    }
+  },
+  {
+    "case": "last startup status",
+    "zshenv": "false",
+    "theme": null,
+    "outputs": {
+      "raw": "STATUS:1",
+      "launcher": "STATUS:1",
+      "native": "STATUS:1"
+    }
+  },
+  {
+    "case": "last startup status",
+    "zshenv": "false",
+    "theme": "",
+    "outputs": {
+      "raw": "STATUS:1",
+      "launcher": "STATUS:1",
+      "native": "STATUS:1"
+    }
+  },
+  {
+    "case": "ordinary",
+    "outputs": {
+      "raw": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "GLOBAL-zprofile:on:on",
+        "USER-zprofile:on:on",
+        "GLOBAL-zshrc:on:on",
+        "USER-zshrc:on:on",
+        "GLOBAL-zlogin:on:on",
+        "USER-zlogin:on:on",
+        "DONE:on:on",
+        "USER-zlogout:on:on",
+        "GLOBAL-zlogout:on:on"
+      ],
+      "launcher": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ],
+      "native": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "GLOBAL-zprofile:on:on",
+        "USER-zprofile:on:on",
+        "GLOBAL-zshrc:on:on",
+        "USER-zshrc:on:on",
+        "GLOBAL-zlogin:on:on",
+        "USER-zlogin:on:on",
+        "DONE:on:on",
+        "USER-zlogout:on:on",
+        "GLOBAL-zlogout:on:on"
+      ]
+    }
+  },
+  {
+    "case": "no-global",
+    "outputs": {
+      "raw": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ],
+      "launcher": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ],
+      "native": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ]
+    }
+  },
+  {
+    "case": "user-disables-rcs",
+    "outputs": {
+      "raw": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "DONE:off:on"
+      ],
+      "launcher": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "DONE:off:off"
+      ],
+      "native": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "DONE:off:on"
+      ]
+    }
+  },
+  {
+    "case": "user-disables-global",
+    "outputs": {
+      "raw": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ],
+      "launcher": [
+        "GLOBAL-zshenv:on:off",
+        "USER-zshenv:on:off",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ],
+      "native": [
+        "GLOBAL-zshenv:on:on",
+        "USER-zshenv:on:on",
+        "USER-zprofile:on:off",
+        "USER-zshrc:on:off",
+        "USER-zlogin:on:off",
+        "DONE:on:off",
+        "USER-zlogout:on:off"
+      ]
+    }
+  }
+]

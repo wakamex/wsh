@@ -1,0 +1,38 @@
+{
+  "existing": {
+    "launcher": {
+      "samples": 50,
+      "median_ms": 25.464272,
+      "p95_ms": 26.21011
+    },
+    "native": {
+      "samples": 50,
+      "median_ms": 24.610113,
+      "p95_ms": 25.33727
+    },
+    "paired_delta": {
+      "median_ms": -0.9263119999999994,
+      "p95_ms": -0.31214800000000054,
+      "gate_ms": 3,
+      "pass": true
+    }
+  },
+  "minimal": {
+    "launcher": {
+      "samples": 50,
+      "median_ms": 26.165029,
+      "p95_ms": 26.702391
+    },
+    "native": {
+      "samples": 50,
+      "median_ms": 25.392491,
+      "p95_ms": 26.044066
+    },
+    "paired_delta": {
+      "median_ms": -0.8098089999999978,
+      "p95_ms": -0.31077700000000164,
+      "gate_ms": 3,
+      "pass": true
+    }
+  }
+}

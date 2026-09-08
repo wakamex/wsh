@@ -1,0 +1,10 @@
+[1m[7m%[27m[1m[0m                                                                                ]7;file://3950x/tmp/wsh-native-pty-221gpiid\]133;A;cl=m;aid=zLXqLAw\[0m[J]133;P;k=i\% [K[?2004h]133;B\pprint -r -- RUNTIME:$WSH_RUNTIME_PID:$WSH_PROMPT_OWNER[54D[32mprint[49C[?2004l[0m
+]133;C\RUNTIME:3174729:wsh
+]133;D\[1m[7m%[27m[1m[0m                                                                                ]7;file://3950x/tmp/wsh-native-pty-221gpiid\]133;A;cl=m;aid=zLXqLAw\[0m[J]133;P;k=i\% [K[?2004h]133;B\[0m[J]133;P;k=i\[34m~[0m [32m%[0m [Kssleep 30[8D[32msleep[3C[?2004l[0m
+]133;C\^Z
+zsh: suspended  sleep 30
+]133;D\[1m[7m%[27m[1m[0m                                                                                ]7;file://3950x/tmp/wsh-native-pty-221gpiid\]133;A;cl=m;aid=zLXqLAw\[0m[J]133;P;k=i\[34m~[0m [32m%[0m [K[?2004h]133;B\[0m[J]133;P;k=i\[34m~[0m [31m%[0m [Kffg[32mfg[?2004l[0m
+]133;C\[1]    continued  sleep 30
+^C
+]133;D\[1m[7m%[27m[1m[0m                                                                                ]7;file://3950x/tmp/wsh-native-pty-221gpiid\]133;A;cl=m;aid=zLXqLAw\[0m[J]133;P;k=i\[34m~[0m [31m%[0m [K[?2004h]133;B\pprint -r -- JOB_OK:$?; exit 23[30D[32mprint[18Cexit[3C[?2004l[0m
+]133;C\JOB_OK:130

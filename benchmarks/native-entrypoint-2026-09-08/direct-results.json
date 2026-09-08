@@ -1,0 +1,63 @@
+[
+  {
+    "test": "launcher starts Zsh independent of user activation files",
+    "state_access": "not required; chmod-zero fixture is ignored rather than read"
+  },
+  {
+    "test": "launcher forwards command argv bytes and exit status"
+  },
+  {
+    "test": "launcher native script invocation and no-rcs options"
+  },
+  {
+    "test": "launcher no HOME under no-rcs recovery invocation"
+  },
+  {
+    "test": "launcher relocated installation and symlink entrypoint"
+  },
+  {
+    "test": "native starts Zsh independent of user activation files",
+    "state_access": "not required; chmod-zero fixture is ignored rather than read"
+  },
+  {
+    "test": "native forwards command argv bytes and exit status"
+  },
+  {
+    "test": "native native script invocation and no-rcs options"
+  },
+  {
+    "test": "native no HOME under no-rcs recovery invocation"
+  },
+  {
+    "test": "native relocated installation and symlink entrypoint"
+  },
+  {
+    "test": "native startup restores raw Zsh evaluation context; wrapper differs",
+    "outputs": {
+      "raw": [
+        "ENV:file",
+        "PROFILE:file",
+        "RC:file",
+        "LOGIN:file",
+        "DONE"
+      ],
+      "launcher": [
+        "ENV:file:file",
+        "PROFILE:file:file",
+        "RC:file:file",
+        "LOGIN:file:file",
+        "DONE"
+      ],
+      "native": [
+        "ENV:file",
+        "PROFILE:file",
+        "RC:file",
+        "LOGIN:file",
+        "DONE"
+      ]
+    }
+  },
+  {
+    "test": "native executable remains Zsh when optional integration is absent"
+  }
+]

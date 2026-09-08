@@ -31,5 +31,6 @@ python3 ./benchmarks/verify-native-completion-evidence.py
 python3 ./benchmarks/verify-deferred-completion-evidence.py
 python3 ./benchmarks/verify-completion-cost-evidence.py
 python3 ./benchmarks/verify-login-recovery-evidence.py
+python3 ./benchmarks/verify-native-entrypoint-evidence.py
 
 print -r -- 'PASS: complete retained-evidence suite'

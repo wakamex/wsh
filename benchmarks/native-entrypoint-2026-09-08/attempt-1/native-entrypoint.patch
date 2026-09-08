@@ -1,0 +1,133 @@
+--- a/Src/init.c
++++ b/Src/init.c
+@@ -1476,6 +1476,62 @@
+  * then we source the standard sh/ksh scripts instead of *
+  * the standard zsh scripts                              */
+ 
++/* Wsh prototype: installation lookup is independent of user activation state. */
++static char *wsh_root;
++
++static void
++wsh_source(char *name)
++{
++    char *file;
++    if (!wsh_root)
++        return;
++    file = tricat(wsh_root, "/share/wsh/", name);
++    source(file);
++    zsfree(file);
++}
++
++static void
++wsh_profile(char *event)
++{
++    char *command;
++    if (!wsh_root || !shfunctab->getnode(shfunctab, "_wsh_profile_event"))
++        return;
++    command = dyncat("_wsh_profile_event ", event);
++    execstring(command, 1, 0, "wsh-profile");
++    zsfree(command);
++}
++
++static void
++wsh_setup(void)
++{
++    char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
++    if (!exepath || unset(RCS) || isset(PRIVILEGED))
++        return;
++    wsh_root = ztrdup(exepath);
++    slash = strrchr(wsh_root, '/');
++    if (!slash)
++        goto unavailable;
++    *slash = '\0';
++    slash = strrchr(wsh_root, '/');
++    if (!slash)
++        goto unavailable;
++    *slash = '\0';
++    file = tricat(wsh_root, "/share/wsh/", "native-before.zsh");
++    if (access(unmeta(file), R_OK)) {
++        zsfree(file);
++        goto unavailable;
++    }
++    zsfree(file);
++    setsparam("WSH_BUNDLE_ROOT", ztrdup(wsh_root));
++    wsh_source("native-before.zsh");
++    return;
++
++unavailable:
++    zsfree(wsh_root);
++    wsh_root = NULL;
++    zwarn("Wsh integration unavailable; starting Zsh without Wsh defaults");
++}
++
+ /**/
+ void
+ run_init_scripts(void)
+@@ -1505,6 +1561,7 @@
+ 	} else
+ 	    source("/etc/suid_profile");
+     } else {
++        wsh_setup();
+ #ifdef GLOBAL_ZSHENV
+ 	source(GLOBAL_ZSHENV);
+ #endif
+@@ -1522,7 +1579,11 @@
+ 		}
+ 	    }
+ 
+-	    sourcehome(".zshenv");
++	    {
++            wsh_profile("user-zshenv-start");
++            sourcehome(".zshenv");
++            wsh_profile("user-zshenv-end");
++        }
+ 	}
+ 	if (islogin) {
+ #ifdef GLOBAL_ZPROFILE
+@@ -1530,7 +1591,11 @@
+ 		    source(GLOBAL_ZPROFILE);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zprofile");
++		{
++            wsh_profile("user-zprofile-start");
++            sourcehome(".zprofile");
++            wsh_profile("user-zprofile-end");
++        }
+ 	}
+ 	if (interact) {
+ #ifdef GLOBAL_ZSHRC
+@@ -1538,16 +1603,29 @@
+ 		source(GLOBAL_ZSHRC);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zshrc");
+-	}
++		{
++            wsh_profile("user-zshrc-start");
++            sourcehome(".zshrc");
++            wsh_profile("user-zshrc-end");
++        }
++	}
++        if (interact)
++            wsh_source("native-after.zsh");
+ 	if (islogin) {
+ #ifdef GLOBAL_ZLOGIN
+ 	    if (isset(RCS) && isset(GLOBALRCS))
+ 		source(GLOBAL_ZLOGIN);
+ #endif
+ 	    if (isset(RCS) && unset(PRIVILEGED))
+-		sourcehome(".zlogin");
+-	}
++		{
++            wsh_profile("user-zlogin-start");
++            sourcehome(".zlogin");
++            wsh_profile("user-zlogin-end");
++        }
++	}
++    }
++    if (wsh_root) {
++        wsh_source("native-finish.zsh");
+     }
+     noerrexit = 0;
+     nohistsave = 0;
