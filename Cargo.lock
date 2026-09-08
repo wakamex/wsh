@@ -921,6 +921,7 @@ dependencies = [
 name = "wsh-runtime"
 version = "0.3.1"
 dependencies = [
+ "cc",
  "flate2",
  "libc",
  "serde",
