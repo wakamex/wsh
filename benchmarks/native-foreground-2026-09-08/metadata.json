@@ -1,0 +1,12 @@
+{
+  "command": "python3 native/test-foreground.py",
+  "cpu": 0,
+  "trace_mode": "off",
+  "zshrc": "PROMPT=\"NATIVE> \"\nZSHZ_DATA=$HOME/jump-data\n",
+  "zshenv": "unsetopt globalrcs\n",
+  "source_revision": "577241dcf01c32515f227937af0b7972a393a882",
+  "native_sha256": "e0dcc03af80fc101532648466155a02f0f998d04cfc3cd37aeab969905aedb04",
+  "runtime_sha256": "f4c206f5ab6452c167d18be199c41434551d870c258f5f39cd6ea8708bc422c1",
+  "manifest_sha256": "55e7fd11ca28a313f309892f70d7bd7beae4cbf9bba53a80ea3a9e52047a864f",
+  "correctness": "exact bytes including non-UTF-8 executable path, status 7, shell exit 23, one C/D marker pair, native PID, six malformed invocations"
+}

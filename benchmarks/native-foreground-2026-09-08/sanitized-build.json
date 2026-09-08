@@ -1,0 +1,5 @@
+{
+  "binary_sha256": "7339cae3b545e4dc020e9b0b0d9e8b55110b1e8cf06a21e1002bdcbea6c2ec02",
+  "foreground_c_sha256": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1",
+  "scope": "Full Zsh core ASan/UBSan, excluding the previously reproduced upstream function-pointer check and full-shell leak detection. Baseline dynamic modules. The isolated argument parser has no exclusions."
+}

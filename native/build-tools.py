@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = Path('/var/tmp/wsh-native-entry-prototype')
 WORK = Path('/var/tmp/wsh-native-tools')
 SOURCE = WORK / 'source'
-EVIDENCE = WORK / 'doctor-evidence'
+EVIDENCE = WORK / 'foreground-evidence'
 
 
 def run(arguments, **kwargs):
@@ -41,7 +41,12 @@ def main():
         '    fdtable[0] = fdtable[1] = fdtable[2] = FDT_EXTERNAL;\n'
         '    if (wsh_doctor_fd >= 0)\n        fdtable[wsh_doctor_fd] = FDT_INTERNAL;', 1)
     source = source.replace('    run_init_scripts();', '    run_init_scripts();\n    wsh_doctor_finish();', 1)
+    source = source.replace('    init_jobs(argv, environ);',
+        '    if (wsh_foreground_count)\n        argv = wsh_foreground_arguments;\n\n    init_jobs(argv, environ);', 1)
+    source = source.replace('    init_misc(cmd, zsh_name);',
+        '    init_misc(cmd, zsh_name);\n    wsh_foreground_run();', 1)
     (SOURCE / 'Src/init.c').write_text(source)
+    shutil.copy2(ROOT / 'native/foreground.c', SOURCE / 'Src/wsh-foreground.c')
     shutil.copy2(ROOT / 'native/doctor.c', SOURCE / 'Src/wsh-doctor.c')
     shutil.copy2(ROOT / 'native/tools.c', SOURCE / 'Src/wsh-tools.c')
     inputs = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -61,6 +66,13 @@ def main():
     run(['make', '-j8'], cwd=SOURCE, env=environment)
     for name in ('wsh', 'zsh'):
         shutil.copy2(SOURCE / 'Src/zsh', destination / 'bin' / name)
+    manifest = json.loads((destination / 'manifest.json').read_text())
+    manifest['release_id'] = 'development-native-tools'
+    manifest['files'] = [{'path': str(p.relative_to(destination)), 'kind': 'file',
+        'mode': p.stat().st_mode & 0o777, 'size': p.stat().st_size,
+        'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
+        for p in sorted(destination.rglob('*')) if p.is_file() and p.name != 'manifest.json']
+    (destination / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     record = {'source_revision': revision, 'inputs': inputs, 'build_identity': definitions,
               'binary_sha256': hashlib.sha256((destination / 'bin/wsh').read_bytes()).hexdigest(),
               'control_sha256': hashlib.sha256((BASE / 'native/bin/wsh').read_bytes()).hexdigest(),

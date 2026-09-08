@@ -1,0 +1,18 @@
+{
+  "existing": {
+    "pairs": 50,
+    "paired_p95_ms": 0.24109599999999887,
+    "gate_ms": 3,
+    "passed": true,
+    "callback_median_ms": 25.265677,
+    "native_median_ms": 25.162865
+  },
+  "minimal": {
+    "pairs": 50,
+    "paired_p95_ms": 0.3133569999999999,
+    "gate_ms": 3,
+    "passed": true,
+    "callback_median_ms": 26.177908,
+    "native_median_ms": 25.947652
+  }
+}

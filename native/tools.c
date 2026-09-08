@@ -2,6 +2,7 @@
 #include "wsh-build.h"
 #ifndef WSH_CLI_STANDALONE
 #include "wsh-doctor.c"
+#include "wsh-foreground.c"
 #endif
 
 static int
@@ -10,6 +11,8 @@ wsh_cli(int argc, char **arguments)
     const char *option = argc > 1 ? arguments[1] : "";
 
 #ifndef WSH_CLI_STANDALONE
+    if (!strcmp(option, "--wsh-run"))
+        return wsh_foreground_parse(argc, arguments);
     if (!strcmp(option, "--wsh-doctor")) {
         if (argc != 2) {
             fputs("usage: wsh --wsh-doctor\n", stderr);
@@ -42,6 +45,7 @@ wsh_cli(int argc, char **arguments)
         fputs("usage: wsh [native Zsh arguments]\n"
               "       wsh --wsh-version\n"
               "       wsh --wsh-doctor\n"
+              "       wsh --wsh-run [--login] -- <command> [arguments...]\n"
               "       wsh --wsh-help\n"
               "Ordinary script names and -- retain their Zsh meanings.\n",
               stdout);

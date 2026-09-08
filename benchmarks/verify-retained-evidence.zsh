@@ -37,4 +37,6 @@ python3 ./benchmarks/verify-native-tools-evidence.py
 
 python3 ./benchmarks/verify-native-doctor-evidence.py
 
+python3 ./benchmarks/verify-native-foreground-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

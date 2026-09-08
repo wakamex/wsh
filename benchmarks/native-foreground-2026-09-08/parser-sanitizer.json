@@ -1,0 +1,19 @@
+{
+  "command": [
+    "clang",
+    "-std=c99",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-g",
+    "/tmp/wsh-foreground-parser-5yoz7b92/harness.c",
+    "-o",
+    "/tmp/wsh-foreground-parser-5yoz7b92/harness"
+  ],
+  "arbitrary_cases": 10000,
+  "valid_cases": 2,
+  "passed": true,
+  "parser_sha256": "44ab3f8a804ef5dea132f5f8e36e9390e915854b3d83922f1b98368f922468ea"
+}

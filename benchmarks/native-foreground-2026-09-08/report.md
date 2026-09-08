@@ -1,0 +1,15 @@
+# Native foreground startup results
+
+The native foreground action preserves exact argv, native job control and terminal behavior. Its readiness difference is +0.241 ms paired p95 with the existing prompt and +0.313 ms with the minimal theme, passing the +3 ms gate in 50 alternating pairs per mode. The comparison used the same native executable, resources, runtime and global startup policy for the old callback and new action.
+
+The existing PTY regression suite passes after replacing only its candidate invocations with `--wsh-run`, correcting the primary-prompt observer and pointing it at the same C probe. Coverage includes Ctrl-C, a foreground application that consumes Ctrl-C, Ctrl-Z and fg, nested process groups, exact arguments, terminal settings, login/non-login startup files, preserved aliases and hooks, disabled integration, and twenty repeated launches. Additional direct exec/PTY checks cover a non-UTF-8 executable path, empty and non-UTF-8 arguments, newlines, literal shell syntax and prompt escapes, command status 7, shell exit 23, one C/D marker pair, unchanged shell PID, and six malformed invocations.
+
+The new C interface captures raw argv before native startup. Its startup action passes metafied values through one private Zsh array and a fixed anonymous function that preserves the old emulation scope. Argument values are never parsed as source. Zsh remains responsible for foreground process groups, suspension, resumption and terminal restoration. Native ZLE pre/post-execution calls now own the initial output markers, replacing the shell adapter's independent terminal-policy loop.
+
+The file contains 53 lines of C covering both option parsing and the startup action, plus dispatcher/init calls. It introduces no library, helper process or user setting. The old callback and environment handoff remain only for the legacy manager path used as the control; they are removable from the native installation once ordinary startup integration is complete. Their continued presence is not counted as deleted code.
+
+Both normal and sanitized direct foreground checks pass. The exact C argument parser passed two valid shapes and 10,000 arbitrary malformed byte strings under ASan/UBSan with strict warnings. Full-shell sanitizer scope retains the previously documented upstream function-pointer and leak-detection exclusions; the parser harness has no exclusions. No foreground implementation intervention was needed after the first candidate.
+
+Timing measures native primary-editor readiness after `/usr/bin/true` exits, with tracing off and CPU 0. Both variants use `.zshenv` to disable global rc files for a matched workload; ordinary product startup continues to respect native global-file behavior. The existing prompt and minimal theme both enable the normal interactive components. Raw rows, identities, source archives, probe and adapted fixtures, terminal transcripts, build logs and sanitizer evidence are retained here.
+
+The native action is accepted. The next part of stage 2 integrates it with native startup and resource lookup in the normal locked build.

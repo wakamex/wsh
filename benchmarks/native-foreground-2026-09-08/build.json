@@ -1,0 +1,33 @@
+{
+  "source_revision": "577241dcf01c32515f227937af0b7972a393a882",
+  "inputs": {
+    "native/README.md": "952376bf992c3ce233ee5726a83495240d75e391b943b4cf9326783066416812",
+    "native/build-tools.py": "bd2dfca880de592844b1f929d84d63c8775588b47280342f63e5364aa3c53a86",
+    "native/doctor.c": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056",
+    "native/foreground.c": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1",
+    "native/test-doctor-boundaries.py": "bae8bc23cf37a46903f195c1d420fbd4a6c24f2bf228c7ff4e061beb2afd8586",
+    "native/test-doctor.py": "6bba7f51774ca51b55265123522729abad009aadbe90e5eb704bd098953c44fc",
+    "native/test-foreground.py": "75c3237810b109e93473b8e606686e3f17adc6009b58f98be67844f5df001a01",
+    "native/test-ownership.py": "d5c611dd74ff9b46c371d7bd3bfa1a87cd00b0c787d8c14e5ecd19e3e70648d6",
+    "native/test-tools.py": "8f2f4d837670a6cae068aeb941e1fe50a8d6e4d34b5c965e148ac57d53b960f1",
+    "native/tools.c": "a3a13134d2465b755b0969fc07964fd7cbbfe74370510139130e25071f470403",
+    "baseline-init.c": "8164de1500d39ef709dab637a9c17aed212d095f686d3e8d2532a845d79a50f4"
+  },
+  "build_identity": {
+    "WSH_VERSION": "0.3.1-native-tools",
+    "WSH_SOURCE_REVISION": "577241dcf01c32515f227937af0b7972a393a882",
+    "WSH_INPUTS_SHA256": "b0974b27cf53965e7e9fc7bdbd6d6ae2b804275859671e310e9059c0901961d0",
+    "WSH_ZSH_SOURCE_REVISION": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "WSH_TARGET": "x86_64-linux-gnu"
+  },
+  "binary_sha256": "e0dcc03af80fc101532648466155a02f0f998d04cfc3cd37aeab969905aedb04",
+  "control_sha256": "b810d59d4e5f82a7ec3847ac7aab293e0c452e21eedc72ddb7138718675c2eb4",
+  "compiler": "gcc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "configure": "--prefix=/var/tmp/wsh-native-entry-prototype/install/usr --enable-cap --enable-multibyte --enable-pcre\n",
+  "build_command": "python3 native/build-tools.py",
+  "environment": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8",
+    "TZ": "UTC"
+  }
+}
