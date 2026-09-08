@@ -1,0 +1,38 @@
+{
+  "pairs": 50,
+  "statistic": "nearest-rank paired p95 native minus control process-exit milliseconds",
+  "paired_p95_ms": -0.11598199999999981,
+  "gate_ms": 3,
+  "passed": true,
+  "cpu": 0,
+  "environment": {
+    "PATH": "/usr/bin:/bin",
+    "HOME": "<temporary fixture>",
+    "ZDOTDIR": "<temporary fixture>",
+    "TERM": "xterm-256color",
+    "LC_ALL": "C.UTF-8",
+    "TZ": "UTC"
+  },
+  "correctness": [
+    "version does not load user startup",
+    "extra and non-UTF-8 tool arguments rejected with status 2",
+    "version survives absent resources, corrupt state, missing HOME, non-UTF-8 executable path, and mismatched metadata",
+    "native flags, ordinary script names, delimiters, status and argument bytes match baseline",
+    "strict compiler diagnostics and ASan/UBSan: 10000 arbitrary byte arguments"
+  ],
+  "sanitizer_command": [
+    "clang",
+    "-std=c99",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-g",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/code/wsh/native",
+    "-I/var/tmp/wsh-native-tools/source/Src",
+    "/tmp/wsh-native-tools-sxze69ji/harness.c",
+    "-o",
+    "/tmp/wsh-native-tools-sxze69ji/harness"
+  ]
+}

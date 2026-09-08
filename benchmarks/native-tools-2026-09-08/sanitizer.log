@@ -1,0 +1,11 @@
+wsh 0.3.1-native-tools (unsigned development artifact)
+wsh source: c5066cef8f98c89d78c1cba0b7951f31eba2d661
+native inputs sha256: 76df65612c955a22ba973dc70c778c223dc6321d9f9b48603bed387d3aa1cfdf
+zsh: test
+zsh source: cad0d67c76e2be7371cf3526b79ea2581810d35a
+target: x86_64-linux-gnu
+identity: compiled build; installed resources not verified
+usage: wsh [native Zsh arguments]
+       wsh --wsh-version
+       wsh --wsh-help
+Ordinary script names and -- retain their Zsh meanings.

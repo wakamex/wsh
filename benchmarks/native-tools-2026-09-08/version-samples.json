@@ -1,0 +1,252 @@
+[
+  {
+    "pair": 0,
+    "control_ms": 2.154859,
+    "native_ms": 1.953164
+  },
+  {
+    "pair": 1,
+    "native_ms": 1.928944,
+    "control_ms": 2.232711
+  },
+  {
+    "pair": 2,
+    "control_ms": 2.299113,
+    "native_ms": 1.962785
+  },
+  {
+    "pair": 3,
+    "native_ms": 1.932924,
+    "control_ms": 2.237291
+  },
+  {
+    "pair": 4,
+    "control_ms": 2.16416,
+    "native_ms": 1.966304
+  },
+  {
+    "pair": 5,
+    "native_ms": 1.949904,
+    "control_ms": 2.16171
+  },
+  {
+    "pair": 6,
+    "control_ms": 2.149479,
+    "native_ms": 1.953694
+  },
+  {
+    "pair": 7,
+    "native_ms": 1.934745,
+    "control_ms": 2.164799
+  },
+  {
+    "pair": 8,
+    "control_ms": 2.158549,
+    "native_ms": 2.053487
+  },
+  {
+    "pair": 9,
+    "native_ms": 1.953085,
+    "control_ms": 2.18228
+  },
+  {
+    "pair": 10,
+    "control_ms": 2.232621,
+    "native_ms": 1.950284
+  },
+  {
+    "pair": 11,
+    "native_ms": 1.919374,
+    "control_ms": 2.17016
+  },
+  {
+    "pair": 12,
+    "control_ms": 2.234231,
+    "native_ms": 1.936194
+  },
+  {
+    "pair": 13,
+    "native_ms": 1.942375,
+    "control_ms": 2.160559
+  },
+  {
+    "pair": 14,
+    "control_ms": 2.17958,
+    "native_ms": 1.943944
+  },
+  {
+    "pair": 15,
+    "native_ms": 1.905884,
+    "control_ms": 2.17435
+  },
+  {
+    "pair": 16,
+    "control_ms": 2.314483,
+    "native_ms": 1.921243
+  },
+  {
+    "pair": 17,
+    "native_ms": 1.961744,
+    "control_ms": 2.18587
+  },
+  {
+    "pair": 18,
+    "control_ms": 2.15809,
+    "native_ms": 1.954054
+  },
+  {
+    "pair": 19,
+    "native_ms": 1.872803,
+    "control_ms": 2.16425
+  },
+  {
+    "pair": 20,
+    "control_ms": 2.144959,
+    "native_ms": 1.957974
+  },
+  {
+    "pair": 21,
+    "native_ms": 1.949345,
+    "control_ms": 2.19069
+  },
+  {
+    "pair": 22,
+    "control_ms": 2.205251,
+    "native_ms": 1.950704
+  },
+  {
+    "pair": 23,
+    "native_ms": 1.956695,
+    "control_ms": 2.16917
+  },
+  {
+    "pair": 24,
+    "control_ms": 2.19333,
+    "native_ms": 1.962465
+  },
+  {
+    "pair": 25,
+    "native_ms": 1.932254,
+    "control_ms": 2.160759
+  },
+  {
+    "pair": 26,
+    "control_ms": 2.217731,
+    "native_ms": 1.936764
+  },
+  {
+    "pair": 27,
+    "native_ms": 1.884753,
+    "control_ms": 2.19455
+  },
+  {
+    "pair": 28,
+    "control_ms": 2.16155,
+    "native_ms": 1.934664
+  },
+  {
+    "pair": 29,
+    "native_ms": 1.978255,
+    "control_ms": 2.200351
+  },
+  {
+    "pair": 30,
+    "control_ms": 2.20917,
+    "native_ms": 2.093188
+  },
+  {
+    "pair": 31,
+    "native_ms": 1.965835,
+    "control_ms": 2.171619
+  },
+  {
+    "pair": 32,
+    "control_ms": 2.225491,
+    "native_ms": 1.929754
+  },
+  {
+    "pair": 33,
+    "native_ms": 1.919134,
+    "control_ms": 2.1686
+  },
+  {
+    "pair": 34,
+    "control_ms": 2.1802,
+    "native_ms": 1.953024
+  },
+  {
+    "pair": 35,
+    "native_ms": 1.999576,
+    "control_ms": 2.19072
+  },
+  {
+    "pair": 36,
+    "control_ms": 2.18611,
+    "native_ms": 1.914784
+  },
+  {
+    "pair": 37,
+    "native_ms": 1.943624,
+    "control_ms": 2.148189
+  },
+  {
+    "pair": 38,
+    "control_ms": 2.200121,
+    "native_ms": 1.928954
+  },
+  {
+    "pair": 39,
+    "native_ms": 1.938334,
+    "control_ms": 2.151279
+  },
+  {
+    "pair": 40,
+    "control_ms": 2.162409,
+    "native_ms": 1.951834
+  },
+  {
+    "pair": 41,
+    "native_ms": 1.919693,
+    "control_ms": 2.15254
+  },
+  {
+    "pair": 42,
+    "control_ms": 2.152089,
+    "native_ms": 1.935194
+  },
+  {
+    "pair": 43,
+    "native_ms": 1.929324,
+    "control_ms": 2.17011
+  },
+  {
+    "pair": 44,
+    "control_ms": 2.162629,
+    "native_ms": 1.925424
+  },
+  {
+    "pair": 45,
+    "native_ms": 1.922114,
+    "control_ms": 2.152989
+  },
+  {
+    "pair": 46,
+    "control_ms": 2.147609,
+    "native_ms": 2.041367
+  },
+  {
+    "pair": 47,
+    "native_ms": 2.027826,
+    "control_ms": 2.1572
+  },
+  {
+    "pair": 48,
+    "control_ms": 2.144479,
+    "native_ms": 1.929974
+  },
+  {
+    "pair": 49,
+    "native_ms": 1.923674,
+    "control_ms": 2.142669
+  }
+]

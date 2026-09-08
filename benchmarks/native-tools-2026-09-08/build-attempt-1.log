@@ -1,0 +1,84 @@
++ ['make', '-j8']
+make[1]: Entering directory '/var/tmp/wsh-native-tools/source/Src'
+make[2]: Entering directory '/var/tmp/wsh-native-tools/source/Src'
+gawk -f ../Src/makepro.awk init.c Src > init.syms
+(echo '/* Generated automatically */'; sed -n '/^E/{s/^E//;p;}' < init.syms) \
+	> init.epro
+(echo '/* Generated automatically */'; sed -n '/^L/{s/^L//;p;}' < init.syms) \
+	> `echo init.epro | sed 's/\.epro$/.pro/'`
+make[3]: Entering directory '/var/tmp/wsh-native-tools/source/Src/Builtins'
+make[3]: Leaving directory '/var/tmp/wsh-native-tools/source/Src/Builtins'
+make[3]: Entering directory '/var/tmp/wsh-native-tools/source/Src/Modules'
+make[4]: Entering directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[4]: 'zle.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[4]: Entering directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[4]: 'complete.mdh' is up to date.
+make[4]: Leaving directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-native-tools/source/Src/Modules'
+make[3]: Entering directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[3]: Leaving directory '/var/tmp/wsh-native-tools/source/Src/Zle'
+make[2]: Leaving directory '/var/tmp/wsh-native-tools/source/Src'
+rm -f stamp-modobjs.tmp
+make[2]: Entering directory '/var/tmp/wsh-native-tools/source/Src'
+fatal: not a git repository (or any of the parent directories): .git
+gcc -c -I. -I../Src -I../Src -I../Src/Zle -I.  -DHAVE_CONFIG_H -Wall -Wmissing-prototypes -O2  -o init.o init.c
+In file included from init.epro:42,
+                 from zsh.mdh:43,
+                 from init.c:30:
+wsh-tools.c: In function ‘wsh_cli’:
+wsh-tools.c:22:16: error: ‘ZSH_VERSION’ undeclared (first use in this function); did you mean ‘WSH_VERSION’?
+   22 |                ZSH_VERSION, WSH_ZSH_SOURCE_REVISION, WSH_TARGET);
+      |                ^~~~~~~~~~~
+      |                WSH_VERSION
+wsh-tools.c:22:16: note: each undeclared identifier is reported only once for each function it appears in
+In file included from init.pro:6,
+                 from init.c:35:
+wsh-tools.c: At top level:
+wsh-tools.c:5:1: error: redefinition of ‘wsh_cli’
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+wsh-tools.c:5:1: note: previous definition of ‘wsh_cli’ with type ‘int(int,  char **)’
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+wsh-tools.c: In function ‘wsh_cli’:
+wsh-tools.c:22:16: error: ‘ZSH_VERSION’ undeclared (first use in this function); did you mean ‘WSH_VERSION’?
+   22 |                ZSH_VERSION, WSH_ZSH_SOURCE_REVISION, WSH_TARGET);
+      |                ^~~~~~~~~~~
+      |                WSH_VERSION
+In file included from init.c:1978:
+wsh-tools.c: At top level:
+wsh-tools.c:5:1: error: redefinition of ‘wsh_cli’
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+wsh-tools.c:5:1: note: previous definition of ‘wsh_cli’ with type ‘int(int,  char **)’
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+init.c:1981:1: warning: no previous prototype for ‘zsh_main’ [-Wmissing-prototypes]
+ 1981 | zsh_main(int argc, char **argv)
+      | ^~~~~~~~
+wsh-tools.c:5:1: warning: ‘wsh_cli’ defined but not used [-Wunused-function]
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+wsh-tools.c:5:1: warning: ‘wsh_cli’ defined but not used [-Wunused-function]
+    5 | wsh_cli(int argc, char **arguments)
+      | ^~~~~~~
+make[2]: *** [Makemod:225: init.o] Error 1
+make[2]: Leaving directory '/var/tmp/wsh-native-tools/source/Src'
+make[1]: *** [Makefile:448: modobjs] Error 2
+make[1]: Leaving directory '/var/tmp/wsh-native-tools/source/Src'
+make: *** [Makefile:73: all] Error 1
+Traceback (most recent call last):
+  File "/code/wsh/native/build-tools.py", line 68, in <module>
+    main()
+    ~~~~^^
+  File "/code/wsh/native/build-tools.py", line 53, in main
+    run(['make', '-j8'], cwd=SOURCE, env=environment)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/code/wsh/native/build-tools.py", line 19, in run
+    return subprocess.run([str(a) for a in arguments], check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['make', '-j8']' returned non-zero exit status 2.

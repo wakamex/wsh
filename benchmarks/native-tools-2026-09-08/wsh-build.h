@@ -1,0 +1,5 @@
+#define WSH_VERSION "0.3.1-native-tools"
+#define WSH_SOURCE_REVISION "c5066cef8f98c89d78c1cba0b7951f31eba2d661"
+#define WSH_INPUTS_SHA256 "76df65612c955a22ba973dc70c778c223dc6321d9f9b48603bed387d3aa1cfdf"
+#define WSH_ZSH_SOURCE_REVISION "cad0d67c76e2be7371cf3526b79ea2581810d35a"
+#define WSH_TARGET "x86_64-linux-gnu"
