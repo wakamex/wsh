@@ -1,0 +1,12 @@
+{
+  "source_revision": "1064e432400702691afaf58ce0385ff38d35d3cb+dirty",
+  "source_inputs": {
+    "native/test-migration.py": "6e6ece46b04802ed9ee7ef65318362565328aa12fc92cc37e02038f1d4738fbb",
+    "NATIVE-MIGRATION.md": "3160cab7ac9a46bfee8e2bfba645bfabbdcdd3a099a056f5fcbc2d031f9f44a9"
+  },
+  "wakterm_commit": "e33307f0bedaa190214ba3ff2c38f71cf2564483",
+  "commands": [
+    "python3 native/test-migration.py bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986 target/release/wsh /var/tmp/wsh-native-qualification/migration",
+    "cd /code/wakterm && cargo test --locked -p mux restored_harness_"
+  ]
+}
