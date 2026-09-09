@@ -12,7 +12,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 | 6. C themes and rendering | Complete opt-in C helper passes; architecture/migration pending | [Definition parity](benchmarks/native-render-2026-09-08/theme-parser-report.md), [renderer parity](benchmarks/native-render-2026-09-08/renderer-report.md) and [complete-helper contracts/resource gates](benchmarks/native-render-2026-09-08/runtime-report.md) pass; explicit NUL-path rejection remains recorded |
 | 7. Runtime process boundary | Keep one helper per shell | [Direct embedding loses child ownership; handler suppression breaks shell wait](benchmarks/native-runtime-boundary-2026-09-09/report.md). Helper IPC is 11.850 microseconds p95 |
 | 8. Completion | Bounded experiments complete; default initialization not admitted | [Read-only seed passes the valid path; stale/unusable fallback exceeds startup budget and the bounded-read wrapper is rejected](benchmarks/native-completion-scan-2026-09-09/report.md) |
-| 9. Interactive components | Pending | Independent directory/history/suggestion/highlighting comparisons |
+| 9. Interactive components | Directory kernel comparison complete; editor components pending | [C matching passes parity and reduces 1,000-entry lookup median by 62.25%](benchmarks/native-directory-query-2026-09-09/report.md); partial-port adoption remains a decision |
 | 10. Migration and qualification | Pending | Consumer inventory, local qualification, decisions and verification limits |
 
 Each result is bounded by its predeclared experiment gates. A retained prototype is not an adopted production implementation. Production currently remains on the existing Rust-manager bundle path.
