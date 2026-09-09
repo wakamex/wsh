@@ -32,6 +32,7 @@ jq -e '
   (.archive_sha256 | type == "string" and test("^[0-9a-f]{64}$")) and
   (.source_revision | type == "string" and length > 0) and
   (.preconfigure | type == "boolean") and
+  ((.native.linked_modules // false) | type == "boolean") and
   (.source_patches | type == "array") and
   (all(.source_patches[];
     (.path | type == "string" and test("^build/zsh-patches/[A-Za-z0-9._-]+\\.patch$")) and
@@ -202,6 +203,10 @@ fi
   --enable-cap \
   --enable-multibyte \
   --enable-pcre
+if jq -e '.native.linked_modules == true' "$source_lock" >/dev/null; then
+  # Keep dynamic loading for external modules while linking the bundled set.
+  sed -i 's/ link=dynamic / link=static /' config.modules
+fi
 make -j "${WSH_BUILD_JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 if (( test_patch_count > 0 )); then
   test_patch=
@@ -219,6 +224,7 @@ if [[ ! -x ${staged_install}/bin/zsh ]]; then
   exit 1
 fi
 print -r -- "$source_lock_sha256" >| "${staged_install}/.wsh-source-lock.sha256"
+cp config.modules "${staged_install}/.wsh-config.modules"
 if [[ -n $native_build_identity ]]; then
   print -r -- "$native_build_identity" >| "${staged_install}/.wsh-native-build.sha256"
   install -m 755 "${staged_install}/bin/zsh" "${staged_install}/bin/wsh"

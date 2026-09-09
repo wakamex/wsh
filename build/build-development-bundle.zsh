@@ -67,7 +67,14 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 755 "${zsh_root}/bin/wsh" "${stage}/bin/wsh"
 fi
 install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
-cp -R -- "${zsh_root}/lib" "$stage/lib"
+if [[ -d ${zsh_root}/lib ]]; then
+  cp -R -- "${zsh_root}/lib" "$stage/lib"
+elif jq -e '.native.linked_modules == true' "$zsh_source_lock" >/dev/null; then
+  mkdir -p -- "$stage/lib/zsh/${zsh_version}"
+else
+  print -u2 -- 'error: dynamic Zsh build is missing its module directory'
+  exit 1
+fi
 mkdir -p -- "${stage}/share/zsh/${zsh_version}"
 cp -R -- "${zsh_root}/share/zsh/${zsh_version}/functions" "${stage}/share/zsh/${zsh_version}/functions"
 install -D -m 644 "${repository_root}/integration/integration.zsh" "${stage}/share/wsh/integration.zsh"

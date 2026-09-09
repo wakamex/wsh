@@ -1,0 +1,43 @@
+{
+  "source_revision": "d2f6513da068e1a523023ca5cfe9469ffe460e7a+dirty",
+  "source_inputs": {
+    "build/build-zsh.zsh": "90b70496e9fce3c948d337d1506ead72897da85ffa534f7522fb857e94492898",
+    "build/build-development-bundle.zsh": "ea03d7a987af3a3802cce8ee655cd544dd7823bc82579d10c619f293e89b5d9f",
+    "build/update-native-lock.py": "9af5f7e4ebe60b6b629ee3d03cd1c8e8f53ce6760cc2fa83ce0ed5cd44cb1ddc",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "6c8ae101071afbf5357ecf604c63e78cb38e4737ab44f90b771eed8d875fc907",
+    "native/startup.c": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0",
+    "native/prepare-build.py": "d15b639bf8da4593752b26e001deae8ea00d731a15ec462ca0eafcb0b1c6fad9",
+    "native/test-linked-modules.py": "e36c42b2b31883d37a7c98417d5f9b195c8e74da02ffcd3407d39715ed1aa9d9",
+    "native/test-startup.py": "aea1d5e10be3ac00adaac0e57b7ece97af7b3eab7397e63186ac179f8275064e",
+    "native/check-installation.py": "5bd28abe0947cc1b568646a7c317e1b73a8b1cb5a22adc721331ecbec626d374",
+    "native/measure-startup.py": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2",
+    "native/measure-linked-memory.py": "6a1bc017145caf7456a2331b21bc5d2ae4c01a41c2a28c883e4c7c1ea3ec6d1b",
+    "native/suggestion-kernel-prototype.c": "894812e5e7af20c9a0a351650ad8adc6ffb0a1bec0c7b79b4c392ecbaec3cd60",
+    "benchmarks/native-qualification-2026-09-09/modules-plan.md": "1b44c65c338c731899a222f7524bbced155fb921950e884315a8118cab66991c"
+  },
+  "variants": {
+    "control": {
+      "manifest_sha256": "2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8",
+      "zsh_sha256": "a244188fdcea7d906d3446ce793d8dd5266beed1864a486f6b72759db986944b",
+      "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683"
+    },
+    "candidate": {
+      "manifest_sha256": "622516bc153c52658ade6eaa9ea4e014e3306bfffe8e34d6fe8b63b092d2fe00",
+      "zsh_sha256": "32883b5b8b13583aaf4aeb94ea2dd5b4e98be9ee05839cef06d5b956a8ea343f",
+      "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683"
+    }
+  },
+  "sanitized_binary_sha256": "4029b304bf37b90775df0c04156b85dd27d946d7e81cf0c4f31d73323872ff29",
+  "external_module_sha256": "103bffa3cc1673244cc10502ea56bc7b6a3a4d98a618cf292f01d93dac5d1677",
+  "sanitized_external_module_sha256": "e2db9ff8094d4289cdf7630d6401e1088e9cec9eed048aae431e40e98845bf1c",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "commands": [
+    "CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS=-L/var/tmp/wsh-native-sdk/usr/lib64 LIBS=-ljansson WSH_KEEP_FAILED_BUILD=1 WSH_ZSH_SOURCE_LOCK=/var/tmp/wsh-native-qualification/linked-source.json WSH_ZSH_OUTPUT_ROOT=/var/tmp/wsh-native-qualified-linked ./build/build-zsh.zsh",
+    "CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS=-L/var/tmp/wsh-native-sdk/usr/lib64 LIBS=-ljansson WSH_ZSH_SOURCE_LOCK=/var/tmp/wsh-native-qualification/linked-source.json WSH_ZSH_ROOT=/var/tmp/wsh-native-qualified-linked/zsh-cad0d67c-native-linked ./build/build-development-bundle.zsh",
+    "python3 native/test-linked-modules.py /code/wsh/bundles/2f16088a07e00940ddf6d0ce7826513b5b872747c73efc82fad1f023bd2f39a4 /var/tmp/wsh-native-suggestion /code/wsh/bundles/d129be9f8b50f52fa9a0591ded5e1d1d64b85a22ed58e8434a5aa45877fcb5a9/bin/wsh /var/tmp/wsh-native-qualification/module-lifetime",
+    "ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-linked-modules.py /var/tmp/wsh-native-qualification/linked-sanitized-installation /var/tmp/wsh-native-suggestion/sanitized /code/wsh/bundles/d129be9f8b50f52fa9a0591ded5e1d1d64b85a22ed58e8434a5aa45877fcb5a9/bin/wsh /var/tmp/wsh-native-qualification/module-lifetime-sanitized",
+    "python3 native/check-installation.py /var/tmp/wsh-native-qualification/linked-installations/622516bc153c52658ade6eaa9ea4e014e3306bfffe8e34d6fe8b63b092d2fe00 /var/tmp/wsh-native-qualification/linked-c-contracts",
+    "python3 native/measure-startup.py /var/tmp/wsh-native-qualification/path-installations/2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8 /var/tmp/wsh-native-qualification/linked-installations/622516bc153c52658ade6eaa9ea4e014e3306bfffe8e34d6fe8b63b092d2fe00 /var/tmp/wsh-native-qualification/linked-timing",
+    "python3 native/measure-linked-memory.py /var/tmp/wsh-native-qualification/path-installations/2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8 /var/tmp/wsh-native-qualification/linked-installations/622516bc153c52658ade6eaa9ea4e014e3306bfffe8e34d6fe8b63b092d2fe00 /var/tmp/wsh-native-qualification/linked-memory"
+  ]
+}

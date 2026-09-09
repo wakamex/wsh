@@ -71,4 +71,6 @@ python3 ./benchmarks/verify-native-highlight-kernel-evidence.py
 
 python3 ./benchmarks/verify-native-resource-paths-evidence.py
 
+python3 ./benchmarks/verify-native-linked-modules-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'
