@@ -11,7 +11,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 | 5. C Git collector | Tested opt-in C prototype; default remains Rust | [Correctness and resource gates pass](benchmarks/native-git-2026-09-08/report.md); C plus temporary bridge adds code, so full runtime comparison is next |
 | 6. C themes and rendering | Complete opt-in C helper passes; architecture/migration pending | [Definition parity](benchmarks/native-render-2026-09-08/theme-parser-report.md), [renderer parity](benchmarks/native-render-2026-09-08/renderer-report.md) and [complete-helper contracts/resource gates](benchmarks/native-render-2026-09-08/runtime-report.md) pass; explicit NUL-path rejection remains recorded |
 | 7. Runtime process boundary | Keep one helper per shell | [Direct embedding loses child ownership; handler suppression breaks shell wait](benchmarks/native-runtime-boundary-2026-09-09/report.md). Helper IPC is 11.850 microseconds p95 |
-| 8. Completion | Pending | Audit, scan, dump and first-use cost |
+| 8. Completion | Bounded experiments complete; default initialization not admitted | [Read-only seed passes the valid path; stale/unusable fallback exceeds startup budget and the bounded-read wrapper is rejected](benchmarks/native-completion-scan-2026-09-09/report.md) |
 | 9. Interactive components | Pending | Independent directory/history/suggestion/highlighting comparisons |
 | 10. Migration and qualification | Pending | Consumer inventory, local qualification, decisions and verification limits |
 

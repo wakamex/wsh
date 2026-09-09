@@ -59,4 +59,6 @@ python3 ./benchmarks/verify-native-runtime-evidence.py
 
 python3 ./benchmarks/verify-native-runtime-boundary-evidence.py
 
+python3 ./benchmarks/verify-native-completion-scan-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

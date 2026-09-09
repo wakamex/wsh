@@ -1,0 +1,30 @@
+{
+  "source_revision": "ba0f607022608c6c34a427e9f7c74766cd355d46+dirty",
+  "source_inputs": {
+    "native/measure-compinit.py": "bd4dc2fde7333ed8edbb20118e476d97c2cd4a449d53361bcf21095be4117cc2",
+    "native/prepare-completion-prototype.py": "5c843621ebb2b90e9afd06b64bde2458bf6ec63ec6489d075b5b2828e33cfd3e",
+    "native/test-completion-dump.py": "7b7ae19b9445e8eb46bfbe7aee9051904c3baa394e4821fa7ff3648e40d58616",
+    "native/test-completion-headers.py": "eb9bc2ea7cc544d5db1d8af08b91e277b348210b9ec24cf731c364d219d7b3b9",
+    "native/test-completion-seed.py": "8f5db9a27ebaee4330a71e5eddf1361c18e58b0dbd66508de4c7267ffea353da",
+    "benchmarks/deferred-completion-2026-09-06/run.py": "10140d6437d244aec4f35f5c9e0e9dd96ef25d8d0184f7197a1fe0a955c78880",
+    "benchmarks/native-completion-scan-2026-09-09/plan.md": "79bfb413142af78d510241e0abc8a9a20271e60c4bcb5791e27a454f08caf302"
+  },
+  "bundle_path": "/var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2",
+  "bundle_sha256": "ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2",
+  "zsh_sha256": "5aad1bcbdfa93b9dc72be628f8c2fe735ca09f524166d298d3acbd4889f9e04e",
+  "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cpu": 0,
+  "commands": [
+    "python3 native/measure-compinit.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/spans",
+    "python3 native/prepare-completion-prototype.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype",
+    "python3 native/test-completion-dump.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype /var/tmp/wsh-native-completion/dump-correctness",
+    "python3 native/test-completion-seed.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype /var/tmp/wsh-native-completion/zle-final correctness",
+    "python3 native/test-completion-seed.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype /var/tmp/wsh-native-completion/zle-final measure",
+    "python3 native/prepare-completion-prototype.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype-bulk-2 --bulk",
+    "python3 native/test-completion-headers.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype-bulk-2 /var/tmp/wsh-native-completion/header-parity-2",
+    "python3 native/test-completion-dump.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype-bulk-2 /var/tmp/wsh-native-completion/dump-bulk",
+    "python3 native/test-completion-seed.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype-bulk-2 /var/tmp/wsh-native-completion/zle-bulk correctness",
+    "python3 native/test-completion-seed.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-completion/prototype-bulk-2 /var/tmp/wsh-native-completion/zle-bulk measure"
+  ]
+}
