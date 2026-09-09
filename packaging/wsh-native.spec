@@ -7,7 +7,7 @@ Name:           wsh-native-development
 Version:        0.3.1
 Release:        %{wsh_release}%{?dist}
 Summary:        Unsigned native Wsh installation for migration testing
-License:        MIT AND Zsh
+License:        MIT AND Zsh AND BSD-3-Clause
 URL:            https://github.com/wakamex/wsh
 Source0:        native-payload.tar.gz
 Requires:       /bin/sh

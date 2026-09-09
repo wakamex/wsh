@@ -1,0 +1,11 @@
+# Final C package passes login, transactions and packaging reproducibility
+
+The selected native core and C helper pass real Fedora PAM login before and after reboot, including a newly created empty-home account and a confined SELinux account. Missing, corrupt, unreadable and incompatible activation state, and missing or unusable optional helper/integration files, all preserve shell access. Two independent packaging directories produce identical source archives and unsigned RPMs from the same verified payload.
+
+The package tests repeat authenticated `chsh`, Ctrl-Z/`fg`/Ctrl-C, DNF upgrade and downgrade, failed pre/post scriptlets, interruption during the post-install phase, repaired package verification, and an old running shell loading modules/functions and starting the replacement helper. Ordinary removal refuses while local accounts use Wsh; moving all test accounts to Bash permits removal, clears registration, and preserves recovery. Reinstallation and reboot restore both fresh and confined account logins. The recorded boot IDs differ.
+
+Packaging now fixes source timestamps, ownership, modes, gzip headers, build host and RPM build/file times. The license expression includes the shipped BSD-3-Clause highlighting component. The [plan](package-plan.md) fixes the gates. `package-metadata.json`, `package-inputs.tar.gz` and `package-results.tar.gz` retain commands, source, logs, identities and the tested 0.1 RPM. The 0.2-0.5 transaction variants differ only in declared release/fault flags. These are unsigned development artifacts, not published packages.
+
+## Qualification boundaries
+
+The login test uses real serial getty and PAM. The noninteractive `-lc` invocation also passes with nonexistent HOME/XDG/state paths; a complete GDM desktop session was not exercised. The transaction interruption occurs after payload installation, not during a power loss while writing files. The module lifetime test separately proves bundled modules survive executable replacement and external modules still load. Future incompatible autoload-function or helper-protocol changes need a release policy. Remote account directories and arbitrary account-shell aliases remain outside the local `/etc/passwd` removal guard. The earlier real `--noscripts` bypass test remains applicable; no package scriptlet can prevent an administrator from bypassing it.

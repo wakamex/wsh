@@ -1,0 +1,39 @@
+{
+  "source_revision": "a98029edea2733e69465d817a9ae999597ad7864+dirty",
+  "source_inputs": {
+    "packaging/build-rpm.py": "669cf7b2dc78e274669d92527a2f757717070eed8f5a32aee17cd7110decdb3f",
+    "packaging/wsh-native.spec": "392158ea08dbaba71959fc8d5294f165f4a76f1e62a7458d4bbea216b4c9df17",
+    "packaging/vm.py": "cd8e9f0bde41212242fafcab512b9d670919671798829d83f183cb0404402fdd",
+    "packaging/test-login.py": "732d4d4b09605187aa34faf1b333178c8b2178f39bfbdb5bb0de66ed963035bb",
+    "packaging/test-vm-recovery.py": "2d7f22b952178f787487dd0af4ce6e048599afd94fef492d7c6e340d38b4b05a",
+    "packaging/test-transactions-guest.py": "05827f6ac82ecb821781bc250f9ba39f0020ae9c50e20521c2d7d03b711d690e",
+    "packaging/test-chsh-guest.py": "7e58c359aaba151bc1c220e400171cedc2cae4e37a9de121659d3ebf6f833c83",
+    "benchmarks/native-qualification-2026-09-09/package-plan.md": "92841ad3d5e1d755eadc99aa886276e88573d1943677a1135bb8aa59623caf69"
+  },
+  "results": {
+    "rpm_sha256": {
+      "a": "de5e4a20eb027d4e4121570b857fd73a1092d1ffd71e210274f55572da9cd591",
+      "b": "de5e4a20eb027d4e4121570b857fd73a1092d1ffd71e210274f55572da9cd591"
+    },
+    "source_archive_sha256": {
+      "a": "c707c269db42736a1419b49bfa38af94f1c312cc2dff91cbaa318b1cc777368e",
+      "b": "c707c269db42736a1419b49bfa38af94f1c312cc2dff91cbaa318b1cc777368e"
+    },
+    "epoch": 1788931200,
+    "rpm_version": "RPM version 6.0.2",
+    "before_boot_id": "7801635f-8a93-43d6-85d8-702474d71007",
+    "after_boot_id": "5f23fce6-2dd3-4d8f-a729-6b91cc3d58d5"
+  },
+  "installation_manifest_sha256": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "commands": [
+    "python3 packaging/build-rpm.py bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986 /var/tmp/wsh-native-qualification/rpm-a --epoch 1788931200",
+    "Repeat in rpm-b; compare source archive and RPM bytes. Repeat releases 0.2/none, 0.3/pre, 0.4/post, 0.5/pause for transaction variants.",
+    "python3 packaging/test-login.py final-native-pam shellempty --job-control",
+    "python3 packaging/test-vm-recovery.py",
+    "python3 packaging/test-login.py final-confined-pam shellsecond",
+    "python3 packaging/test-login.py final-fresh-empty-pam shellfinal",
+    "python3 packaging/test-login.py final-post-reboot-pam shellfinal",
+    "python3 packaging/test-login.py final-post-reboot-confined shellsecond",
+    "Guest setup/transaction/removal/reboot commands are retained as vm/final-*.sh."
+  ]
+}
