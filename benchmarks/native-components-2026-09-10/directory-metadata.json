@@ -1,0 +1,11 @@
+{
+  "source_revision": "6d8d9ff8f46ce68b6fc06978f7dcee9f06421149",
+  "unsigned_development_bundle": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "target": "x86_64-linux-gnu",
+  "trace": "off",
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "binary_sha256": "1c42eb54b0ab65a4978f6dc0d1cd0e8edb3161e0af28b2e8649dd6bd7ec12bbc",
+  "module_sha256": "2ec43faba5bd7944a4a68f569436ecc74208600270273dc776f4181c5dc2109b",
+  "sanitized_module_sha256": "3429959ac6c769676569451eb4287fa356629d7f9e4cc6c1827e0f40ee8f9d8b",
+  "selected": false
+}

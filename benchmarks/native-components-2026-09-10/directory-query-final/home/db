@@ -1,0 +1,15 @@
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project|1.5|1700000000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/Project|2.5|1700001000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project space|5.5|1800000000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project[1]|4.5|1700003000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project$(false)|5.5|1700004000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project`false`|1.5|1700005000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project;false|2.5|1700006000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project\x|3.5|1700007000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/projecté|4.5|1700008000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/PROJECT|5.5|1700009000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project/new|1.5|1700010000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/other|2.5|1700011000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project%F|3.5|1700012000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project'quote|4.5|1700013000
+/code/wsh/benchmarks/native-components-2026-09-10/directory-query-final/home/project	tab|5.5|1700014000
