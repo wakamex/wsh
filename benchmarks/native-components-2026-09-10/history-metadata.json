@@ -1,0 +1,12 @@
+{
+  "source_revision": "eae1185c809290950528e30bb7f2471c5b46f87e",
+  "unsigned_development_bundle": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "target": "x86_64-linux-gnu",
+  "trace": "off",
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "binary_sha256": "1c42eb54b0ab65a4978f6dc0d1cd0e8edb3161e0af28b2e8649dd6bd7ec12bbc",
+  "module_sha256": "ca5bc90b55ac994696b0656dde6647fc5cb376cdf3a3c25219bbe13d30373e76",
+  "sanitized_module_sha256": "fe469407da7a4ea7d7a09e58a9f393ff939eb0b2f461610ebacbdd595c43cb25",
+  "selected": false,
+  "scope": "native matching/navigation with retained Zsh editor/highlight adapters"
+}

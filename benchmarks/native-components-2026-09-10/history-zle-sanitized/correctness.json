@@ -1,0 +1,122 @@
+[
+  {
+    "config": [
+      "",
+      "",
+      ""
+    ],
+    "variants": [
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ],
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "config": [
+      "1",
+      "",
+      ""
+    ],
+    "variants": [
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ],
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "config": [
+      "",
+      "1",
+      ""
+    ],
+    "variants": [
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ],
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond",
+        "echo duplicate 1",
+        ""
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "config": [
+      "",
+      "",
+      "1"
+    ],
+    "variants": [
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond\u0001",
+        "echo duplicate 1",
+        ""
+      ],
+      [
+        "echo \u00e9 newest",
+        "echo multiline\r\nsecond",
+        "echo \u00e9 newest",
+        "absent",
+        "echo CUSTOM",
+        "echo multiline\r\nsecond\u0001",
+        "echo duplicate 1",
+        ""
+      ]
+    ],
+    "equal": true
+  }
+]
