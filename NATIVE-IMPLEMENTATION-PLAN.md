@@ -144,7 +144,7 @@ Run upstream tests, complete Wsh correctness and hostile-input suites, real-conf
 
 Update release, provenance, installation, security, and user documentation together with their implementation. Preserve the existing exact-commit eligibility check and explicit release authorization until an approved workflow change replaces them. No package publication or account-shell change is implied by writing or executing local prototype stages.
 
-Completion condition: the released package contains the selected native implementation, all shipped paths pass their applicable gates, obsolete user-facing commands have a tested migration, and users can select the system shell without creating a dependency on private activation state.
+Local completion condition: the selected native development package passes its applicable gates, former user-facing commands have a tested migration, and the system account shell does not depend on private activation state. Retain explicit publication, artifact-contract and compatibility decisions for discussion. Publishing the replacement package and retiring the legacy distribution require separate release authorization.
 
 ## Deferred cross-shell collection experiment
 

@@ -1,0 +1,790 @@
+{
+  "native_shell_c": {
+    "files": [
+      {
+        "path": "native/doctor.c",
+        "lines": 212,
+        "bytes": 8202,
+        "sha256": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056"
+      },
+      {
+        "path": "native/foreground.c",
+        "lines": 53,
+        "bytes": 1897,
+        "sha256": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1"
+      },
+      {
+        "path": "native/profile-report.c",
+        "lines": 358,
+        "bytes": 15842,
+        "sha256": "a6950a40209fcfb0b0e35b0b30ecae6dc3e8c435b2dd951fc5e964fe4219f574"
+      },
+      {
+        "path": "native/profile.c",
+        "lines": 209,
+        "bytes": 7965,
+        "sha256": "385dbe77c81256130efe11df16d1d7e1c3495455a6fc1c90b778934e0fa44e7a"
+      },
+      {
+        "path": "native/startup.c",
+        "lines": 133,
+        "bytes": 3727,
+        "sha256": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0"
+      },
+      {
+        "path": "native/tools.c",
+        "lines": 68,
+        "bytes": 2408,
+        "sha256": "72027f31a44aed08ffa70be93880b0c56a3ce1d56be54f40b92dda6053f3825c"
+      }
+    ],
+    "lines": 1033,
+    "bytes": 40041
+  },
+  "native_helper_c": {
+    "files": [
+      {
+        "path": "native/git.c",
+        "lines": 591,
+        "bytes": 24785,
+        "sha256": "acb06896c54b52ef72e331490474ff6b11511cb0e46c1ed080ccae9f06e95f2a"
+      },
+      {
+        "path": "native/render.c",
+        "lines": 215,
+        "bytes": 13020,
+        "sha256": "54d7fc6f562aed19d17a4eed56b10d3514d528b8a40eb3c3dd9dcf4ab80d58e3"
+      },
+      {
+        "path": "native/runtime-trace.c",
+        "lines": 120,
+        "bytes": 3544,
+        "sha256": "dbad4fa7387c3404541e6bcc764f6e00fbef3a2eca686fe08c3d12b25745bbad"
+      },
+      {
+        "path": "native/runtime.c",
+        "lines": 548,
+        "bytes": 18749,
+        "sha256": "8b165be348112e7f94b674948cb3365d66c7597f4e030436846f897b0187c03b"
+      },
+      {
+        "path": "native/theme.c",
+        "lines": 168,
+        "bytes": 10395,
+        "sha256": "ce54cb57147a97adf73d13fab22ce1dbcfba8823ae73fb4e460715b232915ebd"
+      }
+    ],
+    "lines": 1642,
+    "bytes": 70493
+  },
+  "native_headers": {
+    "files": [
+      {
+        "path": "native/git.h",
+        "lines": 16,
+        "bytes": 637,
+        "sha256": "25e48ab4d5db5cf58450ec551b2c7a92fa59cca55f4a494eb8647ecdbcfd2bfa"
+      },
+      {
+        "path": "native/render.h",
+        "lines": 16,
+        "bytes": 638,
+        "sha256": "e21af597954d3a1088d92436461ff10b39f10326ae1795f098bd3d7f2b0bbc00"
+      },
+      {
+        "path": "native/runtime-json.h",
+        "lines": 64,
+        "bytes": 1720,
+        "sha256": "b71ee14ef4d74ab1e8a3f21fbcfa99b7f689a5e590ec61b60a321d557787b6e1"
+      },
+      {
+        "path": "native/runtime-trace.h",
+        "lines": 16,
+        "bytes": 688,
+        "sha256": "2cf850449cd8d9c62bb6d3f7445844a3c12bee78594a63f03ff21b3442a69173"
+      },
+      {
+        "path": "native/theme.h",
+        "lines": 15,
+        "bytes": 607,
+        "sha256": "8d3da5adf7614ec9e13c8ae79de5d2c54aa5d3c58c6f9b0c483ac73ad7c23e4e"
+      }
+    ],
+    "lines": 127,
+    "bytes": 4290
+  },
+  "legacy_rust": {
+    "files": [
+      {
+        "path": "crates/wsh-install/examples/benchmark_provenance.rs",
+        "lines": 60,
+        "bytes": 1980,
+        "sha256": "52ace4fa1ed6de9e0264fe570b3e1c22d47520d4cfe32ef2ac71416363a1fcea"
+      },
+      {
+        "path": "crates/wsh-install/src/lib.rs",
+        "lines": 1094,
+        "bytes": 40611,
+        "sha256": "da2269958a22ae361b5486d24bee187a7cd6563d784c3909fcabc68c5e53bb14"
+      },
+      {
+        "path": "crates/wsh-install/src/main.rs",
+        "lines": 87,
+        "bytes": 3041,
+        "sha256": "4cdd08175b2e23601ac4dac1a6cf53bdfb3539a5f7b9be2bc1a2cf7a9a57761b"
+      },
+      {
+        "path": "crates/wsh-install/tests/external_attestation.rs",
+        "lines": 51,
+        "bytes": 2118,
+        "sha256": "b84738861e6cf7fe79af2da43ea3e9556010ac1374217f68b9d103d6581d5eef"
+      },
+      {
+        "path": "crates/wsh-runtime/build.rs",
+        "lines": 14,
+        "bytes": 476,
+        "sha256": "eba16294e214146dd6a9af42f8496ff967bd9ac56f2b73c5db5e1dd62ecafc8d"
+      },
+      {
+        "path": "crates/wsh-runtime/examples/theme-benchmark.rs",
+        "lines": 54,
+        "bytes": 2230,
+        "sha256": "319d738672a1887a8ab89e08fa7071699bdc5e63adcef9d306d1ddfbe8e77dc6"
+      },
+      {
+        "path": "crates/wsh-runtime/src/git.rs",
+        "lines": 409,
+        "bytes": 13587,
+        "sha256": "117f0b8c1f8c4d5aa99c30380c51030ffb581bc267f48ab26def958d27922f83"
+      },
+      {
+        "path": "crates/wsh-runtime/src/git_comparison.rs",
+        "lines": 90,
+        "bytes": 3500,
+        "sha256": "d0cddf2e96eda535f1a0df27d042771b5b836f3fd823257728d2651d14591813"
+      },
+      {
+        "path": "crates/wsh-runtime/src/lib.rs",
+        "lines": 1897,
+        "bytes": 66146,
+        "sha256": "75584f5355c257143fe61445864afe4854818affac607af526c845bcaf1a0cea"
+      },
+      {
+        "path": "crates/wsh-runtime/src/main.rs",
+        "lines": 70,
+        "bytes": 2136,
+        "sha256": "27dc169ed07f205162698364302f3e83146273dc2482119489090a7cb46c47ad"
+      },
+      {
+        "path": "crates/wsh-runtime/src/native_git.rs",
+        "lines": 146,
+        "bytes": 4424,
+        "sha256": "d134ad97a84bfa54b6e1119b41dc6743730cc98a524f54c6cbfd70ecec205267"
+      },
+      {
+        "path": "crates/wsh-runtime/src/render_comparison.rs",
+        "lines": 213,
+        "bytes": 8743,
+        "sha256": "9e08c17de24ea19a5e47cd93f973a6e8ccd4337ab4bb56a1aa08a43b1a90904c"
+      },
+      {
+        "path": "crates/wsh/src/doctor.rs",
+        "lines": 306,
+        "bytes": 11155,
+        "sha256": "78b271c4821bd762a6399dd2441ff874b559b7cf6ffa0565eff20384c270fbca"
+      },
+      {
+        "path": "crates/wsh/src/lib.rs",
+        "lines": 912,
+        "bytes": 32858,
+        "sha256": "79ab1985c911b2c9f96abd0dddcc96c05a21227620148330f4e5776da7a59d61"
+      },
+      {
+        "path": "crates/wsh/src/login.rs",
+        "lines": 143,
+        "bytes": 4859,
+        "sha256": "2a4628eded0527b766b24e8af96e5b876484a2b801d923ccf01aebd1b4271791"
+      },
+      {
+        "path": "crates/wsh/src/main.rs",
+        "lines": 499,
+        "bytes": 20165,
+        "sha256": "08b95965d2fb13bd19aba7e3eacabf0fb5cc447b64858f09f9cf81e873df04a5"
+      },
+      {
+        "path": "crates/wsh/src/profile.rs",
+        "lines": 642,
+        "bytes": 21760,
+        "sha256": "05bbccbe7d540c787000b2ed16dd9b5689ae50fcd62481eb4c11a9d53973de17"
+      },
+      {
+        "path": "crates/wsh/src/update.rs",
+        "lines": 321,
+        "bytes": 10133,
+        "sha256": "aab0614b00ab4b2071dd2d1fa3ef99c9135bec0e333549b8867477c57aa11026"
+      },
+      {
+        "path": "crates/wsh/tests/version_cli.rs",
+        "lines": 32,
+        "bytes": 1028,
+        "sha256": "b36bba05f6003d2933f27eabf279747440c9ff1dd3cc291f5be7115c8c15bec9"
+      }
+    ],
+    "lines": 7040,
+    "bytes": 250950
+  },
+  "integration_zsh": {
+    "files": [
+      {
+        "path": "integration/autosuggestions.zsh",
+        "lines": 72,
+        "bytes": 2677,
+        "sha256": "2d369f247f2a7278c83e90ba48690d0a1f63528837d034055b1cbec87d86a6d6"
+      },
+      {
+        "path": "integration/directory-jump.zsh",
+        "lines": 19,
+        "bytes": 772,
+        "sha256": "1cd461e08643174bc3cc64ff245ec2015ff500204873fbb25c41ac9402d07330"
+      },
+      {
+        "path": "integration/history-substring-search.zsh",
+        "lines": 95,
+        "bytes": 4048,
+        "sha256": "5970c7b331dac6809eb60c6f9b609ca87a140c7018a0b020d8b69ea791a62b93"
+      },
+      {
+        "path": "integration/integration.zsh",
+        "lines": 237,
+        "bytes": 7962,
+        "sha256": "1ba4386741f3e01883b8eb2b240b767f4b3feeed0ad0c836a4029b3493531c46"
+      },
+      {
+        "path": "integration/native-after.zsh",
+        "lines": 20,
+        "bytes": 1310,
+        "sha256": "d79265ae3ff093d08af95e0ec66e9411a24a367f1ea47409a6d2da801c7afc38"
+      },
+      {
+        "path": "integration/native-before.zsh",
+        "lines": 13,
+        "bytes": 677,
+        "sha256": "9f6316990e00f03c25c017a2935cb3a57cd0117bdebdabfd7057e62e0ce0523e"
+      },
+      {
+        "path": "integration/profile.zsh",
+        "lines": 115,
+        "bytes": 4196,
+        "sha256": "e868d2f904609927b5e671a91b5d2b69f0020f1af50bcb8113974d71b624fb83"
+      },
+      {
+        "path": "integration/syntax-highlighting.zsh",
+        "lines": 114,
+        "bytes": 4725,
+        "sha256": "6d14a315685176dcc317842064b4a1e061b1e87b0623d4bee688ee780de831e7"
+      }
+    ],
+    "lines": 685,
+    "bytes": 26367
+  },
+  "vendored_c": {
+    "files": [
+      {
+        "path": "third_party/tomlc17/tomlc17.c",
+        "lines": 3253,
+        "bytes": 87841,
+        "sha256": "89d3fe5ffe387360993c8b9df8f03eb13cd6df379b4482bcd039399f690a770f"
+      },
+      {
+        "path": "third_party/tomlc17/tomlc17.h",
+        "lines": 285,
+        "bytes": 9302,
+        "sha256": "281708fa05b805c32c117fc6033b0f4248257fce3440b1ac3391853bfc8f8bb5"
+      },
+      {
+        "path": "third_party/yyjson/yyjson.c",
+        "lines": 11480,
+        "bytes": 424765,
+        "sha256": "d2d58ef0a3b2267862dc363832c4f3185fd375aea933d5d3419d1a940d6ece2e"
+      },
+      {
+        "path": "third_party/yyjson/yyjson.h",
+        "lines": 8467,
+        "bytes": 330896,
+        "sha256": "ef803cda5c06b8962face6dfa39c3284b3bcf3e73f4d7317664690cc779679ca"
+      }
+    ],
+    "lines": 23485,
+    "bytes": 852804
+  },
+  "payload": {
+    "manifest_sha256": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+    "files": 1275,
+    "bytes": 9871975,
+    "bin": {
+      "wsh-runtime": 372320,
+      "zsh": 1864824,
+      "wsh": 1864824
+    },
+    "required_libraries": [
+      "libc.so.6",
+      "libcap.so.2",
+      "libjansson.so.4",
+      "libm.so.6",
+      "libncursesw.so.6",
+      "libpcre2-8.so.0",
+      "libtinfo.so.6",
+      "libz.so.1"
+    ]
+  },
+  "vendored_shell_plugins": {
+    "files": [
+      {
+        "path": "third_party/zsh-autosuggestions/zsh-autosuggestions.zsh",
+        "lines": 867,
+        "bytes": 27017,
+        "sha256": "eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a"
+      },
+      {
+        "path": "third_party/zsh-history-substring-search/oh-my-zsh-history-substring-search.zsh",
+        "lines": 846,
+        "bytes": 29692,
+        "sha256": "b2f8ffceca6006eadfdca72a487adb572fe3dccbd5ac3e9f95c50127968454b9"
+      },
+      {
+        "path": "third_party/zsh-history-substring-search/zsh-history-substring-search.zsh",
+        "lines": 846,
+        "bytes": 29692,
+        "sha256": "0b864862a3b48992d7316cc7e585a1315fa389d730c17bf16e2f2bd5918089f3"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/brackets/brackets-highlighter.zsh",
+        "lines": 107,
+        "bytes": 4436,
+        "sha256": "b3ac4a66edf133b8f029332e787b7d36e2e1d7cabec0d271f7e5fe6724490dd3"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/cursor/cursor-highlighter.zsh",
+        "lines": 47,
+        "bytes": 2492,
+        "sha256": "bd6ef3aae900fee57ff132360b3dd9d68df5aab150a33e32259fd5adbe8efd49"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/line/line-highlighter.zsh",
+        "lines": 44,
+        "bytes": 2318,
+        "sha256": "1a12c094770bc00276395dc71a398a63fd768c433453d35f4e47e5d315dfacf0"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/main/main-highlighter.zsh",
+        "lines": 1848,
+        "bytes": 69949,
+        "sha256": "d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/pattern/pattern-highlighter.zsh",
+        "lines": 60,
+        "bytes": 2867,
+        "sha256": "c2d5b50db13936421672b5ce16c0d7ec4f1abfeded34ea3a23bb39d2499b953b"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/highlighters/regexp/regexp-highlighter.zsh",
+        "lines": 62,
+        "bytes": 2873,
+        "sha256": "f567458da4fb89cae8ea220b8febea11ed67ab6f6c8f5e0d6723ea7285e932e7"
+      },
+      {
+        "path": "third_party/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh",
+        "lines": 587,
+        "bytes": 23776,
+        "sha256": "156ebe9530eb991dcef54d476967e2ff4338d35dabaaff9e5462673a287cc63b"
+      },
+      {
+        "path": "third_party/zsh-z/_z",
+        "lines": 63,
+        "bytes": 2293,
+        "sha256": "f2dcf5058a5eb5275358b644b259c342e492ab0d17e1f4ff8968ca62bbc6cca0"
+      },
+      {
+        "path": "third_party/zsh-z/z.plugin.zsh",
+        "lines": 1890,
+        "bytes": 79281,
+        "sha256": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7"
+      }
+    ],
+    "lines": 7267,
+    "bytes": 276686
+  },
+  "native_prototype_c": {
+    "files": [
+      {
+        "path": "native/collector-module-prototype.c",
+        "lines": 109,
+        "bytes": 2939,
+        "sha256": "96a013c40ad5fa10203203f32a2d51e7ac1a1703b27d6cf2d765d5f845044194"
+      },
+      {
+        "path": "native/directory-query-prototype.c",
+        "lines": 94,
+        "bytes": 5235,
+        "sha256": "696802ff22e394e272a1c2c2ad0f8aec364091c286c7f6fe143f04e0f58985ef"
+      },
+      {
+        "path": "native/git-parser-driver.c",
+        "lines": 44,
+        "bytes": 1812,
+        "sha256": "b7a54160137ef214232a4464cc1d13569b097342a66a75700ee5e3bb58164f8c"
+      },
+      {
+        "path": "native/highlight-kernel-prototype.c",
+        "lines": 45,
+        "bytes": 2183,
+        "sha256": "0bac208e22b8c503a0cc202ed8f1137a82cef173c8a53ee4675142c0ced707bd"
+      },
+      {
+        "path": "native/history-kernel-prototype.c",
+        "lines": 63,
+        "bytes": 3015,
+        "sha256": "b0a98860c31e5a39e754b0b8272fd2dac5208f329b1461ac84fa315b01d96cad"
+      },
+      {
+        "path": "native/render-driver.c",
+        "lines": 66,
+        "bytes": 4504,
+        "sha256": "0f58041d56642dc1f169ec3c01b966289e69c8b5f06205ed93638347ae21f217"
+      },
+      {
+        "path": "native/suggestion-kernel-prototype.c",
+        "lines": 34,
+        "bytes": 1671,
+        "sha256": "894812e5e7af20c9a0a351650ad8adc6ffb0a1bec0c7b79b4c392ecbaec3cd60"
+      },
+      {
+        "path": "native/theme-benchmark.c",
+        "lines": 32,
+        "bytes": 1078,
+        "sha256": "5623d1d8f9cbfd87b71348715f1dde738436e81ece3531bbcdacce105a8aacb7"
+      },
+      {
+        "path": "native/theme-prototype.c",
+        "lines": 14,
+        "bytes": 497,
+        "sha256": "e238b1c5c393b642783b1127b80f30c88853aecb0f8ef1b8c69bca6b027b1d00"
+      }
+    ],
+    "lines": 501,
+    "bytes": 22934
+  },
+  "native_build_test_tools": {
+    "files": [
+      {
+        "path": "native/build-collector-module.zsh",
+        "lines": 10,
+        "bytes": 423,
+        "sha256": "485ae231de9e9aee9b1e191edc12c3a683f0fe746432741f8383d10e3f82d603"
+      },
+      {
+        "path": "native/build-render-driver.zsh",
+        "lines": 11,
+        "bytes": 545,
+        "sha256": "97efa1691498672080a54fb45fe7caadb92b52afb814b4fef60f47cd8a21ba76"
+      },
+      {
+        "path": "native/build-runtime.zsh",
+        "lines": 13,
+        "bytes": 684,
+        "sha256": "13eef53f4e87d527a1c44fec6a22a5f69341f06c15719eea32ebb17f233d515f"
+      },
+      {
+        "path": "native/build-theme-prototype.zsh",
+        "lines": 13,
+        "bytes": 556,
+        "sha256": "65e20f683702f5cdf90fdc2ce2085b77919294f7373bafb7a2de06450e0b1e5e"
+      },
+      {
+        "path": "native/build-tools.py",
+        "lines": 88,
+        "bytes": 5092,
+        "sha256": "bd2dfca880de592844b1f929d84d63c8775588b47280342f63e5364aa3c53a86"
+      },
+      {
+        "path": "native/check-installation.py",
+        "lines": 51,
+        "bytes": 3654,
+        "sha256": "97acd7f3303f36aba9cd88dc4aaa312404a92770270f4bc85342f8da2cf18913"
+      },
+      {
+        "path": "native/measure-compinit.py",
+        "lines": 59,
+        "bytes": 3967,
+        "sha256": "bd4dc2fde7333ed8edbb20118e476d97c2cd4a449d53361bcf21095be4117cc2"
+      },
+      {
+        "path": "native/measure-directory-query.py",
+        "lines": 62,
+        "bytes": 2486,
+        "sha256": "260e3f98e5c43196c64421ec45c902289e36cfe9f594f4b8acee97f001772ce1"
+      },
+      {
+        "path": "native/measure-git.py",
+        "lines": 89,
+        "bytes": 5551,
+        "sha256": "6a20bc7c0b43afc334b43b806131a781107e68ed6da3088547c9f4cc9bfc9e6b"
+      },
+      {
+        "path": "native/measure-highlight-kernel.py",
+        "lines": 75,
+        "bytes": 3130,
+        "sha256": "8880d45e63004784263698468e2647c793602284c2c68bd21875d8ff53d3c2ca"
+      },
+      {
+        "path": "native/measure-history-kernel.py",
+        "lines": 70,
+        "bytes": 2792,
+        "sha256": "fde28205c306b585f7f2dfa4a384e980a32ee2894caace64c99403b65ee420c7"
+      },
+      {
+        "path": "native/measure-linked-memory.py",
+        "lines": 64,
+        "bytes": 3132,
+        "sha256": "6a1bc017145caf7456a2331b21bc5d2ae4c01a41c2a28c883e4c7c1ea3ec6d1b"
+      },
+      {
+        "path": "native/measure-runtime-ipc.py",
+        "lines": 30,
+        "bytes": 1727,
+        "sha256": "2abaac3ac7b0f359e219b7bdcbef31e7627a9b7b41a7fedf647633ee003b2324"
+      },
+      {
+        "path": "native/measure-startup.py",
+        "lines": 83,
+        "bytes": 4048,
+        "sha256": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2"
+      },
+      {
+        "path": "native/measure-suggestion-kernel.py",
+        "lines": 67,
+        "bytes": 2965,
+        "sha256": "3b8510f7c88d626eaadb79cfef4a1f2953cc3c0ea340f599d9544ed636ee48b4"
+      },
+      {
+        "path": "native/prepare-build.py",
+        "lines": 43,
+        "bytes": 2410,
+        "sha256": "d15b639bf8da4593752b26e001deae8ea00d731a15ec462ca0eafcb0b1c6fad9"
+      },
+      {
+        "path": "native/prepare-completion-prototype.py",
+        "lines": 41,
+        "bytes": 2475,
+        "sha256": "5c843621ebb2b90e9afd06b64bde2458bf6ec63ec6489d075b5b2828e33cfd3e"
+      },
+      {
+        "path": "native/prepare-directory-query.py",
+        "lines": 16,
+        "bytes": 1131,
+        "sha256": "f4e661c9f57e17bb52e0b964b5b537b435abec21260e78328bfe5ea77aeb5980"
+      },
+      {
+        "path": "native/prepare-highlight-kernel.py",
+        "lines": 22,
+        "bytes": 1160,
+        "sha256": "e098ea53b3a9612ab849cc9e34127caaedabab8c8c1aed8d6120ba21fe508dce"
+      },
+      {
+        "path": "native/prepare-runtime-comparison.py",
+        "lines": 38,
+        "bytes": 2185,
+        "sha256": "85dae40aefe468adbaee0eaf0c95e4acc93ae78cb1f36f6d44e1467f9e837db0"
+      },
+      {
+        "path": "native/test-collector-jobs.py",
+        "lines": 25,
+        "bytes": 1318,
+        "sha256": "80f074ba4e6c952aa97d6087d3f705868391a956ca5c810b36309c6724704117"
+      },
+      {
+        "path": "native/test-collector-module.py",
+        "lines": 40,
+        "bytes": 2955,
+        "sha256": "f059820935c506ceebe597aee68f4f4a765fcba983963e026f9844936ebeba20"
+      },
+      {
+        "path": "native/test-completion-dump.py",
+        "lines": 51,
+        "bytes": 2742,
+        "sha256": "7b7ae19b9445e8eb46bfbe7aee9051904c3baa394e4821fa7ff3648e40d58616"
+      },
+      {
+        "path": "native/test-completion-headers.py",
+        "lines": 42,
+        "bytes": 2101,
+        "sha256": "eb9bc2ea7cc544d5db1d8af08b91e277b348210b9ec24cf731c364d219d7b3b9"
+      },
+      {
+        "path": "native/test-completion-seed.py",
+        "lines": 112,
+        "bytes": 7340,
+        "sha256": "8f5db9a27ebaee4330a71e5eddf1361c18e58b0dbd66508de4c7267ffea353da"
+      },
+      {
+        "path": "native/test-directory-query.py",
+        "lines": 78,
+        "bytes": 3464,
+        "sha256": "0628fde5d4356f78553b6986c539c8ff8267ffd4c2018d7c4d4118d707b65e99"
+      },
+      {
+        "path": "native/test-doctor-boundaries.py",
+        "lines": 70,
+        "bytes": 4185,
+        "sha256": "bae8bc23cf37a46903f195c1d420fbd4a6c24f2bf228c7ff4e061beb2afd8586"
+      },
+      {
+        "path": "native/test-doctor.py",
+        "lines": 122,
+        "bytes": 7449,
+        "sha256": "6bba7f51774ca51b55265123522729abad009aadbe90e5eb704bd098953c44fc"
+      },
+      {
+        "path": "native/test-foreground.py",
+        "lines": 107,
+        "bytes": 5577,
+        "sha256": "75c3237810b109e93473b8e606686e3f17adc6009b58f98be67844f5df001a01"
+      },
+      {
+        "path": "native/test-git-adversarial.py",
+        "lines": 108,
+        "bytes": 5814,
+        "sha256": "978603f37f486b493b1a603da2244c8b93c33ff9b8c4d1acf1c8cd3977055e40"
+      },
+      {
+        "path": "native/test-git-matrix.py",
+        "lines": 107,
+        "bytes": 6716,
+        "sha256": "515a1fc87e5bf23d5cc6cb56f8f4d2428b6d1bf147bf406532bfc0d24914a0dc"
+      },
+      {
+        "path": "native/test-git-output.py",
+        "lines": 36,
+        "bytes": 2934,
+        "sha256": "af4388fa18345abe6e6c44b08cf147909fb644f71d4773ac9aa9fc465bfb8c12"
+      },
+      {
+        "path": "native/test-git-pipe-lifetime.py",
+        "lines": 88,
+        "bytes": 4353,
+        "sha256": "3d2852b3d31582237f6d439088e43cf43ad349e1e6508445561a22a96876ae6e"
+      },
+      {
+        "path": "native/test-history-kernel.py",
+        "lines": 58,
+        "bytes": 2740,
+        "sha256": "5159fdf480857dbee049be301d5df27c2fee71cbcf894195124721e4b2e6514b"
+      },
+      {
+        "path": "native/test-linked-modules.py",
+        "lines": 52,
+        "bytes": 2153,
+        "sha256": "e36c42b2b31883d37a7c98417d5f9b195c8e74da02ffcd3407d39715ed1aa9d9"
+      },
+      {
+        "path": "native/test-migration.py",
+        "lines": 57,
+        "bytes": 3374,
+        "sha256": "6e6ece46b04802ed9ee7ef65318362565328aa12fc92cc37e02038f1d4738fbb"
+      },
+      {
+        "path": "native/test-ownership.py",
+        "lines": 42,
+        "bytes": 2336,
+        "sha256": "d5c611dd74ff9b46c371d7bd3bfa1a87cd00b0c787d8c14e5ecd19e3e70648d6"
+      },
+      {
+        "path": "native/test-profile-isolation.py",
+        "lines": 46,
+        "bytes": 3198,
+        "sha256": "f27a15c6c8f9aba8fedee5293e7b190b723e3215e3ed4ee9e18442adff633fb7"
+      },
+      {
+        "path": "native/test-profile-lifecycle.py",
+        "lines": 58,
+        "bytes": 4142,
+        "sha256": "40a4ddce7020bcca1a6d5e6b19c8a15e968a781a05a90ddce70900cdb53fbc4c"
+      },
+      {
+        "path": "native/test-profile-report.py",
+        "lines": 83,
+        "bytes": 5918,
+        "sha256": "964f5affeed0581ae8e87f33a791571b3ac68b89f5f36d0698719e3b31722d96"
+      },
+      {
+        "path": "native/test-profile-storage.py",
+        "lines": 47,
+        "bytes": 2722,
+        "sha256": "41f324dac086d6d2bea0c4754e1bd119c46a8d828ab0ae6487e8719d3a3a6ad8"
+      },
+      {
+        "path": "native/test-profile.py",
+        "lines": 110,
+        "bytes": 5998,
+        "sha256": "39b7011aebb326a21ea0a697fb14ccac0f2bd24aebbb8f380e4ede4eaf87d268"
+      },
+      {
+        "path": "native/test-recovery.py",
+        "lines": 59,
+        "bytes": 3161,
+        "sha256": "fc547106668fff5a145c8b5db6ba106589f2cc4ca1ffdb68de8f33e4cb2b8e54"
+      },
+      {
+        "path": "native/test-resource-paths.py",
+        "lines": 43,
+        "bytes": 2537,
+        "sha256": "31fd955d66eee06951d1863595ee7baaedf40df4c5a6d68df7b6d9f11de879c5"
+      },
+      {
+        "path": "native/test-runtime-lifecycle.py",
+        "lines": 129,
+        "bytes": 7827,
+        "sha256": "f92eac4495d90d9d13240f83e05de5daf046578b7955af2d3410fe1c142629d9"
+      },
+      {
+        "path": "native/test-runtime-nul-path.py",
+        "lines": 23,
+        "bytes": 1384,
+        "sha256": "db5cc066d698f877a887b67240ccb0203e6ee4911e6d388ecfe7e09846b0f80c"
+      },
+      {
+        "path": "native/test-runtime-protocol.py",
+        "lines": 99,
+        "bytes": 6051,
+        "sha256": "4898c4ff0637cc5f98e2dbb1579c2b3e17df40ac4caaa38a93a498f7d4c45af6"
+      },
+      {
+        "path": "native/test-startup.py",
+        "lines": 100,
+        "bytes": 6798,
+        "sha256": "aea1d5e10be3ac00adaac0e57b7ece97af7b3eab7397e63186ac179f8275064e"
+      },
+      {
+        "path": "native/test-suggestion-kernel.py",
+        "lines": 57,
+        "bytes": 2736,
+        "sha256": "d623de916e3b11d3c747b3d65844e103b4204c853b98e6b365c89a10f0e17739"
+      },
+      {
+        "path": "native/test-theme-parity.py",
+        "lines": 80,
+        "bytes": 5667,
+        "sha256": "fdda39b72a3c9367ad98c95bd993005d043ae0084c815a387a03cadd63729acc"
+      },
+      {
+        "path": "native/test-tools.py",
+        "lines": 114,
+        "bytes": 6813,
+        "sha256": "8f2f4d837670a6cae068aeb941e1fe50a8d6e4d34b5c965e148ac57d53b960f1"
+      }
+    ],
+    "lines": 3188,
+    "bytes": 182616
+  }
+}
