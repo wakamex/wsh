@@ -65,4 +65,6 @@ python3 ./benchmarks/verify-native-directory-query-evidence.py
 
 python3 ./benchmarks/verify-native-history-kernel-evidence.py
 
+python3 ./benchmarks/verify-native-suggestion-kernel-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'
