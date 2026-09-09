@@ -1,0 +1,75 @@
+{
+  "source_revision": "f9e5fb3a2e17bf110262e05ad1b48fdb99a06a88+dirty",
+  "source_inputs": {
+    "native/render.c": "54d7fc6f562aed19d17a4eed56b10d3514d528b8a40eb3c3dd9dcf4ab80d58e3",
+    "native/render.h": "e21af597954d3a1088d92436461ff10b39f10326ae1795f098bd3d7f2b0bbc00",
+    "native/render-driver.c": "0f58041d56642dc1f169ec3c01b966289e69c8b5f06205ed93638347ae21f217",
+    "native/build-render-driver.zsh": "97efa1691498672080a54fb45fe7caadb92b52afb814b4fef60f47cd8a21ba76",
+    "native/theme.c": "ce54cb57147a97adf73d13fab22ce1dbcfba8823ae73fb4e460715b232915ebd",
+    "native/theme.h": "8d3da5adf7614ec9e13c8ae79de5d2c54aa5d3c58c6f9b0c483ac73ad7c23e4e",
+    "native/git.h": "25e48ab4d5db5cf58450ec551b2c7a92fa59cca55f4a494eb8647ecdbcfd2bfa",
+    "native/theme-prototype.c": "e238b1c5c393b642783b1127b80f30c88853aecb0f8ef1b8c69bca6b027b1d00",
+    "native/build-theme-prototype.zsh": "65e20f683702f5cdf90fdc2ce2085b77919294f7373bafb7a2de06450e0b1e5e",
+    "native/tomlc17-wsh.patch": "356d36c8f97244d1945801373f489644701d6df638d3c7c994f18caccca5f56c",
+    "crates/wsh-runtime/src/render_comparison.rs": "9e08c17de24ea19a5e47cd93f973a6e8ccd4337ab4bb56a1aa08a43b1a90904c",
+    "crates/wsh-runtime/src/lib.rs": "75584f5355c257143fe61445864afe4854818affac607af526c845bcaf1a0cea",
+    "crates/wsh-runtime/src/git.rs": "117f0b8c1f8c4d5aa99c30380c51030ffb581bc267f48ab26def958d27922f83",
+    "crates/wsh-runtime/Cargo.toml": "8e359a0aebb172d73308f5f41d843b4ff06ccbb4641e0d383c141a860db718d1",
+    "crates/wsh-runtime/build.rs": "eba16294e214146dd6a9af42f8496ff967bd9ac56f2b73c5db5e1dd62ecafc8d",
+    "Cargo.toml": "9bff37be65d0fb2d20d8460ecaa85ab0fb1d8cc30d3ecaa21318c665dc189f0d",
+    "Cargo.lock": "10c10fcd48b9b7f05e7bb5b9d3cbe6bc95a481fe59d2d021d9d24f2a75b097d9",
+    "benchmarks/native-render-2026-09-08/plan.md": "903cfb22fe97d0a2d77a3bdc2ada1c3926233e1bcaf4827a5a17be34a264073e",
+    "third_party/tomlc17/PROVENANCE.md": "7e38562ef3cb14aff943738ac400aa38957a7ba9c3ec11db09bb55e5bb5b9c6e",
+    "third_party/tomlc17/SHA256SUMS": "0bef799e1cf1500c069306961a910b7ef6e90c06e8be57f22e0c849b77082483",
+    "third_party/tomlc17/tomlc17.c": "89d3fe5ffe387360993c8b9df8f03eb13cd6df379b4482bcd039399f690a770f",
+    "third_party/tomlc17/LICENSE": "f949d0976f85076c96fc5122f0632b5a1b806d8b2badbe968c42c97230e6e79e",
+    "third_party/tomlc17/tomlc17.h": "281708fa05b805c32c117fc6033b0f4248257fce3440b1ac3391853bfc8f8bb5",
+    "third_party/yyjson/PROVENANCE.md": "4fe712f25b1b3a958b8307a58327b088ce97f7ecf79d392bce258cc80bb0e226",
+    "third_party/yyjson/SHA256SUMS": "12ca6cf67e5c9a3fa955f8731d57c88a23b84977deb1b963612dbce444efb912",
+    "third_party/yyjson/LICENSE": "45e384d3d52c73cba3a64d6e6c25d47cd738cd8a55c30629e3201046eda62947",
+    "third_party/yyjson/yyjson.c": "d2d58ef0a3b2267862dc363832c4f3185fd375aea933d5d3419d1a940d6ece2e",
+    "third_party/yyjson/yyjson.h": "ef803cda5c06b8962face6dfa39c3284b3bcf3e73f4d7317664690cc779679ca",
+    "themes/wakamex.toml": "26468b0866a7fdbd4e5d94b36cf4f19821a2295dc62258696f3cf3875e2b4fb3",
+    "themes/minimal.toml": "fc2b6516ca20650d3bb795c52a0122ed76272fc34696e95cbcde31ff958b5482",
+    "themes/agnoster.toml": "cf90babd84f3e47554955b9288dfdc999b62775dc1ae884d96e03ba7cd7fa856",
+    "themes/OMZ-LICENSE.txt": "6772e603fd19666902ab7541f49f3d9e92637539fb0840605615d8c6d18fc3f6",
+    "themes/robbyrussell.toml": "43aa3fa364cfa9687fd609b2b4e73955747a38697e9fa9d8e6e658901afe559a"
+  },
+  "binaries": {
+    "c": {
+      "path": "/var/tmp/wsh-native-render/render-driver-release",
+      "sha256": "670b70bfe0125d68446f7fc75aef6808c15d39440af0f7a9bbc8bd99380dafc1",
+      "size": 343736
+    },
+    "sanitized": {
+      "path": "/var/tmp/wsh-native-render/render-driver-sanitized",
+      "sha256": "096c77a33fd1ba47acbbda76fb01e39d0e789169028f70e116d9ba87b0f17f7b",
+      "size": 5289920
+    },
+    "rust": {
+      "path": "/var/tmp/wsh-native-render/rust-target/release/deps/wsh_runtime-428aa957ebf70718",
+      "sha256": "af197376212af46b46019f50d247855800a63aba0db312dd4431fb334fda77dd",
+      "size": 2356688
+    }
+  },
+  "toolchains": {
+    "cc": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "clang": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)"
+  },
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cpu": 0,
+  "trace_mode": "none",
+  "components": "standalone renderer, unchanged schema-1 TOML themes; no shell installation",
+  "commands": [
+    "clang -std=c17 -Wall -Wextra -Werror -O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer -I/var/tmp/wsh-native-render/theme-sanitized -Ithird_party/yyjson native/theme.c native/render.c native/render-driver.c /var/tmp/wsh-native-render/theme-sanitized/tomlc17.c third_party/yyjson/yyjson.c -o /var/tmp/wsh-native-render/render-driver-sanitized",
+    "cc -std=c17 -Wall -Wextra -Werror -O2 -I/var/tmp/wsh-native-render/theme-release -Ithird_party/yyjson native/theme.c native/render.c native/render-driver.c /var/tmp/wsh-native-render/theme-release/tomlc17.c third_party/yyjson/yyjson.c -o /var/tmp/wsh-native-render/render-driver-release",
+    "WSH_RENDER_DRIVER=/var/tmp/wsh-native-render/render-driver-sanitized WSH_RENDER_OUTPUT=/var/tmp/wsh-native-render/render-parity-expanded.json CARGO_TARGET_DIR=/var/tmp/wsh-native-render/rust-target cargo test --offline --locked -p wsh-runtime native_renderer_matches_rust -- --ignored --nocapture",
+    "WSH_RENDER_DRIVER=/var/tmp/wsh-native-render/render-driver-release WSH_RENDER_OUTPUT=/var/tmp/wsh-native-render/render-parity-release.json CARGO_TARGET_DIR=/var/tmp/wsh-native-render/rust-target cargo test --offline --locked --release -p wsh-runtime native_renderer_matches_rust -- --ignored --nocapture",
+    "WSH_RENDER_BENCHMARK=1 WSH_RENDER_DRIVER=/var/tmp/wsh-native-render/render-driver-release WSH_RENDER_OUTPUT=/var/tmp/wsh-native-render/render-samples.json CARGO_TARGET_DIR=/var/tmp/wsh-native-render/rust-target taskset -c 0 cargo test --offline --locked --release -p wsh-runtime native_renderer_matches_rust -- --ignored --nocapture",
+    "cmake -S /var/tmp/wsh-native-render/yyjson -B /var/tmp/wsh-native-render/yyjson-sanitized -DCMAKE_C_COMPILER=clang -DCMAKE_BUILD_TYPE=Debug -DYYJSON_BUILD_TESTS=ON -DCMAKE_C_FLAGS=\"-fsanitize=address,undefined -fno-omit-frame-pointer\"",
+    "cmake --build /var/tmp/wsh-native-render/yyjson-sanitized -j8",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 ctest --test-dir /var/tmp/wsh-native-render/yyjson-sanitized --output-on-failure"
+  ]
+}

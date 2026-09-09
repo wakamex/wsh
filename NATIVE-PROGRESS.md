@@ -9,7 +9,7 @@ The active goal is to work through all ten stages of [NATIVE-IMPLEMENTATION-PLAN
 | 3. System package and login | Tested RPM prototype; policy decisions retained | [Real Fedora PAM, SELinux, reboot and package tests pass](benchmarks/native-package-2026-09-08/report.md); cross-ABI upgrade and supported removal policy remain open |
 | 4. Profiling | Native path passes; report migration decisions retained | [Invocation and reporting](benchmarks/native-profile-2026-09-08/report.md), [startup recovery](benchmarks/native-lifecycle-2026-09-08/report.md), and [child isolation](benchmarks/native-profile-isolation-2026-09-08/report.md) pass; shell-owned component/function callbacks remain counted |
 | 5. C Git collector | Tested opt-in C prototype; default remains Rust | [Correctness and resource gates pass](benchmarks/native-git-2026-09-08/report.md); C plus temporary bridge adds code, so full runtime comparison is next |
-| 6. C themes and rendering | Theme validator prototype passes; renderer/runtime pending | [Definition parity and parser measurements](benchmarks/native-render-2026-09-08/theme-parser-report.md); preserve the existing format while completing the C runtime |
+| 6. C themes and rendering | Validator and renderer prototypes pass; complete runtime pending | [Definition parity](benchmarks/native-render-2026-09-08/theme-parser-report.md) and [45,600 exact renderer comparisons](benchmarks/native-render-2026-09-08/renderer-report.md) pass; preserve the format while completing the C runtime |
 | 7. Runtime process boundary | Pending | Compare the same C functionality |
 | 8. Completion | Pending | Audit, scan, dump and first-use cost |
 | 9. Interactive components | Pending | Independent directory/history/suggestion/highlighting comparisons |

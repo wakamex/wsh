@@ -69,6 +69,8 @@ The retained [syntax-highlighting result](benchmarks/syntax-highlighting-2026-09
 
 The opt-in native runtime prototype also evaluates [tomlc17](third_party/tomlc17/PROVENANCE.md). Its source snapshot remains unchanged; a private build copy receives three recorded allocator/numeric compatibility changes. Wsh enables strict UTF-8 and full unsigned-64-bit theme thresholds. This dependency and its patches remain prototype costs while theme validation and rendering parity are tested; the production Rust runtime is unchanged.
 
+The same prototype evaluates unchanged [yyjson](third_party/yyjson/PROVENANCE.md) source for strict JSON with full-u64 counters. Wsh owns protocol field/type/duplicate checks and resource bounds; parser-suite and consumer comparisons remain required before adoption.
+
 Every vendored update must:
 
 1. Record the upstream repository, revision, license, file list, and exact source digests in its provenance file.

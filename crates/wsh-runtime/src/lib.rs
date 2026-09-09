@@ -10,6 +10,9 @@ use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
 
+#[cfg(test)]
+mod render_comparison;
+
 #[cfg(any(not(feature = "native-git"), test))]
 #[cfg_attr(feature = "native-git", allow(dead_code))]
 mod git;
