@@ -1,0 +1,7 @@
+# tomlc17 prototype provenance
+
+The source and MIT license are byte-identical to [cktan/tomlc17](https://github.com/cktan/tomlc17) revision `64a063b8636a4b48d142f978270f5e53e605e240`. `SHA256SUMS` binds the three upstream files. This dependency is used only by the opt-in native runtime prototype.
+
+The prototype build applies [the Wsh patch](../../native/tomlc17-wsh.patch) to private build copies. It replaces a null-pointer offset expression with `offsetof`, scans complete numeric tokens instead of truncating them to 49 bytes, and adds an opt-in unsigned-64-bit integer representation. Wsh enables UTF-8 checking and the extended integer representation before parsing themes. The latter preserves the existing Rust theme decoder's accepted duration threshold range. Default upstream signed-integer behavior remains available for the authoritative conformance suite.
+
+The unmodified parser passes the pinned TOML suite but fails the additional long-binary-integer case, and strict UBSan rejects the allocator expression even for an ordinary integer. The patched candidate passes 220 valid and 493 invalid upstream cases under ASan/UBSan, with the upstream TOML-1.1 exclusion for `invalid/key/special-character`. The test corpus revision is `bc8f2c2cca601ea91d482046ea9fef3bf7a26c28`. The full Wsh validation and rendering experiment remains in progress under [its fixed plan](../../benchmarks/native-render-2026-09-08/plan.md).

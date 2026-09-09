@@ -1,0 +1,165 @@
+--- a/tomlc17.c
++++ b/tomlc17.c
+@@ -8,6 +8,7 @@
+ #include <limits.h>
+ #include <math.h>
+ #include <stdarg.h>
++#include <stddef.h>
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <stdio.h>
+@@ -16,7 +17,7 @@
+ 
+ const toml_datum_t DATUM_ZERO = {0};
+ 
+-static toml_option_t toml_option = {0, realloc, free};
++static toml_option_t toml_option = {0, realloc, free, false};
+ 
+ #define MALLOC(n) toml_option.mem_realloc(0, n)
+ #define REALLOC(p, n) toml_option.mem_realloc(p, n)
+@@ -107,7 +108,7 @@
+   if (!(0 <= size && size <= (1 << 30))) { // [0..1GB]
+     return NULL;
+   }
+-  size_t totalsz = (size_t) & ((page_t *)0)->data[size];
++  size_t totalsz = offsetof(page_t, data) + (size_t)size;
+   page_t *page = MALLOC(totalsz);
+   if (!page) {
+     return NULL;
+@@ -316,11 +317,13 @@
+   int lineno;
+   int colno;
+   span_t str;
++  bool unsigned_integer;
+ 
+   // values represented by str
+   union {
+     const char *escp; // point to an esc char in str
+     int64_t int64;
++    uint64_t uint64;
+     double fp64;
+     bool b1;
+     struct {
+@@ -739,6 +742,8 @@
+            0 == memcmp(a.u.str.ptr, b.u.str.ptr, a.u.str.len);
+   case TOML_INT64:
+     return a.u.int64 == b.u.int64;
++  case TOML_UINT64:
++    return a.u.uint64 == b.u.uint64;
+   case TOML_FP64:
+     return a.u.fp64 == b.u.fp64 || (isnan(a.u.fp64) && isnan(b.u.fp64));
+   case TOML_BOOLEAN:
+@@ -942,7 +947,7 @@
+  *  Return the default options.
+  */
+ toml_option_t toml_default_option(void) {
+-  toml_option_t opt = {0, realloc, free};
++  toml_option_t opt = {0, realloc, free, false};
+   return opt;
+ }
+ 
+@@ -1232,8 +1237,9 @@
+ static int token_to_int64(parser_t *pp, token_t tok, toml_datum_t *ret) {
+   (void)pp;
+   assert(tok.toktyp == TOK_INTEGER);
+-  *ret = mkdatum_at(TOML_INT64, tok.lineno, tok.colno);
+-  ret->u.int64 = tok.u.int64;
++  *ret = mkdatum_at(tok.unsigned_integer ? TOML_UINT64 : TOML_INT64, tok.lineno, tok.colno);
++  if (tok.unsigned_integer) ret->u.uint64 = tok.u.uint64;
++  else ret->u.int64 = tok.u.int64;
+   return 0;
+ }
+ 
+@@ -2686,10 +2692,22 @@
+   return 0;
+ }
+ 
+-static int scan_number(scanner_t *sp, token_t *tok) {
++/* Wsh's existing typed TOML decoder accepts the full unsigned range. */
++static void scan_integer_value(const char *source, char **end, int base, token_t *tok) {
++  errno = 0;
++  tok->u.int64 = strtoll(source, end, base);
++  if (errno == ERANGE && *source != '-' && toml_option.allow_uint64) {
++    errno = 0;
++    uint64_t value = strtoull(source, end, base);
++    if (!errno) {
++      tok->unsigned_integer = true;
++      tok->u.uint64 = value;
++    }
++  }
++}
++
++static int scan_number_buffer(scanner_t *sp, token_t *tok, char *buffer) {
+   const char *reason;
+-  char buffer[50]; // need to accommodate "9_007_199_254_740_991.0"
+-  scan_copystr(sp, buffer, sizeof(buffer));
+ 
+   char *p = buffer;
+   int lineno = sp->lineno;
+@@ -2725,7 +2743,7 @@
+       *tok = mktoken(sp, TOK_INTEGER);
+       char *q;
+       errno = 0;
+-      tok->u.int64 = strtoll(buffer + 2, &q, base);
++      scan_integer_value(buffer + 2, &q, base, tok);
+       if (errno || *q || q == buffer + 2) {
+         return SETERROR(sp->ebuf, lineno, "error parsing integer");
+       }
+@@ -2756,7 +2774,7 @@
+   *tok = mktoken(sp, TOK_INTEGER);
+   char *q;
+   errno = 0;
+-  tok->u.int64 = strtoll(buffer, &q, 10);
++  scan_integer_value(buffer, &q, 10, tok);
+   if (errno || *q || q == buffer) {
+     if (*q && strchr(".eE", *q)) {
+       return scan_float(sp, tok); // try to fit a float
+@@ -2767,6 +2785,22 @@
+   tok->str.len = len;
+   sp->cur += len;
+   return 0;
++}
++
++static int scan_number(scanner_t *sp, token_t *tok) {
++  size_t length = 0;
++  while (sp->cur + length < sp->endp &&
++         (isalnum((unsigned char)sp->cur[length]) ||
++          (sp->cur[length] && strchr("_+.-", sp->cur[length])))) {
++    ++length;
++  }
++  char *buffer = MALLOC(length + 1);
++  if (!buffer) return SETERROR(sp->ebuf, sp->lineno, "out of memory");
++  memcpy(buffer, sp->cur, length);
++  buffer[length] = 0;
++  int status = scan_number_buffer(sp, tok, buffer);
++  FREE(buffer);
++  return status;
+ }
+ 
+ static int scan_bool(scanner_t *sp, token_t *tok) {
+--- a/tomlc17.h
++++ b/tomlc17.h
+@@ -53,6 +53,7 @@
+   TOML_DATETIMETZ,  /**< Offset datetime type */
+   TOML_ARRAY,       /**< Array type */
+   TOML_TABLE,       /**< Table type */
++  TOML_UINT64,      /**< Optional positive integers above INT64_MAX */
+ };
+ typedef enum toml_type_t toml_type_t;
+ 
+@@ -77,6 +78,7 @@
+       int len; /**< Length of the string excluding the terminating NUL */
+     } str;
+     int64_t int64; /**< 64-bit integer value */
++    uint64_t uint64; /**< Extended unsigned integer value */
+     double fp64;   /**< 64-bit floating point value */
+     bool boolean;  /**< Boolean value */
+     struct {       /**< Date and time components */
+@@ -261,6 +263,7 @@
+       void *ptr,
+       size_t size); /**< Custom realloc function. Default: realloc(). */
+   void (*mem_free)(void *ptr); /**< Custom free function. Default: free(). */
++  bool allow_uint64; /**< Accept positive integers through UINT64_MAX. Default: false. */
+ };
+ 
+ /**

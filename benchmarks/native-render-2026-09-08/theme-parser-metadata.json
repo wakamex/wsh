@@ -1,0 +1,72 @@
+{
+  "source_revision": "53f020a5b0af197b1d5f3febea18180ce87fd3de+dirty",
+  "source_inputs": {
+    "native/theme.c": "ce54cb57147a97adf73d13fab22ce1dbcfba8823ae73fb4e460715b232915ebd",
+    "native/theme.h": "8d3da5adf7614ec9e13c8ae79de5d2c54aa5d3c58c6f9b0c483ac73ad7c23e4e",
+    "native/theme-prototype.c": "e238b1c5c393b642783b1127b80f30c88853aecb0f8ef1b8c69bca6b027b1d00",
+    "native/theme-benchmark.c": "5623d1d8f9cbfd87b71348715f1dde738436e81ece3531bbcdacce105a8aacb7",
+    "native/build-theme-prototype.zsh": "65e20f683702f5cdf90fdc2ce2085b77919294f7373bafb7a2de06450e0b1e5e",
+    "native/test-theme-parity.py": "fdda39b72a3c9367ad98c95bd993005d043ae0084c815a387a03cadd63729acc",
+    "native/tomlc17-wsh.patch": "356d36c8f97244d1945801373f489644701d6df638d3c7c994f18caccca5f56c",
+    "crates/wsh-runtime/examples/theme-benchmark.rs": "319d738672a1887a8ab89e08fa7071699bdc5e63adcef9d306d1ddfbe8e77dc6",
+    "crates/wsh-runtime/src/lib.rs": "d149fe7ef0425788194ced39066decd456e4f7cf97813671636171de28b9a610",
+    "crates/wsh-runtime/src/git.rs": "117f0b8c1f8c4d5aa99c30380c51030ffb581bc267f48ab26def958d27922f83",
+    "crates/wsh-runtime/Cargo.toml": "8e359a0aebb172d73308f5f41d843b4ff06ccbb4641e0d383c141a860db718d1",
+    "Cargo.toml": "9bff37be65d0fb2d20d8460ecaa85ab0fb1d8cc30d3ecaa21318c665dc189f0d",
+    "Cargo.lock": "10c10fcd48b9b7f05e7bb5b9d3cbe6bc95a481fe59d2d021d9d24f2a75b097d9",
+    "benchmarks/native-render-2026-09-08/plan.md": "903cfb22fe97d0a2d77a3bdc2ada1c3926233e1bcaf4827a5a17be34a264073e",
+    "third_party/tomlc17/PROVENANCE.md": "7e38562ef3cb14aff943738ac400aa38957a7ba9c3ec11db09bb55e5bb5b9c6e",
+    "third_party/tomlc17/SHA256SUMS": "0bef799e1cf1500c069306961a910b7ef6e90c06e8be57f22e0c849b77082483",
+    "third_party/tomlc17/tomlc17.c": "89d3fe5ffe387360993c8b9df8f03eb13cd6df379b4482bcd039399f690a770f",
+    "third_party/tomlc17/LICENSE": "f949d0976f85076c96fc5122f0632b5a1b806d8b2badbe968c42c97230e6e79e",
+    "third_party/tomlc17/tomlc17.h": "281708fa05b805c32c117fc6033b0f4248257fce3440b1ac3391853bfc8f8bb5",
+    "themes/wakamex.toml": "26468b0866a7fdbd4e5d94b36cf4f19821a2295dc62258696f3cf3875e2b4fb3",
+    "themes/minimal.toml": "fc2b6516ca20650d3bb795c52a0122ed76272fc34696e95cbcde31ff958b5482",
+    "themes/agnoster.toml": "cf90babd84f3e47554955b9288dfdc999b62775dc1ae884d96e03ba7cd7fa856",
+    "themes/robbyrussell.toml": "43aa3fa364cfa9687fd609b2b4e73955747a38697e9fa9d8e6e658901afe559a"
+  },
+  "binaries": {
+    "rust": {
+      "path": "/var/tmp/wsh-native-git/rust-target/release/wsh-runtime",
+      "sha256": "58a51470009f53dddf4c786ec04dfeda310a45bfe4756b35d67ac91af523de9d",
+      "size": 1679240
+    },
+    "c": {
+      "path": "/var/tmp/wsh-native-render/theme-release/wsh-theme-prototype",
+      "sha256": "11b31838c714708baae3b0a23cbc670e645efaeec37011c62c18944991a223d5",
+      "size": 63208
+    },
+    "sanitized": {
+      "path": "/var/tmp/wsh-native-render/theme-sanitized/wsh-theme-prototype",
+      "sha256": "ab44f9709a500203de1333c9c2078c05254a82b5a1cfae8136a01410c6ae8493",
+      "size": 2133456
+    },
+    "c_benchmark": {
+      "path": "/var/tmp/wsh-native-render/theme-benchmark",
+      "sha256": "a0bc690404a611771fe489a589d24c68c12dc17c6afc6b1adb3c2d41bf2f4584",
+      "size": 67496
+    },
+    "rust_benchmark": {
+      "path": "/var/tmp/wsh-native-render/rust-target/release/examples/theme-benchmark",
+      "sha256": "428bb56d97600d83834f0a8e42e3a872c8802b5b0d8d9df07144bc2a127bc64b",
+      "size": 1282488
+    }
+  },
+  "toolchains": {
+    "cc": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "clang": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)"
+  },
+  "cpu": 0,
+  "commands": [
+    "CC=clang CFLAGS=\"-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer\" native/build-theme-prototype.zsh /var/tmp/wsh-native-render/theme-sanitized",
+    "native/build-theme-prototype.zsh /var/tmp/wsh-native-render/theme-release",
+    "python3 native/test-theme-parity.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/theme-sanitized/wsh-theme-prototype /var/tmp/wsh-native-render/theme-parity-sanitized-final",
+    "python3 native/test-theme-parity.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/theme-release/wsh-theme-prototype /var/tmp/wsh-native-render/theme-parity-release",
+    "cc -std=c17 -Wall -Wextra -Werror -O2 -I/var/tmp/wsh-native-render/theme-release native/theme.c native/theme-benchmark.c /var/tmp/wsh-native-render/theme-release/tomlc17.c -o /var/tmp/wsh-native-render/theme-benchmark",
+    "CARGO_TARGET_DIR=/var/tmp/wsh-native-render/rust-target cargo build --offline --locked --release -p wsh-runtime --example theme-benchmark",
+    "taskset -c 0 /var/tmp/wsh-native-render/rust-target/release/examples/theme-benchmark /var/tmp/wsh-native-render/theme-benchmark themes/minimal.toml themes/wakamex.toml themes/robbyrussell.toml themes/agnoster.toml",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 /var/tmp/wsh-native-render/toml-test-bin test -toml 1.1 -decoder /var/tmp/wsh-native-render/tomlc17-candidate/test/stdtest/driver -skip invalid/key/special-character"
+  ]
+}
