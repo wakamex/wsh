@@ -1,0 +1,197 @@
+{
+  "source_revision": "0a78686a1dbe5e8a54dafa5ecf487e077d023f59+dirty",
+  "source_inputs": {
+    "native/runtime.c": "8b165be348112e7f94b674948cb3365d66c7597f4e030436846f897b0187c03b",
+    "native/runtime-json.h": "b71ee14ef4d74ab1e8a3f21fbcfa99b7f689a5e590ec61b60a321d557787b6e1",
+    "native/runtime-trace.c": "dbad4fa7387c3404541e6bcc764f6e00fbef3a2eca686fe08c3d12b25745bbad",
+    "native/runtime-trace.h": "2cf850449cd8d9c62bb6d3f7445844a3c12bee78594a63f03ff21b3442a69173",
+    "native/git.c": "acb06896c54b52ef72e331490474ff6b11511cb0e46c1ed080ccae9f06e95f2a",
+    "native/git.h": "25e48ab4d5db5cf58450ec551b2c7a92fa59cca55f4a494eb8647ecdbcfd2bfa",
+    "native/render.c": "54d7fc6f562aed19d17a4eed56b10d3514d528b8a40eb3c3dd9dcf4ab80d58e3",
+    "native/render.h": "e21af597954d3a1088d92436461ff10b39f10326ae1795f098bd3d7f2b0bbc00",
+    "native/theme.c": "ce54cb57147a97adf73d13fab22ce1dbcfba8823ae73fb4e460715b232915ebd",
+    "native/theme.h": "8d3da5adf7614ec9e13c8ae79de5d2c54aa5d3c58c6f9b0c483ac73ad7c23e4e",
+    "native/theme-prototype.c": "e238b1c5c393b642783b1127b80f30c88853aecb0f8ef1b8c69bca6b027b1d00",
+    "native/tomlc17-wsh.patch": "356d36c8f97244d1945801373f489644701d6df638d3c7c994f18caccca5f56c",
+    "native/build-runtime-prototype.zsh": "ebc3bc4343182156cad9fff9232f7d361fd53b2c732dd02f7ff7e17f83e553f7",
+    "native/build-theme-prototype.zsh": "65e20f683702f5cdf90fdc2ce2085b77919294f7373bafb7a2de06450e0b1e5e",
+    "native/test-runtime-protocol.py": "4898c4ff0637cc5f98e2dbb1579c2b3e17df40ac4caaa38a93a498f7d4c45af6",
+    "native/test-runtime-lifecycle.py": "f92eac4495d90d9d13240f83e05de5daf046578b7955af2d3410fe1c142629d9",
+    "native/test-runtime-nul-path.py": "db5cc066d698f877a887b67240ccb0203e6ee4911e6d388ecfe7e09846b0f80c",
+    "native/test-git-matrix.py": "515a1fc87e5bf23d5cc6cb56f8f4d2428b6d1bf147bf406532bfc0d24914a0dc",
+    "native/test-git-adversarial.py": "978603f37f486b493b1a603da2244c8b93c33ff9b8c4d1acf1c8cd3977055e40",
+    "native/test-git-output.py": "af4388fa18345abe6e6c44b08cf147909fb644f71d4773ac9aa9fc465bfb8c12",
+    "native/test-git-pipe-lifetime.py": "3d2852b3d31582237f6d439088e43cf43ad349e1e6508445561a22a96876ae6e",
+    "native/prepare-runtime-comparison.py": "85dae40aefe468adbaee0eaf0c95e4acc93ae78cb1f36f6d44e1467f9e837db0",
+    "native/check-installation.py": "5bd28abe0947cc1b568646a7c317e1b73a8b1cb5a22adc721331ecbec626d374",
+    "native/measure-git.py": "6a20bc7c0b43afc334b43b806131a781107e68ed6da3088547c9f4cc9bfc9e6b",
+    "native/measure-startup.py": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2",
+    "benchmarks/benchmark-runtime-memory.zsh": "8678d3866e4d751a355e6227b9e9a8a0abb7d66be6bba87d963655b9667643fc",
+    "benchmarks/benchmark-trace-overhead.zsh": "5cb04774cc3ad24af7638128e280595ecd0c2914f731a84c4260c36233e2366d",
+    "benchmarks/native-render-2026-09-08/plan.md": "0dd4c9dd3b9251b2fdafbcc44489750f07b1334b2de1ef9d0a724e8b40ef92bd",
+    "tests/runtime-pty.zsh": "ada53bb21cf643c53265854d8743623a23f198c924129e24070d2eeb86b26bf9",
+    "integration/integration.zsh": "1ba4386741f3e01883b8eb2b240b767f4b3feeed0ad0c836a4029b3493531c46",
+    "Cargo.lock": "10c10fcd48b9b7f05e7bb5b9d3cbe6bc95a481fe59d2d021d9d24f2a75b097d9",
+    "third_party/tomlc17/PROVENANCE.md": "7e38562ef3cb14aff943738ac400aa38957a7ba9c3ec11db09bb55e5bb5b9c6e",
+    "third_party/tomlc17/SHA256SUMS": "0bef799e1cf1500c069306961a910b7ef6e90c06e8be57f22e0c849b77082483",
+    "third_party/tomlc17/tomlc17.c": "89d3fe5ffe387360993c8b9df8f03eb13cd6df379b4482bcd039399f690a770f",
+    "third_party/tomlc17/LICENSE": "f949d0976f85076c96fc5122f0632b5a1b806d8b2badbe968c42c97230e6e79e",
+    "third_party/tomlc17/tomlc17.h": "281708fa05b805c32c117fc6033b0f4248257fce3440b1ac3391853bfc8f8bb5",
+    "third_party/yyjson/PROVENANCE.md": "4fe712f25b1b3a958b8307a58327b088ce97f7ecf79d392bce258cc80bb0e226",
+    "third_party/yyjson/SHA256SUMS": "12ca6cf67e5c9a3fa955f8731d57c88a23b84977deb1b963612dbce444efb912",
+    "third_party/yyjson/LICENSE": "45e384d3d52c73cba3a64d6e6c25d47cd738cd8a55c30629e3201046eda62947",
+    "third_party/yyjson/yyjson.c": "d2d58ef0a3b2267862dc363832c4f3185fd375aea933d5d3419d1a940d6ece2e",
+    "third_party/yyjson/yyjson.h": "ef803cda5c06b8962face6dfa39c3284b3bcf3e73f4d7317664690cc779679ca",
+    "themes/wakamex.toml": "26468b0866a7fdbd4e5d94b36cf4f19821a2295dc62258696f3cf3875e2b4fb3",
+    "themes/minimal.toml": "fc2b6516ca20650d3bb795c52a0122ed76272fc34696e95cbcde31ff958b5482",
+    "themes/agnoster.toml": "cf90babd84f3e47554955b9288dfdc999b62775dc1ae884d96e03ba7cd7fa856",
+    "themes/OMZ-LICENSE.txt": "6772e603fd19666902ab7541f49f3d9e92637539fb0840605615d8c6d18fc3f6",
+    "themes/robbyrussell.toml": "43aa3fa364cfa9687fd609b2b4e73955747a38697e9fa9d8e6e658901afe559a"
+  },
+  "source_sizes": {
+    "native/runtime.c": {
+      "bytes": 18749,
+      "lines": 548
+    },
+    "native/runtime-json.h": {
+      "bytes": 1720,
+      "lines": 64
+    },
+    "native/runtime-trace.c": {
+      "bytes": 3544,
+      "lines": 120
+    },
+    "native/runtime-trace.h": {
+      "bytes": 688,
+      "lines": 16
+    },
+    "native/git.c": {
+      "bytes": 24785,
+      "lines": 591
+    },
+    "native/git.h": {
+      "bytes": 637,
+      "lines": 16
+    },
+    "native/render.c": {
+      "bytes": 13020,
+      "lines": 215
+    },
+    "native/render.h": {
+      "bytes": 638,
+      "lines": 16
+    },
+    "native/theme.c": {
+      "bytes": 10395,
+      "lines": 168
+    },
+    "native/theme.h": {
+      "bytes": 607,
+      "lines": 15
+    },
+    "native/theme-prototype.c": {
+      "bytes": 497,
+      "lines": 14
+    },
+    "native/tomlc17-wsh.patch": {
+      "bytes": 5080,
+      "lines": 165
+    },
+    "third_party/tomlc17/tomlc17.c": {
+      "bytes": 87841,
+      "lines": 3253
+    },
+    "third_party/tomlc17/tomlc17.h": {
+      "bytes": 9302,
+      "lines": 285
+    },
+    "third_party/yyjson/yyjson.c": {
+      "bytes": 424765,
+      "lines": 11480
+    },
+    "third_party/yyjson/yyjson.h": {
+      "bytes": 330896,
+      "lines": 8467
+    }
+  },
+  "binaries": {
+    "rust": {
+      "path": "/var/tmp/wsh-native-git/rust-target/release/wsh-runtime",
+      "sha256": "58a51470009f53dddf4c786ec04dfeda310a45bfe4756b35d67ac91af523de9d",
+      "size": 1679240
+    },
+    "c": {
+      "path": "/var/tmp/wsh-native-render/runtime-release-final/wsh-runtime",
+      "sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683",
+      "size": 372320
+    },
+    "sanitized": {
+      "path": "/var/tmp/wsh-native-render/runtime-sanitized-final/wsh-runtime",
+      "sha256": "643536f62a58e53baec0ffbfe84527145fe0d85c4517e983fa469ad59ee3b8fd",
+      "size": 5503104
+    },
+    "initial_sanitized": {
+      "path": "/var/tmp/wsh-native-render/runtime-sanitized/wsh-runtime",
+      "sha256": "03b9756d93e97317817036d27fe7f5be90a12ddcca713194ea36ad60c10fde0c",
+      "size": 5501584
+    },
+    "ordered_trace_sanitized": {
+      "path": "/var/tmp/wsh-native-render/runtime-sanitized-2/wsh-runtime",
+      "sha256": "8bd72728f532ae8652e4d808c19b4968a3624cd13eac64b685047e4765606d81",
+      "size": 5502728
+    }
+  },
+  "comparison": {
+    "source_installation": "/var/tmp/wsh-native-git/installations/0e52c10a9a6c389ef5afd48eb9c950a3b7bdf3d0c38206ae726b1289aeb15a53",
+    "source_manifest_sha256": "0e52c10a9a6c389ef5afd48eb9c950a3b7bdf3d0c38206ae726b1289aeb15a53",
+    "status": "unsigned development comparison",
+    "variants": {
+      "rust": {
+        "path": "/var/tmp/wsh-native-render/runtime-installations-final/60bc27f8999178968ceffb3ee5cfed049cc0286bca8799c1e0948c7f2d6ea11a",
+        "manifest_sha256": "60bc27f8999178968ceffb3ee5cfed049cc0286bca8799c1e0948c7f2d6ea11a",
+        "runtime_sha256": "58a51470009f53dddf4c786ec04dfeda310a45bfe4756b35d67ac91af523de9d"
+      },
+      "c": {
+        "path": "/var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2",
+        "manifest_sha256": "ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2",
+        "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683"
+      }
+    }
+  },
+  "native_binary_sha256": "5aad1bcbdfa93b9dc72be628f8c2fe735ca09f524166d298d3acbd4889f9e04e",
+  "toolchains": {
+    "cc": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+    "clang": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+    "cargo": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)",
+    "rustc": "rustc 1.95.0 (59807616e 2026-04-14)"
+  },
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cpu": 0,
+  "trace_mode": "matched off/on only in trace experiment",
+  "dependencies": "\tlinux-vdso.so.1 (0x00007fa017064000)\n\tlibz.so.1 => /lib64/libz.so.1 (0x00007fa017018000)\n\tlibc.so.6 => /lib64/libc.so.6 (0x00007fa016e1f000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007fa017066000)\n",
+  "commands": [
+    "CC=clang CFLAGS='-O1 -g -fsanitize=address,undefined -fno-omit-frame-pointer' native/build-runtime-prototype.zsh /var/tmp/wsh-native-render/runtime-sanitized-final",
+    "native/build-runtime-prototype.zsh /var/tmp/wsh-native-render/runtime-release-final",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-runtime-protocol.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-sanitized-final/wsh-runtime /var/tmp/wsh-native-render/runtime-protocol-final",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-runtime-lifecycle.py /var/tmp/wsh-native-render/runtime-sanitized-final/wsh-runtime /var/tmp/wsh-native-render/runtime-lifecycle-final",
+    "python3 native/test-runtime-protocol.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-release-final/wsh-runtime /var/tmp/wsh-native-render/runtime-protocol-release",
+    "python3 native/test-runtime-nul-path.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-release-final/wsh-runtime /var/tmp/wsh-native-render/runtime-nul-path.json",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-git-matrix.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-sanitized/wsh-runtime /var/tmp/wsh-native-render/runtime-git-matrix-1",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-git-adversarial.py /var/tmp/wsh-native-render/runtime-sanitized/wsh-runtime /var/tmp/wsh-native-render/runtime-git-adversarial-1",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-git-output.py /var/tmp/wsh-native-render/runtime-sanitized-2/wsh-runtime /var/tmp/wsh-native-render/runtime-output",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-git-pipe-lifetime.py /var/tmp/wsh-native-render/runtime-sanitized-2/wsh-runtime /var/tmp/wsh-native-render/runtime-pipe-cancel --require-bounded",
+    "ASAN_OPTIONS=detect_leaks=1:abort_on_error=1 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-git-pipe-lifetime.py /var/tmp/wsh-native-render/runtime-sanitized-final/wsh-runtime /var/tmp/wsh-native-render/runtime-pipe-timeout --timeout --require-bounded",
+    "python3 native/prepare-runtime-comparison.py /var/tmp/wsh-native-git/installations/0e52c10a9a6c389ef5afd48eb9c950a3b7bdf3d0c38206ae726b1289aeb15a53 /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-release-final/wsh-runtime /var/tmp/wsh-native-render/runtime-installations-final",
+    "python3 native/check-installation.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-render/runtime-contracts-final",
+    "WSH_TEST_RUNTIME=/var/tmp/wsh-native-render/runtime-release-final/wsh-runtime ./tests/runtime-pty.zsh",
+    "python3 native/measure-git.py /var/tmp/wsh-native-git/rust-target/release/wsh-runtime /var/tmp/wsh-native-render/runtime-release-final/wsh-runtime /var/tmp/wsh-native-render/runtime-collection",
+    "python3 native/measure-startup.py /var/tmp/wsh-native-render/runtime-installations-final/60bc27f8999178968ceffb3ee5cfed049cc0286bca8799c1e0948c7f2d6ea11a /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-render/runtime-readiness",
+    "WSH_THEME=minimal WSH_MEMORY_RUNTIME=/var/tmp/wsh-native-render/runtime-release-final/wsh-runtime taskset -c 0 build/out/zsh-cad0d67c-wsh2/bin/zsh benchmarks/benchmark-runtime-memory.zsh",
+    "WSH_TRACE_RUNTIME=/var/tmp/wsh-native-render/runtime-release-final/wsh-runtime taskset -c 0 build/out/zsh-cad0d67c-wsh2/bin/zsh benchmarks/benchmark-trace-overhead.zsh"
+  ],
+  "zlib": {
+    "path": "/usr/lib64/libz.so.1.3.1.zlib-ng",
+    "sha256": "bbde8faec092a7c67b8bd76bbba4a826e61b05c171b97004ce6b308c5a090351",
+    "size": 169544
+  }
+}

@@ -55,4 +55,6 @@ python3 ./benchmarks/verify-native-theme-parser-evidence.py
 
 python3 ./benchmarks/verify-native-renderer-evidence.py
 
+python3 ./benchmarks/verify-native-runtime-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'
