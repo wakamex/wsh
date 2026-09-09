@@ -3,15 +3,23 @@ static char *wsh_root;
 static int wsh_integration;
 
 static void
-wsh_prepend_path(char *name, char *directory)
+wsh_prepend_path(char *name, char *directory, char *compiled, char *site)
 {
     char **old = getaparam(name), **paths;
     int count = old ? arrlen(old) : 0, i, used = 1;
     paths = (char **)zalloc((count + 2) * sizeof(char *));
     paths[0] = directory;
-    for (i = 0; i < count; ++i)
-        if (strcmp(old[i], directory))
-            paths[used++] = ztrdup(old[i]);
+    for (i = 0; i < count; ++i) {
+        if (!strcmp(old[i], directory) || (compiled && !strcmp(old[i], compiled)))
+            continue;
+#ifdef SITEFPATH_DIR
+        if (site && !strcmp(old[i], SITEFPATH_DIR)) {
+            paths[used++] = ztrdup(site);
+            continue;
+        }
+#endif
+        paths[used++] = ztrdup(old[i]);
+    }
     paths[used] = NULL;
     setaparam(name, paths);
 }
@@ -21,8 +29,13 @@ wsh_resource_paths(void)
 {
     if (!wsh_root)
         return;
-    wsh_prepend_path("module_path", tricat(wsh_root, "/lib/zsh/", ZSH_VERSION));
-    wsh_prepend_path("fpath", tricat(wsh_root, "/share/zsh/" ZSH_VERSION, "/functions"));
+    wsh_prepend_path("module_path", tricat(wsh_root, "/lib/zsh/", ZSH_VERSION), MODULE_DIR, NULL);
+    char *site = tricat(wsh_root, "/share/zsh/", "site-functions");
+    /* An explicitly exported FPATH belongs to the user, including its fallbacks. */
+    int explicit_fpath = getenv("FPATH") != NULL;
+    wsh_prepend_path("fpath", tricat(wsh_root, "/share/zsh/" ZSH_VERSION, "/functions"),
+                     explicit_fpath ? NULL : FPATH_DIR, explicit_fpath ? NULL : site);
+    zsfree(site);
 }
 
 static void

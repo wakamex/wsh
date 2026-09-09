@@ -1,0 +1,46 @@
+{
+  "source_revision": "20da9445910017dea1699756be5de63e491424f7+dirty",
+  "source_inputs": {
+    "native/startup.c": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0",
+    "native/test-resource-paths.py": "31fd955d66eee06951d1863595ee7baaedf40df4c5a6d68df7b6d9f11de879c5",
+    "native/test-startup.py": "aea1d5e10be3ac00adaac0e57b7ece97af7b3eab7397e63186ac179f8275064e",
+    "native/check-installation.py": "5bd28abe0947cc1b568646a7c317e1b73a8b1cb5a22adc721331ecbec626d374",
+    "native/measure-startup.py": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2",
+    "native/prepare-build.py": "d15b639bf8da4593752b26e001deae8ea00d731a15ec462ca0eafcb0b1c6fad9",
+    "native/prepare-runtime-comparison.py": "85dae40aefe468adbaee0eaf0c95e4acc93ae78cb1f36f6d44e1467f9e837db0",
+    "build/update-native-lock.py": "5f6212c678689d992980196bc2f8da7445afa58074f0b19824aa83eeaac61a96",
+    "build/build-native-installation.zsh": "926fe3bcc75c02c365c122b9e8dcd19e9a8b109ea361ed7910c5c90bc3980265",
+    "build/build-zsh.zsh": "1c7adaa1408292d7e96b635b16096f27e51475144abc67e22faf04b700e8e343",
+    "build/build-development-bundle.zsh": "ca0e7359321748d9e2f6a53b02b38d3a14ce8b69c1e9026a3f420ff148f078d4",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "d33cea744642ca21687afea88112a2d5291cea9535ba1b8310bdc2ee5f1bdf9c",
+    "benchmarks/native-qualification-2026-09-09/plan.md": "3f481abc2240e0910936ea8f0aa7a68b795854c05519f9c6626a64c2728d4bd1",
+    "native/tools.c": "72027f31a44aed08ffa70be93880b0c56a3ce1d56be54f40b92dda6053f3825c",
+    "native/doctor.c": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056",
+    "native/foreground.c": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1",
+    "native/profile.c": "385dbe77c81256130efe11df16d1d7e1c3495455a6fc1c90b778934e0fa44e7a",
+    "native/profile-report.c": "a6950a40209fcfb0b0e35b0b30ecae6dc3e8c435b2dd951fc5e964fe4219f574"
+  },
+  "variants": {
+    "control": {
+      "manifest_sha256": "ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2",
+      "zsh_sha256": "5aad1bcbdfa93b9dc72be628f8c2fe735ca09f524166d298d3acbd4889f9e04e",
+      "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683"
+    },
+    "candidate": {
+      "manifest_sha256": "2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8",
+      "zsh_sha256": "a244188fdcea7d906d3446ce793d8dd5266beed1864a486f6b72759db986944b",
+      "runtime_sha256": "48b2b3e649c46f377b9d71458b48591d92e8bc1283a88410a3b5fb0a06d5b683"
+    }
+  },
+  "sanitized_binary_sha256": "f35d8141c3184a9c6b7bef7da910d6b4c5b1fac8cd734108c959b792ba476596",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "commands": [
+    "CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS=-L/var/tmp/wsh-native-sdk/usr/lib64 WSH_ZSH_OUTPUT_ROOT=/var/tmp/wsh-native-qualified-paths-final ./build/build-native-installation.zsh",
+    "python3 native/test-resource-paths.py /code/wsh/bundles/d129be9f8b50f52fa9a0591ded5e1d1d64b85a22ed58e8434a5aa45877fcb5a9 /var/tmp/wsh-native-qualified-paths-final/zsh-cad0d67c-native /var/tmp/wsh-native-qualification/paths-check",
+    "python3 native/test-startup.py /code/wsh/bundles/d129be9f8b50f52fa9a0591ded5e1d1d64b85a22ed58e8434a5aa45877fcb5a9 /var/tmp/wsh-native-qualification/startup",
+    "python3 native/check-installation.py /var/tmp/wsh-native-qualification/path-installations/2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8 /var/tmp/wsh-native-qualification/c-contracts",
+    "python3 native/measure-startup.py /var/tmp/wsh-native-render/runtime-installations-final/ba2599f9f670b8ced903bb91d98b23db04a2ca8ef0ca0d7c353a575202006ab2 /var/tmp/wsh-native-qualification/path-installations/2c45e74d390fee2d8f131f14e99cc174951bf24080203ef2227d838656ff8cf8 /var/tmp/wsh-native-qualification/paths-timing",
+    "make -C /var/tmp/wsh-native-tools/source-sanitized -j 8 CC=clang DLLD=clang CFLAGS='-O1 -g -fsanitize=address,undefined -fno-sanitize=function -fno-omit-frame-pointer' CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS='-fsanitize=address,undefined -L/var/tmp/wsh-native-sdk/usr/lib64' LIBS='-lpcre2-8 -lcap -ldl -lncursesw -lrt -lm -lc -ljansson'",
+    "ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 python3 native/test-startup.py /var/tmp/wsh-native-qualification/sanitized-installation /var/tmp/wsh-native-qualification/startup-sanitized"
+  ]
+}
