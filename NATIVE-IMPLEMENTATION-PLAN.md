@@ -149,3 +149,7 @@ Local completion condition: the selected native development package passes its a
 ## Deferred cross-shell collection experiment
 
 Cross-shell Git sharing is not a prerequisite for any stage above. Reopen it only when same-repository and different-repository pane workloads show material duplicate Git work or aggregate memory cost. Compare per-session coalescing and caching before a per-user collection service. Any shared candidate needs repository/worktree and environment identity, external-change invalidation, cancellation, version coexistence, reconnect/cleanup behavior, and usable local prompts after service failure. Keep rendering and shell lifecycle local. The admission trigger remains in [FEATURES.md](FEATURES.md).
+
+## Follow-up component experiments
+
+The [five-component follow-up](benchmarks/native-components-2026-09-10/report.md) extends the earlier kernels. Native history navigation and full completion registration scanning pass their measured gates, with remaining ownership/integration decisions. Complete directory ownership fails persistence compatibility; native autosuggestion actions miss the complete-sequence gain gate; highlighting attribution identifies the main parser loop as the next substantial boundary. All follow-up candidates remain disabled. Their reports explicitly identify the parts of the three full feature ports that remain unfinished.

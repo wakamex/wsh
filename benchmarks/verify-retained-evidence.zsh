@@ -83,4 +83,6 @@ python3 ./benchmarks/verify-native-floor-evidence.py
 
 python3 ./benchmarks/verify-native-inventory-evidence.py
 
+python3 ./benchmarks/verify-native-components-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

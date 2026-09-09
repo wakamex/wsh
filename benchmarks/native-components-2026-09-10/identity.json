@@ -1,0 +1,88 @@
+{
+  "base_source_revision": "6d8d9ff",
+  "experiment_source_state": "uncommitted component prototypes relative to each recorded parent revision",
+  "development_bundle": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "bundle_manifest_sha256": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "binary_sha256": "1c42eb54b0ab65a4978f6dc0d1cd0e8edb3161e0af28b2e8649dd6bd7ec12bbc",
+  "runtime_sha256": "c1b07ce4c461a47c0ac1214ce6d54db1ff933b136126bb31ef12113226577b85",
+  "zsh_source_lock": {
+    "schema_version": 1,
+    "id": "zsh-cad0d67c-native",
+    "mode": "canonical-commit",
+    "version": "5.9.999.3-test",
+    "output_name": "zsh-cad0d67c-native",
+    "repository": "https://github.com/zsh-users/zsh",
+    "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
+    "archive_sha256": "79120ee69dde051792ec548817126381331f26a7131244aab17d4d2cbb5b1819",
+    "source_revision": "cad0d67c76e2be7371cf3526b79ea2581810d35a",
+    "source_tree": "2c07cbc91c766336de8029e0da8e34723bbe09bf",
+    "signature_url": null,
+    "signer_fingerprint": null,
+    "key_url": null,
+    "preconfigure": true,
+    "source_patches": [
+      {
+        "path": "build/zsh-patches/cad0d67c-terminal-integration.patch",
+        "sha256": "b4c048789cac67a0b07d4d2644a8de266dafa279ac570a6419e5080403dfc5f8"
+      },
+      {
+        "path": "build/zsh-patches/cad0d67c-zcompile-padding.patch",
+        "sha256": "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
+      },
+      {
+        "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
+        "sha256": "45c9085d5e213eacdf9d15a65f35bf9be0b17c629ae22d3f1ff6f5bf737301b3"
+      }
+    ],
+    "test_patches": [
+      {
+        "path": "build/zsh-test-patches/cad0d67c-prompt-fixture.patch",
+        "sha256": "e5f79c067b6cf470f2f9ee40d821eb1dc2c188efed00ab32d3a7e2d20483f4b7"
+      }
+    ],
+    "native": {
+      "version": "0.3.1",
+      "linked_modules": true,
+      "sources": [
+        {
+          "path": "native/startup.c",
+          "sha256": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0"
+        },
+        {
+          "path": "native/tools.c",
+          "sha256": "72027f31a44aed08ffa70be93880b0c56a3ce1d56be54f40b92dda6053f3825c"
+        },
+        {
+          "path": "native/doctor.c",
+          "sha256": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056"
+        },
+        {
+          "path": "native/foreground.c",
+          "sha256": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1"
+        },
+        {
+          "path": "native/profile.c",
+          "sha256": "385dbe77c81256130efe11df16d1d7e1c3495455a6fc1c90b778934e0fa44e7a"
+        },
+        {
+          "path": "native/profile-report.c",
+          "sha256": "a6950a40209fcfb0b0e35b0b30ecae6dc3e8c435b2dd951fc5e964fe4219f574"
+        }
+      ]
+    }
+  },
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "sanitizer_compiler": "clang version 22.1.8 (Fedora 22.1.8-4.fc44)",
+  "target": "x86_64-redhat-linux",
+  "timing_cpu": 0,
+  "module_flags": "-std=c17 -Wall -Wextra -Werror -O2 -fPIC -shared",
+  "sanitizer_flags": "-O1 -g -fsanitize=address,undefined -fno-sanitize=function -fno-omit-frame-pointer",
+  "sanitizer_options": {
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "sanitized_binary_sha256": "4029b304bf37b90775df0c04156b85dd27d946d7e81cf0c4f31d73323872ff29",
+  "trace": "off except the explicitly paired Zsh function-profiler attribution"
+}

@@ -1,0 +1,1 @@
+python3 native/profile-highlighting.py bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986/bin/wsh benchmarks/native-components-2026-09-10/highlight-profile
