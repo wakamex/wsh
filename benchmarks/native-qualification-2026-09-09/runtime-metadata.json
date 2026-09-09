@@ -1,0 +1,47 @@
+{
+  "source_revision": "aa4f0d258e801d8c0330411d636b52c11bf03e4e+dirty",
+  "source_inputs": {
+    "build/build-development-bundle.zsh": "2815e0318f536aab24efe253228c442d88856bb85e4e9b8daf2efab3dcfd63fc",
+    "native/build-runtime.zsh": "13eef53f4e87d527a1c44fec6a22a5f69341f06c15719eea32ebb17f233d515f",
+    "native/build-theme-prototype.zsh": "65e20f683702f5cdf90fdc2ce2085b77919294f7373bafb7a2de06450e0b1e5e",
+    "native/check-installation.py": "5bd28abe0947cc1b568646a7c317e1b73a8b1cb5a22adc721331ecbec626d374",
+    "native/test-runtime-protocol.py": "4898c4ff0637cc5f98e2dbb1579c2b3e17df40ac4caaa38a93a498f7d4c45af6",
+    "native/test-runtime-lifecycle.py": "f92eac4495d90d9d13240f83e05de5daf046578b7955af2d3410fe1c142629d9",
+    "VENDORED-COMPONENTS.md": "87cce00f7fb01fab6030d3890f6602ff45512718c6f6292b0046ed4420f975f0",
+    "native/collector-module-prototype.c": "96a013c40ad5fa10203203f32a2d51e7ac1a1703b27d6cf2d765d5f845044194",
+    "native/highlight-kernel-prototype.c": "0bac208e22b8c503a0cc202ed8f1137a82cef173c8a53ee4675142c0ced707bd",
+    "native/theme-prototype.c": "e238b1c5c393b642783b1127b80f30c88853aecb0f8ef1b8c69bca6b027b1d00",
+    "native/render.c": "54d7fc6f562aed19d17a4eed56b10d3514d528b8a40eb3c3dd9dcf4ab80d58e3",
+    "native/suggestion-kernel-prototype.c": "894812e5e7af20c9a0a351650ad8adc6ffb0a1bec0c7b79b4c392ecbaec3cd60",
+    "native/profile-report.c": "a6950a40209fcfb0b0e35b0b30ecae6dc3e8c435b2dd951fc5e964fe4219f574",
+    "native/runtime-trace.c": "dbad4fa7387c3404541e6bcc764f6e00fbef3a2eca686fe08c3d12b25745bbad",
+    "native/theme-benchmark.c": "5623d1d8f9cbfd87b71348715f1dde738436e81ece3531bbcdacce105a8aacb7",
+    "native/startup.c": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0",
+    "native/runtime.c": "8b165be348112e7f94b674948cb3365d66c7597f4e030436846f897b0187c03b",
+    "native/doctor.c": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056",
+    "native/profile.c": "385dbe77c81256130efe11df16d1d7e1c3495455a6fc1c90b778934e0fa44e7a",
+    "native/render-driver.c": "0f58041d56642dc1f169ec3c01b966289e69c8b5f06205ed93638347ae21f217",
+    "native/git.c": "acb06896c54b52ef72e331490474ff6b11511cb0e46c1ed080ccae9f06e95f2a",
+    "native/theme.c": "ce54cb57147a97adf73d13fab22ce1dbcfba8823ae73fb4e460715b232915ebd",
+    "native/git-parser-driver.c": "b7a54160137ef214232a4464cc1d13569b097342a66a75700ee5e3bb58164f8c",
+    "native/foreground.c": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1",
+    "native/tools.c": "72027f31a44aed08ffa70be93880b0c56a3ce1d56be54f40b92dda6053f3825c",
+    "native/directory-query-prototype.c": "696802ff22e394e272a1c2c2ad0f8aec364091c286c7f6fe143f04e0f58985ef",
+    "native/history-kernel-prototype.c": "b0a98860c31e5a39e754b0b8272fd2dac5208f329b1461ac84fa315b01d96cad",
+    "benchmarks/native-qualification-2026-09-09/runtime-plan.md": "bfc17ed035d2119d31e3c35f3e704fa45fc6ef610b85dc0bc2730ff470de05b0"
+  },
+  "helper_sha256": {
+    "build-a": "c1b07ce4c461a47c0ac1214ce6d54db1ff933b136126bb31ef12113226577b85",
+    "build-b": "c1b07ce4c461a47c0ac1214ce6d54db1ff933b136126bb31ef12113226577b85",
+    "installed": "c1b07ce4c461a47c0ac1214ce6d54db1ff933b136126bb31ef12113226577b85"
+  },
+  "manifest_sha256": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "commands": [
+    "./native/build-runtime.zsh /var/tmp/wsh-native-qualification/helper-build-a",
+    "./native/build-runtime.zsh /var/tmp/wsh-native-qualification/helper-build-b",
+    "CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS=-L/var/tmp/wsh-native-sdk/usr/lib64 WSH_KEEP_FAILED_BUILD=1 WSH_ZSH_OUTPUT_ROOT=/var/tmp/wsh-native-selected ./build/build-native-installation.zsh",
+    "python3 native/test-runtime-protocol.py target/release/wsh-runtime /var/tmp/wsh-native-qualification/helper-build-a/wsh-runtime /var/tmp/wsh-native-qualification/selected-protocol",
+    "python3 native/test-runtime-lifecycle.py /var/tmp/wsh-native-qualification/helper-build-a/wsh-runtime /var/tmp/wsh-native-qualification/selected-lifecycle",
+    "python3 native/check-installation.py /code/wsh/bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986 /var/tmp/wsh-native-qualification/selected-contracts"
+  ]
+}

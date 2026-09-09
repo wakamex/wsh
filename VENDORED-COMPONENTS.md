@@ -67,9 +67,9 @@ The retained [syntax-highlighting result](benchmarks/syntax-highlighting-2026-09
 
 ## Vendored updates require a divergence review
 
-The opt-in native runtime prototype also evaluates [tomlc17](third_party/tomlc17/PROVENANCE.md). Its source snapshot remains unchanged; a private build copy receives three recorded allocator/numeric compatibility changes. Wsh enables strict UTF-8 and full unsigned-64-bit theme thresholds. This dependency and its patches remain prototype costs while theme validation and rendering parity are tested; the production Rust runtime is unchanged.
+The native C runtime uses [tomlc17](third_party/tomlc17/PROVENANCE.md). Its source snapshot remains unchanged; a private build copy receives three recorded allocator/numeric compatibility changes. Wsh enables strict UTF-8 and full unsigned-64-bit theme thresholds. [Definition, upstream-parser and renderer comparisons](benchmarks/native-render-2026-09-08/theme-parser-report.md) pass. Native installations include its license. The legacy distribution retains its Rust runtime.
 
-The same prototype evaluates unchanged [yyjson](third_party/yyjson/PROVENANCE.md) source for strict JSON with full-u64 counters. Wsh owns protocol field/type/duplicate checks and resource bounds; parser-suite and consumer comparisons remain required before adoption.
+The native C runtime uses unchanged [yyjson](third_party/yyjson/PROVENANCE.md) source for strict JSON with full-u64 counters. Wsh owns protocol field/type/duplicate checks and resource bounds. Its upstream parser suite, [renderer parity](benchmarks/native-render-2026-09-08/renderer-report.md) and [complete-runtime contracts](benchmarks/native-render-2026-09-08/runtime-report.md) pass. Native installations include its license.
 
 Every vendored update must:
 

@@ -73,4 +73,6 @@ python3 ./benchmarks/verify-native-resource-paths-evidence.py
 
 python3 ./benchmarks/verify-native-linked-modules-evidence.py
 
+python3 ./benchmarks/verify-native-selected-runtime-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'

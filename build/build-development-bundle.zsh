@@ -55,7 +55,11 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   }
 fi
 cd "$repository_root"
-cargo build --release --locked --workspace
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  cargo build --release --locked -p wsh
+else
+  cargo build --release --locked --workspace
+fi
 
 mkdir -p -- "$output_root"
 stage=$(mktemp -d "${output_root}/.development.XXXXXX")
@@ -66,7 +70,17 @@ install -D -m 755 "${zsh_root}/bin/zsh" "${stage}/bin/zsh"
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 755 "${zsh_root}/bin/wsh" "${stage}/bin/wsh"
 fi
-install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  "${repository_root}/native/build-runtime.zsh" "$stage/.runtime-build"
+  install -D -m 755 "$stage/.runtime-build/wsh-runtime" "${stage}/bin/wsh-runtime"
+  rm -rf -- "$stage/.runtime-build"
+  install -D -m 644 "$zsh_source_lock" "$stage/share/wsh/native-source-lock.json"
+  install -D -m 644 "$zsh_root/.wsh-config.modules" "$stage/share/wsh/config.modules"
+  install -D -m 644 "$repository_root/third_party/tomlc17/LICENSE" "$stage/share/wsh/licenses/tomlc17-LICENSE"
+  install -D -m 644 "$repository_root/third_party/yyjson/LICENSE" "$stage/share/wsh/licenses/yyjson-LICENSE"
+else
+  install -D -m 755 "${cargo_target_dir}/release/wsh-runtime" "${stage}/bin/wsh-runtime"
+fi
 if [[ -d ${zsh_root}/lib ]]; then
   cp -R -- "${zsh_root}/lib" "$stage/lib"
 elif jq -e '.native.linked_modules == true' "$zsh_source_lock" >/dev/null; then
