@@ -1,0 +1,318 @@
+[
+  {
+    "mode": "sync",
+    "variants": [
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ],
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "mode": "async",
+    "variants": [
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ],
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "mode": "vi",
+    "variants": [
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ],
+      [
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo value newest",
+        [
+          " newest",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " replacement",
+          "5",
+          "other"
+        ],
+        "other replacement",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "alue newest",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "mode": "custom",
+    "variants": [
+      [
+        [
+          " custom",
+          "6",
+          "echo v"
+        ],
+        "echo v custom",
+        [
+          " custom",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " custom",
+          "5",
+          "other"
+        ],
+        "other custom",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          " custom",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ],
+      [
+        [
+          " custom",
+          "6",
+          "echo v"
+        ],
+        "echo v custom",
+        [
+          " custom",
+          "6",
+          "echo \u00e9"
+        ],
+        "echo \u00e9 ",
+        [
+          " custom",
+          "5",
+          "other"
+        ],
+        "other custom",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          " custom",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ]
+    ],
+    "equal": true
+  },
+  {
+    "mode": "completion",
+    "variants": [
+      [
+        [
+          "unique-file",
+          "15",
+          "cat completion-"
+        ],
+        "cat completion-unique-file",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ],
+      [
+        [
+          "unique-file",
+          "15",
+          "cat completion-"
+        ],
+        "cat completion-unique-file",
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        [
+          "",
+          "6",
+          "echo v"
+        ],
+        "echo vCUSTOM"
+      ]
+    ],
+    "equal": true
+  }
+]
