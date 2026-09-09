@@ -57,4 +57,6 @@ python3 ./benchmarks/verify-native-renderer-evidence.py
 
 python3 ./benchmarks/verify-native-runtime-evidence.py
 
+python3 ./benchmarks/verify-native-runtime-boundary-evidence.py
+
 print -r -- 'PASS: complete retained-evidence suite'
