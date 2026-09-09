@@ -11,8 +11,10 @@ ROOT=Path(__file__).resolve().parents[1]
 BUNDLE=Path(sys.argv[1]).resolve()
 OUT=Path(sys.argv[2]).resolve()
 OUT.mkdir(parents=True,exist_ok=True)
-ZSH=ROOT/'build/out/zsh-cad0d67c-wsh2/bin/zsh'
-MANAGER=ROOT/'target/release/wsh'
+ZSH=Path(os.environ.get('WSH_TEST_ZSH', ROOT/'build/out/zsh-cad0d67c-wsh2/bin/zsh'))
+RAW=Path(os.environ.get('WSH_REFERENCE_ZSH', '/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh'))
+OMZ=Path(os.environ.get('WSH_TEST_OMZ', '/home/mihai/.oh-my-zsh'))
+MANAGER=Path(os.environ.get('WSH_TEST_MANAGER', ROOT/'target/release/wsh'))
 results=[]
 for name in ('history-substring-search','autosuggestions','syntax-highlighting','plugin-doctor','directory-jump','named-themes','zsh-config-coexistence','prompt-ownership','foreground-startup'):
     source=(ROOT/'tests'/(name+'.zsh')).read_text()
@@ -28,7 +30,7 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
     if name=='prompt-ownership':
         source=source.replace('exec $manager profile --state-root $state', 'exec $bundle/bin/wsh --wsh-profile -- -d')
         source=source.replace('$manager profile report ', '$bundle/bin/wsh --wsh-profile-report ')
-        source=source.replace('export WSH_TEST_ZSH=$bundle/bin/zsh', 'export WSH_TEST_ZSH=/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh')
+        source=source.replace('export WSH_TEST_ZSH=$bundle/bin/zsh', 'export WSH_TEST_ZSH='+str(RAW))
         source=source.replace('exec $bundle/bin/zsh -di ${=login_flag}', 'exec $WSH_TEST_ZSH -di ${=login_flag}')
     if name=='foreground-startup':
         source=source.replace('exec $manager run-foreground --state-root $state_root --login --', 'exec $bundle/bin/wsh --wsh-run --login --')
@@ -39,7 +41,7 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
     command=[ZSH,test,MANAGER,BUNDLE]
     if name=='zsh-config-coexistence':command.append('present')
     if name=='foreground-startup':command.append('candidate')
-    if name in ('directory-jump','prompt-ownership'):command.append('/home/mihai/.oh-my-zsh')
+    if name in ('directory-jump','prompt-ownership'):command.append(OMZ)
     with (OUT/(name+'.log')).open('wb') as log:
         result=subprocess.run([str(value) for value in command],cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,timeout=180,
                               env=dict(os.environ,WSH_EXPECT_NATIVE_TERMINAL_PASS='1'))
