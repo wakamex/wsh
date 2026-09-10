@@ -28,7 +28,7 @@ assert manifest['status'] == 'development' or args.fault == 'none'
 assert (bundle / 'bin/wsh').is_file() and not (bundle / 'zdotdir').exists()
 for name in ('SOURCES', 'SPECS', 'BUILD', 'BUILDROOT', 'RPMS', 'SRPMS'):
     (top / name).mkdir(parents=True, exist_ok=True)
-epoch = args.epoch if args.epoch is not None else int(subprocess.check_output(
+epoch = args.epoch if args.epoch is not None else int(os.environ.get('SOURCE_DATE_EPOCH') or subprocess.check_output(
     ['git', 'show', '-s', '--format=%ct', 'HEAD'], cwd=ROOT, text=True).strip())
 assert 0 <= epoch <= 0xffffffff, 'epoch must fit a gzip timestamp'
 def normalize(info):
