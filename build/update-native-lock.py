@@ -17,7 +17,7 @@ base['source_patches'].append({'path':str(patch.relative_to(ROOT)),'sha256':hash
 base['native']={'version':(ROOT/'VERSION').read_text().strip(),
                 'linked_modules':True,
                 'sources':[{'path':'native/'+name+'.c','sha256':hashlib.sha256((ROOT/'native'/(name+'.c')).read_bytes()).hexdigest()}
-                           for name in ('startup','tools','doctor','foreground','profile','profile-report','completion','history','directory')]}
+                           for name in ('startup','tools','doctor','foreground','profile','profile-report','completion','history','directory','autosuggestions')]}
 payload=json.dumps(base,indent=2)+'\n'
 path=ROOT/'build/zsh-sources/zsh-cad0d67c-native.json'
 if '--check' in sys.argv:

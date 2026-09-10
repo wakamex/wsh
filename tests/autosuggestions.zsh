@@ -243,10 +243,10 @@ for variant in $variants; do
   state=$(report_state)
   case $variant in
     clean|configured|composition)
-      [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/zsh-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected bundled state for ${variant}: $state"; exit 1; }
+      [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/native-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected bundled state for ${variant}: $state"; exit 1; }
       ;;
     external)
-      [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/zsh-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected takeover state: $state"; exit 1; }
+      [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/native-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected takeover state: $state"; exit 1; }
       ;;
     external-active)
       [[ $state == external-active\|0\|${autosuggestions_source}/zsh-autosuggestions.zsh\|1\|0\|\|\|* ]] || { print -u2 -r -- "unexpected active external state: $state"; exit 1; }

@@ -65,7 +65,7 @@ _wsh_detect_autosuggestions() {
 _wsh_detect_autosuggestions
 unfunction _wsh_detect_autosuggestions
 if (( _WSH_AUTOSUGGESTIONS_LOAD )); then
-  source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-autosuggestions.zsh
+  source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/native-autosuggestions.zsh
   [[ ${WSH_AUTOSUGGEST_ASYNC:-1} == 0 ]] && unset ZSH_AUTOSUGGEST_USE_ASYNC
   WSH_AUTOSUGGESTIONS_OWNER=wsh
 fi

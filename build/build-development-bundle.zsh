@@ -101,6 +101,11 @@ cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/shar
 (cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/zsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
 find "${stage}/share/wsh/defaults/zsh-syntax-highlighting" -type f -exec chmod 644 {} +
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  python3 "${repository_root}/native/prepare-autosuggestions.py" "${stage}/.autosuggestion-fixture"
+  install -D -m 644 "${stage}/.autosuggestion-fixture/candidate.zsh" "${stage}/share/wsh/defaults/native-autosuggestions.zsh"
+  rm -rf "${stage}/.autosuggestion-fixture"
+  (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile native-autosuggestions.zsh.zwc native-autosuggestions.zsh')
+  chmod 644 "${stage}/share/wsh/defaults/native-autosuggestions.zsh.zwc"
   install -D -m 644 "${repository_root}/integration/native-history.zsh" "${stage}/share/wsh/defaults/native-history.zsh"
   install -D -m 644 "${repository_root}/integration/native-before.zsh" "${stage}/share/wsh/native-before.zsh"
   install -D -m 644 "${repository_root}/integration/native-after.zsh" "${stage}/share/wsh/native-after.zsh"

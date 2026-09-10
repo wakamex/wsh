@@ -1,5 +1,6 @@
 #include "wsh-completion.c"
 #include "wsh-history.c"
+#include "wsh-autosuggestions.c"
 #include "wsh-directory.c"
 
 /* Optional Wsh defaults surround Zsh-owned startup; user files stay native. */
@@ -92,6 +93,7 @@ wsh_setup(void)
     char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
     (void)addbuiltins("wsh", wsh_completion_builtins, 1);
     (void)addbuiltins("wsh", wsh_history_builtins, 1);
+    (void)addbuiltins("wsh", wsh_sa_builtins, 3);
     (void)addbuiltins("wsh", wsh_directory_builtins, 1);
     if (!exepath || isset(PRIVILEGED))
         return;

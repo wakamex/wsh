@@ -108,3 +108,7 @@ The [complete controller experiment](benchmarks/native-consolidation-2026-09-10/
 ## Substantial highlighting parser prototype
 
 The [parser ownership experiment](benchmarks/native-consolidation-2026-09-10/highlighting-report.md) replaces the main command-list parser only in a generated private fixture. C owns traversal and parser state while retaining Zsh tokenization, command classification and style helpers. Vendored bytes and the installed highlighter remain unchanged. The candidate passes 117/271 main fixtures and all 16 other fixtures, with identical normal/sanitized counts. Multiline and composed-region failures prevent adoption; rejected redraw measurements are retained without a performance claim.
+
+## Installed native autosuggestion ownership
+
+The [installed qualification](benchmarks/native-autosuggestions-installed-2026-09-10/report.md) supersedes the prototype adoption deferral. Native installations compile the complete C controller into the shell and generate thin Zsh configuration/completion callbacks. The upstream MIT notice is retained in the C source; pinned vendor bytes remain unchanged for exact-copy recognition. Existing active/modified ownership and user settings are preserved, including manual and automatic rebinding. Installed normal/sanitized editor, lifecycle, OMZ, startup and canonical floor checks pass. The large-history complete sequence improves 29.3%. The report separately records existing sanitizer-suite and terminal-doctor failures.
