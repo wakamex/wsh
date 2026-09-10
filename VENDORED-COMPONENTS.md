@@ -104,3 +104,7 @@ The [native directory qualification](benchmarks/native-directory-final-2026-09-1
 ## Complete autosuggestion controller prototype
 
 The [complete controller experiment](benchmarks/native-consolidation-2026-09-10/autosuggestions-report.md) moves strategies, asynchronous collection, widget registration and editor actions into a private C module. Its generated fixture retains upstream configuration and small ZLE/completion bridges; the C source retains the upstream MIT notice. Vendored source bytes and selected runtime remain unchanged. Ten normal and sanitized editor modes pass, including sync/async completion, plus cancellation and response bounds. The large-history complete editing sequence improves 27.1%; installed coexistence and floor qualification remain prerequisites for adoption.
+
+## Substantial highlighting parser prototype
+
+The [parser ownership experiment](benchmarks/native-consolidation-2026-09-10/highlighting-report.md) replaces the main command-list parser only in a generated private fixture. C owns traversal and parser state while retaining Zsh tokenization, command classification and style helpers. Vendored bytes and the installed highlighter remain unchanged. The candidate passes 117/271 main fixtures and all 16 other fixtures, with identical normal/sanitized counts. Multiline and composed-region failures prevent adoption; rejected redraw measurements are retained without a performance claim.
