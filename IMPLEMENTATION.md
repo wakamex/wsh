@@ -1,3 +1,9 @@
+# Native implementation status
+
+The active build uses the C entrypoint and per-session C runtime, native completion registration, history substring search and directory data ownership. Zsh owns shell language, startup and ZLE. Autosuggestions and highlighting retain their pinned Zsh implementations pending complete ownership prototypes. Distribution uses the native inventory and system RPM; `VERSION` replaces Cargo metadata. [DEVELOPMENT.md](DEVELOPMENT.md) defines the active build and testing workflow.
+
+The following first-slice record describes the earlier Rust distribution and its original gates. Its benchmark evidence is retained against the original source. It is not the current build contract.
+
 # First wsh implementation
 
 The first implementation targets `x86_64-unknown-linux-gnu`, uses Rust for the manager and shared runtime, keeps a thin trusted Zsh adapter for shell-process integration, and ships one complete content-addressed bundle built from pinned upstream Zsh source. Release `v0.1.3` used the signed Zsh 5.9.2 source release. The current source uses accepted upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`. Wsh does not use a system Zsh or a third-party Zsh binary for an official bundle.
@@ -183,4 +189,4 @@ The initial release scope fixes the target, product boundary, implementation lan
 
 ## Selected native development path
 
-The [native migration](NATIVE-MIGRATION.md) assembles the locked C entrypoint and complete C helper, links bundled Zsh modules into the shell, and retains external module loading. It omits legacy redirecting startup files, launcher execution and runtime Rust code from the installed native path. The current development manifest assembler still uses the Rust manager and retains a duplicate private `bin/zsh`; those build/artifact responsibilities have not been deleted. Existing Zsh plugins remain selected after bounded native component comparisons. [NATIVE-PROGRESS.md](NATIVE-PROGRESS.md) distinguishes accepted implementation, retained prototypes and publication decisions.
+The [native migration](NATIVE-MIGRATION.md) assembles the locked C entrypoint and complete C helper, links bundled Zsh modules into the shell, and retains external module loading. It omits legacy redirecting startup files, launcher execution and runtime Rust code from the installed native path. Native assembly now uses the Python inventory verifier and retains a private `bin/zsh` copy for compatibility fixtures. Existing Zsh plugins remain selected after bounded native component comparisons. [NATIVE-PROGRESS.md](NATIVE-PROGRESS.md) distinguishes accepted implementation, retained prototypes and publication decisions.

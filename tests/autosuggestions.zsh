@@ -5,19 +5,19 @@ export WSH_THEME=minimal
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silent
 zmodload zsh/datetime zsh/zpty zsh/zselect
 
-(( $# == 2 || $# == 4 )) || {
-  print -u2 -- 'usage: autosuggestions.zsh MANAGER BUNDLE [AUTOSUGGESTIONS-REPOSITORY SYNTAX-HIGHLIGHTING-REPOSITORY]'
+(( $# == 1 || $# == 3 )) || {
+  print -u2 -- 'usage: autosuggestions.zsh BUNDLE [AUTOSUGGESTIONS-REPOSITORY SYNTAX-HIGHLIGHTING-REPOSITORY]'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
-readonly autosuggestions_repository=${3:-}
-readonly syntax_repository=${4:-}
-readonly external_sources=$(( $# == 4 ))
+
+readonly bundle=${1:A}
+readonly autosuggestions_repository=${2:-}
+readonly syntax_repository=${3:-}
+readonly external_sources=$(( $# == 3 ))
 readonly autosuggestions_revision=85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 readonly syntax_revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
-[[ -x $manager && -x $bundle/bin/zsh ]] || {
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh ]] || {
   print -u2 -- 'error: manager or bundle is invalid'
   exit 2
 }
@@ -46,7 +46,7 @@ if (( external_sources )); then
 else
   command cp -- $bundle/share/wsh/defaults/zsh-autosuggestions.zsh $autosuggestions_source/zsh-autosuggestions.zsh
 fi
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 git -C $fixture init -q -b main
 git -C $fixture config user.name 'wsh autosuggestions correctness test'
 git -C $fixture config user.email autosuggestions-correctness@wsh.invalid
@@ -141,7 +141,7 @@ pty_wait_for_prompt() {
   local -F deadline=$(( EPOCHREALTIME + 5 ))
   while (( EPOCHREALTIME < deadline )); do
     pty_read_available
-    [[ $pty_output == *git:main* ]] && return 0
+    [[ $pty_output == *$'\e]133;B'* ]] && return 0
     zselect -t 1 2>/dev/null || true
   done
   print -u2 -r -- "timeout waiting for ${label}: ${(qqq)pty_output}"
@@ -182,7 +182,7 @@ managed_child() {
   export TERM=xterm-256color
   unset EDITOR VISUAL WSH_BUNDLE_ROOT WSH_USER_ZDOTDIR WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
   command stty -echo
-  exec $manager run --state-root $state_root
+  exec $bundle/bin/wsh -d
 }
 
 start_variant() {

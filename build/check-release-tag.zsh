@@ -11,7 +11,7 @@ readonly tag=${1:-}
   print -u2 -- 'usage: check-release-tag.zsh vMAJOR.MINOR.PATCH'
   exit 1
 }
-for command in cargo git jq; do
+for command in git jq; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
@@ -32,14 +32,13 @@ readonly tag_revision=$(git -C $repository_root rev-parse ${tag}^{commit})
   exit 1
 }
 
-typeset -a workspace_versions
-workspace_versions=(${(f)$(cargo metadata --locked --no-deps --format-version 1 --manifest-path ${repository_root}/Cargo.toml | jq -r '[.packages[].version] | unique[]')})
-(( ${#workspace_versions} == 1 )) || {
-  print -u2 -- 'error: release packages do not share exactly one version'
+readonly product_version=$(<${repository_root}/VERSION)
+[[ $product_version =~ '^[0-9]+\.[0-9]+\.[0-9]+$' ]] || {
+  print -u2 -- 'error: invalid VERSION'
   exit 1
 }
-[[ v${workspace_versions[1]} == $tag ]] || {
-  print -u2 -- "error: release tag $tag does not match workspace version ${workspace_versions[1]}"
+[[ v$product_version == $tag ]] || {
+  print -u2 -- "error: release tag $tag does not match product version $product_version"
   exit 1
 }
 

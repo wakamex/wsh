@@ -1,6 +1,6 @@
 # Native package migration
 
-The native development package starts the bundled Zsh directly and uses the C helper for optional prompt work. Login no longer reads per-user activation records. The package owns `/usr/bin/wsh`, its `/bin/wsh` alias on Fedora, and resources under `/usr/libexec/wsh`. These instructions describe the tested local RPM prototype. Published Wsh releases still use the legacy bundle installer and updater.
+The native development package starts the bundled Zsh directly and uses the C helper for optional prompt work. Login no longer reads per-user activation records. The package owns `/usr/bin/wsh`, its `/bin/wsh` alias on Fedora, and resources under `/usr/libexec/wsh`. These instructions describe the native RPM distribution under development. Published Wsh releases still use the legacy bundle installer and updater.
 
 ## Preserve access while changing installations
 
@@ -32,7 +32,7 @@ Wakterm's restore caller selects native foreground invocation for `/usr/bin/wsh`
 
 ## Package updates and recovery
 
-For this development RPM, use `sudo dnf install ./wsh-native-development-*.rpm`, `sudo dnf upgrade ./NEW_PACKAGE.rpm`, or `sudo dnf downgrade ./OLDER_PACKAGE.rpm` with the intended single local package file. Future published package names and repository configuration require a release decision. There is no second native updater or mutable activation record.
+For a selected native RPM, use `sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm`, `sudo dnf upgrade ./NEW_PACKAGE.rpm`, or `sudo dnf downgrade ./OLDER_PACKAGE.rpm` with the intended single local package file. The package name is `wsh`. A hosted DNF repository is not configured. There is no second native updater or mutable activation record.
 
 Bundled modules are linked into each shell executable, so a running shell retains them when RPM replaces the executable. External module loading remains available and follows Zsh's ABI requirements. Autoload functions and the optional helper use the installed package's resources; this qualification covers the current Zsh ABI and helper protocol. Future incompatible function/protocol changes need an explicit compatibility or restart policy before shipping.
 

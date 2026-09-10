@@ -21,7 +21,7 @@ readonly notes_file=${repository_root}/release-notes/${tag}.md
   print -u2 -- "error: release notes must be a non-empty regular file: release-notes/${tag}.md"
   exit 1
 }
-for command in cargo gh git jq; do
+for command in gh git jq; do
   (( $+commands[$command] )) || {
     print -u2 -- "error: required command not found: $command"
     exit 1
@@ -55,14 +55,13 @@ readonly remote_main_revision=${remote_main_record%%[[:space:]]*}
   exit 1
 }
 
-typeset -a workspace_versions
-workspace_versions=(${(f)$(cargo metadata --locked --no-deps --format-version 1 --manifest-path ${repository_root}/Cargo.toml | jq -r '[.packages[].version] | unique[]')})
-(( ${#workspace_versions} == 1 )) || {
-  print -u2 -- 'error: release packages do not share exactly one version'
+readonly product_version=$(<${repository_root}/VERSION)
+[[ $product_version =~ '^[0-9]+\.[0-9]+\.[0-9]+$' ]] || {
+  print -u2 -- 'error: invalid VERSION'
   exit 1
 }
-[[ v${workspace_versions[1]} == $tag ]] || {
-  print -u2 -- "error: release tag $tag does not match workspace version ${workspace_versions[1]}"
+[[ v$product_version == $tag ]] || {
+  print -u2 -- "error: release tag $tag does not match product version $product_version"
   exit 1
 }
 

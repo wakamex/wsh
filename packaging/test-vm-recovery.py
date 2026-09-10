@@ -31,7 +31,7 @@ chmod 755 /usr/libexec/wsh/bin/wsh-runtime
 if [ -d /var/tmp/wsh-integration-backup ]; then mv /var/tmp/wsh-integration-backup /usr/libexec/wsh/share/wsh; fi
 rm -f /home/shellempty/.zshrc
 restorecon -R /usr/libexec/wsh
-rpm -V wsh-native-development
+rpm -V wsh
 ''', name + '-restore')
     (WORK / 'recovery-results.json').write_text(json.dumps(results, indent=2) + '\n')
 print('PASS: seven real PAM login failures preserve native shell availability')

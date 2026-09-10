@@ -3,25 +3,25 @@
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
 
-(( $# == 2 || $# == 7 )) || {
-  print -u2 -- 'usage: history-substring-search.zsh MANAGER BUNDLE [HSS-REPOSITORY OMZ-REPOSITORY AUTOSUGGESTIONS-REPOSITORY SYNTAX-HIGHLIGHTING-REPOSITORY baseline|candidate]'
+(( $# == 1 || $# == 6 )) || {
+  print -u2 -- 'usage: history-substring-search.zsh BUNDLE [HSS-REPOSITORY OMZ-REPOSITORY AUTOSUGGESTIONS-REPOSITORY SYNTAX-HIGHLIGHTING-REPOSITORY baseline|candidate]'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
-readonly hss_repository=${3:-}
-readonly omz_repository=${4:-}
-readonly autosuggestions_repository=${5:-}
-readonly syntax_repository=${6:-}
-readonly expectation=${7:-candidate}
-readonly external_sources=$(( $# == 7 ))
+
+readonly bundle=${1:A}
+readonly hss_repository=${2:-}
+readonly omz_repository=${3:-}
+readonly autosuggestions_repository=${4:-}
+readonly syntax_repository=${5:-}
+readonly expectation=${6:-candidate}
+readonly external_sources=$(( $# == 6 ))
 readonly hss_revision=14c8d2e0ffaee98f2df9850b19944f32546fdea5
 readonly omz_revision=9112b53fa8b5ab556c7c893aa8be8a247ac512a0
 readonly autosuggestions_revision=85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 readonly syntax_revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
 
-[[ -x $manager && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
   print -u2 -- 'error: manager, bundle, or expectation is invalid'
   exit 2
 }
@@ -70,7 +70,7 @@ zmodload zsh/terminfo
 bindkey -M emacs "$terminfo[kcuu1]" history-substring-search-up
 bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down' >| $omz_source/plugins/history-substring-search/history-substring-search.plugin.zsh
 fi
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 
 git -C $fixture init -q -b main
 git -C $fixture config user.name 'wsh history correctness test'
@@ -192,7 +192,7 @@ managed_child() {
   export TERM=xterm-256color
   unset EDITOR VISUAL WSH_BUNDLE_ROOT WSH_USER_ZDOTDIR WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
   command stty -echo
-  exec $manager run --state-root $state_root
+  exec $bundle/bin/wsh -d
 }
 
 start_variant() {
@@ -257,14 +257,14 @@ for variant in $variants; do
   else
     case $variant in
       clean)
-        [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/zsh-history-substring-search.zsh\|history-substring-search-up\|* ]] || { print -u2 -r -- "unexpected clean state: $state"; exit 1; }
+        [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/native-history.zsh\|history-substring-search-up\|* ]] || { print -u2 -r -- "unexpected clean state: $state"; exit 1; }
         assert_search wsh_match $'\eOA' 'print -r -- WSH_MATCH_NEWER' 1
         assert_search wsh_match $'\eOA\eOA' 'print -r -- WSH_MATCH_OLDER' 2
         assert_search wsh_match $'\eOA\eOA\eOB' 'print -r -- WSH_MATCH_NEWER' 3
         assert_search WSH_NO_MATCH_UNIQUE $'\eOA' WSH_NO_MATCH_UNIQUE 4
         ;;
       external-upstream|external-omz)
-        [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/zsh-history-substring-search.zsh\|history-substring-search-up\|*\|0\|0\|* ]] || { print -u2 -r -- "unexpected recognized external state for ${variant}: $state"; exit 1; }
+        [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/native-history.zsh\|history-substring-search-up\|*\|0\|0\|* ]] || { print -u2 -r -- "unexpected recognized external state for ${variant}: $state"; exit 1; }
         assert_search wsh_match $'\eOA' 'print -r -- WSH_MATCH_NEWER' 1
         ;;
       unknown)
@@ -272,7 +272,7 @@ for variant in $variants; do
         assert_search arbitrary $'\eOA' UNKNOWN_UP 1
         ;;
       custom-binding)
-        [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/zsh-history-substring-search.zsh\|_wsh_custom_up\|* ]] || { print -u2 -r -- "custom binding was not preserved: $state"; exit 1; }
+        [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/native-history.zsh\|_wsh_custom_up\|* ]] || { print -u2 -r -- "custom binding was not preserved: $state"; exit 1; }
         assert_search arbitrary $'\eOA' CUSTOM_UP 1
         ;;
       disabled)
@@ -282,7 +282,7 @@ for variant in $variants; do
         [[ $state == *'|fg=blue|fg=yellow||1|1|1|0.25' ]] || { print -u2 -r -- "configuration was not preserved: $state"; exit 1; }
         ;;
       composition)
-        [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/zsh-history-substring-search.zsh\|history-substring-search-up\|*\|0\|0\|* ]] || { print -u2 -r -- "unexpected composition state: $state"; exit 1; }
+        [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/native-history.zsh\|history-substring-search-up\|*\|0\|0\|* ]] || { print -u2 -r -- "unexpected composition state: $state"; exit 1; }
         assert_search wsh_match $'\eOA' 'print -r -- WSH_MATCH_NEWER' 1
         ;;
     esac

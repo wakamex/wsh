@@ -5,13 +5,13 @@ export WSH_THEME=minimal
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silent
 zmodload zsh/datetime zsh/zpty zsh/zselect
 
-(( $# == 2 )) || {
-  print -u2 -- 'usage: syntax-highlighting.zsh MANAGER BUNDLE'
+(( $# == 1 )) || {
+  print -u2 -- 'usage: syntax-highlighting.zsh BUNDLE'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
+
+readonly bundle=${1:A}
 readonly test_root=$(mktemp -d /var/tmp/wsh-syntax-correctness.XXXXXX)
 readonly state_root=$test_root/state
 readonly fixture=$test_root/fixture
@@ -20,7 +20,7 @@ readonly modified_source=$test_root/modified
 readonly custom_source=$test_root/custom
 typeset -g current_pty= pty_output= child_home= child_buffer_log= child_state_log=
 
-[[ -x $manager && -x $bundle/bin/zsh && -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || {
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || {
   print -u2 -- 'error: manager or bundle is invalid'
   exit 2
 }
@@ -40,7 +40,7 @@ command mkdir -p -- $custom_source/highlighters/custom
 print -r -- '_zsh_highlight_highlighter_custom_predicate() { return 0 }
 _zsh_highlight_highlighter_custom_paint() { _zsh_highlight_add_highlight 0 $#BUFFER custom }' >| $custom_source/highlighters/custom/custom-highlighter.zsh
 
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 git -C $fixture init -q -b main
 git -C $fixture config user.name 'wsh syntax highlighting correctness test'
 git -C $fixture config user.email syntax-correctness@wsh.invalid
@@ -163,7 +163,7 @@ managed_child() {
   export TERM=xterm-256color
   unset EDITOR VISUAL WSH_BUNDLE_ROOT WSH_USER_ZDOTDIR WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
   command stty -echo
-  exec $manager run --state-root $state_root
+  exec $bundle/bin/wsh -d
 }
 
 start_variant() {

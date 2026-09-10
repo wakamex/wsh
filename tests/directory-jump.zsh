@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
-(( $# == 2 || $# == 3 )) || exit 2
-readonly manager=${1:A} bundle=${2:A} omz=${3:-}
+(( $# == 1 || $# == 2 )) || exit 2
+readonly bundle=${1:A} omz=${2:-}
 readonly scratch=$(mktemp -d /var/tmp/wsh-directory-jump.XXXXXX)
 trap 'rm -rf -- $scratch' EXIT INT TERM
 readonly home=$scratch/home state=$scratch/state
 mkdir -p $home $scratch/bin "$scratch/project alpha" "$scratch/project beta" "$scratch/safe \$(touch owned)"
 printf '#!/bin/sh\nprintf "external-z\\n"\n' > $scratch/bin/z
 chmod +x $scratch/bin/z
-$manager bundle activate $bundle --state-root $state >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 cat > $home/.zshrc <<'CONFIG'
 PROMPT='JUMP> '
 autoload -Uz compinit
@@ -75,11 +75,11 @@ for variant in $variants; do
   [[ $variant == executable ]] && effective_path=$scratch/bin:$PATH
   PATH=$effective_path HOME=$home ZDOTDIR=$home WSH_THEME= JUMP_CASE=$variant JUMP_ROOT=$scratch JUMP_OMZ=$omz \
   JUMP_EXTERNAL=$bundle/share/wsh/defaults/zsh-z/z.plugin.zsh JUMP_PROBE=$scratch/probe.zsh \
-    $manager run --state-root $state -- -dic 'cd "$JUMP_ROOT"; source "$JUMP_PROBE"' || exit 1
+    $bundle/bin/wsh -d -dic 'cd "$JUMP_ROOT"; source "$JUMP_PROBE"' || exit 1
   print -r -- "PASS: $variant directory-jump ownership and behavior"
 done
 HOME=$home ZDOTDIR=$home WSH_THEME= JUMP_CASE=builtin JUMP_ROOT=$scratch \
-  $manager run --state-root $state -- -dic 'zshz beta; [[ $PWD == "$JUMP_ROOT/project beta" ]]'
+  $bundle/bin/wsh -d -dic 'zshz beta; [[ $PWD == "$JUMP_ROOT/project beta" ]]'
 print -r -- 'PASS: directory database persists across Wsh sessions'
 
 # Exercise recording and completion through real ZLE, including a spaced path.
@@ -90,7 +90,7 @@ trap cleanup EXIT INT TERM
 child() {
   export HOME=$home ZDOTDIR=$home TERM=xterm-256color JUMP_CASE=builtin WSH_THEME=
   command stty -echo
-  exec $manager run --state-root $state
+  exec $bundle/bin/wsh -d
 }
 read_until() {
   local expected=$1 chunk

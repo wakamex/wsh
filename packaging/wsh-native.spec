@@ -3,10 +3,10 @@
 %{!?wsh_release:%global wsh_release 0.1}
 %{!?wsh_fault:%global wsh_fault none}
 
-Name:           wsh-native-development
-Version:        0.3.1
+Name:           wsh
+Version:        %{wsh_version}
 Release:        %{wsh_release}%{?dist}
-Summary:        Unsigned native Wsh installation for migration testing
+Summary:        Zsh distribution with native diagnostics and interactive defaults
 License:        MIT AND Zsh AND BSD-3-Clause
 URL:            https://github.com/wakamex/wsh
 Source0:        native-payload.tar.gz
@@ -16,8 +16,8 @@ Requires(post): /usr/bin/grep
 Requires(postun): /usr/bin/sed
 
 %description
-Local native installation used to qualify account login and package transactions.
-This development RPM is not an official Wsh release.
+Wsh provides Zsh-compatible interactive defaults, diagnostics and profiling.
+System packages own installation and updates.
 
 %prep
 %setup -q -c -T

@@ -104,11 +104,11 @@ Every accepted provider exposes measurements through the same runtime boundary: 
 
 ## The first wsh provider adapts the benchmarked worker
 
-The manager and shared runtime are implemented in Rust. A thin trusted Zsh adapter owns only the interfaces that must live in the shell process: hooks, ZLE callbacks, prompt installation, snapshot transfer, and repaint requests. The initial Rust Git provider adapts the semantics and lifecycle demonstrated by the precursor worker, including staged asynchronous results, a bounded identity wait, cancellation, refresh coalescing, stale-result rejection, process cleanup, optional-lock suppression, and repaint-on-change behavior.
+The shell integration and per-session runtime are implemented in C. System packages own distribution. A thin trusted Zsh adapter owns only the interfaces that must live in the shell process: hooks, ZLE callbacks, prompt installation, snapshot transfer, and repaint requests. The C Git provider adapts the semantics and lifecycle demonstrated by the precursor worker, including staged asynchronous results, a bounded identity wait, cancellation, refresh coalescing, stale-result rejection, process cleanup, optional-lock suppression, and repaint-on-change behavior.
 
 Generalizing it requires separating its structured Git result from its current glyph and prompt decisions. The provider publishes the existing field scope while trusted prompt components interpret the active definition's validated choices about whether `main` is hidden, whether a branch appears only after it changes, and which symbols and named styles represent each state.
 
-The current Rust runtime communicates with the Zsh adapter through a small versioned protocol. The native transition first compares a C runtime under the same process boundary, then compares helper-process and in-process execution. Measure adapter dispatch, serialization, copying, cleanup, and implementation complexity in that comparison. External Git latency alone does not establish that the adapter needs in-process code.
+The C runtime communicates with the Zsh adapter through the existing versioned protocol. The measured in-process prototype did not justify moving child-process ownership into the shell. Rendering and shell lifecycle stay local; shared Git collection remains deferred until measurements justify it.
 
 ## Git provider implementations remain replaceable
 

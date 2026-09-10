@@ -4,14 +4,14 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silen
 zmodload zsh/datetime zsh/zpty zsh/zselect
 export WSH_THEME=${WSH_THEME-minimal}
 
-(( $# == 3 )) || {
-  print -u2 -- 'usage: foreground-startup.zsh MANAGER BUNDLE baseline|candidate'
+(( $# == 2 )) || {
+  print -u2 -- 'usage: foreground-startup.zsh BUNDLE baseline|candidate'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
-readonly expectation=$3
+
+readonly bundle=${1:A}
+readonly expectation=$2
 readonly test_root=$(mktemp -d /var/tmp/wsh-foreground-startup.XXXXXX)
 readonly probe=$test_root/foreground-probe
 readonly fixture=$test_root/fixture
@@ -20,7 +20,7 @@ typeset -g current_pty= pty_output= current_variant= current_mode= current_repor
 typeset -gi current_disable_terminal=0
 typeset -ga current_extra_args=()
 
-[[ -x $manager && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
   print -u2 -- 'error: manager, bundle, or expectation is invalid'
   exit 2
 }
@@ -39,7 +39,7 @@ git -C $fixture config user.email foreground-startup@wsh.invalid
 print -r -- tracked > $fixture/tracked
 git -C $fixture add tracked
 git -C $fixture commit -qm initial
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 
 write_home() {
   local variant=$1
@@ -92,14 +92,14 @@ foreground_child() {
       exec $bundle/bin/zsh -d -l -i -c '"$@"; exec "$0" -d -l -i' $bundle/bin/zsh $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate)
-      exec $manager run-foreground --state-root $state_root --login -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --wsh-run --login -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate-non-login)
-      exec $manager run-foreground --state-root $state_root -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --wsh-run -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate-shorthand)
       export WSH_STATE_ROOT=$state_root
-      exec $manager -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --wsh-run -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     *)
       print -u2 -- "error: unknown foreground variant: $current_variant"
@@ -129,6 +129,7 @@ wait_for_text() {
 
 wait_for_prompt() {
   local label=$1
+  wait_for_text $'\e]133;P;k=i' $label
   wait_for_text $'\e]133;B' $label
 }
 
@@ -244,7 +245,7 @@ assert_normal_launch_ignores_foreground_environment() {
 typeset -g WSH_DISABLE_AUTOSUGGESTIONS=1
 typeset -g WSH_DISABLE_SYNTAX_HIGHLIGHTING=1' >| $home/.zshrc
   local output=$(HOME=$home ZDOTDIR=$home WSH_RUN_FOREGROUND=prepared \
-    $manager run --state-root $state_root -- -ic 'print -r -- WSH_NORMAL_RUN_OK' 2>&1)
+    $bundle/bin/wsh -d -ic 'print -r -- WSH_NORMAL_RUN_OK' 2>&1)
   [[ $output == *WSH_NORMAL_RUN_OK* && $output != *'foreground command is unavailable'* ]]
 }
 

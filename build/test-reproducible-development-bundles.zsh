@@ -1,150 +1,28 @@
 #!/usr/bin/env zsh
-
 emulate -L zsh
 setopt errexit nounset pipefail
-umask 022
-
-readonly script_dir=${0:A:h}
-readonly repository_root=${script_dir:h}
-readonly output_root=${1:-}
-readonly requested_revision=${2:-HEAD}
-
-[[ -n $output_root ]] || {
-  print -u2 -- 'usage: test-reproducible-development-bundles.zsh OUTPUT_DIRECTORY [REVISION]'
+readonly root=${0:A:h:h}
+readonly output=${1:?usage: test-reproducible-development-bundles.zsh NEW_OUTPUT [REVISION]}
+readonly revision=$(git -C $root rev-parse ${2:-HEAD}^{commit})
+[[ -z $(git -C $root status --porcelain --untracked-files=all) && ! -e $output ]] || {
+  print -u2 -- 'error: a clean worktree and new output directory are required'
   exit 1
 }
-for command in cmp cp cut find git mkdir mktemp rm sha256sum; do
-  (( $+commands[$command] )) || {
-    print -u2 -- "error: required command not found: $command"
-    exit 1
-  }
-done
-[[ -z $(git -C $repository_root status --porcelain --untracked-files=all) ]] || {
-  print -u2 -- 'error: reproducibility test requires a clean source worktree'
-  exit 1
-}
-readonly revision=$(git -C $repository_root rev-parse ${requested_revision}^{commit})
-[[ ! -e $output_root && ! -L $output_root ]] || {
-  print -u2 -- "error: output already exists: $output_root"
-  exit 1
-}
-mkdir -p -- $output_root
-
-readonly scratch_root=$(mktemp -d /var/tmp/wsh-reproducibility.XXXXXX)
-typeset -a registered_worktrees=()
-integer completed=0
-
-cleanup() {
-  if (( completed )); then
-    for worker_source in $registered_worktrees; do
-      git -C $repository_root worktree remove --force $worker_source 2>/dev/null || true
-    done
-    rm -rf -- $scratch_root
-  else
-    print -u2 -- "preserved failed reproducibility workers: $scratch_root"
-  fi
-}
-trap cleanup EXIT INT TERM
-
-for worker_name in a b; do
-  worker_source=${scratch_root}/worker-${worker_name}
-  git -C $repository_root worktree add --detach $worker_source $revision >/dev/null
-  registered_worktrees+=($worker_source)
-  worker_log=${output_root}/worker-${worker_name}.log
-  print -r -- "worker=$worker_name revision=$revision source=$worker_source" >| $worker_log
-  (
-    cd $worker_source
-    ./build/build-glibc-2.28-development-bundle.zsh
-  ) >> $worker_log 2>&1
-
-  worker_archives=(${worker_source}/build/portable/glibc-2.28/archives/*.tar.xz(N))
-  worker_bundles=(${worker_source}/build/portable/glibc-2.28/bundles/*(N/))
-  (( ${#worker_archives} == 1 && ${#worker_bundles} == 1 )) || {
-    print -u2 -- "error: worker $worker_name did not produce exactly one archive and bundle"
-    exit 1
-  }
-  cp -- $worker_archives[1] ${output_root}/worker-${worker_name}.tar.xz
-  cp -- ${worker_bundles[1]}/manifest.json ${output_root}/worker-${worker_name}.manifest.json
-  cp -- ${worker_source}/build/portable/glibc-2.28/target/release/wsh ${output_root}/worker-${worker_name}.launcher
-  cp -- ${worker_source}/build/portable/glibc-2.28/target/release/wsh-install ${output_root}/worker-${worker_name}.installer
-  ${worker_source}/build/render-bootstrap.zsh \
-    v0.0.0 \
-    $revision \
-    $worker_archives[1] \
-    ${worker_source}/build/portable/glibc-2.28/target/release/wsh \
-    ${worker_source}/build/portable/glibc-2.28/target/release/wsh-install \
-    ${output_root}/worker-${worker_name}.bootstrap >/dev/null
-done
-
-readonly archive_a=${output_root}/worker-a.tar.xz
-readonly archive_b=${output_root}/worker-b.tar.xz
-readonly manifest_a=${output_root}/worker-a.manifest.json
-readonly manifest_b=${output_root}/worker-b.manifest.json
-readonly launcher_a=${output_root}/worker-a.launcher
-readonly launcher_b=${output_root}/worker-b.launcher
-readonly installer_a=${output_root}/worker-a.installer
-readonly installer_b=${output_root}/worker-b.installer
-readonly bootstrap_a=${output_root}/worker-a.bootstrap
-readonly bootstrap_b=${output_root}/worker-b.bootstrap
-archive_a_sha256=$(sha256sum $archive_a)
-archive_b_sha256=$(sha256sum $archive_b)
-manifest_a_sha256=$(sha256sum $manifest_a)
-manifest_b_sha256=$(sha256sum $manifest_b)
-launcher_a_sha256=$(sha256sum $launcher_a)
-launcher_b_sha256=$(sha256sum $launcher_b)
-installer_a_sha256=$(sha256sum $installer_a)
-installer_b_sha256=$(sha256sum $installer_b)
-bootstrap_a_sha256=$(sha256sum $bootstrap_a)
-bootstrap_b_sha256=$(sha256sum $bootstrap_b)
-archive_a_sha256=${archive_a_sha256%% *}
-archive_b_sha256=${archive_b_sha256%% *}
-manifest_a_sha256=${manifest_a_sha256%% *}
-manifest_b_sha256=${manifest_b_sha256%% *}
-launcher_a_sha256=${launcher_a_sha256%% *}
-launcher_b_sha256=${launcher_b_sha256%% *}
-installer_a_sha256=${installer_a_sha256%% *}
-installer_b_sha256=${installer_b_sha256%% *}
-bootstrap_a_sha256=${bootstrap_a_sha256%% *}
-bootstrap_b_sha256=${bootstrap_b_sha256%% *}
-
-{
-  print -r -- 'format_version=1'
-  print -r -- "source_revision=$revision"
-  print -r -- "archive_a_sha256=$archive_a_sha256"
-  print -r -- "archive_b_sha256=$archive_b_sha256"
-  print -r -- "manifest_a_sha256=$manifest_a_sha256"
-  print -r -- "manifest_b_sha256=$manifest_b_sha256"
-  print -r -- "launcher_a_sha256=$launcher_a_sha256"
-  print -r -- "launcher_b_sha256=$launcher_b_sha256"
-  print -r -- "installer_a_sha256=$installer_a_sha256"
-  print -r -- "installer_b_sha256=$installer_b_sha256"
-  print -r -- "bootstrap_a_sha256=$bootstrap_a_sha256"
-  print -r -- "bootstrap_b_sha256=$bootstrap_b_sha256"
-  print -r -- "package_lock_sha256=$(sha256sum ${repository_root}/build/rocky-8.10-packages.lock | cut -d ' ' -f 1)"
-  print -r -- "rust_toolchain_lock_sha256=$(sha256sum ${repository_root}/build/rust-toolchain.lock | cut -d ' ' -f 1)"
-} >| ${output_root}/result.txt
-
-cmp --silent $manifest_a $manifest_b || {
-  print -u2 -- 'error: isolated bundle manifests differ'
-  exit 1
-}
-cmp --silent $archive_a $archive_b || {
-  print -u2 -- 'error: isolated canonical archives differ'
-  exit 1
-}
-cmp --silent $launcher_a $launcher_b || {
-  print -u2 -- 'error: isolated launchers differ'
-  exit 1
-}
-cmp --silent $installer_a $installer_b || {
-  print -u2 -- 'error: isolated installers differ'
-  exit 1
-}
-cmp --silent $bootstrap_a $bootstrap_b || {
-  print -u2 -- 'error: isolated bootstrap scripts differ'
-  exit 1
-}
-
-print -r -- 'byte_identical=1' >> ${output_root}/result.txt
-completed=1
-print -r -- "PASS: two isolated archives, manifests, launchers, installers, and bootstrap scripts are byte-identical"
+mkdir -p $output
+readonly destination=${output:A}
+for worker in a b; do
+  source=$destination/source-$worker
+  git -C $root worktree add --detach $source $revision
+  (cd $source && ./build/build-glibc-2.28-development-bundle.zsh) > $destination/build-$worker.log 2>&1
+  mkdir $destination/$worker
+  manifests=($source/build/portable/glibc-2.28/bundles/*/manifest.json(N))
+  packages=($source/build/portable/glibc-2.28/rpm/RPMS/**/*.rpm(N))
+  (( $#manifests == 1 && $#packages == 1 ))
+  cp $manifests[1] $destination/$worker/manifest.json
+  cp $packages[1] $destination/$worker/package.rpm
+  git -C $root worktree remove --force $source
+ done
+cmp $destination/a/manifest.json $destination/b/manifest.json
+cmp $destination/a/package.rpm $destination/b/package.rpm
+sha256sum $destination/{a,b}/{manifest.json,package.rpm} > $destination/SHA256SUMS
+print -r -- 'PASS: independent native installations and RPMs are byte-identical'

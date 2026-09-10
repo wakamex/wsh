@@ -2,11 +2,11 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
-(( $# == 2 || $# == 3 )) || {
-  print -u2 -- 'usage: prompt-ownership.zsh MANAGER BUNDLE [REAL_OMZ_DIRECTORY]'
+(( $# == 1 || $# == 2 )) || {
+  print -u2 -- 'usage: prompt-ownership.zsh BUNDLE [REAL_OMZ_DIRECTORY]'
   exit 2
 }
-readonly manager=${1:A} bundle=${2:A} omz=${3:-}
+readonly bundle=${1:A} omz=${2:-}
 readonly scratch=$(mktemp -d /var/tmp/wsh-prompt-ownership.XXXXXX)
 readonly state=$scratch/state
 readonly home=$scratch/home
@@ -20,7 +20,7 @@ trap cleanup EXIT INT TERM
 mkdir -p $home
 sed 's/^id = "minimal"$/id = "custom-selection"/' $bundle/share/wsh/themes/minimal.toml > $custom_theme
 print -r -- 'theme-version = "invalid"' > $scratch/invalid.toml
-$manager bundle activate $bundle --state-root $state >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 cat > $home/.zshenv <<'CONFIG'
 typeset -g selector_at_zshenv=${WSH_THEME-absent}
 CONFIG
@@ -83,7 +83,7 @@ CONFIG
 
 child() {
   export HOME=$home ZDOTDIR=$home TERM=xterm-256color WSH_STATE_ROOT=$state
-  export WSH_TEST_ZSH=$bundle/bin/zsh WSH_TEST_OMZ=$omz
+  export WSH_TEST_ZSH=${WSH_REFERENCE_ZSH:-/usr/bin/zsh} WSH_TEST_OMZ=$omz
   unset WSH_THEME WSH_BUNDLE_ROOT WSH_USER_ZDOTDIR WSH_INTEGRATION_LOADED WSH_PROMPT_OWNER
   case $mode in
     default|regular) export EXPECT_OWNER=existing EXPECT_SELECTOR=absent ;;
@@ -96,11 +96,11 @@ child() {
   esac
   command stty -echo
   if [[ $mode == profile-* ]]; then
-    exec $manager profile --state-root $state
+    exec $bundle/bin/wsh --wsh-profile -- -d
   elif [[ $mode == regular ]]; then
-    exec $bundle/bin/zsh -di ${=login_flag}
+    exec $WSH_TEST_ZSH -di ${=login_flag}
   else
-    exec $manager run --state-root $state -- -di ${=login_flag}
+    exec $bundle/bin/wsh -d -di ${=login_flag}
   fi
 }
 wait_for() {
@@ -134,7 +134,7 @@ for login_flag in '' -l; do
     if [[ $mode == profile-* ]]; then
       wait_for $'\r\nStartup\r\n'
       profile_dirs=($state/profiles/*(/om[1]))
-      report=$($manager profile report $profile_dirs[1])
+      report=$($bundle/bin/wsh --wsh-profile-report $profile_dirs[1])
       [[ $report == *'Wsh ZLE initialization hook:'* ]] || exit 1
       if [[ $mode == profile-existing ]]; then
         ! grep -q '"source":"runtime"' $profile_dirs[1]/trace.jsonl
@@ -160,14 +160,14 @@ if [[ -n $omz ]]; then
   cp $home/.zshrc $scratch/conditional.zshrc
   sed '/^if \[\[ -n ${WSH_THEME-} \]\]; then$/,/^fi$/d' $scratch/conditional.zshrc > $home/.zshrc
   before=$(sha256sum $home/.zshrc)
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $manager doctor --state-root $state)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --wsh-doctor)
   [[ $report == *'before sourcing oh-my-zsh.sh'* && $report == *'alone does not skip'* ]]
   [[ $(sha256sum $home/.zshrc) == $before ]]
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME= $manager doctor --state-root $state)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME= $bundle/bin/wsh --wsh-doctor)
   [[ $report != *'Prompt compatibility:'* ]]
   cp $scratch/conditional.zshrc $home/.zshrc
   before=$(sha256sum $home/.zshrc)
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $manager doctor --state-root $state)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --wsh-doctor)
   [[ $report != *'Prompt compatibility:'* && $(sha256sum $home/.zshrc) == $before ]]
   print -r -- 'PASS: real OMZ overlap advice, conditional resolution, existing-mode silence, unchanged configuration'
 else

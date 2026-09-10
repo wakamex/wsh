@@ -6,11 +6,11 @@
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
 - Jump back to frequently used directories with `z`.
 - Keep your existing prompt or choose Minimal, Wakamex, Robbyrussell, or Agnoster with asynchronous Git updates.
-- Find startup slowdowns with `wsh profile` and redundant plugin setup with `wsh doctor`.
-- Update explicitly and roll back offline if needed.
+- Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.
+- Use system packages for installation, upgrades and downgrades.
 - Navigate prompts and command output in compatible terminals.
 
-These features are included in v0.3.1.
+The current source uses the native system-package architecture. Published v0.3.1 uses the earlier per-user launcher; see [migration](NATIVE-MIGRATION.md) for the command and installation changes.
 
 ## Motivation
 
@@ -27,30 +27,20 @@ The [`zsh-theme-bench` benchmark](https://github.com/wakamex/zsh-theme-bench/blo
 - Non-executable theme definitions and an open-submission directory governed by mechanical safety and resource checks rather than stylistic approval
 - Fast editable prompts, bounded asynchronous refresh, and composed repainting
 - Exact foreground application startup with native Zsh job control and one prompt afterward
-- Immutable bundles that pair one exact Zsh build with its tested Wsh runtime
-- Explicit, signed, reproducible, atomic, and reversible updates with no update work during shell startup
+- System packages that pair one exact Zsh build with its tested Wsh runtime
+- Reproducible packages with explicit system-managed updates and no update work during shell startup
 - Built-in profiling and tracing for startup, prompts, providers, child processes, and repaints
 - Reproducible correctness fixtures and benchmarks for performance claims and new feature decisions
 
 ## Install
 
-The supported target is x86-64 Linux with glibc 2.28 or newer. Install the current immutable GitHub Release:
+The native distribution targets x86-64 Fedora RPM installations, built against glibc 2.28. Native packages have not been published yet. Build instructions are in [DEVELOPMENT.md](DEVELOPMENT.md); local artifacts are unsigned development builds.
 
-```sh
-curl --proto '=https' --tlsv1.2 -fsSL https://github.com/wakamex/wsh/releases/latest/download/wsh-install.sh | sh
-```
+Install a selected native package with `sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm`. Use DNF to upgrade or downgrade the complete package. Run `/usr/bin/wsh --wsh-version` and test `/usr/bin/wsh -l` before using `chsh -s /usr/bin/wsh`. The [migration guide](NATIVE-MIGRATION.md) covers login testing, an older launcher earlier in PATH, package removal and recovery.
 
-Then start Wsh with `wsh`. The explicit `wsh run` form accepts Zsh arguments after `--`, such as `wsh run -- -f`. The installer uses `~/.local/bin`; add that directory to `PATH` or run `~/.local/bin/wsh` directly if necessary.
+Published v0.3.1 installation instructions remain available in its [versioned README](https://github.com/wakamex/wsh/blob/v0.3.1/README.md). Keep a system shell as the account shell when using that per-user launcher: missing activation state or an unavailable home executable can prevent login. Native package installation replaces that dependency with a system-owned executable.
 
-Keep system Bash or Zsh as your account login shell and start Wsh from your terminal. Do not set the per-user Wsh launcher as your login shell with `chsh`: it depends on per-user bundle state and an executable in your home directory. A failure there can prevent graphical and TTY login. [Login-shell recovery and limitations](LOGIN.md) describes the development recovery path and the remaining boundaries.
-
-A separate [native system-package migration](NATIVE-MIGRATION.md) is being qualified locally. It starts Zsh without private activation state and uses the system package manager for updates. The published installation above remains the legacy distribution.
-
-Use `wsh update --check` to check without changing anything, `wsh update` to install a newer current release, or `wsh update --to vX.Y.Z` to select an exact version. `wsh bundle rollback` returns to the previously active verified bundle without a network request.
-
-`wsh --version` reports the installed launcher version. `wsh version` also reports the active bundle's release or development identity, Wsh source revision, bundled Zsh version and source revision, target, and bundle digest.
-
-Run `wsh profile` to start a normal interactive session that reports launcher, startup-file, built-in, provider, rendering, and first-editor timing when you exit. `wsh profile --functions` adds Zsh function-level timing. [PROFILING.md](PROFILING.md) defines the captured data, privacy limits, and recovery command.
+Native Wsh preserves Zsh command-line parsing. Run `wsh` normally, `wsh --wsh-doctor` for diagnostics, `wsh --wsh-version` for distribution identity and `wsh --wsh-profile -- -i` for an interactive profile. `wsh --wsh-run -- PROGRAM ARG...` starts an exact foreground command with native job control and returns to the prompt. See [PROFILING.md](PROFILING.md) for profiling and recovery.
 
 ## Directory jumping
 
@@ -62,7 +52,7 @@ cd /tmp
 z my-project
 ```
 
-The pinned Zsh-z implementation ranks visited directories by frequency and recency and persists them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
+The native directory implementation ranks visited directories by frequency and recency, persisting them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
 
 ## Prompt selection
 
@@ -88,7 +78,7 @@ fi
 
 Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: that would also select it for regular Zsh and trigger the conditional there. Selection takes effect after `.zshrc`; changing it later does not switch an active renderer. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
 
-`WSH_THEME=wakamex wsh doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Theme selection alone does not stop OMZ from loading its theme. Doctor never edits startup files or unloads arbitrary theme hooks. Further cleanup follows identified duplication; retain conditional declarations for plugins you still use in regular Zsh.
+`WSH_THEME=wakamex wsh --wsh-doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Theme selection alone does not stop OMZ from loading its theme. Doctor never edits startup files or unloads arbitrary theme hooks. Further cleanup follows identified duplication; retain conditional declarations for plugins you still use in regular Zsh.
 
 ## Current status
 
@@ -101,7 +91,7 @@ It also includes two Wsh-maintained Zsh source patches:
 
 Both patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
 
-The current source includes native loading of existing Zsh configuration, the three interactive defaults above, a focused `wsh doctor` command for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified installation, explicit updates, offline rollback, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
+The current source includes native loading of existing Zsh configuration, the three interactive defaults above, native diagnostics for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified native package assembly and system-managed updates, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 
 Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
 

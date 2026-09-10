@@ -4,16 +4,16 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 zmodload zsh/datetime zsh/zpty zsh/zselect
 export WSH_THEME=minimal
 
-(( $# == 3 )) || {
-  print -u2 -- 'usage: zsh-config-coexistence.zsh MANAGER BUNDLE present|missing'
+(( $# == 2 )) || {
+  print -u2 -- 'usage: zsh-config-coexistence.zsh BUNDLE present|missing'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
-readonly expectation=$3
-[[ -x $manager && -x $bundle/bin/zsh && ( $expectation == present || $expectation == missing ) ]] || {
-  print -u2 -- 'error: invalid manager, bundle, or expectation'
+
+readonly bundle=${1:A}
+readonly expectation=$2
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == present || $expectation == missing ) ]] || {
+  print -u2 -- 'error: invalid installation, or expectation'
   exit 2
 }
 
@@ -31,7 +31,7 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 command mkdir -p -- $initial_zdotdir $redirected_zdotdir $state_root
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 
 print -r -- 'print -r -- zshenv >> $WSH_STARTUP_LOG
 typeset -gx ZDOTDIR=$WSH_REDIRECTED_ZDOTDIR' > $initial_zdotdir/.zshenv
@@ -83,9 +83,9 @@ managed_child() {
   unset WSH_BUNDLE_ROOT WSH_USER_ZDOTDIR WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS
   command stty -echo
   if (( child_login )); then
-    exec $manager run --state-root $state_root -- -l
+    exec $bundle/bin/wsh -d -l
   else
-    exec $manager run --state-root $state_root
+    exec $bundle/bin/wsh -d
   fi
 }
 
@@ -145,8 +145,8 @@ run_interactive() {
     print -u2 -r -- "unexpected $mode startup and hook order: ${(qqq)$(<$child_log)}"
     return 1
   }
-  [[ $pty_output == *"WSH_CONFIG_STATE:${redirected_zdotdir}:${redirected_zdotdir}:1:off:on:2:2:"<1->* ]] || {
-    print -u2 -r -- "user ZDOTDIR was not restored after $mode startup: ${(qqq)pty_output}"
+  [[ $pty_output == *"WSH_CONFIG_STATE:${redirected_zdotdir}:unset:1:off:on:2:2:"<1->* ]] || {
+    print -u2 -r -- "native ZDOTDIR or removed launcher metadata is incorrect after $mode startup: ${(qqq)pty_output}"
     return 1
   }
   local hook_line=${${pty_output##*WSH_HOOKS:}%%$'\r\n'*}
@@ -166,7 +166,7 @@ noninteractive_output=$(HOME=$initial_zdotdir \
   WSH_STARTUP_LOG=$noninteractive_log \
   WSH_REDIRECTED_ZDOTDIR=$redirected_zdotdir \
   WSH_STATE_ROOT=$state_root \
-  $manager run --state-root $state_root -- -c 'print -r -- WSH_NONINTERACTIVE:${ZDOTDIR}:${WSH_INTEGRATION_LOADED-unset}')
+  $bundle/bin/wsh -d -c 'print -r -- WSH_NONINTERACTIVE:${ZDOTDIR}:${WSH_INTEGRATION_LOADED-unset}')
 
 if [[ $expectation == present ]]; then
   [[ $(<$noninteractive_log) == zshenv ]] || {

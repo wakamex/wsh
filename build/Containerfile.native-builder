@@ -1,0 +1,9 @@
+FROM ghcr.io/wakamex/wsh-builder-glibc-2.28@sha256:74dda0facfec11e403a2cfd17cd6b08cdc4e13f28a9f161c21b1a1b30ac3b1fb
+COPY *.rpm /tmp/native-sdk/
+COPY installed.lock /tmp/expected-packages.lock
+RUN rpmkeys --checksig /tmp/native-sdk/*.rpm \
+    && dnf -y --disablerepo='*' install /tmp/native-sdk/*.rpm \
+    && rpm -qa --qf '%{NAME}\t%{EPOCHNUM}\t%{VERSION}\t%{RELEASE}\t%{ARCH}\t%{SHA256HEADER}\t%{PAYLOADDIGESTALGO}\t%{PAYLOADDIGEST}\n' | LC_ALL=C sort > /tmp/actual-packages.lock \
+    && diff -u /tmp/expected-packages.lock /tmp/actual-packages.lock \
+    && rm -rf /tmp/native-sdk /tmp/expected-packages.lock /tmp/actual-packages.lock \
+    && ln -s /usr/bin/python3.9 /usr/local/bin/python3

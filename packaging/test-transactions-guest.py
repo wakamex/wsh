@@ -38,7 +38,7 @@ def command(source, marker):
             transcript.extend(data)
     return bytes(output)
 
-def rpm_path(release): return '/var/tmp/wsh-native-development-0.3.1-' + release + '.fc44.x86_64.rpm'
+def rpm_path(release): return '/var/tmp/wsh-0.3.1-' + release + '.x86_64.rpm'
 def run(name, argv, expected=None):
     result = subprocess.run(argv, capture_output=True, timeout=120)
     (OUT / (name + '.log')).write_bytes(result.stdout + result.stderr)
@@ -61,10 +61,10 @@ try:
     results.append({'case': 'old-shell-after-upgrade', 'pid': shell.pid, 'executable': executable, 'module_and_helper': True, 'same_zsh_abi': True})
     failed = run('rpm-pre-failure', ['rpm', '-Uvh', rpm_path('0.3')])
     assert failed.returncode != 0
-    assert b'0.2.fc44' in run('version-after-pre-failure', ['rpm', '-q', 'wsh-native-development'], 0).stdout
+    assert b'0.2' in run('version-after-pre-failure', ['rpm', '-q', 'wsh'], 0).stdout
     post = run('rpm-post-failure', ['rpm', '-Uvh', rpm_path('0.4')])
     assert b'injected post-install failure' in post.stderr
-    assert b'0.4.fc44' in run('version-after-post-failure', ['rpm', '-q', 'wsh-native-development'], 0).stdout
+    assert b'0.4' in run('version-after-post-failure', ['rpm', '-q', 'wsh'], 0).stdout
     run('new-shell-after-post-failure', ['runuser', '-u', 'shellempty', '--', '/usr/bin/wsh', '-fc', 'print -r -- USABLE'], 0)
     run('dnf-downgrade', ['dnf', '-y', 'downgrade', rpm_path('0.1')], 0)
     pause_log = open(OUT / 'rpm-interrupted.log', 'wb')
@@ -78,9 +78,9 @@ try:
     pause_log.close()
     results.append({'case': 'interrupted-after-payload-install', 'status': status, 'phase': 'post-scriptlet', 'power_loss_during_payload': False})
     run('new-shell-after-interruption', ['runuser', '-u', 'shellempty', '--', '/usr/bin/wsh', '-fc', 'print -r -- USABLE'], 0)
-    run('rpm-query-after-interruption', ['rpm', '-q', 'wsh-native-development'])
+    run('rpm-query-after-interruption', ['rpm', '-q', 'wsh'])
     run('repair-interrupted-transaction', ['rpm', '-Uvh', '--oldpackage', '--replacepkgs', rpm_path('0.2')], 0)
-    run('verify-repaired-package', ['rpm', '-V', 'wsh-native-development'], 0)
+    run('verify-repaired-package', ['rpm', '-V', 'wsh'], 0)
     command('print -r -- OLD_STILL_ALIVE:$ZSH_VERSION', b'OLD_STILL_ALIVE:')
     shell.stdin.write(b'exit 23\n'); shell.stdin.flush()
     assert shell.wait(timeout=5) == 23

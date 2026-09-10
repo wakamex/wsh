@@ -1,0 +1,227 @@
+[
+  {
+    "name": "annobin-13.27-1.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/a/annobin-13.27-1.el8_10.x86_64.rpm",
+    "sha256": "f7cfde1103d4092861de0cdec9dee361a9c348d8d44c9d8f7bcab09c92d0cd4e"
+  },
+  {
+    "name": "bzip2-1.0.6-28.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/b/bzip2-1.0.6-28.el8_10.x86_64.rpm",
+    "sha256": "df8552e87d82162ce371128a7736f3205990763257e3ead41fd4c422140c2437"
+  },
+  {
+    "name": "cpio-2.12-11.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/c/cpio-2.12-11.el8.x86_64.rpm",
+    "sha256": "af69fa87dc89d44217a405f35f576fc71f60f932ce0b0f99710b743ab5a06e19"
+  },
+  {
+    "name": "dwz-0.12-10.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/d/dwz-0.12-10.el8.x86_64.rpm",
+    "sha256": "d4682e21463097454b01d788a980f13c2377cdc5f757d6a446c30ed1061ba00c"
+  },
+  {
+    "name": "efi-srpm-macros-3-3.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/e/efi-srpm-macros-3-3.el8.noarch.rpm",
+    "sha256": "be93fbe5d15a6af78df7e5441fa6c0a13ef4d4ca73431cd7a8e49c691aa3442a"
+  },
+  {
+    "name": "elfutils-0.190-2.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/e/elfutils-0.190-2.el8.x86_64.rpm",
+    "sha256": "20523117264964d539a6ac01e3089b6166dd4ca4a43fceb38f8e6341159e5aac"
+  },
+  {
+    "name": "elfutils-debuginfod-client-0.190-2.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/e/elfutils-debuginfod-client-0.190-2.el8.x86_64.rpm",
+    "sha256": "80094878cfa0dd1cddb77655e67a8a53d9ab5b257223ae8498431c6c2e7d3f5c"
+  },
+  {
+    "name": "file-5.33-26.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/f/file-5.33-26.el8.x86_64.rpm",
+    "sha256": "1391537ab59f4423693611d9afb72a18a8d5574c8b09900dc0c1d8aaa6d6983d"
+  },
+  {
+    "name": "gc-7.6.4-3.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/gc-7.6.4-3.el8.x86_64.rpm",
+    "sha256": "11f239d5463cbf0f15e4ca325624dd148bfd23710482245e34fd7fabd794df8a"
+  },
+  {
+    "name": "gcc-plugin-annobin-8.5.0-28.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/gcc-plugin-annobin-8.5.0-28.el8_10.x86_64.rpm",
+    "sha256": "7729e1e69e44cec771d98f5f9685dd324504fae40fdef43cba63bfc07083f568"
+  },
+  {
+    "name": "gdb-headless-8.2-20.el8.0.1.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/gdb-headless-8.2-20.el8.0.1.x86_64.rpm",
+    "sha256": "2c7f8fa98a540b32e296088cb8ded62e7df12a206d6d6cc6ca4830d7915a6a05"
+  },
+  {
+    "name": "ghc-srpm-macros-1.4.2-7.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/ghc-srpm-macros-1.4.2-7.el8.noarch.rpm",
+    "sha256": "0c95293277d68ab9e504ea2eb7ed2b992320b592eca98e60f46135161c813265"
+  },
+  {
+    "name": "glibc-gconv-extra-2.28-251.el8_10.2.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/g/glibc-gconv-extra-2.28-251.el8_10.2.x86_64.rpm",
+    "sha256": "890e73820ba5355f7d55020f63fe11d3dde628eaf4227dee344f2c3b6e857e5a"
+  },
+  {
+    "name": "go-srpm-macros-2-17.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/go-srpm-macros-2-17.el8.noarch.rpm",
+    "sha256": "18ed6d3a24dac62dea1c6facc0045ddc89c05f450128561a9b063579727b1ced"
+  },
+  {
+    "name": "guile-2.0.14-7.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/g/guile-2.0.14-7.el8.x86_64.rpm",
+    "sha256": "fbd8b5b80a3946ae0c162741eebdc3a9c29743b93c694fc6d31e3c542a44e475"
+  },
+  {
+    "name": "jansson-2.14-1.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/j/jansson-2.14-1.el8.x86_64.rpm",
+    "sha256": "ec4abca99b96acd29c05cb39c5eb15c7e01827c5e8aeda51f24bc8f93869cd20"
+  },
+  {
+    "name": "jansson-devel-2.14-1.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/j/jansson-devel-2.14-1.el8.x86_64.rpm",
+    "sha256": "35b0b0591cbe5cddaf91736f2d564e332cdf3332321e88c020eebb9ac5d20053"
+  },
+  {
+    "name": "libatomic_ops-7.6.2-3.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/l/libatomic_ops-7.6.2-3.el8.x86_64.rpm",
+    "sha256": "765fd0ae8dee1d67cb6d017989c1d5a9faed50dd2e05ef47cacea0d6bf92370a"
+  },
+  {
+    "name": "libbabeltrace-1.5.4-4.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/l/libbabeltrace-1.5.4-4.el8.x86_64.rpm",
+    "sha256": "9e6e4064fb82bb163daeb5f230c4fd92917ba94d6e93fc366e769e7a7844e7ac"
+  },
+  {
+    "name": "libipt-1.6.1-8.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/l/libipt-1.6.1-8.el8.x86_64.rpm",
+    "sha256": "31a22ce7a4fb9585236d07d4bec4a15e7e424da29046ebe0b42111c8c6a95b52"
+  },
+  {
+    "name": "libtool-ltdl-2.4.6-25.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/l/libtool-ltdl-2.4.6-25.el8.x86_64.rpm",
+    "sha256": "7a34e022c774ccc6d35226a0d47a9da065dc3b88b8a248a7558359a3847f86d9"
+  },
+  {
+    "name": "ocaml-srpm-macros-5-4.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/o/ocaml-srpm-macros-5-4.el8.noarch.rpm",
+    "sha256": "37a3415a3034d735efa91cef6d27fd07e2230cfda3a0a0708d0b39e2093b6940"
+  },
+  {
+    "name": "openblas-srpm-macros-2-2.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/o/openblas-srpm-macros-2-2.el8.noarch.rpm",
+    "sha256": "9a1d75dc262a61fdf6ebbc267aea8dd32c22ed725c1ca0ad9278174ad442cdb7"
+  },
+  {
+    "name": "perl-srpm-macros-1-25.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/perl-srpm-macros-1-25.el8.noarch.rpm",
+    "sha256": "c83d78a47fbc2d1683694fc7399f409cdb7c922d79bdd11a8a84373c332dba36"
+  },
+  {
+    "name": "python-rpm-macros-3-45.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python-rpm-macros-3-45.el8.noarch.rpm",
+    "sha256": "a66019d1238b9b4b3734c01e1fef3a579688a0a1487590d715b9f17ab4f73aab"
+  },
+  {
+    "name": "python-srpm-macros-3-45.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python-srpm-macros-3-45.el8.noarch.rpm",
+    "sha256": "85ae015c44ed293108d095cc75d91e1c7f57bf8f85d3f95e8cc55a773de6339a"
+  },
+  {
+    "name": "python3-rpm-4.14.3-32.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/p/python3-rpm-4.14.3-32.el8_10.x86_64.rpm",
+    "sha256": "25b52c1e3324dc8741399ec8a8c188bfeef54033c7cfb9ffc545d8bad52960ce"
+  },
+  {
+    "name": "python3-rpm-macros-3-45.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python3-rpm-macros-3-45.el8.noarch.rpm",
+    "sha256": "af65eee66bca7d25592763fa1e694a855400e6446e1db2006cade596b6079f49"
+  },
+  {
+    "name": "python39-3.9.25-2.module+el8.10.0+40046+11e46e10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-3.9.25-2.module+el8.10.0+40046+11e46e10.x86_64.rpm",
+    "sha256": "38f2e005678899e256efa742556a15b8e6b461e4f7d3f45b691ec1df4f1717f3"
+  },
+  {
+    "name": "python39-libs-3.9.25-2.module+el8.10.0+40046+11e46e10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-libs-3.9.25-2.module+el8.10.0+40046+11e46e10.x86_64.rpm",
+    "sha256": "5828d0f49fa5487e75a2a6f43f9c4728ff6b13c08d6fedf7c05fc017007532ac"
+  },
+  {
+    "name": "python39-pip-20.2.4-9.module+el8.10.0+1860+afcc1c71.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-pip-20.2.4-9.module+el8.10.0+1860+afcc1c71.noarch.rpm",
+    "sha256": "ddc846de5ec45a66996f4aed54e0e8874e95a44a52b22c9ae635020d043f7714"
+  },
+  {
+    "name": "python39-pip-wheel-20.2.4-9.module+el8.10.0+1860+afcc1c71.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-pip-wheel-20.2.4-9.module+el8.10.0+1860+afcc1c71.noarch.rpm",
+    "sha256": "3ad7296ae7621ce287fef26e8a45c728ea353a0b9509111ddf2db8c39a2707ff"
+  },
+  {
+    "name": "python39-setuptools-50.3.2-7.module+el8.10.0+2057+30213a2b.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-setuptools-50.3.2-7.module+el8.10.0+2057+30213a2b.noarch.rpm",
+    "sha256": "d631ecd37a6c1bcec6c969adbb7e466de8e7fbdc05a5120c35f5c83dd12e1168"
+  },
+  {
+    "name": "python39-setuptools-wheel-50.3.2-7.module+el8.10.0+2057+30213a2b.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/p/python39-setuptools-wheel-50.3.2-7.module+el8.10.0+2057+30213a2b.noarch.rpm",
+    "sha256": "cf1eba72b50bea947ca49be3ee7cd74525be16f89d3525773f2d7c6b918cbd7f"
+  },
+  {
+    "name": "qt5-srpm-macros-5.15.3-1.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/q/qt5-srpm-macros-5.15.3-1.el8.noarch.rpm",
+    "sha256": "3c67f14e96c3953ccae000512d56e7db073fedac51b7a3cb79de29fc941b6891"
+  },
+  {
+    "name": "redhat-rpm-config-131-1.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/r/redhat-rpm-config-131-1.el8.noarch.rpm",
+    "sha256": "64d924524a8455cc6bf6144ee791d95770fd8c970102a31cf78523f5ad974106"
+  },
+  {
+    "name": "rpm-4.14.3-32.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/r/rpm-4.14.3-32.el8_10.x86_64.rpm",
+    "sha256": "3de59eb2a2850cf2c39d5940fb285cf7927941cb98e5e2cd623b425b367b1b98"
+  },
+  {
+    "name": "rpm-build-4.14.3-32.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/r/rpm-build-4.14.3-32.el8_10.x86_64.rpm",
+    "sha256": "f6c6d6bea47cd59f61a691d26d6e71cf8b6dd17eaccc5617ff227dedc6d7b048"
+  },
+  {
+    "name": "rpm-build-libs-4.14.3-32.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/r/rpm-build-libs-4.14.3-32.el8_10.x86_64.rpm",
+    "sha256": "6580b3ce3e28df8982bc46ea92c10e00832fcfc2b9c8d5f8778c23763bc2ef76"
+  },
+  {
+    "name": "rpm-libs-4.14.3-32.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/r/rpm-libs-4.14.3-32.el8_10.x86_64.rpm",
+    "sha256": "231567e147e46a8a6d938086d4a4994a74cc04281ee149d9f89c99a3c098cc78"
+  },
+  {
+    "name": "rust-srpm-macros-5-2.el8.noarch.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/r/rust-srpm-macros-5-2.el8.noarch.rpm",
+    "sha256": "637498e14aa544d9d8036e8591e481f6a443bc9483099bffbcb74f8c78b6d4e0"
+  },
+  {
+    "name": "unzip-6.0-48.el8_10.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/u/unzip-6.0-48.el8_10.x86_64.rpm",
+    "sha256": "888eb57f9d1206da4490c7cb687b99e85d96063caf3bcb1840f49ddc1679e4d9"
+  },
+  {
+    "name": "zip-3.0-23.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/z/zip-3.0-23.el8.x86_64.rpm",
+    "sha256": "0d0c8b68b97ecf3e1bb4340e2041080999d5032559ad5daaa87ea5ad5c1ec5ed"
+  },
+  {
+    "name": "zlib-devel-1.2.11-26.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/BaseOS/x86_64/os/Packages/z/zlib-devel-1.2.11-26.el8.x86_64.rpm",
+    "sha256": "0150c9915495849bbb1ac9d9d12a1716ce39c9a6dbbd458eb038ba8c218027cf"
+  },
+  {
+    "name": "zstd-1.4.4-1.el8.x86_64.rpm",
+    "url": "https://dl.rockylinux.org/pub/rocky/8.10/AppStream/x86_64/os/Packages/z/zstd-1.4.4-1.el8.x86_64.rpm",
+    "sha256": "3a5bea3f29f92bd1b4865f129ac8807a20201ccfb7d807b8e6e5a7a77174a2ac"
+  }
+]

@@ -7,39 +7,7 @@ on:
 permissions:
   contents: read
 
-env:
-  RUST_TOOLCHAIN: 1.95.0
-
 jobs:
-  rust-correctness:
-    name: Rust correctness
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - name: Check out the exact source
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Install the script runtime
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes jq zsh
-      - name: Install and verify the locked Rust toolchain
-        run: |
-          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
-          ./build/verify-rust-toolchain.zsh
-      - name: Run the Rust correctness suite
-        run: cargo test --locked --workspace
-      - name: Test the release bootstrap
-        run: ./tests/bootstrap-install.zsh
-      - name: Test the immutable builder lock
-        run: ./tests/builder-image-lock.zsh
-      - name: Test explicit release updates
-        run: ./tests/update-cli.zsh
-      - name: Verify a real external GitHub Actions attestation
-        run: ./tests/external-attestation.zsh
-
   floor-bundle:
     name: Bundle, PTY, and portability
     runs-on: ubuntu-24.04
@@ -54,12 +22,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes podman zsh
-      - name: Install and verify the locked Rust toolchain
-        run: |
-          rustup toolchain install "$RUST_TOOLCHAIN" --profile minimal --no-self-update
-          ./build/verify-rust-toolchain.zsh
-      - name: Fetch the digest-pinned floor image
-        run: podman pull "$(./build/resolve-glibc-2.28-builder.zsh)"
       - name: Build and test the development bundle on the glibc 2.28 floor
         run: ./build/build-glibc-2.28-development-bundle.zsh
 
@@ -84,7 +46,6 @@ jobs:
     name: validate
     if: always()
     needs:
-      - rust-correctness
       - floor-bundle
       - retained-resource-gates
     runs-on: ubuntu-24.04
@@ -93,5 +54,4 @@ jobs:
         env:
           FLOOR_RESULT: ${{ needs.floor-bundle.result }}
           RESOURCE_RESULT: ${{ needs.retained-resource-gates.result }}
-          RUST_RESULT: ${{ needs.rust-correctness.result }}
-        run: test "$FLOOR_RESULT" = success && test "$RESOURCE_RESULT" = success && test "$RUST_RESULT" = success
+        run: test "$FLOOR_RESULT" = success && test "$RESOURCE_RESULT" = success

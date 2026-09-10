@@ -15,7 +15,7 @@ fixture.mkdir(exist_ok=True)
 functions = next((REFERENCE / 'share/zsh').glob('*/functions'))
 (fixture / 'compinit').write_bytes((functions / 'compinit').read_bytes())
 if not (fixture / 'seed').exists():
-    subprocess.run([REFERENCE / 'bin/wsh', '-dfc', 'fpath=($1); autoload -Uz compinit; compinit -i -d "$2"', 'seed', functions, fixture / 'seed'], env=dict(PATH='/usr/bin:/bin', HOME=str(OUT), LC_ALL='C.UTF-8'), check=True)
+    subprocess.run([(REFERENCE / 'bin/wsh' if (REFERENCE / 'bin/wsh').exists() else REFERENCE / 'bin/zsh'), '-dfc', 'fpath=($1); autoload -Uz compinit; compinit -i -d "$2"', 'seed', functions, fixture / 'seed'], env=dict(PATH='/usr/bin:/bin', HOME=str(OUT), LC_ALL='C.UTF-8'), check=True)
 results = []
 if MODE == 'correctness':
     smoke = subprocess.run([BUNDLE / 'bin/wsh', '-dfc', 'zmodload zsh/parameter; (( $+builtins[wsh-completion-scan] ))'], capture_output=True)

@@ -2,13 +2,13 @@
 
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail -o typeset_silent
 
-(( $# == 2 )) || {
-  print -u2 -- 'usage: plugin-doctor.zsh MANAGER BUNDLE'
+(( $# == 1 )) || {
+  print -u2 -- 'usage: plugin-doctor.zsh BUNDLE'
   exit 2
 }
 
-readonly manager=${1:A}
-readonly bundle=${2:A}
+
+readonly bundle=${1:A}
 readonly test_root=$(mktemp -d /var/tmp/wsh-plugin-doctor.XXXXXX)
 readonly state_root=$test_root/state
 readonly exact_history=$bundle/share/wsh/defaults/zsh-history-substring-search.zsh
@@ -19,7 +19,7 @@ readonly modified_history=$test_root/modified-history.zsh
 readonly modified_autosuggestions=$test_root/modified-autosuggestions.zsh
 readonly modified_syntax=$test_root/modified-syntax
 
-[[ -x $manager && -x $bundle/bin/zsh && -f $exact_history && -f $omz_history && -f $exact_autosuggestions && -f $exact_syntax/zsh-syntax-highlighting.zsh ]] || {
+[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && -f $exact_history && -f $omz_history && -f $exact_autosuggestions && -f $exact_syntax/zsh-syntax-highlighting.zsh ]] || {
   print -u2 -- 'error: manager or complete plugin bundle is invalid'
   exit 2
 }
@@ -36,7 +36,7 @@ command cp -R -- $exact_syntax $modified_syntax
 print -r -- '# modified doctor fixture' >> $modified_history
 print -r -- '# modified doctor fixture' >> $modified_autosuggestions
 print -r -- '# modified doctor fixture' >> $modified_syntax/highlighters/main/main-highlighter.zsh
-$manager bundle activate $bundle --state-root $state_root >/dev/null
+python3 "${0:A:h:h}/build/native_manifest.py" verify $bundle >/dev/null
 
 write_home() {
   local variant=$1
@@ -82,7 +82,7 @@ run_doctor() {
   local home=$1 output=$2
   local before=$(sha256sum $home/.zshrc)
   HOME=$home ZDOTDIR=$home WSH_STATE_ROOT=$state_root \
-    $manager doctor --state-root $state_root >| $output
+    $bundle/bin/wsh --wsh-doctor >| $output
   local after=$(sha256sum $home/.zshrc)
   [[ $before == $after ]] || {
     print -u2 -- "error: doctor changed ${home}/.zshrc"

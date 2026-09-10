@@ -24,7 +24,7 @@ assert all(c in '0123456789.' for c in args.release) and args.release
 bundle = args.installation.resolve()
 top = args.output.resolve()
 manifest = verify(bundle)
-assert manifest['status'] == 'development'
+assert manifest['status'] == 'development' or args.fault == 'none'
 assert (bundle / 'bin/wsh').is_file() and not (bundle / 'zdotdir').exists()
 for name in ('SOURCES', 'SPECS', 'BUILD', 'BUILDROOT', 'RPMS', 'SRPMS'):
     (top / name).mkdir(parents=True, exist_ok=True)
@@ -41,7 +41,8 @@ with (top / 'SOURCES/native-payload.tar.gz').open('wb') as output:
     with gzip.GzipFile(filename='', mode='wb', fileobj=output, mtime=epoch) as compressed:
         with tarfile.open(fileobj=compressed, mode='w', format=tarfile.GNU_FORMAT) as archive:
             archive.add(bundle, arcname='payload', filter=normalize)
-subprocess.run(['rpmbuild', '-bb', '--define', '_topdir ' + str(top), '--define', 'wsh_release ' + args.release,
+subprocess.run(['rpmbuild', '-bb', '--define', '_topdir ' + str(top), '--define', 'wsh_release ' + args.release, '--define', 'wsh_version ' + manifest['version'],
+                '--define', 'dist %{nil}',
                 '--define', 'wsh_fault ' + args.fault,
                 '--define', '_buildhost wsh-development',
                 '--define', 'use_source_date_epoch_as_buildtime 1',
