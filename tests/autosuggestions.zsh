@@ -31,6 +31,8 @@ readonly state_root=$test_root/state
 readonly fixture=$test_root/fixture
 readonly autosuggestions_source=$test_root/autosuggestions
 readonly syntax_source=$test_root/syntax
+readonly older_source=$test_root/older.zsh
+readonly modified_older_source=$test_root/older-modified.zsh
 typeset -g current_pty= pty_output= child_home= child_suggestion_log= child_buffer_log= child_state_log=
 
 cleanup() {
@@ -40,6 +42,9 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 command mkdir -p -- $state_root $fixture $autosuggestions_source $syntax_source
+command cp -- $bundle/share/wsh/defaults/known-zsh-autosuggestions-0.7.0.zsh $older_source
+command cp -- $older_source $modified_older_source
+print -r -- '# user modification' >> $modified_older_source
 if (( external_sources )); then
   git -C ${autosuggestions_repository:A} archive $autosuggestions_revision | tar -xf - -C $autosuggestions_source
   git -C ${syntax_repository:A} archive $syntax_revision | tar -xf - -C $syntax_source
@@ -100,6 +105,13 @@ add-zle-hook-widget zle-line-pre-redraw _wsh_test_capture_suggestion' >| $config
     external)
       print -r -- "source ${(q)autosuggestions_source}/zsh-autosuggestions.zsh" >> $config
       ;;
+    older|older-active|older-modified|older-override)
+      local plugin=$older_source
+      [[ $variant != older-modified ]] || plugin=$modified_older_source
+      print -r -- "source ${(q)plugin}" >> $config
+      [[ $variant != older-active ]] || print -r -- '_zsh_autosuggest_start' >> $config
+      [[ $variant != older-override ]] || print -r -- '_zsh_autosuggest_widget_accept() { zle .forward-char; }' >> $config
+      ;;
     external-active)
       print -r -- "source ${(q)autosuggestions_source}/zsh-autosuggestions.zsh
 _zsh_autosuggest_start" >> $config
@@ -112,7 +124,7 @@ zle -N autosuggest-fetch _wsh_test_custom_widget' >> $config
     disabled)
       print -r -- 'typeset -g WSH_DISABLE_AUTOSUGGESTIONS=1' >> $config
       ;;
-    configured)
+    configured|older-configured)
       print -r -- 'typeset -g ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=blue
 typeset -ga ZSH_AUTOSUGGEST_STRATEGY=(history)
 typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=1234
@@ -127,6 +139,7 @@ typeset -g WSH_AUTOSUGGEST_ASYNC=0' >> $config
       print -r -- "source ${(q)syntax_source}/zsh-syntax-highlighting.zsh" >> $config
       ;;
   esac
+  [[ $variant != older-configured ]] || print -r -- "source ${(q)older_source}" >> $config
 }
 
 pty_read_available() {
@@ -234,7 +247,7 @@ assert_suggestion() {
   }
 }
 
-local -a variants=(clean external external-active unknown disabled configured)
+local -a variants=(clean external external-active older older-active older-modified older-override older-configured unknown disabled configured)
 (( external_sources )) && variants+=(composition)
 local variant state
 for variant in $variants; do
@@ -245,8 +258,14 @@ for variant in $variants; do
     clean|configured|composition)
       [[ $state == wsh\|0\|${bundle}/share/wsh/defaults/native-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected bundled state for ${variant}: $state"; exit 1; }
       ;;
-    external)
+    external|older|older-configured)
       [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/native-autosuggestions.zsh\|0\|1\|\|\|* ]] || { print -u2 -r -- "unexpected takeover state: $state"; exit 1; }
+      ;;
+    older-active)
+      [[ $state == external-active\|0\|${older_source}\|1\|0\|* ]] || { print -u2 -- "older active copy replaced: $state"; exit 1; }
+      ;;
+    older-modified|older-override)
+      [[ $state == external-unknown\|0\|* ]] || { print -u2 -- "older custom implementation replaced: $state"; exit 1; }
       ;;
     external-active)
       [[ $state == external-active\|0\|${autosuggestions_source}/zsh-autosuggestions.zsh\|1\|0\|\|\|* ]] || { print -u2 -r -- "unexpected active external state: $state"; exit 1; }
@@ -258,14 +277,14 @@ for variant in $variants; do
       [[ $state == disabled\|0\|none\|0\|0\|\|\|unset\|* ]] || { print -u2 -r -- "unexpected disabled state: $state"; exit 1; }
       ;;
   esac
-  if [[ $variant == configured ]]; then
+  if [[ $variant == configured || $variant == older-configured ]]; then
     [[ $state == *'|fg=blue|history|1234|'* ]] || { print -u2 -r -- "configuration was not preserved: $state"; exit 1; }
     [[ $state == *'|end-of-line|accept-line|beep|git *|0|configured' ]] || { print -u2 -r -- "widget or execution configuration was not preserved: $state"; exit 1; }
   fi
   if [[ $variant == composition ]]; then
     [[ $state == *'|0.8.1-dev|1|'* ]] || { print -u2 -r -- "syntax highlighting did not compose: $state"; exit 1; }
   fi
-  if [[ $variant == clean || $variant == external || $variant == external-active || $variant == composition ]]; then
+  if [[ $variant == clean || $variant == external || $variant == external-active || $variant == older || $variant == older-active || $variant == composition ]]; then
     assert_suggestion
   fi
   if [[ $variant == clean ]]; then

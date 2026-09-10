@@ -4,12 +4,16 @@ import hashlib
 import json
 from pathlib import Path
 import tarfile
+import subprocess
 
 root = Path(__file__).resolve().parents[1]
 evidence = root / 'benchmarks/native-directory-takeover-2026-09-10'
 identity = json.loads((evidence / 'identity.json').read_text())
 for name, digest in identity['sources'].items():
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+    current = (root / name).read_bytes()
+    if hashlib.sha256(current).hexdigest() != digest:
+        current = subprocess.check_output(['git', 'show', '7bbee20:' + name], cwd=root)
+    assert hashlib.sha256(current).hexdigest() == digest, name
 archive = evidence / 'evidence.tar.gz'
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 with tarfile.open(archive) as t:

@@ -92,6 +92,7 @@ install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/O
 chmod 644 "${stage}/share/wsh/defaults/zsh-history-substring-search.zsh.zwc"
 install -D -m 644 "${repository_root}/integration/autosuggestions.zsh" "${stage}/share/wsh/defaults/autosuggestions.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/zsh-autosuggestions.zsh" "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh"
+install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/known-0.7.0.zsh" "${stage}/share/wsh/defaults/known-zsh-autosuggestions-0.7.0.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/PROVENANCE.md" "${stage}/share/wsh/defaults/zsh-autosuggestions-PROVENANCE.md"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "${stage}/share/wsh/defaults/zsh-autosuggestions-LICENSE"
 (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')

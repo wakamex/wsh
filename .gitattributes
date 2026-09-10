@@ -10,3 +10,7 @@ benchmarks/native-entrypoint-2026-09-08/**/*.bin binary
 build/zsh-patches/cad0d67c-native-entrypoint.patch whitespace=-blank-at-eol,-space-before-tab
 build/zsh-patches/cad0d67c-native-completion.patch whitespace=-blank-at-eol,-blank-at-eof
 build/zsh-patches/cad0d67c-highlight-none.patch whitespace=-blank-at-eol,-space-before-tab
+
+# Preserve exact upstream autosuggestion reference bytes and their comparison.
+third_party/zsh-autosuggestions/known-0.7.0.zsh whitespace=-blank-at-eol,-space-before-tab
+benchmarks/native-autosuggestions-older-2026-09-10/upstream.diff whitespace=-blank-at-eol,-space-before-tab

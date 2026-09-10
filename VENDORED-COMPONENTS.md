@@ -51,6 +51,8 @@ Wsh sets upstream's documented `ZSH_AUTOSUGGEST_MANUAL_REBIND` option before loa
 
 An exact copy that has only registered its pending first-prompt hook can be replaced before it wraps widgets. An active wrapper stack, modified source, or unknown implementation remains external because unwinding it would be ambiguous. These defaults and ownership rules are Wsh policy implemented around unchanged upstream source.
 
+The unchanged v0.7.0 source at `a411ef3e0992d4839f0732ebeb9823024afaaaa8` is also retained solely for exact-copy recognition. Pending copies use the installed native controller while retaining user settings and widget lists, including lists initialized by the older version. Added named strategies remain supported; overrides of implementation functions remain external. See the [older-copy qualification](benchmarks/native-autosuggestions-older-2026-09-10/report.md) and [reference provenance](third_party/zsh-autosuggestions/PROVENANCE.md).
+
 The retained [autosuggestions result](benchmarks/autosuggestions-2026-09-03/report.md) records the settled-prompt improvement, matched edit latency, ownership cases, cancellation, and process behavior.
 
 ## Syntax highlighting fixes Wsh startup timing
