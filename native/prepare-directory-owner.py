@@ -16,8 +16,6 @@ wrapper = '''zshz() {
   wsh-directory "$@"
   result=$?
   (( result == 64 )) && { _zshz_usage; return; }
-  # Root removal is deliberately unavailable until confirmation parity passes.
-  (( result == 65 )) && return 1
   (( result )) && return $result
   if [[ -n $REPLY ]]; then
     if [[ -z $ZSHZ_CD ]]; then

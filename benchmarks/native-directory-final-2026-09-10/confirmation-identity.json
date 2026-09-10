@@ -1,0 +1,17 @@
+{
+  "baseline": "07f91c74ff841d964c00cbe4d0b97865e89dc7be",
+  "source": {
+    "native/directory-prototype.c": "0472d0d5d6a126be507394447817de3eaca4750c1257853c77e26fdb01f650c5",
+    "native/prepare-directory-owner.py": "0ed840631ff3d82b5bcc7c9484971344f03bdb5094dd461608c2876e091053f1",
+    "native/test-directory-confirmation.py": "09f74e9525b8cc4fbf3bd596c8aa8951ac1b967919e32eb2efad666e5e2d84fe",
+    "native/test-directory-persistence.py": "c4bbc80a2684902a2925a16fdac51a67bd47030d7eab868e56ec6008b6165fe2",
+    "third_party/zsh-z/z.plugin.zsh": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7"
+  },
+  "binaries": {
+    "bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986/bin/zsh": "1c42eb54b0ab65a4978f6dc0d1cd0e8edb3161e0af28b2e8649dd6bd7ec12bbc",
+    "/var/tmp/wsh-native-adoption/directory/wshdirectory.so": "0b899d63cd43c0fe6fa79589a451d263d2b7ea19ba1a717c6b23f84bf78ed198",
+    "/var/tmp/wsh-native-adoption/directory/sanitized/wshdirectory.so": "a29d3a9427caeb8da5162ef320713bedd50debcece735f4a617dae3ef6db89b7",
+    "/var/tmp/wsh-native-adoption/sanitized-installation/bin/zsh": "1873bcbf142cabfc6d453eb81044178af849a166aeed431f9f268c94043b88f9"
+  },
+  "archive_sha256": "99971cdcffe55e612a042bfad9c4a483b5eab4568b3f2138155866b23f139f58"
+}

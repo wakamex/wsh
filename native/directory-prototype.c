@@ -319,7 +319,11 @@ static int command_impl(char *name, char **args, Options options, int function)
         char *target = canonical(*query ? query : pwd, !enabled("ZSHZ_NO_RESOLVE_SYMLINKS", "_Z_NO_RESOLVE_SYMLINKS"));
         if (!target) return 1;
         if (add && (!strcmp(target, home) || in_array(target, "ZSHZ_EXCLUDE_DIRS", "_Z_EXCLUDE_DIRS"))) return 0;
-        if (remove_path && recursive && !strcmp(target, "/")) return 65; /* Confirmation before locking. */
+        if (remove_path && recursive && !strcmp(target, "/")) {
+            execstring("builtin read -q '?Delete entire Zsh-z database? '", 1, 0, "wsh-directory");
+            setsparam("REPLY", ztrdup(""));
+            if (lastval || errflag) { putchar('\n'); return 1; }
+        }
         return persist(path, target, remove_path, recursive, now, owner);
     }
     if (!format && !echo && count && *words[count-1] == '/' && directory(words[count-1])) { setsparam("REPLY", ztrdup(words[count-1])); return 0; }
