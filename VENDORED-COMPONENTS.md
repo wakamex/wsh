@@ -116,3 +116,7 @@ The [installed qualification](benchmarks/native-autosuggestions-installed-2026-0
 ## Neutral highlight ownership in Zsh
 
 The local [neutral-attribute parser fix](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata) restores `none` serialization round trips, including following memo and layer fields. This fixes stale syntax-highlighting regions in the existing plugin without changing its vendored bytes. The [retained reproduction](benchmarks/zsh-highlight-none-2026-09-10/report.md) compares identical upstream implementations in real ZLE and validates the native fix.
+
+## Native highlighting traversal counterfactual
+
+The [faithful traversal experiment](benchmarks/native-highlighting-traversal-2026-09-10/report.md) moves per-word whitespace and character-position accounting into a private C module while preserving the upstream parser state machine. Its source retains the upstream BSD notice; vendored bytes remain unchanged. Normal and sanitized runs pass all 287 fixtures and exact composed editor comparisons after the independent Zsh metadata fix. Complete-redraw gains of 0.9–2.6% miss the 20% gate, so this candidate remains unselected.
