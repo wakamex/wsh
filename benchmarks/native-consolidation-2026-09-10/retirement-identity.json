@@ -1,0 +1,19 @@
+{
+  "source_revision": "ebe2b4c",
+  "archive_sha256": "72fec54ba8c1a439c93926ff5ae6fab510372c2238c2c6849642a26e6dad4650",
+  "files": {
+    "repro-fixed.log": "73071eca8b609026fa8fa4708082b7b48b9b82510a800a07ae389a957662ed51",
+    "repro-fixed/build-a.log": "122821b3d42184ea4ea7b843c663648b169907428eff86a1ca7fafb542a21993",
+    "repro-fixed/build-b.log": "32c14221b2756125bd179ef3c114054b14f18c2692c32bfb88269a0fcaa3c90e",
+    "repro-fixed/SHA256SUMS": "d2147be278c932a49ddd1ee2504e611d2c47e8e4d4e60e859be6d26f64bd5d62",
+    "repro-fixed/a/manifest.json": "50da095f371a1ab0d89c7a0afbae107874a419492c87bb469af171c7a1438510",
+    "repro-fixed/b/manifest.json": "50da095f371a1ab0d89c7a0afbae107874a419492c87bb469af171c7a1438510",
+    "worktree-git-boundary.log": "4411536f04fe2a15014339ae91e5a7d0369c3a86a9f8f960da479fd3199ec2ff",
+    "epoch-check.log": "986cb9814e1ee38b0a1a7d98d8a4466f6f120211bae2c073e0a07d0e59c5ed4f",
+    "vm/distribution-transactions.log": "2c8bd6ad2c767a35d4239166bd943bf1f9c07d911faeae86b8dfdcc0ee3c9cac",
+    "vm/distribution-reproduced-install.log": "6ae318432ea3b920e7a26ae8d4db31a17ccb1b08c61563dee84624a4ed2def57",
+    "source/packaging/build-rpm.py": "ba6505fe4d92eed84e037b87e422c64a110f8c1873381df539945df14942123f",
+    "source/packaging/test-transactions-guest.py": "58a024b4e313471cb3058f061e0a9aaf41adc687d72908d58f3b635628ddf991",
+    "source/build/test-reproducible-development-bundles.zsh": "5d4829de3ffb47ef107e4bf3f2a4764c28e5515443dce986e6e2dc4b2ac9157f"
+  }
+}
