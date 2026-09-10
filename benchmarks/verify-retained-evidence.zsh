@@ -93,4 +93,6 @@ python3 ./benchmarks/verify-native-directory-adoption.py
 
 python3 ./benchmarks/verify-native-directory-confirmation.py
 
+python3 ./benchmarks/verify-native-directory-mount.py
+
 print -r -- 'PASS: complete retained-evidence suite'

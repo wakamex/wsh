@@ -1,0 +1,14 @@
+{
+  "baseline": "aca3cf2ba57da3571d25803a743d54c12a5f48cb",
+  "source": {
+    "native/directory-prototype.c": "926100b9599390a9b302df417ed3fc67dcdcc56f1262f0f73dba621f7aa459db",
+    "native/test-directory-bind-mount.py": "5e307ff951532ae23c6e8d43c19152922c35e920a9b214d31c0665da71604b28",
+    "native/prepare-directory-owner.py": "0ed840631ff3d82b5bcc7c9484971344f03bdb5094dd461608c2876e091053f1",
+    "third_party/zsh-z/z.plugin.zsh": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7"
+  },
+  "binaries": {
+    "/var/tmp/wsh-native-adoption/directory/wshdirectory.so": "d73b9c4d537bf65482960dada9a742c699dac359acecb274c468f908b0ec36b5",
+    "/var/tmp/wsh-native-adoption/directory/sanitized/wshdirectory.so": "45a47b321103312c27d8d41a2eb2239ddc7e91ec42426019438c87fa917d90bd"
+  },
+  "archive_sha256": "31950cef868feb1fa3f9ae72a6185878721c20dfa67ab3d437d9188b37df242a"
+}

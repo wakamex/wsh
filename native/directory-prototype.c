@@ -128,6 +128,36 @@ static int acquire(const char *path, double timeout, struct passwd *owner, int *
     }
     *result = fd; return 0;
 }
+/* A file mount cannot be replaced. Keep the same lock through an in-place copy. */
+static int copy_mounted(const char *temporary, const char *path, struct passwd *owner)
+{
+    int input = open(temporary, O_RDONLY | O_CLOEXEC);
+    if (input < 0) return 1;
+    int output = open(path, O_WRONLY | O_CLOEXEC | O_NOFOLLOW);
+    if (output < 0) { close(input); return 1; }
+    struct stat st;
+    int status = 1;
+    if (fstat(output, &st) || !S_ISREG(st.st_mode) ||
+        (!owner && st.st_uid != geteuid()) || fchmod(output, 0600) ||
+        (owner && fchown(output, owner->pw_uid, owner->pw_gid)) || ftruncate(output, 0)) goto done;
+    char buffer[8192];
+    for (;;) {
+        ssize_t count = read(input, buffer, sizeof(buffer));
+        if (count < 0) { if (errno == EINTR && !errflag) continue; goto done; }
+        if (!count) break;
+        for (ssize_t offset = 0; offset < count;) {
+            ssize_t written = write(output, buffer + offset, count - offset);
+            if (written < 0 && errno == EINTR && !errflag) continue;
+            if (written <= 0) goto done;
+            offset += written;
+        }
+    }
+    status = 0;
+done:
+    if (close(output)) status = 1;
+    close(input);
+    return status;
+}
 static int persist(const char *path, const char *target, int remove_path, int recursive, long long now, struct passwd *owner)
 {
     int lockfd = -1;
@@ -210,7 +240,7 @@ static int persist(const char *path, const char *target, int remove_path, int re
     if (fflush(output) || ferror(output) || (owner && fchown(fd, owner->pw_uid, owner->pw_gid))) { status = 1; goto done; }
     if (fclose(output)) { output = NULL; status = 1; goto done; }
     output = NULL;
-    if (rename(temporary, path)) { status = 1; goto done; }
+    if (rename(temporary, path) && (errno != EBUSY || copy_mounted(temporary, path, owner))) { status = 1; goto done; }
     if (remove_path) removed = 1;
 done:
     if (output) fclose(output);
