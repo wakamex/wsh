@@ -96,6 +96,8 @@ install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/PROVENANCE
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "${stage}/share/wsh/defaults/zsh-autosuggestions-LICENSE"
 (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')
 chmod 644 "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh.zwc"
+install -D -m 644 "${repository_root}/integration/git-prompt.zsh" "${stage}/share/wsh/defaults/git-prompt.zsh"
+cp -R -- "${repository_root}/third_party/oh-my-zsh-git-prompt" "${stage}/share/wsh/defaults/oh-my-zsh-git-prompt"
 install -D -m 644 "${repository_root}/integration/syntax-highlighting.zsh" "${stage}/share/wsh/defaults/syntax-highlighting.zsh"
 cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/share/wsh/defaults/zsh-syntax-highlighting"
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then

@@ -16,5 +16,6 @@ fi
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event syntax-highlighting-end
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event integration-start
 source "${WSH_BUNDLE_ROOT}/share/wsh/integration.zsh"
+source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/git-prompt.zsh"
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event integration-end
 (( $+functions[_wsh_profile_install] )) && _wsh_profile_install

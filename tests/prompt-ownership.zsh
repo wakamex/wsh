@@ -173,3 +173,5 @@ if [[ -n $omz ]]; then
 else
   print -r -- 'Real OMZ checks require the optional directory argument.'
 fi
+
+python3 "${0:A:h:h}/native/test-git-prompt-ownership.py" $bundle $scratch/git-prompt

@@ -71,7 +71,7 @@ Two GitHub workers share a trust domain. Byte agreement establishes repeatabilit
 
 ## Prompt ownership checks
 
-`tests/prompt-ownership.zsh BUNDLE` tests shared native configuration, login startup, both prompt owners, profiling, and nested regular Zsh. Pass a real Oh My Zsh checkout as a second argument to repeat the cases against its loader and verify doctor advice before and after the conditional. `tests/foreground-startup.zsh` also accepts `WSH_THEME=` to exercise foreground return with the preserved renderer.
+`tests/prompt-ownership.zsh BUNDLE` tests shared native configuration, login startup, both prompt owners, profiling, and nested regular Zsh. It also runs `native/test-git-prompt-ownership.py` against the real OMZ collector to check redundant hook removal, preserved customization and failed-theme fallback. Pass a real Oh My Zsh checkout as a second argument to repeat the cases against its loader and verify doctor advice before and after the conditional. `tests/foreground-startup.zsh` also accepts `WSH_THEME=` to exercise foreground return with the preserved renderer.
 
 Historical renderer benchmarks require `WSH_THEME=minimal` when run against current source. The current profile benchmark and real-configuration Python harness set it explicitly; prefix other renderer benchmark invocations with the setting. Recorded experiments bind their original source bytes; accepted-source snapshots preserve inputs when a harness subsequently changes.
 
