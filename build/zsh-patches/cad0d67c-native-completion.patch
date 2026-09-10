@@ -1,0 +1,70 @@
+--- a/Completion/compinit
++++ b/Completion/compinit
+@@ -501,31 +501,43 @@
+ if [[ -z "$_i_done" ]]; then
+   typeset -A _i_test
+ 
+-  for _i_dir in $fpath; do
+-    [[ $_i_dir = . ]] && continue
+-    (( $_i_wdirs[(I)$_i_dir] )) && continue
+-    for _i_file in $_i_dir/^([^_]*|*[\;\|\&]*|*~|*.zwc)(N); do
+-      _i_name="${_i_file:t}"
+-      (( $+_i_test[$_i_name] + $_i_wfiles[(I)$_i_file] )) && continue
+-      _i_test[$_i_name]=yes
+-      IFS=$' \t' read -rA _i_line < $_i_file
+-      _i_tag=$_i_line[1]
+-      shift _i_line
+-      case $_i_tag in
+-      (\#compdef)
+-	if [[ $_i_line[1] = -[pPkK](n|) ]]; then
+-	  compdef ${_i_line[1]}na "${_i_name}" "${(@)_i_line[2,-1]}"
+-	else
+-	  compdef -na "${_i_name}" "${_i_line[@]}"
+-	fi
+-	;;
+-      (\#autoload)
+-	autoload -rUz "$_i_line[@]" ${_i_name}
+-	[[ "$_i_line" != \ # ]] && _compautos[${_i_name}]="$_i_line"
+-	;;
+-      esac
++  # The bundled native scanner preserves compaudit exclusions and compdef.
++  # Regular Zsh and a deliberately disabled builtin keep the upstream loop.
++  if zmodload -F zsh/parameter p:builtins 2>/dev/null &&
++     (( $+builtins[wsh-completion-scan] )); then
++    _wsh_completion_read() { IFS=$' \t' read -rA _i_line < "$1"; }
++    _wsh_completion_autoload() { builtin autoload -rUz "$@"; }
++    { builtin wsh-completion-scan } always {
++      unfunction _wsh_completion_read _wsh_completion_autoload
++    }
++  else
++    for _i_dir in $fpath; do
++      [[ $_i_dir = . ]] && continue
++      (( $_i_wdirs[(I)$_i_dir] )) && continue
++      for _i_file in $_i_dir/^([^_]*|*[\;\|\&]*|*~|*.zwc)(N); do
++        _i_name="${_i_file:t}"
++        (( $+_i_test[$_i_name] + $_i_wfiles[(I)$_i_file] )) && continue
++        _i_test[$_i_name]=yes
++        IFS=$' \t' read -rA _i_line < $_i_file
++        _i_tag=$_i_line[1]
++        shift _i_line
++        case $_i_tag in
++        (\#compdef)
++  	if [[ $_i_line[1] = -[pPkK](n|) ]]; then
++  	  compdef ${_i_line[1]}na "${_i_name}" "${(@)_i_line[2,-1]}"
++  	else
++  	  compdef -na "${_i_name}" "${_i_line[@]}"
++  	fi
++  	;;
++        (\#autoload)
++  	autoload -rUz "$_i_line[@]" ${_i_name}
++  	[[ "$_i_line" != \ # ]] && _compautos[${_i_name}]="$_i_line"
++  	;;
++        esac
++      done
+     done
+-  done
++
++  fi
+ 
+   # If autodumping was requested, do it now.
+ 

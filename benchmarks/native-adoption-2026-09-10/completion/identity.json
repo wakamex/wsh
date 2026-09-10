@@ -1,0 +1,24 @@
+{
+  "source_revision": "d4c07feb43363686f5a169808a5e5af86d4e67ba",
+  "target": "x86_64-linux-gnu",
+  "host": "Linux-7.1.9-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "trace": "off",
+  "unsigned": true,
+  "selected": true,
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "bundle": "376c2e4803daf7b394d35d26a8c552b909005924c76f8b2513ed93562a576aeb",
+  "binary_sha256": "d36320968e40eb29cf403cb93ce8990c525944cc562f032b70d9a68fd7b12ae0",
+  "sanitized_binary_sha256": "93a88a9e8fe5ca398e18abe941bfc0301165b031fe72e2dd9dfd3c8b3e0c1fec",
+  "input_sha256": {
+    "native/completion.c": "5534e625e59ec8ee8820774887e7f5ad214abd18a75c2b92ecbb5b697748caf7",
+    "native/startup.c": "e081f54069afff0d3e3e97d40b45151a014cd373bc17002b7f2e24705e180909",
+    "native/test-installed-completion.py": "7555a59542b8cb076573ae90611095d7e3738bf28fd42037b685aa42b7bdd1f4",
+    "native/test-completion-header-zle.py": "5533c9a09d9950d723427d08fb025197783445fdf59d67c26a13e0c079212b82",
+    "native/test-completion-header-dump.py": "d26445332504ba22b9dde8d0724b2f9d37ed70a8cc40425efaca88269b777c1c",
+    "native/test-completion-scan.py": "151b18d649e932aa146e74bd08e4382d445e53209a1b2b72feeb2020335dae76",
+    "build/update-native-lock.py": "d298dc931997755357a11236275ff24a8e72e9c63273a69795eb06b6d5250204",
+    "build/zsh-patches/cad0d67c-native-completion.patch": "ed3c389b55b79a729115ebae86e53a439d42e826732fe16aa6b8dc7568b3c806",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "b22ed447b3d9f929e729aba7f7a67302fa72a5edc90ae218a0e2338bf6a220e8",
+    "benchmarks/deferred-completion-2026-09-06/run.py": "10140d6437d244aec4f35f5c9e0e9dd96ef25d8d0184f7197a1fe0a955c78880"
+  }
+}

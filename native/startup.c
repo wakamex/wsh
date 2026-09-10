@@ -1,3 +1,5 @@
+#include "wsh-completion.c"
+
 /* Optional Wsh defaults surround Zsh-owned startup; user files stay native. */
 static char *wsh_root;
 static int wsh_integration;
@@ -86,6 +88,7 @@ static void
 wsh_setup(void)
 {
     char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
+    (void)addbuiltins("wsh", wsh_completion_builtins, 1);
     if (!exepath || isset(PRIVILEGED))
         return;
     wsh_root = ztrdup(exepath);

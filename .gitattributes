@@ -8,3 +8,4 @@ benchmarks/native-entrypoint-2026-09-08/**/*.bin binary
 
 # Upstream context in the locked native source patch.
 build/zsh-patches/cad0d67c-native-entrypoint.patch whitespace=-blank-at-eol,-space-before-tab
+build/zsh-patches/cad0d67c-native-completion.patch whitespace=-blank-at-eol,-blank-at-eof

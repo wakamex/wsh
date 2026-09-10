@@ -26,6 +26,10 @@
     {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
       "sha256": "45c9085d5e213eacdf9d15a65f35bf9be0b17c629ae22d3f1ff6f5bf737301b3"
+    },
+    {
+      "path": "build/zsh-patches/cad0d67c-native-completion.patch",
+      "sha256": "ed3c389b55b79a729115ebae86e53a439d42e826732fe16aa6b8dc7568b3c806"
     }
   ],
   "test_patches": [
@@ -40,7 +44,7 @@
     "sources": [
       {
         "path": "native/startup.c",
-        "sha256": "910360865c353eb7a9496c44b654829065c770c87939c0f61ec03e7f3a0ef0c0"
+        "sha256": "e081f54069afff0d3e3e97d40b45151a014cd373bc17002b7f2e24705e180909"
       },
       {
         "path": "native/tools.c",
@@ -61,6 +65,10 @@
       {
         "path": "native/profile-report.c",
         "sha256": "a6950a40209fcfb0b0e35b0b30ecae6dc3e8c435b2dd951fc5e964fe4219f574"
+      },
+      {
+        "path": "native/completion.c",
+        "sha256": "5534e625e59ec8ee8820774887e7f5ad214abd18a75c2b92ecbb5b697748caf7"
       }
     ]
   }
