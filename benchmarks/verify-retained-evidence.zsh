@@ -13,4 +13,5 @@ python3 benchmarks/verify-highlight-full.py
 python3 benchmarks/verify-installed-highlighting.py
 python3 benchmarks/verify-highlighting-handoff.py
 python3 benchmarks/verify-git-prompt-ownership.py
+python3 benchmarks/verify-directory-takeover.py
 print -r -- 'PASS: complete retained-evidence suite'

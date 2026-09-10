@@ -36,6 +36,12 @@ wrapper = '''zshz() {
 '''
 (out / 'control.zsh').write_text(control)
 tail = control[end:].replace('_zshz_precmd() {', '_zshz_precmd() {\n  builtin wsh-directory --can-record || return 0')
-tail = tail.replace('  ZSHZ[DIRECTORY_REMOVED]=0', '  builtin wsh-directory --changed')
+tail = tail.replace('  ZSHZ[DIRECTORY_REMOVED]=0', '  ZSHZ[DIRECTORY_REMOVED]=0\n  builtin wsh-directory --changed')
 tail = tail.replace('zsh-z_plugin_unload() {', 'zsh-z_plugin_unload() {\n  builtin wsh-directory --changed')
 (out / 'candidate.zsh').write_text(control[:start] + wrapper + tail)
+
+# Upgrade an already initialized upstream copy without reinitializing its widget,
+# fpath ownership, completion mappings, aliases, settings or removal state.
+recording = tail[tail.index('_zshz_precmd() {'):tail.index('autoload -Uz add-zsh-hook')]
+unload = tail[tail.index('zsh-z_plugin_unload() {'):]
+(out / 'takeover.zsh').write_text(wrapper + '\n' + recording + '\n' + unload)

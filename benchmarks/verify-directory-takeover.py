@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
-"""Verify real collector behavior and matched prompt ownership startup gates."""
+"""Verify exact directory takeover, preserved lifecycle and matched startup gates."""
 import hashlib
 import json
 from pathlib import Path
 import tarfile
-import subprocess
 
 root = Path(__file__).resolve().parents[1]
-evidence = root / 'benchmarks/git-prompt-ownership-2026-09-10'
+evidence = root / 'benchmarks/native-directory-takeover-2026-09-10'
 identity = json.loads((evidence / 'identity.json').read_text())
 for name, digest in identity['sources'].items():
-    data = (root / name).read_bytes()
-    if hashlib.sha256(data).hexdigest() != digest:
-        data = subprocess.check_output(['git', 'show', '9a5c703:' + name], cwd=root)
-    assert hashlib.sha256(data).hexdigest() == digest, name
+    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
 archive = evidence / 'evidence.tar.gz'
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 with tarfile.open(archive) as t:
@@ -21,18 +17,18 @@ with tarfile.open(archive) as t:
         assert hashlib.sha256(t.extractfile(name).read()).hexdigest() == digest, name
     def read(name):
         return json.load(t.extractfile(name))
-    for name in ('host/results.json', 'floor/results.json'):
-        rows = read(name)
-        assert len(rows) == 7 and all(r['passed'] for r in rows)
-        for row in rows:
-            if row['case'] in ('wsh', 'absent'):
-                assert row['collector_calls'] == 0 and row['state'].endswith('|0|0|0')
-            else:
-                assert row['collector_calls'] > 0
-    contracts = read('contracts/results.json')
+    contracts = read('contracts-final/results.json')
     assert len(contracts) == 9 and all(r['status'] == 0 for r in contracts)
-    samples = read('startup/samples.json')
-    summary = read('startup/summary.json')
+    for name in ('contracts-final/directory-jump.log', 'floor-final.log'):
+        log = t.extractfile(name).read()
+        for case in ('builtin', 'external', 'legacy-completion', 'modified', 'override', 'custom-alias', 'custom-command', 'removed', 'disabled-external', 'custom', 'executable', 'disabled'):
+            assert ('PASS: ' + case + ' directory-jump ownership and behavior').encode() in log, (name, case)
+        assert b'PASS: real ZLE completion handles spaces and prompt hooks record directory visits' in log
+        assert b'PASS: directory database persists across Wsh sessions' in log
+    rows = read('engine/results.json')
+    assert len(rows) == 10 and all(r['exact_equal'] for r in rows if r['name'] != 'tab')
+    samples = read('startup-final/samples.json')
+    summary = read('startup-final/summary.json')
     assert len(samples) == 200
     for theme, row in summary.items():
         data = {v: [s['readiness_ms'] for s in samples if s['theme'] == theme and s['variant'] == v] for v in ('control', 'native')}
@@ -42,4 +38,4 @@ with tarfile.open(archive) as t:
         assert row['passed']
         assert sorted(data['control'])[24] == row['control_median_ms']
         assert sorted(data['native'])[24] == row['native_median_ms']
-print('PASS: exact git-prompt hook ownership, real collector, fallback, custom hooks and startup gates')
+print('PASS: recognized directory takeover, preserved state/customization/completion and startup gates')

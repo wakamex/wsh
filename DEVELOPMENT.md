@@ -75,7 +75,7 @@ Two GitHub workers share a trust domain. Byte agreement establishes repeatabilit
 
 Historical renderer benchmarks require `WSH_THEME=minimal` when run against current source. The current profile benchmark and real-configuration Python harness set it explicitly; prefix other renderer benchmark invocations with the setting. Recorded experiments bind their original source bytes; accepted-source snapshots preserve inputs when a harness subsequently changes.
 
-`tests/directory-jump.zsh BUNDLE [OMZ_DIRECTORY]` tests the pinned directory-jump implementation, optional real OMZ coexistence, and actual ZLE completion. `tests/named-themes.zsh BUNDLE` verifies every bundled name through the launcher and runtime. The retained runtime comparisons cover ports, segment transitions, escaping and rejected definitions.
+`tests/directory-jump.zsh BUNDLE [OMZ_DIRECTORY]` tests the pinned directory-jump implementation, exact-copy native takeover, preserved customization/removal state, optional real OMZ coexistence, and actual ZLE completion. `tests/named-themes.zsh BUNDLE` verifies every bundled name through the launcher and runtime. The retained runtime comparisons cover ports, segment transitions, escaping and rejected definitions.
 
 ## Native development installation
 

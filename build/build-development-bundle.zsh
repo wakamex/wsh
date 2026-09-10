@@ -122,6 +122,7 @@ cp -R -- "${repository_root}/third_party/zsh-z" "${stage}/share/wsh/defaults/zsh
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   python3 "${repository_root}/native/prepare-directory-owner.py" "${stage}/.directory-fixture"
   install -D -m 644 "${stage}/.directory-fixture/candidate.zsh" "${stage}/share/wsh/defaults/zsh-z/native.zsh"
+  install -D -m 644 "${stage}/.directory-fixture/takeover.zsh" "${stage}/share/wsh/defaults/zsh-z/takeover.zsh"
   rm -rf "${stage}/.directory-fixture"
   (cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile native.zsh.zwc native.zsh')
 fi
