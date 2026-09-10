@@ -151,7 +151,19 @@ static int persist(const char *path, const char *target, int remove_path, int re
         } else {
             if (e->rank < 1 || (!directory(e->path) && !in_array(e->path, "ZSHZ_KEEP_DIRS", NULL))) { e->group = -1; continue; }
             total += e->rank;
-            if (!strcmp(e->path, target)) { e->rank++; e->when = now; found = 1; }
+            if (!strcmp(e->path, target)) {
+                mnumber incremented = matheval(dyncat(e->rank_text, "+1"));
+                char integer[32];
+                if (incremented.type == MN_INTEGER) {
+                    snprintf(integer, sizeof(integer), "%lld", (long long)incremented.u.l);
+                    e->rank_text = dupstring(integer);
+                    e->rank = incremented.u.l;
+                } else {
+                    e->rank = incremented.u.d;
+                    e->rank_text = dupstring(convfloat(e->rank, 0, 0, NULL));
+                }
+                e->when = now; found = 1;
+            }
         }
     }
     if (remove_path && !changed) { status = 1; goto done; }
@@ -160,15 +172,41 @@ static int persist(const char *path, const char *target, int remove_path, int re
         if (append(&db, (char *)target, "1", stamp)) { status = 1; goto done; }
     }
     int age = !remove_path && total > number(setting("ZSHZ_MAX_SCORE", "_Z_MAX_SCORE", "9000"));
+    HashTable updated = newparamtable(17, "directory updated");
+    if (!remove_path) {
+        queue_signals();
+        HashTable saved = paramtab; paramtab = updated;
+        Param p = createparam(quotestring((char *)target, QT_BACKSLASH), PM_SCALAR | PM_HASHELEM);
+        paramtab = saved;
+        p->gsu.s->setfn(p, ztrdup(""));
+        unqueue_signals();
+    }
+    int wrote = 0;
     for (size_t i = 0; i < db.count; ++i) {
         struct entry *e = &db.rows[i];
         if (e->group == -1) continue;
+        wrote = 1;
         if (remove_path) fprintf(output, "%s|%s|%s\n", unmeta(e->path), e->rank_text, e->time_text);
         else {
-            char *rank = age ? convfloat(0.99*e->rank, 0, 0, NULL) : convfloat(e->rank, 0, 0, NULL);
-            fprintf(output, "%s|%s|%lld\n", unmeta(e->path), rank, e->when);
+            char *rank = age ? convfloat(0.99*e->rank, 0, 0, NULL) : e->rank_text;
+            char stamp[32]; snprintf(stamp, sizeof(stamp), "%lld", e->when);
+            char *line = zhtricat(e->path, "|", zhtricat(rank, "|", stamp));
+            char *key = quotestring(e->path, QT_BACKSLASH);
+            queue_signals();
+            HashTable saved = paramtab; paramtab = updated;
+            Param p = (Param)updated->getnode(updated, key);
+            if (!p) p = createparam(key, PM_SCALAR | PM_HASHELEM);
+            paramtab = saved;
+            p->gsu.s->setfn(p, ztrdup(line));
+            unqueue_signals();
         }
     }
+    if (remove_path && !wrote) fputc('\n', output);
+    if (!remove_path) {
+        char **rows = paramvalarr(updated, SCANPM_WANTVALS);
+        for (; *rows; ++rows) fprintf(output, "%s\n", unmeta(*rows));
+    }
+    deleteparamtable(updated);
     if (fflush(output) || ferror(output) || (owner && fchown(fd, owner->pw_uid, owner->pw_gid))) { status = 1; goto done; }
     if (fclose(output)) { output = NULL; status = 1; goto done; }
     output = NULL;
@@ -230,6 +268,7 @@ static int emit(struct database *db, int group, char *best, int format, int rece
 static int command_impl(char *name, char **args, Options options, int function)
 {
     (void)name; (void)options; (void)function;
+    if (*args && !strcmp(*args, "--can-record")) return removed ? 1 : 0;
     if (*args && !strcmp(*args, "--changed")) { removed = 0; return 0; }
     int record = *args && !strcmp(*args, "--record");
     if (record) { if (removed) return 0; ++args; }
@@ -279,6 +318,7 @@ static int command_impl(char *name, char **args, Options options, int function)
     if (add || remove_path) {
         char *target = canonical(*query ? query : pwd, !enabled("ZSHZ_NO_RESOLVE_SYMLINKS", "_Z_NO_RESOLVE_SYMLINKS"));
         if (!target) return 1;
+        if (add && (!strcmp(target, home) || in_array(target, "ZSHZ_EXCLUDE_DIRS", "_Z_EXCLUDE_DIRS"))) return 0;
         if (remove_path && recursive && !strcmp(target, "/")) return 65; /* Confirmation before locking. */
         return persist(path, target, remove_path, recursive, now, owner);
     }

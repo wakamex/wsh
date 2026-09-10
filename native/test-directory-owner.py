@@ -50,3 +50,4 @@ for name, data, setup, args in cases:
 (out/'results.json').write_text(json.dumps(rows, indent=2)+'\n')
 assert all(v['status'] == 0 and not v['stderr'] for row in rows for v in row['variants']), rows
 print(json.dumps({row['name']: row['exact_equal'] for row in rows}, indent=2))
+assert all(row['exact_equal'] for row in rows if row['name'] != 'tab'), rows

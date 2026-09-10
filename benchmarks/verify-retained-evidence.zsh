@@ -89,4 +89,6 @@ python3 ./benchmarks/verify-native-completion-adoption.py
 
 python3 ./benchmarks/verify-native-history-adoption.py
 
+python3 ./benchmarks/verify-native-directory-adoption.py
+
 print -r -- 'PASS: complete retained-evidence suite'

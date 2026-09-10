@@ -1,0 +1,47 @@
+{
+  "source_revision": "6f21a1be1251228306cbfd1bee799494bbd60f8d",
+  "bundle": "4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986",
+  "unsigned": true,
+  "selected": false,
+  "trace": "off",
+  "target": "x86_64-linux-gnu",
+  "compiler": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)",
+  "input_sha256": {
+    "native/directory-prototype.c": "3369120874da2619801a3b30134e9022d4f8ed248c26e233034274147f0c6f94",
+    "native/prepare-directory-owner.py": "252d94323ec83e079525700b369f35f65b85487bdfa71863f181d3a6c2bc0fc5",
+    "native/test-directory-owner.py": "02b0928258e0b62ec66a684d497203dab40bc03fc99480192cdff91c33fb6cbd",
+    "native/test-directory-query.py": "0628fde5d4356f78553b6986c539c8ff8267ffd4c2018d7c4d4118d707b65e99",
+    "native/test-directory-lifecycle.py": "4e9273e880e5c5eae0492ac78d1da3dc053ad9f59feda56941cf58733f24e60c",
+    "native/test-directory-persistence.py": "c4bbc80a2684902a2925a16fdac51a67bd47030d7eab868e56ec6008b6165fe2",
+    "native/test-directory-zle.py": "6e084456ddd7dca423d4a80afa116418b7a908bdd0b04d77b112d06e308b8210",
+    "native/measure-directory-owner.py": "a7424abbf926e5106791cb6aa9294fa2de4084a3b9c1a4eb09072c47b7c250ed",
+    "native/measure-directory-query.py": "260e3f98e5c43196c64421ec45c902289e36cfe9f594f4b8acee97f001772ce1",
+    "third_party/zsh-z/z.plugin.zsh": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7",
+    "third_party/zsh-z/_z": "f2dcf5058a5eb5275358b644b259c342e492ab0d17e1f4ff8968ca62bbc6cca0",
+    "benchmarks/deferred-completion-2026-09-06/run.py": "10140d6437d244aec4f35f5c9e0e9dd96ef25d8d0184f7197a1fe0a955c78880"
+  },
+  "artifact_sha256": {
+    "/code/wsh/bundles/4bfc1bd9af7cf33c315f62a65db66eceb64a9ffba4585144b7ee2732106f0986/bin/wsh": "1c42eb54b0ab65a4978f6dc0d1cd0e8edb3161e0af28b2e8649dd6bd7ec12bbc",
+    "/var/tmp/wsh-native-adoption/sanitized-installation/bin/wsh": "1873bcbf142cabfc6d453eb81044178af849a166aeed431f9f268c94043b88f9",
+    "/var/tmp/wsh-native-adoption/directory/wshdirectory.so": "bc2ad9740876b2116c8f9901543233bf0f80a314cac32b994ca6dfb6724c76a6",
+    "/var/tmp/wsh-native-adoption/directory/sanitized/wshdirectory.so": "31e3bdbe6b4f63f2a7688e8a067fbd82da91334e20ac7b29edf2226f1aa14333"
+  },
+  "sdk_headers_sha256": {
+    "Src/hashtable.h": "7aaf63d6de49f5d67042a1dcc84a1c2dbef95909b2afabc07e913cc3bc7c7a83",
+    "Src/patchlevel.h": "400e1398afe18c5ea2a65cb3de507c15bbcf35b0d6a710d6416511bed709b973",
+    "Src/prototypes.h": "8000f4ba8a550940787febcda67905fd07ad7e2634a55466f0e7dcb5771f3431",
+    "Src/sigcount.h": "16e93035ac433aa40be98a5f5f38ed0a80cfae4ad5adec6656e76d4670c913d1",
+    "Src/signals.h": "c422bbc0c9ff5b37e4ccd93101c75c05fc2da79a29e2ecb228d1be7b9c3c051b",
+    "Src/version.h": "276c26a0fd03be6d5975d78604d1a23c11400ed1c8067fbb8393d3c3716a2d33",
+    "Src/wcwidth9.h": "7e0f8ee12912f8a560e8bf87d74db78d2d7f1a70fcc6ce9b2c3d794c0649adaf",
+    "Src/wsh-build.h": "c7de1089779042475efd5af35d60b1c2cf0cfdb8c104166a8e1d80e3ad184257",
+    "Src/zsh.h": "52f0dc62173191cf35c76e4e7e54cf85c1eb484da4bd62ba327f51076b6e2605",
+    "Src/zsh_system.h": "e72d56607677112668b965a5531b8c2315eda3ed6936707c8d6cab7e0a5c13e6",
+    "Src/zshcurses.h": "1e6a9144fa0d3a2b180ee29f352ca1e0690954d66a5382a7c53e68bd484ce65e",
+    "Src/zshpaths.h": "545e68ba7b9d96a07bc4f25cc82e9b00e57fca2e86bbe34991b3cb1ecdad58bf",
+    "Src/zshterm.h": "9091f917acdb78e055b345d2330c631076c85ac29280f29c0cd5e7f5f9782abd",
+    "Src/zshxmods.h": "677051474f9da97f47137d4e18c28543556e98615bd17177e61056f11358dac6",
+    "Src/ztype.h": "50ecac7e1cb7ec4bb18008938d298da4666d1308908289d23de9b1941a6f0046"
+  },
+  "sdk_config_sha256": "74ba26aa1ae8e8ec9168ef99ad0dabceb17ee30c4d69e3830e045d541ab361ee"
+}

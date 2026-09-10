@@ -37,4 +37,7 @@ wrapper = '''zshz() {
 }
 '''
 (out / 'control.zsh').write_text(control)
-(out / 'candidate.zsh').write_text(control[:start] + wrapper + control[end:])
+tail = control[end:].replace('_zshz_precmd() {', '_zshz_precmd() {\n  builtin wsh-directory --can-record || return 0')
+tail = tail.replace('  ZSHZ[DIRECTORY_REMOVED]=0', '  builtin wsh-directory --changed')
+tail = tail.replace('zsh-z_plugin_unload() {', 'zsh-z_plugin_unload() {\n  builtin wsh-directory --changed')
+(out / 'candidate.zsh').write_text(control[:start] + wrapper + tail)
