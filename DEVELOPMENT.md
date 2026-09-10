@@ -6,7 +6,7 @@ The selected native transition follows [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IM
 
 ## Native installation and distribution
 
-The product is a native Zsh executable, thin Zsh integration and one C helper per shell session. System packages own installation and updates. Login does not read a per-user activation record. Prompt rendering and shell lifecycle remain local to each shell. Native autosuggestions use the qualified C controller and a generated Zsh adapter. Wsh-owned main syntax highlighting uses the native C parser and a generated configuration/predicate adapter; the pinned redraw lifecycle and optional highlighters remain in Zsh. Exact or unknown external highlighters retain their existing ownership.
+The product is a native Zsh executable, thin Zsh integration and one C helper per shell session. System packages own installation and updates. Login does not read a per-user activation record. Prompt rendering and shell lifecycle remain local to each shell. Native autosuggestions use the qualified C controller and a generated Zsh adapter. Wsh-owned main syntax highlighting uses the native C parser and a generated configuration/predicate adapter; the pinned redraw lifecycle and optional highlighters remain in Zsh. Recognized upstream external core/main pairs hand main parsing to the same native adapter, retaining their lifecycle, styles and optional highlighters. Modified or unknown main implementations retain ownership.
 
 ## Every intervention starts with a fixed gate
 

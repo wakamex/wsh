@@ -33,6 +33,11 @@ _wsh_syntax_files_equal() {
   done
 }
 
+# Keep the external lifecycle and optional highlighters; upgrade only main.
+_wsh_syntax_highlighting_native_main() {
+  source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-syntax-highlighting/highlighters/main/main-highlighter.zsh
+}
+
 _wsh_detect_syntax_highlighting() {
   builtin emulate -L zsh -o no_aliases
 
@@ -46,34 +51,46 @@ _wsh_detect_syntax_highlighting() {
     local source=${functions_source[_zsh_highlight]:-}
     local candidate_root=${source:h}
     local bundled_root=${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-syntax-highlighting
-    local known_external=1
-    [[ $ZSH_HIGHLIGHT_VERSION == 0.8.1-dev ]] || known_external=0
-    local -a compare_files=($source $bundled_root/zsh-syntax-highlighting.zsh)
-
+    local main_source=${functions_source[_zsh_highlight_highlighter_main_paint]:-}
+    local known_external=0 reference
     local -a active_highlighters=(${ZSH_HIGHLIGHT_HIGHLIGHTERS:-main})
-    local highlighter function_name candidate
-    for highlighter in $active_highlighters; do
-      [[ $highlighter == (brackets|cursor|line|main|pattern|regexp) ]] || {
-        known_external=0
-        continue
-      }
-      function_name=_zsh_highlight_highlighter_${highlighter}_paint
-      candidate=$candidate_root/highlighters/$highlighter/${highlighter}-highlighter.zsh
-      (( ${+functions[$function_name]} )) || known_external=0
-      [[ ${functions_source[$function_name]:-} == $candidate ]] || known_external=0
-      local reference=$bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh
-      if [[ $highlighter == main && -f $bundled_root/highlighters/main/known-main-highlighter.zsh ]] &&
-         ! _wsh_syntax_files_equal $candidate $reference; then
-        reference=$bundled_root/highlighters/main/known-main-highlighter.zsh
-      fi
-      compare_files+=($candidate $reference)
-    done
-    (( known_external )) && _wsh_syntax_files_equal $compare_files || known_external=0
+    if (( ${active_highlighters[(Ie)main]} )) && [[ -n $main_source ]]; then
+      for reference in $bundled_root $bundled_root/recognized/*(N/); do
+        local reference_main=$reference/main-highlighter.zsh
+        if [[ $reference == $bundled_root ]]; then
+          reference_main=$reference/highlighters/main/known-main-highlighter.zsh
+          if _wsh_syntax_files_equal $main_source $reference/highlighters/main/main-highlighter.zsh; then
+            reference_main=$reference/highlighters/main/main-highlighter.zsh
+          fi
+        fi
+        if _wsh_syntax_files_equal $source $reference/zsh-syntax-highlighting.zsh $main_source $reference_main; then
+          known_external=1
+          break
+        fi
+      done
+      # Preserve main-parser functions overridden after loading an upstream file.
+      local function_name
+      for function_name in ${(k)functions[(I)_zsh_highlight_main_*]} _zsh_highlight_highlighter_main_predicate; do
+        [[ ${functions_source[$function_name]:-} == $main_source ]] || known_external=0
+      done
+    fi
 
     if (( ! known_external )); then
       WSH_SYNTAX_HIGHLIGHTING_OWNER=external-unknown
       return 0
     fi
+
+    # A custom optional highlighter may depend on the external installation.
+    # Keep doctor from recommending removal of that installation.
+    local external_owner=external-exact highlighter optional_source
+    for highlighter in $active_highlighters; do
+      [[ $highlighter == main ]] && continue
+      optional_source=${functions_source[_zsh_highlight_highlighter_${highlighter}_paint]:-}
+      if [[ $highlighter != (brackets|cursor|line|pattern|regexp) ]] ||
+         ! _wsh_syntax_files_equal $optional_source $bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh; then
+        external_owner=external-unknown
+      fi
+    done
 
     local -a redraw_hooks=() finish_hooks=()
     zstyle -a zle-line-pre-redraw widgets redraw_hooks
@@ -83,7 +100,8 @@ _wsh_detect_syntax_highlighting() {
     local redraw_count=$#redraw_matches
     local finish_count=$#finish_matches
     if (( redraw_count == 1 && finish_count == 1 )); then
-      WSH_SYNTAX_HIGHLIGHTING_OWNER=external-exact
+      _wsh_syntax_highlighting_native_main
+      WSH_SYNTAX_HIGHLIGHTING_OWNER=$external_owner
       return 0
     fi
     if (( redraw_count || finish_count )) || [[ ${widgets[self-insert]:-} == user:_zsh_highlight_widget_* ]]; then
@@ -91,7 +109,8 @@ _wsh_detect_syntax_highlighting() {
       return 0
     fi
 
-    WSH_SYNTAX_HIGHLIGHTING_OWNER=external-exact
+    _wsh_syntax_highlighting_native_main
+    WSH_SYNTAX_HIGHLIGHTING_OWNER=$external_owner
     _WSH_SYNTAX_HIGHLIGHTING_ACTIVATE_EXTERNAL=1
   else
     _WSH_SYNTAX_HIGHLIGHTING_LOAD=1
@@ -116,4 +135,4 @@ _wsh_syntax_highlighting_start() {
 }
 
 _wsh_detect_syntax_highlighting
-unfunction _wsh_detect_syntax_highlighting _wsh_syntax_files_equal
+unfunction _wsh_detect_syntax_highlighting _wsh_syntax_files_equal _wsh_syntax_highlighting_native_main

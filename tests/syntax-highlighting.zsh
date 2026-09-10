@@ -16,6 +16,8 @@ readonly test_root=$(mktemp -d /var/tmp/wsh-syntax-correctness.XXXXXX)
 readonly state_root=$test_root/state
 readonly fixture=$test_root/fixture
 readonly exact_source=$test_root/exact
+readonly older_source=$test_root/older
+readonly older_modified_source=$test_root/older-modified
 readonly modified_source=$test_root/modified
 readonly custom_source=$test_root/custom
 typeset -g current_pty= pty_output= child_home= child_buffer_log= child_state_log=
@@ -37,6 +39,13 @@ if [[ -f $exact_source/highlighters/main/known-main-highlighter.zsh ]]; then
   command cp -- $exact_source/highlighters/main/known-main-highlighter.zsh $exact_source/highlighters/main/main-highlighter.zsh
   command rm -f -- $exact_source/highlighters/main/main-highlighter.zsh.zwc
 fi
+command cp -R -- $exact_source $older_source
+command cp -- $exact_source/recognized/b2c910a/zsh-syntax-highlighting.zsh $older_source/zsh-syntax-highlighting.zsh
+command cp -- $exact_source/recognized/b2c910a/main-highlighter.zsh $older_source/highlighters/main/main-highlighter.zsh
+command rm -f -- $older_source/zsh-syntax-highlighting.zsh.zwc $older_source/highlighters/main/main-highlighter.zsh.zwc
+print -r -- 0.8.0-alpha2-dev >| $older_source/.version
+command cp -R -- $older_source $older_modified_source
+print -r -- '# user main change' >> $older_modified_source/highlighters/main/main-highlighter.zsh
 command cp -R -- $exact_source $modified_source
 command cp -R -- $exact_source $custom_source
 print -r -- '# wsh modified fixture' >> $modified_source/highlighters/main/main-highlighter.zsh
@@ -67,6 +76,24 @@ print -s "print \"WSH_SYNTAX_COMPLETE\""' >| $config
   case $variant in
     external)
       print -r -- "source ${(q)exact_source}/zsh-syntax-highlighting.zsh" >> $config
+      ;;
+    older|older-ready)
+      [[ $variant != older-ready ]] || print -r -- 'zmodload zsh/zle' >> $config
+      print -r -- "source ${(q)older_source}/zsh-syntax-highlighting.zsh" >> $config
+      ;;
+    older-modified)
+      print -r -- "zmodload zsh/zle
+source ${(q)older_modified_source}/zsh-syntax-highlighting.zsh" >> $config
+      ;;
+    disabled-external)
+      print -r -- "zmodload zsh/zle
+WSH_DISABLE_SYNTAX_HIGHLIGHTING=1
+source ${(q)older_source}/zsh-syntax-highlighting.zsh" >> $config
+      ;;
+    override)
+      print -r -- "zmodload zsh/zle
+source ${(q)exact_source}/zsh-syntax-highlighting.zsh
+_zsh_highlight_main__is_redirection() { return 1 }" >> $config
       ;;
     external-ready)
       print -r -- "zmodload zsh/zle
@@ -207,7 +234,7 @@ report_buffer() {
   sed -n "${line_number}p" $child_buffer_log
 }
 
-local -a variants=(clean external external-ready modified-inactive modified-ready custom-ready disabled configured composition)
+local -a variants=(clean external external-ready older older-ready older-modified disabled-external override modified-inactive modified-ready custom-ready disabled configured composition)
 local variant state buffer_state
 for variant in $variants; do
   write_home $variant
@@ -221,7 +248,20 @@ for variant in $variants; do
       fi
       [[ $state == wsh\|0.8.1-dev\|${bundle}/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "unexpected bundled state for ${variant}: $state"; exit 1; }
       ;;
+    older|older-ready)
+      [[ $state == external-exact\|0.8.0-alpha2-dev\|${older_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* && $state == *'|native_main=1|'* ]] || { print -u2 -r -- "older upstream handoff failed: $state"; exit 1; }
+      ;;
+    older-modified)
+      [[ $state == external-unknown\|* && $state == *'|native_main=0|'* ]] || { print -u2 -- "modified older copy replaced: $state"; exit 1; }
+      ;;
+    disabled-external)
+      [[ $state == disabled\|* && $state == *'|native_main=0|'* ]] || { print -u2 -- "disabled external copy replaced: $state"; exit 1; }
+      ;;
+    override)
+      [[ $state == external-unknown\|* && $state == *'|native_main=0|'* ]] || { print -u2 -r -- "runtime override was not preserved: $state"; exit 1; }
+      ;;
     external|external-ready)
+      [[ $state == *'|native_main=1|'* ]] || { print -u2 -r -- "native external handoff missing: $state"; exit 1; }
       [[ $state == external-exact\|0.8.1-dev\|${exact_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "unexpected exact external state for ${variant}: $state"; exit 1; }
       ;;
     modified-inactive)
@@ -231,6 +271,7 @@ for variant in $variants; do
       [[ $state == external-unknown\|0.8.1-dev\|${modified_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "modified active implementation was not preserved: $state"; exit 1; }
       ;;
     custom-ready)
+      [[ $state == *'|native_main=1|'* ]] || { print -u2 -- "custom composition lost native main: $state"; exit 1; }
       [[ $state == external-unknown\|0.8.1-dev\|${custom_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|main,custom\|* ]] || { print -u2 -r -- "custom highlighter was not preserved: $state"; exit 1; }
       ;;
     disabled)
