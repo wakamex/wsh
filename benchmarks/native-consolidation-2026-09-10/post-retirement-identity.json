@@ -1,0 +1,27 @@
+{
+  "archive_sha256": "436c2c951dd65aa2ed8e6ce8583039b0a2b4255886d004e1ff1444eef65ccf24",
+  "files": {
+    "floor.log": "976ee8b1ff3ec130668ab71da89f6663fc8e2c2e97e456d203b1e36efc2a6f03",
+    "manifest.json": "9cc80c7e143474d8ba6d690bb2eb3658c7eb2b06fa809e65e6bd83fd60995161",
+    "contracts.json": "4b08a3cb4918723607ab49b215cdbd47b6f7704021f580fd5fb8c0721bfc4ce0",
+    "checks/contracts/results.json": "4b08a3cb4918723607ab49b215cdbd47b6f7704021f580fd5fb8c0721bfc4ce0",
+    "checks/completion/correctness-results.json": "969d75912e9debd4d65af6dd5813b08d5d777fe3b1bf56a5e4ad0717de899bc3",
+    "checks/runtime-lifecycle/results.json": "faf42ba5658bfbcbf4f0bc82ddee5223b687ad120b6c32cf93e31b3dca95b83b",
+    "checks/runtime-lifecycle/metadata.json": "a696171b51c3c1f0ab734446a969956039e344fe25710bacc44a5dc3dbea5760",
+    "checks/recovery/recovery-results.json": "27c02b861a6be65008c98c25fffae8e0efd0cb4b96df6b0aebcc2b468ad364dc",
+    "checks/profile/profile-results.json": "18932ccacf5a78e2d1252f4ed8e78f2b99e21a28ac07edc7b730f2af7ba1eb51",
+    "checks/profile-storage/storage-results.json": "a3492d2682aa99a3101b40255abf66e7577c041333482da941b2b8a823a3c188",
+    "checks/directory/results.json": "b8fed187c2215570d5fc9a58200f2c3f5f0f09be4bc85a00722fe1de23294401",
+    "checks/profile-report/report-cases.json": "a4c8d5a321239ce563f5a4b1fb62444ecd2e365716dc0ec608e77fdd791895b4",
+    "checks/history/results/correctness.json": "a7626f2e8d9eddef945ba9db46744449a2e5c7f03aa28ee48590dc67bd8023b0",
+    "checks/profile/state/profiles/1789025615-85807-RIW6Mz/metadata.json": "b1a3b12c4b24719a06a118a0e07e9847f751baaead5cd2b715f974c2fdc27d80",
+    "checks/profile/state/profiles/1789025615-85809-pdaT8Y/metadata.json": "b1a3b12c4b24719a06a118a0e07e9847f751baaead5cd2b715f974c2fdc27d80",
+    "checks/profile/state/profiles/1789025614-85790-Noj5j0/metadata.json": "b1a3b12c4b24719a06a118a0e07e9847f751baaead5cd2b715f974c2fdc27d80",
+    "checks/profile/state/profiles/1789025615-85804-bCGQSQ/metadata.json": "b1a3b12c4b24719a06a118a0e07e9847f751baaead5cd2b715f974c2fdc27d80",
+    "checks/profile/state/profiles/1789025615-85805-9kax7Z/metadata.json": "b1a3b12c4b24719a06a118a0e07e9847f751baaead5cd2b715f974c2fdc27d80",
+    "checks/completion/zle/correctness.json": "8ce755362a2a6bd2ce39365a652fc3cdd3d01ba060b5a4f55d146324c97863b4",
+    "checks/completion/test-completion-header-dump/results.json": "1f40003b426a18b955e84479b12a20263a58d265cc723a768a9b926f30ee5c4f",
+    "checks/completion/test-completion-scan/results.json": "0168b95d2e9de7c2d22c5f34610a53732e8b9908c987492eb7db0abb7aedadf9"
+  },
+  "rpm_sha256": "abea5cfbbcea3826987192d759cfd47950a8b8088735c60d0828746e551131dc"
+}

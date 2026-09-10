@@ -21,3 +21,13 @@ with tarfile.open(archive) as t:
 for path in ('Cargo.toml','Cargo.lock','rust-toolchain.toml','build/rust-toolchain.lock','crates'):
     assert not (root/path).exists(),path
 print('PASS: native two-build reproduction, RPM transactions and obsolete Rust source retirement')
+
+identity=json.loads((evidence/'post-retirement-identity.json').read_text())
+archive=evidence/'post-retirement.tar.gz'
+assert hashlib.sha256(archive.read_bytes()).hexdigest()==identity['archive_sha256']
+with tarfile.open(archive) as t:
+    for name,digest in identity['files'].items():assert hashlib.sha256(t.extractfile(name).read()).hexdigest()==digest
+    rows=json.load(t.extractfile('contracts.json'));assert len(rows)==9 and all(r['status']==0 for r in rows)
+    assert json.load(t.extractfile('manifest.json'))['source_revision'].startswith('32d2bc6')
+    assert b'PASS: real RPM agreement' in t.extractfile('floor.log').read()
+print('PASS: fresh canonical floor build after removal of Rust sources')

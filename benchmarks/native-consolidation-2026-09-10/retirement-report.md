@@ -11,3 +11,7 @@ The launcher, installer and runtime Rust crates, Cargo manifests and lock, rustu
 The first worktree experiment exposed a packaging lookup of Git metadata outside the container mount. RPM assembly now honors the source timestamp already resolved by the canonical builder. A real RPM records an explicitly supplied timestamp, and both fresh builds pass after this correction. The failed boundary probe and corrected package log are retained.
 
 These are unsigned local development packages. GitHub publication, a release tag and a hosted DNF repository were not exercised or created. Prototype Rust/C comparison scripts may still accept historical reference binaries; they are not dependencies of the native distribution. The editor ownership prototypes are separate work and remain unselected.
+
+## Fresh build after source removal
+
+A fresh worktree at 32d2bc6 also passes the complete canonical native pipeline after the obsolete crates, toolchain files and legacy drivers are physically absent. Its manifest is 9cc80c7e143474d8ba6d690bb2eb3658c7eb2b06fa809e65e6bd83fd60995161. The floor log, manifest and raw checks are retained in post-retirement.tar.gz and verified by the shared entrypoint.
