@@ -14,7 +14,7 @@ patch=ROOT/'build/zsh-patches/cad0d67c-native-entrypoint.patch'
 base['source_patches'].append({'path':str(patch.relative_to(ROOT)),'sha256':hashlib.sha256(patch.read_bytes()).hexdigest()})
 patch=ROOT/'build/zsh-patches/cad0d67c-native-completion.patch'
 base['source_patches'].append({'path':str(patch.relative_to(ROOT)),'sha256':hashlib.sha256(patch.read_bytes()).hexdigest()})
-base['native']={'version':re.search(r'^version = "([^"]+)"$',(ROOT/'Cargo.toml').read_text(),re.M)[1],
+base['native']={'version':(ROOT/'VERSION').read_text().strip(),
                 'linked_modules':True,
                 'sources':[{'path':'native/'+name+'.c','sha256':hashlib.sha256((ROOT/'native'/(name+'.c')).read_bytes()).hexdigest()}
                            for name in ('startup','tools','doctor','foreground','profile','profile-report','completion','history','directory')]}

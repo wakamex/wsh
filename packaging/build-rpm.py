@@ -8,6 +8,9 @@ import json
 from pathlib import Path
 import subprocess
 import tarfile
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/"build"))
+from native_manifest import verify
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
@@ -20,11 +23,8 @@ args = parser.parse_args()
 assert all(c in '0123456789.' for c in args.release) and args.release
 bundle = args.installation.resolve()
 top = args.output.resolve()
-manifest = json.loads((bundle / 'manifest.json').read_text())
+manifest = verify(bundle)
 assert manifest['status'] == 'development'
-for entry in manifest['files']:
-    path = bundle / entry['path']
-    assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest() == entry['sha256'], entry['path']
 assert (bundle / 'bin/wsh').is_file() and not (bundle / 'zdotdir').exists()
 for name in ('SOURCES', 'SPECS', 'BUILD', 'BUILDROOT', 'RPMS', 'SRPMS'):
     (top / name).mkdir(parents=True, exist_ok=True)

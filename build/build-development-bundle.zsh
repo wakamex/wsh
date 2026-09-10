@@ -12,7 +12,7 @@ readonly cargo_target_dir=${CARGO_TARGET_DIR:-${repository_root}/target}
 readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
 readonly requested_release_id=${WSH_RELEASE_ID:-}
 
-for command in cargo cp find git head install jq ld mktemp mv readelf rm rustc sed sha256sum sort stat; do
+for command in cp find git head install jq ld mktemp mv python3 readelf rm sed sha256sum sort stat; do
   if (( ! $+commands[$command] )); then
     print -u2 -- "error: required command not found: ${command}"
     exit 1
@@ -56,7 +56,7 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
 fi
 cd "$repository_root"
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
-  cargo build --release --locked -p wsh
+  : # Native assembly uses the shared inventory verifier.
 else
   cargo build --release --locked --workspace
 fi
@@ -142,6 +142,22 @@ install -D -m 644 "${repository_root}/themes/wakamex.toml" "${stage}/share/wsh/t
 if [[ -n $(find "$stage" -type l -print -quit) ]]; then
   print -u2 -- 'error: development payload contains a symbolic link'
   exit 1
+fi
+
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  find "$stage" -type f -exec chmod 644 {} +
+  chmod 755 "${stage}"/bin/*
+  identity=$(python3 "${script_dir}/native_manifest.py" create "$stage" "$zsh_source_lock")
+  destination=${output_root}/${identity}
+  if [[ -e $destination ]]; then
+    python3 "${script_dir}/native_manifest.py" verify "$destination" >/dev/null
+    rm -rf -- "$stage"
+  else
+    mv -- "$stage" "$destination"
+  fi
+  trap - EXIT INT TERM
+  print -r -- "$destination"
+  exit 0
 fi
 
 file_records=${stage}/.file-records.jsonl

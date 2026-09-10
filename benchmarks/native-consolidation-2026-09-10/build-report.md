@@ -1,0 +1,9 @@
+# Native assembly and verification no longer invoke Rust
+
+Native installation assembly, inventory verification, installed compatibility tests and RPM assembly use Python/Zsh build tools and the selected C shell/helper. The build runs with cargo and rustc replaced by commands that fail immediately. The native payload uses an explicit version/source inventory instead of the legacy Rust manifest, and VERSION supplies the product version independently of Cargo.toml.
+
+The inventory verifier is shared by assembly, packaging and installed contracts. Fifteen tampering checks reject altered/missing/extra files, incorrect modes, file and directory symlinks, duplicate or unsafe paths, and invalid source/version/format metadata. Native assembly normalizes payload files to the system-package modes before hashing; this avoids changing recorded modes during RPM construction. The fresh host build passes upstream Zsh tests, all nine installed compatibility suites pass with the Rust guards active, and real rpmbuild creates an unsigned development RPM from the verified inventory.
+
+Baseline is 1cf156c: its native assembly explicitly invoked cargo build and rustc and used the Rust manager for manifest verification. The first inventory test exposed existing mode-0600 autoload files, which the old package builder normalized after recording their hashes and modes. Normalizing before inventory creation preserves a consistent package inventory. Runtime behavior and C component ownership are unchanged; no timing claim is made for this build-tool change. Distribution workflow migration and legacy retirement follow in a separate slice.
+
+Exact source inputs, host build log, test results, manifest and RPM identities are retained in build-evidence.tar.gz and build-identity.json. This local experiment does not publish packages or change any account shell.

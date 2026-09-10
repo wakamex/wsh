@@ -1,0 +1,16 @@
+{
+  "source": {
+    "VERSION": "79e3f22ca37c7fdf4c29ae3648d6b008c3cb6547260a453409275470919dc674",
+    "build/native_manifest.py": "b6758053f68eebd89afd843a42fc82c1dc6d5677ccc3a2b810923b12e81d7383",
+    "build/build-development-bundle.zsh": "b7a97cd15c59e7c53da4b2476aff8eddb4bef0002d4b56c80ba8c445f18cf589",
+    "build/update-native-lock.py": "4962dec8ee62187ebf7b0e5e83afac62ff945d27ae8e38df0ffbbcaa4f971d2a",
+    "native/check-installation.py": "21efe301363f4b09c51978622d4490b422f5e12588187fe6993418267fbccdac",
+    "packaging/build-rpm.py": "f2d81732e4e1329903a437282382fd71f39d5f38048bde825fe201ad9a0a76af",
+    "tests/native-manifest.py": "736390ab7ca5e2637a6780b5f13dc6feb973feb823686db1e433c4f423afa3e3"
+  },
+  "bundle": "e70519fc262f3e93a386d74e0ffbe1696a93f44ceb0ec76b19aaf59c7d85c5dc",
+  "rpm_sha256": "202425ad84f97f632a87bdcb711e5859bc5cdd11e95a46b88a21f49e2dd41b7a",
+  "baseline": "1cf156c",
+  "rust_guard_status": "build and contracts pass with cargo/rustc replaced by failing commands",
+  "archive_sha256": "3ae2f3f1bcce7907dcd6e03006aca454fe1d8afae434a4969477cef1878c9671"
+}

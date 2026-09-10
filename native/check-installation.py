@@ -14,11 +14,11 @@ OUT.mkdir(parents=True,exist_ok=True)
 ZSH=Path(os.environ.get('WSH_TEST_ZSH', ROOT/'build/out/zsh-cad0d67c-wsh2/bin/zsh'))
 RAW=Path(os.environ.get('WSH_REFERENCE_ZSH', '/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh'))
 OMZ=Path(os.environ.get('WSH_TEST_OMZ', '/home/mihai/.oh-my-zsh'))
-MANAGER=Path(os.environ.get('WSH_TEST_MANAGER', ROOT/'target/release/wsh'))
+MANAGER=BUNDLE/'bin/wsh'
 results=[]
 for name in ('history-substring-search','autosuggestions','syntax-highlighting','plugin-doctor','directory-jump','named-themes','zsh-config-coexistence','prompt-ownership','foreground-startup'):
     source=(ROOT/'tests'/(name+'.zsh')).read_text()
-    source=re.sub(r'\$manager bundle activate \$bundle --state-root \$[^\s]+', '$manager bundle verify $bundle',source)
+    source=re.sub(r'\$manager bundle activate \$bundle --state-root \$[^\s]+', 'python3 '+str(ROOT/'build/native_manifest.py')+' verify $bundle',source)
     source=re.sub(r'\$manager run --state-root \$[^\s]+ -- ', '$bundle/bin/wsh -d ',source)
     source=re.sub(r'\$manager run --state-root \$[^\s]+', '$bundle/bin/wsh -d',source)
     source=re.sub(r'\$manager doctor --state-root \$[^\s)]+', '$bundle/bin/wsh --wsh-doctor',source)
