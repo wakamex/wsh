@@ -1,6 +1,6 @@
 # Oh My Zsh git-prompt recognition
 
-Unchanged comparison inputs from ohmyzsh/ohmyzsh commit `605a393f1c4734b23c6551370b9d542724e77879`, verified against local upstream Git objects. Wsh never sources or executes these reference files. The retained MIT license applies.
+Unchanged comparison inputs from ohmyzsh/ohmyzsh commit `a7426f0b38817bf7cd7000a5d378b7cfb059884f`, verified against Git objects fetched from the upstream repository. The files were originally collected from local checkout `605a393f1c4734b23c6551370b9d542724e77879`, which also contains an unrelated local theme commit; both plugin files match the upstream revision byte for byte. Wsh never sources or executes these reference files. The retained MIT license applies.
 
 | File | SHA-256 |
 |---|---|

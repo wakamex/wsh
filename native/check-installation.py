@@ -27,3 +27,11 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
     (OUT/'results.json').write_text(json.dumps(results,indent=2)+'\n')
     print(name,result.returncode,flush=True)
 if any(row['status'] for row in results):raise SystemExit(1)
+
+subprocess.run([str(ZSH), '-df', str(ROOT/'tests/plugin-recognition.zsh'), str(BUNDLE)], cwd=ROOT, check=True)
+command = ['python3', str(ROOT/'native/test-plugin-catalog.py'), str(BUNDLE), str(OUT/'plugin-catalog')]
+with (OUT/'plugin-catalog.log').open('wb') as log:
+    result = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, timeout=180)
+print('plugin-catalog', result.returncode, flush=True)
+if result.returncode:
+    raise SystemExit(result.returncode)

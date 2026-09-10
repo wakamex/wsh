@@ -24,29 +24,13 @@ _wsh_detect_history_substring_search() {
     source=${functions_source[$up]:-}
     source_down=${functions_source[$down]:-}
     if [[ -n $source && $source == $source_down && -f $source && -r $source ]]; then
-      zmodload zsh/stat 2>/dev/null || true
-      local -A source_stat=()
-      if zstat -H source_stat -- $source 2>/dev/null && (( source_stat[size] == 29692 )); then
-        zmodload zsh/system 2>/dev/null || return 1
-        local candidate_content upstream_content omz_content
-        local candidate_fd upstream_fd omz_fd
-        local candidate_count=0 upstream_count=0 omz_count=0
-        sysopen -r -o cloexec -u candidate_fd $source || return 1
-        sysread -i $candidate_fd -s 29692 -c candidate_count candidate_content || true
-        exec {candidate_fd}<&-
-        sysopen -r -o cloexec -u upstream_fd ${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-history-substring-search.zsh || return 1
-        sysread -i $upstream_fd -s 29692 -c upstream_count upstream_content || true
-        exec {upstream_fd}<&-
-        if (( candidate_count == 29692 && upstream_count == 29692 )) && [[ $candidate_content == $upstream_content ]]; then
-          known_external=1
-        else
-          sysopen -r -o cloexec -u omz_fd ${WSH_BUNDLE_ROOT}/share/wsh/defaults/known-oh-my-zsh-history-substring-search.zsh || return 1
-          sysread -i $omz_fd -s 29692 -c omz_count omz_content || true
-          exec {omz_fd}<&-
-          (( candidate_count == 29692 && omz_count == 29692 )) && [[ $candidate_content == $omz_content ]] && known_external=1
-        fi
-      fi
+      _wsh_plugin_recognized history $source && known_external=1
     fi
+
+    local function_name
+    for function_name in ${(k)functions[(I)_history-substring-search-*]}; do
+      [[ ${functions_source[$function_name]:-} == $source ]] || known_external=0
+    done
 
     if (( ! known_external )); then
       WSH_HISTORY_SUBSTRING_SEARCH_OWNER=external-unknown

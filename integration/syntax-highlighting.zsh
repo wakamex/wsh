@@ -4,34 +4,6 @@ typeset -g WSH_SYNTAX_HIGHLIGHTING_OWNER=disabled
 typeset -gi _WSH_SYNTAX_HIGHLIGHTING_LOAD=0
 typeset -gi _WSH_SYNTAX_HIGHLIGHTING_ACTIVATE_EXTERNAL=0
 
-_wsh_syntax_files_equal() {
-  builtin emulate -L zsh -o no_aliases
-  zmodload zsh/stat zsh/system 2>/dev/null || return 1
-  local candidate bundled candidate_content bundled_content
-  local candidate_fd bundled_fd
-  local candidate_count bundled_count
-  while (( $# )); do
-    candidate=$1
-    bundled=$2
-    shift 2
-    [[ -f $candidate && -r $candidate && -f $bundled && -r $bundled ]] || return 1
-
-    local -A candidate_stat=() bundled_stat=()
-    zstat -H candidate_stat -- $candidate 2>/dev/null || return 1
-    zstat -H bundled_stat -- $bundled 2>/dev/null || return 1
-    (( candidate_stat[size] == bundled_stat[size] && candidate_stat[size] <= 131072 )) || return 1
-
-    candidate_count=0
-    bundled_count=0
-    sysopen -r -o cloexec -u candidate_fd $candidate || return 1
-    sysread -i $candidate_fd -s $candidate_stat[size] -c candidate_count candidate_content || true
-    exec {candidate_fd}<&-
-    sysopen -r -o cloexec -u bundled_fd $bundled || return 1
-    sysread -i $bundled_fd -s $bundled_stat[size] -c bundled_count bundled_content || true
-    exec {bundled_fd}<&-
-    (( candidate_count == candidate_stat[size] && bundled_count == bundled_stat[size] )) && [[ $candidate_content == $bundled_content ]] || return 1
-  done
-}
 
 # Keep the external lifecycle and optional highlighters; upgrade only main.
 _wsh_syntax_highlighting_native_main() {
@@ -55,19 +27,10 @@ _wsh_detect_syntax_highlighting() {
     local known_external=0 reference
     local -a active_highlighters=(${ZSH_HIGHLIGHT_HIGHLIGHTERS:-main})
     if (( ${active_highlighters[(Ie)main]} )) && [[ -n $main_source ]]; then
-      for reference in $bundled_root $bundled_root/recognized/*(N/); do
-        local reference_main=$reference/main-highlighter.zsh
-        if [[ $reference == $bundled_root ]]; then
-          reference_main=$reference/highlighters/main/known-main-highlighter.zsh
-          if _wsh_syntax_files_equal $main_source $reference/highlighters/main/main-highlighter.zsh; then
-            reference_main=$reference/highlighters/main/main-highlighter.zsh
-          fi
-        fi
-        if _wsh_syntax_files_equal $source $reference/zsh-syntax-highlighting.zsh $main_source $reference_main; then
-          known_external=1
-          break
-        fi
-      done
+      if _wsh_plugin_recognized syntax $source $main_source ||
+         _wsh_plugin_files_equal $source $bundled_root/zsh-syntax-highlighting.zsh $main_source $bundled_root/highlighters/main/main-highlighter.zsh; then
+        known_external=1
+      fi
       # Preserve main-parser functions overridden after loading an upstream file.
       local function_name
       for function_name in ${(k)functions[(I)_zsh_highlight_main_*]} _zsh_highlight_highlighter_main_predicate; do
@@ -87,7 +50,7 @@ _wsh_detect_syntax_highlighting() {
       [[ $highlighter == main ]] && continue
       optional_source=${functions_source[_zsh_highlight_highlighter_${highlighter}_paint]:-}
       if [[ $highlighter != (brackets|cursor|line|pattern|regexp) ]] ||
-         ! _wsh_syntax_files_equal $optional_source $bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh; then
+         ! _wsh_plugin_files_equal $optional_source $bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh; then
         external_owner=external-unknown
       fi
     done
@@ -135,4 +98,4 @@ _wsh_syntax_highlighting_start() {
 }
 
 _wsh_detect_syntax_highlighting
-unfunction _wsh_detect_syntax_highlighting _wsh_syntax_files_equal _wsh_syntax_highlighting_native_main
+unfunction _wsh_detect_syntax_highlighting _wsh_syntax_highlighting_native_main

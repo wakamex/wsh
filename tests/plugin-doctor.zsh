@@ -119,7 +119,7 @@ home=$(write_home modified)
 output=$test_root/modified.out
 run_doctor $home $output
 for component in zsh-history-substring-search zsh-autosuggestions zsh-syntax-highlighting; do
-  grep -F -- "- ${component}: a modified or unrecognized external implementation was preserved." $output >/dev/null
+  grep -F -- "- ${component}: this external implementation is not verified by Wsh." $output >/dev/null
 done
 ! grep -F -- 'load the external copy conditionally outside Wsh' $output >/dev/null
 

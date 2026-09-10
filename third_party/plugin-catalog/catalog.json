@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "component": "autosuggestions",
+      "version": "v0.5.2",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "733abd4af0f23f217caa2a303fbef66382d19d6f",
+      "handoff": "pending-widget-binding-legacy-zle-ignore",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/8261e6428679ac48f85d315837821680ba2a28d60519b00a8abd67f608b2e7c6",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "8261e6428679ac48f85d315837821680ba2a28d60519b00a8abd67f608b2e7c6"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.6.0",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "b3b34eab49b8e44f2df93d746640329a45722c0b",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/7b865223ed1a60e905f1af986bf29816be2dddbd9bcbf56b07a88f1b593798e6",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "7b865223ed1a60e905f1af986bf29816be2dddbd9bcbf56b07a88f1b593798e6"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.6.1",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "112dd3e3c7d1e038c46a2af92d38f4b9aa2ffb17",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/32ae59df91c02afb04ee8858185bf66dd0279d321a53c1071b51b9b981b2c586",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "32ae59df91c02afb04ee8858185bf66dd0279d321a53c1071b51b9b981b2c586"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.6.2",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "c80605595c209e4ee60c3d121ab159ebc6d66547",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/f6701d3b43db69cfdf5ece5608235869c37b793d291ae69d7263ee3707470d7f",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "f6701d3b43db69cfdf5ece5608235869c37b793d291ae69d7263ee3707470d7f"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.6.3",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "146020d9b28c70a5edd93d19bbef9c5cb05d4b62",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/cd431823c960243e1c12fe0b1bf4c9dc20e12bb27052feb2a1883e1cd67190c6",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "cd431823c960243e1c12fe0b1bf4c9dc20e12bb27052feb2a1883e1cd67190c6"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.6.4",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "ae315ded4dba10685dbbafbfa2ff3c1aefeb490d",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/7f5d56a502671c18cdf8056239c67963afd58bd21c19717ec5921cdc314dc75e",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "7f5d56a502671c18cdf8056239c67963afd58bd21c19717ec5921cdc314dc75e"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.7.0",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "a411ef3e0992d4839f0732ebeb9823024afaaaa8",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/zsh-autosuggestions/known-0.7.0.zsh",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "70c34826cb110e1c54dfba85802ad3ac0144e3a2e203c41a617fd7651d43c875"
+        }
+      ]
+    },
+    {
+      "component": "autosuggestions",
+      "version": "v0.7.1",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "revision": "85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5",
+      "handoff": "pending-widget-binding",
+      "files": [
+        {
+          "source": "third_party/zsh-autosuggestions/zsh-autosuggestions.zsh",
+          "upstream_path": "zsh-autosuggestions.zsh",
+          "sha256": "eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "v1.0.0",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "revision": "1e7680405239a835aa403a7457cad23750f98e72",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/86939add2abfa59b18d4adc9735af3cd90323f1822bc3772d14b4a8a9fbfdd81",
+          "upstream_path": "zsh-history-substring-search.zsh",
+          "sha256": "86939add2abfa59b18d4adc9735af3cd90323f1822bc3772d14b4a8a9fbfdd81"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "v1.0.1",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "revision": "aae3388491c2312c4efb2e86bcb999927bb2900e",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/1f6884e13e5c64d58dd47258d234ba73b2ca6f8a63faf0e89858a539b8f2ae1d",
+          "upstream_path": "zsh-history-substring-search.zsh",
+          "sha256": "1f6884e13e5c64d58dd47258d234ba73b2ca6f8a63faf0e89858a539b8f2ae1d"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "v1.0.2",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "revision": "0f80b8eb3368b46e5e573c1d91ae69eb095db3fb",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/9f2e15817cca2d9813a8ca49ec6090596d7d6a13ef1f19e1a896700ad1e21ccb",
+          "upstream_path": "zsh-history-substring-search.zsh",
+          "sha256": "9f2e15817cca2d9813a8ca49ec6090596d7d6a13ef1f19e1a896700ad1e21ccb"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "v1.1.0",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "revision": "400e58a87f72ecec14f783fbd29bc6be4ff1641c",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/840d6a4d403c7ae1e1fafb1f5b5d2a38066defcc62d7d9951b473a3421dd3b04",
+          "upstream_path": "zsh-history-substring-search.zsh",
+          "sha256": "840d6a4d403c7ae1e1fafb1f5b5d2a38066defcc62d7d9951b473a3421dd3b04"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "pinned",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "revision": "14c8d2e0ffaee98f2df9850b19944f32546fdea5",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/zsh-history-substring-search/zsh-history-substring-search.zsh",
+          "upstream_path": "zsh-history-substring-search.zsh",
+          "sha256": "0b864862a3b48992d7316cc7e585a1315fa389d730c17bf16e2f2bd5918089f3"
+        }
+      ]
+    },
+    {
+      "component": "history",
+      "version": "omz-9112b53",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "9112b53fa8b5ab556c7c893aa8be8a247ac512a0",
+      "handoff": "replace-history-hooks",
+      "files": [
+        {
+          "source": "third_party/zsh-history-substring-search/oh-my-zsh-history-substring-search.zsh",
+          "upstream_path": "plugins/history-substring-search/history-substring-search.zsh",
+          "sha256": "b2f8ffceca6006eadfdca72a487adb572fe3dccbd5ac3e9f95c50127968454b9"
+        }
+      ]
+    },
+    {
+      "component": "syntax",
+      "version": "pinned",
+      "repository": "https://github.com/zsh-users/zsh-syntax-highlighting",
+      "revision": "2fc57d63067c18b1100ecdbf684fa5baf49459d1",
+      "handoff": "main-parser-with-preserved-lifecycle",
+      "files": [
+        {
+          "source": "third_party/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh",
+          "upstream_path": "zsh-syntax-highlighting.zsh",
+          "sha256": "156ebe9530eb991dcef54d476967e2ff4338d35dabaaff9e5462673a287cc63b"
+        },
+        {
+          "source": "third_party/zsh-syntax-highlighting/highlighters/main/main-highlighter.zsh",
+          "upstream_path": "highlighters/main/main-highlighter.zsh",
+          "sha256": "d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd"
+        }
+      ]
+    },
+    {
+      "component": "syntax",
+      "version": "b2c910a",
+      "repository": "https://github.com/zsh-users/zsh-syntax-highlighting",
+      "revision": "b2c910a85ed84cb7e5108e7cb3406a2e825a858f",
+      "handoff": "main-parser-with-preserved-lifecycle",
+      "files": [
+        {
+          "source": "third_party/zsh-syntax-highlighting/recognized/b2c910a/zsh-syntax-highlighting.zsh",
+          "upstream_path": "zsh-syntax-highlighting.zsh",
+          "sha256": "b6df8eb756bfef2cafdae00e2920d5ddf969220e8f1e9d61601e566c4cf8a61f"
+        },
+        {
+          "source": "third_party/zsh-syntax-highlighting/recognized/b2c910a/main-highlighter.zsh",
+          "upstream_path": "highlighters/main/main-highlighter.zsh",
+          "sha256": "c0f8ddf4a2d307fe31559a14329516ccac8c8e1c563783b759685455e939d260"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-9112b53",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "9112b53fa8b5ab556c7c893aa8be8a247ac512a0",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/zsh-z/z.plugin.zsh",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7"
+        }
+      ]
+    },
+    {
+      "component": "git-prompt",
+      "version": "omz-a7426f0",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "a7426f0b38817bf7cd7000a5d378b7cfb059884f",
+      "handoff": "remove-prompt-collector-hooks",
+      "files": [
+        {
+          "source": "third_party/oh-my-zsh-git-prompt/git-prompt.plugin.zsh",
+          "upstream_path": "plugins/git-prompt/git-prompt.plugin.zsh",
+          "sha256": "4f9129fd2000dfaca06734c7471934fb179c91a83b0cdb13bd63142d99be432d"
+        },
+        {
+          "source": "third_party/oh-my-zsh-git-prompt/gitstatus.py",
+          "upstream_path": "plugins/git-prompt/gitstatus.py",
+          "sha256": "2485a9e27dd30afa01d4b12e1bdf344933ab4f9927cb42c7c0505c39c05a611d"
+        }
+      ]
+    }
+  ]
+}

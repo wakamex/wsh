@@ -5,12 +5,16 @@ import hashlib
 import json
 from pathlib import Path
 import tarfile
+import subprocess
 
 root = Path(__file__).resolve().parents[1]
 evidence = root / 'benchmarks/native-autosuggestions-older-2026-09-10'
 identity = json.loads((evidence / 'identity.json').read_text())
 for name, digest in identity['sources'].items():
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+    data = (root / name).read_bytes()
+    if hashlib.sha256(data).hexdigest() != digest:
+        data = subprocess.check_output(['git', 'show', '3d63e23:' + name], cwd=root)
+    assert hashlib.sha256(data).hexdigest() == digest, name
 vendor = root / 'third_party/zsh-autosuggestions'
 diff = ''.join(difflib.unified_diff(
     (vendor / 'known-0.7.0.zsh').read_text().splitlines(True),

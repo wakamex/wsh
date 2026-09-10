@@ -198,7 +198,7 @@ wsh_doctor_finish(void)
             if (findings[i] == 1)
                 fprintf(output, "- %s: an exact external copy is redundant. Wsh supplies the tested copy. If you also use regular Zsh, load the external copy conditionally outside Wsh; otherwise remove its startup declaration.\n", names[i]);
             else if (findings[i] == 2)
-                fprintf(output, "- %s: a modified or unrecognized external implementation was preserved. No removal is suggested.\n", names[i]);
+                fprintf(output, "- %s: this external implementation is not verified by Wsh. It may be an unlisted upstream version or customized. No removal is suggested.\n", names[i]);
         }
         if (!strcmp(prompt, "wsh") && theme && *theme && shfunctab->getnode(shfunctab, "_omz_source"))
             fputs("Prompt compatibility: Wsh owns the prompt and Oh My Zsh has a theme configured.\n"

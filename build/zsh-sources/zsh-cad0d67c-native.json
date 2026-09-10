@@ -56,7 +56,7 @@
       },
       {
         "path": "native/doctor.c",
-        "sha256": "926e8200b22523923d28f1e3646262bc3365d2a7a61f3eda7733b9eab5af8056"
+        "sha256": "536c216b97f1eefec9def946e2657204644c805c49aebe31e86877b8a102d52b"
       },
       {
         "path": "native/foreground.c",

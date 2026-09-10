@@ -14,3 +14,6 @@ build/zsh-patches/cad0d67c-highlight-none.patch whitespace=-blank-at-eol,-space-
 # Preserve exact upstream autosuggestion reference bytes and their comparison.
 third_party/zsh-autosuggestions/known-0.7.0.zsh whitespace=-blank-at-eol,-space-before-tab
 benchmarks/native-autosuggestions-older-2026-09-10/upstream.diff whitespace=-blank-at-eol,-space-before-tab
+
+# Exact upstream snapshots used by the recognition catalog.
+third_party/plugin-catalog/snapshots/* whitespace=-blank-at-eol,-space-before-tab
