@@ -17,3 +17,5 @@ Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmar
 - Preserve benchmark inputs, raw results, summaries, exact commands, and relevant hashes needed to reproduce an accepted claim.
 - Before committing, run the relevant tests and benchmarks, run `git diff --check`, and report what was and was not exercised.
 - Before pushing, run `./benchmarks/verify-retained-evidence.zsh` on the final tree. This is the same complete evidence suite CI runs; checking only the changed feature's evidence is insufficient. Add accepted evidence verifiers to this shared entrypoint.
+
+When an investigation confirms a bug in upstream Zsh, record it in [UPSTREAM-ZSH-BUGS.md](UPSTREAM-ZSH-BUGS.md) for potential upstreaming. Include the affected revision, a minimal reproducer against real Zsh/ZLE, expected and observed behavior, local patch and test evidence, and submission status. Distinguish confirmed upstream defects from Wsh integration or benchmark-harness failures. Keep the entry current as validation completes; recording a candidate does not authorize submitting it externally.

@@ -24,6 +24,10 @@
       "sha256": "d1da8d32b8afa27bb0516c81f63345ea1196edf177bdae151fe9f2ad617776a6"
     },
     {
+      "path": "build/zsh-patches/cad0d67c-highlight-none.patch",
+      "sha256": "a92d1ddd2ad98a9ac1ffd51148a18aeeb6b95418397e5562e8c62a8043898c59"
+    },
+    {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
       "sha256": "45c9085d5e213eacdf9d15a65f35bf9be0b17c629ae22d3f1ff6f5bf737301b3"
     },

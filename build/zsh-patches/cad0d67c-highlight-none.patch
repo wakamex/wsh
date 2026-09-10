@@ -1,0 +1,19 @@
+--- a/Src/prompt.c
++++ b/Src/prompt.c
+@@ -2039,7 +2039,15 @@
+ 	zattr atr = 0;
+ 
+ 	found = 0;
+-	if (strpfx("hl=", teststr)) {
++	/* output_highlight() emits "none" for an empty attribute mask.
++	 * Consume it so region_highlight can read following layer/memo data. */
++	if (strpfx("none", teststr) &&
++	    (!teststr[4] || teststr[4] == ',' || teststr[4] == ' ')) {
++	    teststr += 4;
++	    if (*teststr == ',')
++		teststr++;
++	    found = 1;
++	} else if (strpfx("hl=", teststr)) {
+ 	    teststr += 3;
+ 	    teststr = parsehighlight((char *)teststr, ',', &atr, &mask);
+ 	    if (atr != TXT_ERROR)

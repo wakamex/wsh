@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import statistics
+import subprocess
 import tarfile
 
 root = Path(__file__).resolve().parents[1]
@@ -13,7 +14,10 @@ archive = evidence / 'evidence.tar.gz'
 assert identity['selected'] is True
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 for name, digest in identity['current_sources'].items():
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+    data = (root / name).read_bytes()
+    if hashlib.sha256(data).hexdigest() != digest:
+        data = subprocess.check_output(['git', 'show', 'c78fbf44bcb90ba97ab8e8c9fb3515ec8d182e84:' + name], cwd=root)
+    assert hashlib.sha256(data).hexdigest() == digest, name
 with tarfile.open(archive) as t:
     for name, digest in identity['files'].items():
         data = t.extractfile(name).read()

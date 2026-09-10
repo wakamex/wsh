@@ -84,12 +84,13 @@ Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keep
 
 The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
 
-It also includes two Wsh-maintained Zsh source patches:
+It also includes three Wsh-maintained Zsh source patches:
 
 - Terminal reporting fixes produce valid OSC 133 prompt identifiers and restore the shell's OSC 7 working directory after foreground applications change the terminal's reported directory, including when the optional terminal query is disabled. See the [terminal integration tests and results](benchmarks/native-terminal-integration-2026-09-04/report.md).
 - The `zcompile` fix zeroes uninitialized alignment padding in compiled functions, making bundle builds reproducible and preventing those bytes from containing stale heap data. See the [reproducibility tests and results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
+- Neutral syntax-highlight regions retain their ownership markers, so plugins can remove them on subsequent redraws instead of accumulating stale regions. See the [Zsh upstream candidate and reproducer](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata).
 
-Both patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
+These patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
 
 The current source includes native loading of existing Zsh configuration, the three interactive defaults above, native diagnostics for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified native package assembly and system-managed updates, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 

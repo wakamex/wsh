@@ -7,4 +7,5 @@ python3 benchmarks/verify-native-retirement.py
 python3 benchmarks/verify-complete-autosuggestions.py
 python3 benchmarks/verify-highlighting-parser.py
 python3 benchmarks/verify-installed-autosuggestions.py
+python3 benchmarks/verify-highlight-none.py
 print -r -- 'PASS: complete retained-evidence suite'
