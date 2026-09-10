@@ -4,4 +4,5 @@ builtin cd -q -- "${0:A:h:h}"
 python3 benchmarks/verify-historical.py
 python3 benchmarks/verify-native-distribution.py
 python3 benchmarks/verify-native-retirement.py
+python3 benchmarks/verify-complete-autosuggestions.py
 print -r -- 'PASS: complete retained-evidence suite'
