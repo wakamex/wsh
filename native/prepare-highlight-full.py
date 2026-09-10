@@ -16,7 +16,8 @@ for owner in ('control', 'candidate'):
         source = source[:source.index('# Helper to deal with tokens crossing line boundaries.')]
         source += '\n_zsh_highlight_highlighter_main_paint() { builtin wsh-highlight-main }\n'
         source += 'typeset -ga ZSH_HIGHLIGHT_DIRS_BLACKLIST\n'
-        path.write_text('module_path=(' + shlex.quote(str(module)) + ' $module_path)\nzmodload wshhighlightfull || return 2\n' + source)
+        prefix = '' if str(module) == 'installed' else 'module_path=(' + shlex.quote(str(module)) + ' $module_path)\nzmodload wshhighlightfull || return 2\n'
+        path.write_text(prefix + source)
         driver = target / 'tests/test-highlighting.zsh'
         test = driver.read_text()
         marker = '# Activate the highlighter.'

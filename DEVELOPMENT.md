@@ -6,7 +6,7 @@ The selected native transition follows [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IM
 
 ## Native installation and distribution
 
-The product is a native Zsh executable, thin Zsh integration and one C helper per shell session. System packages own installation and updates. Login does not read a per-user activation record. Prompt rendering and shell lifecycle remain local to each shell. Native autosuggestions use the qualified C controller and a generated Zsh adapter; syntax highlighting retains its pinned Zsh implementation.
+The product is a native Zsh executable, thin Zsh integration and one C helper per shell session. System packages own installation and updates. Login does not read a per-user activation record. Prompt rendering and shell lifecycle remain local to each shell. Native autosuggestions use the qualified C controller and a generated Zsh adapter. Wsh-owned main syntax highlighting uses the native C parser and a generated configuration/predicate adapter; the pinned redraw lifecycle and optional highlighters remain in Zsh. Exact or unknown external highlighters retain their existing ownership.
 
 ## Every intervention starts with a fixed gate
 
@@ -90,3 +90,5 @@ The [combined component floor qualification](benchmarks/native-directory-final-2
 Native assembly uses VERSION and the schema-2 native installation inventory verified by `build/native_manifest.py`. The build, native contracts and RPM assembly no longer invoke Cargo or rustc; the [build migration result](benchmarks/native-consolidation-2026-09-10/build-report.md) records the guarded build and malformed-payload checks. Distribution tooling uses the same verifier and native manifest.
 
 The [installed autosuggestion qualification](benchmarks/native-autosuggestions-installed-2026-09-10/report.md) selects the complete controller. Run `native/test-installed-autosuggestions.py` for editor parity, cancellation, response bounds and paired editing measurements. Canonical builds include its correctness and lifecycle regressions; real OMZ ownership and rebinding are covered by `native/test-autosuggestions-omz.py`.
+
+The [installed highlighting qualification](benchmarks/native-highlighting-installed-2026-09-10/report.md) selects complete native main-parser ownership. Run `python3 native/test-installed-highlighting.py INSTALLATION OUTPUT` for actual styles, composed editor regions and bounded redraw lifetime; canonical builds include it. `native/prepare-highlight-full.py UPSTREAM_CHECKOUT installed FIXTURE` prepares all original corpus cases for `native/test-highlight-parser.py`. The symbolic corpus adapter preserves the upstream observer without adding per-token shell calls to the installed path.

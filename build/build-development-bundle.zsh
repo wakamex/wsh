@@ -98,6 +98,9 @@ install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "
 chmod 644 "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh.zwc"
 install -D -m 644 "${repository_root}/integration/syntax-highlighting.zsh" "${stage}/share/wsh/defaults/syntax-highlighting.zsh"
 cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/share/wsh/defaults/zsh-syntax-highlighting"
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  python3 "${repository_root}/native/prepare-highlighting.py" "${stage}/share/wsh/defaults/zsh-syntax-highlighting/highlighters/main"
+fi
 (cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/zsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
 find "${stage}/share/wsh/defaults/zsh-syntax-highlighting" -type f -exec chmod 644 {} +
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then

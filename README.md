@@ -88,6 +88,7 @@ It also includes three Wsh-maintained Zsh source patches:
 
 - Terminal reporting fixes produce valid OSC 133 prompt identifiers and restore the shell's OSC 7 working directory after foreground applications change the terminal's reported directory, including when the optional terminal query is disabled. See the [terminal integration tests and results](benchmarks/native-terminal-integration-2026-09-04/report.md).
 - The `zcompile` fix zeroes uninitialized alignment padding in compiled functions, making bundle builds reproducible and preventing those bytes from containing stale heap data. See the [reproducibility tests and results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
+- Wsh-owned syntax highlighting parses each redraw in C, keeping typing responsive on long commands while preserving upstream styles and existing external plugins. See the [compatibility and performance comparison](benchmarks/native-highlighting-full-2026-09-10/report.md).
 - Neutral syntax-highlight regions retain their ownership markers, so plugins can remove them on subsequent redraws instead of accumulating stale regions. See the [Zsh upstream candidate and reproducer](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata).
 
 These patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.

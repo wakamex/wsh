@@ -154,7 +154,11 @@ run_interactive() {
   local remainder=${hook_line#*:}
   local -a recorded_preexec=(${(s:,:)${remainder%%:*}})
   local -a recorded_zshexit=(${(s:,:)${hook_line##*:}})
-  [[ ${(j:,:)recorded_precmd} == _wsh_user_precmd,_zshz_precmd,_wsh_autosuggest_complete_finish,_wsh_runtime_precmd,_zsh_highlight_main__precmd_hook ]] || return 1
+  local expected_precmd=_wsh_user_precmd,_zshz_precmd,_wsh_autosuggest_complete_finish,_wsh_runtime_precmd
+  if [[ ! -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/highlighters/main/known-main-highlighter.zsh ]]; then
+    expected_precmd+=,_zsh_highlight_main__precmd_hook
+  fi
+  [[ ${(j:,:)recorded_precmd} == $expected_precmd ]] || return 1
   [[ ${(j:,:)recorded_preexec} == _wsh_user_preexec,_wsh_runtime_preexec,_zsh_highlight_preexec_hook ]] || return 1
   [[ ${(j:,:)recorded_zshexit} == _wsh_user_zshexit,_wsh_autosuggest_complete_finish,_wsh_runtime_stop ]] || return 1
 }

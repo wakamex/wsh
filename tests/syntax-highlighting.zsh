@@ -33,6 +33,10 @@ trap cleanup EXIT INT TERM
 
 command mkdir -p -- $state_root $fixture
 command cp -R -- $bundle/share/wsh/defaults/zsh-syntax-highlighting $exact_source
+if [[ -f $exact_source/highlighters/main/known-main-highlighter.zsh ]]; then
+  command cp -- $exact_source/highlighters/main/known-main-highlighter.zsh $exact_source/highlighters/main/main-highlighter.zsh
+  command rm -f -- $exact_source/highlighters/main/main-highlighter.zsh.zwc
+fi
 command cp -R -- $exact_source $modified_source
 command cp -R -- $exact_source $custom_source
 print -r -- '# wsh modified fixture' >> $modified_source/highlighters/main/main-highlighter.zsh
@@ -112,9 +116,11 @@ _wsh_test_report_state() {
   local -a syntax_finish_hooks=(${(M)finish_hooks:#*:_zsh_highlight__zle-line-finish})
   local -a custom_redraw_hooks=(${(M)redraw_hooks:#*:_wsh_test_custom_redraw})
   local -a syntax_preexec_hooks=(${(M)preexec_functions:#_zsh_highlight_preexec_hook})
+  local native_main=0
+  [[ ${functions[_zsh_highlight_highlighter_main_paint]:-} == *wsh-highlight-main* ]] && native_main=1
   local source=none
   (( ${+ZSH_HIGHLIGHT_VERSION} )) && source=$functions_source[_zsh_highlight]
-  print -r -- "${WSH_SYNTAX_HIGHLIGHTING_OWNER-unset}|${ZSH_HIGHLIGHT_VERSION-unset}|${source}|${#syntax_redraw_hooks}|${#syntax_finish_hooks}|${#syntax_preexec_hooks}|${#custom_redraw_hooks}|${(j:,:)ZSH_HIGHLIGHT_HIGHLIGHTERS}|${ZSH_HIGHLIGHT_STYLES[arg0]-unset}|${ZSH_HIGHLIGHT_STYLES[unknown-token]-unset}|${ZSH_HIGHLIGHT_STYLES[bracket-level-1]-unset}|${WSH_TEST_CUSTOM_REDRAWS}|${POSTDISPLAY}|${(j:,:)region_highlight}" >> $WSH_TEST_STATE_LOG
+  print -r -- "${WSH_SYNTAX_HIGHLIGHTING_OWNER-unset}|${ZSH_HIGHLIGHT_VERSION-unset}|${source}|${#syntax_redraw_hooks}|${#syntax_finish_hooks}|${#syntax_preexec_hooks}|${#custom_redraw_hooks}|${(j:,:)ZSH_HIGHLIGHT_HIGHLIGHTERS}|${ZSH_HIGHLIGHT_STYLES[arg0]-unset}|${ZSH_HIGHLIGHT_STYLES[unknown-token]-unset}|${ZSH_HIGHLIGHT_STYLES[bracket-level-1]-unset}|${WSH_TEST_CUSTOM_REDRAWS}|${POSTDISPLAY}|${(j:,:)region_highlight}|native_main=$native_main|legacy_parser=${+functions[_zsh_highlight_main_highlighter_highlight_list]}" >> $WSH_TEST_STATE_LOG
 }
 zle -N _wsh_test_report_buffer
 zle -N _wsh_test_report_state
@@ -210,6 +216,9 @@ for variant in $variants; do
   state=$(report_state)
   case $variant in
     clean|configured|composition)
+      if [[ -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/highlighters/main/known-main-highlighter.zsh ]]; then
+        [[ $state == *'|native_main=1|legacy_parser=0' ]] || { print -u2 -r -- "native main ownership missing for ${variant}: $state"; exit 1; }
+      fi
       [[ $state == wsh\|0.8.1-dev\|${bundle}/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "unexpected bundled state for ${variant}: $state"; exit 1; }
       ;;
     external|external-ready)

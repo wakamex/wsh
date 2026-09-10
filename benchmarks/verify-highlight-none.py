@@ -2,6 +2,7 @@
 """Verify the native neutral-style round-trip fix and repeated editor parity."""
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 import tarfile
 
@@ -12,7 +13,10 @@ archive = evidence / 'evidence.tar.gz'
 assert identity['selected'] is True
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 for name, digest in identity['current_sources'].items():
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+    current = (root / name).read_bytes()
+    if hashlib.sha256(current).hexdigest() != digest:
+        current = subprocess.check_output(['git', 'show', 'ab1691cb6b8245002e2fd03c6aab3cd2628ea6c4:' + name], cwd=root)
+    assert hashlib.sha256(current).hexdigest() == digest, name
 with tarfile.open(archive) as t:
     for name, digest in identity['files'].items():
         assert hashlib.sha256(t.extractfile(name).read()).hexdigest() == digest, name

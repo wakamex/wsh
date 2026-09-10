@@ -61,7 +61,12 @@ _wsh_detect_syntax_highlighting() {
       candidate=$candidate_root/highlighters/$highlighter/${highlighter}-highlighter.zsh
       (( ${+functions[$function_name]} )) || known_external=0
       [[ ${functions_source[$function_name]:-} == $candidate ]] || known_external=0
-      compare_files+=($candidate $bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh)
+      local reference=$bundled_root/highlighters/$highlighter/${highlighter}-highlighter.zsh
+      if [[ $highlighter == main && -f $bundled_root/highlighters/main/known-main-highlighter.zsh ]] &&
+         ! _wsh_syntax_files_equal $candidate $reference; then
+        reference=$bundled_root/highlighters/main/known-main-highlighter.zsh
+      fi
+      compare_files+=($candidate $reference)
     done
     (( known_external )) && _wsh_syntax_files_equal $compare_files || known_external=0
 

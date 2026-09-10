@@ -48,7 +48,7 @@
     "sources": [
       {
         "path": "native/startup.c",
-        "sha256": "97faf45f1b848823d8c68844b221b5cbac7bc83e6f8247db8db0e8dbbe294668"
+        "sha256": "cfa70042b6eee0528d1cb3f114cc9ffffa959714320b584975f0de244ea3909f"
       },
       {
         "path": "native/tools.c",
@@ -85,6 +85,10 @@
       {
         "path": "native/autosuggestions.c",
         "sha256": "d276825b120b1296a08a30182ba41996e12b20de6f96d097e0c7a292e2ede930"
+      },
+      {
+        "path": "native/highlight.c",
+        "sha256": "695db82ac9ab968b5d8a79b58724c75788a21e628d32a5156839948f158cef02"
       }
     ]
   }

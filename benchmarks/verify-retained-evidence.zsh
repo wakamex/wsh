@@ -10,4 +10,5 @@ python3 benchmarks/verify-installed-autosuggestions.py
 python3 benchmarks/verify-highlight-none.py
 python3 benchmarks/verify-highlight-traversal.py
 python3 benchmarks/verify-highlight-full.py
+python3 benchmarks/verify-installed-highlighting.py
 print -r -- 'PASS: complete retained-evidence suite'
