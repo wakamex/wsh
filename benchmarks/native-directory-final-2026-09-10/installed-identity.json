@@ -1,0 +1,39 @@
+{
+  "baseline": "b5425ff1c3886ae73ec06f6fc70f16acb6464394",
+  "selected": true,
+  "bundle": "e0da4c91baf8a35e35e7dc77617da45703cdd16ff0a3e62747913c7282f59e13",
+  "host": "Linux 3950x 7.1.9-200.fc44.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Aug 19 17:41:40 UTC 2026 x86_64 GNU/Linux",
+  "cc": "cc (GCC) 16.2.1 20260819 (Red Hat 16.2.1-2)\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "source": {
+    "native/test-directory-bind-mount.py": "dc2df2d9dc336bad15d2cad98fda8f74318fcebf0341502a8214e5998033d5b2",
+    "native/test-directory-lifecycle.py": "fbc58725754ed89e8b13470a47eec039f50dfb476902bc6dbd26cbc7efb744da",
+    "native/test-directory-confirmation.py": "f0cd5476be5c068f8f3bef5139358f06dd85a724a794edf7549bf571d0abf79e",
+    "native/measure-directory-owner.py": "663c1adec8ce614532dbb7ddc651a3130d6c02ea56c19cbb8dcb805deee91e05",
+    "native/test-directory-zle.py": "d29cce1999b5fa6b6c9573ab25487c78affb42060d1c7562adaf57a789cab44b",
+    "native/test-directory-query.py": "1b8267552f22bbd4158df374839cf8b6b0f0d2b2b5e3db018f100cb1f3803f17",
+    "native/test-directory-owner.py": "ea0f9511585e1631c392d36b719c9038dcb1f19fcf7493f1e8ce72c995e2c2da",
+    "native/prepare-directory-query.py": "f4e661c9f57e17bb52e0b964b5b537b435abec21260e78328bfe5ea77aeb5980",
+    "native/measure-directory-query.py": "260e3f98e5c43196c64421ec45c902289e36cfe9f594f4b8acee97f001772ce1",
+    "native/prepare-directory-owner.py": "0ed840631ff3d82b5bcc7c9484971344f03bdb5094dd461608c2876e091053f1",
+    "native/test-directory-persistence.py": "25c5314d191abc2c4cb5dc730f0859bbbab46576eda86bac330d13543157bf7d",
+    "native/directory.c": "cff493159698160d1a03d02bd6aaf8cd187179f51ecf3a0ff2fbb882848ca071",
+    "native/directory-prototype.c": "82d5907a13da97049aa0246935618e70e16b6905b8d81fee02176c5dd52bebba",
+    "native/startup.c": "e49c17b3e0d0003b71038c5f9d84aed4a2f5e0573f876c1cc84f76d54e9ab452",
+    "native/measure-startup.py": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2",
+    "native/check-installation.py": "a17cabf2957c6b15f6a56484787e20c5c40deba81d0251b50211f0307637a8c3",
+    "native/test-startup.py": "aea1d5e10be3ac00adaac0e57b7ece97af7b3eab7397e63186ac179f8275064e",
+    "native/test-recovery.py": "fc547106668fff5a145c8b5db6ba106589f2cc4ca1ffdb68de8f33e4cb2b8e54",
+    "build/build-development-bundle.zsh": "6e83ef635d3c3caa2b4834b5ad86cf926cf89bda29194a7d11d6d8a00181d210",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "d536c6bdfe91d8700ece705e232bba14a20ccdbf1cbe4e53d613923b7d3ea270",
+    "build/update-native-lock.py": "19ef1e09cdac7a346c2e58abb30032f6844e7323c46d50f5a43aac172cde2f02",
+    "integration/directory-jump.zsh": "8a276b62b18022e4b81beaacbb49149144ed00ea258c4a41eb5a62a0a36e0090",
+    "third_party/zsh-z/z.plugin.zsh": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7",
+    "third_party/zsh-z/_z": "f2dcf5058a5eb5275358b644b259c342e492ab0d17e1f4ff8968ca62bbc6cca0"
+  },
+  "binaries": {
+    "bundles/e0da4c91baf8a35e35e7dc77617da45703cdd16ff0a3e62747913c7282f59e13/bin/wsh": "f066aea710f191056fe93d81551b068da10acd22edbdb77d920384740d497b03",
+    "bundles/e0da4c91baf8a35e35e7dc77617da45703cdd16ff0a3e62747913c7282f59e13/manifest.json": "e0da4c91baf8a35e35e7dc77617da45703cdd16ff0a3e62747913c7282f59e13",
+    "/var/tmp/wsh-native-adoption/sanitized-installation/bin/zsh": "0865a5aaad3bb1a62038491e4bd617f505fee3435c4a86fb855403c194457459"
+  },
+  "archive_sha256": "e33fe772221d3ea62642c9b43a7152357207a040de4529b18006041ac5c76fa9"
+}

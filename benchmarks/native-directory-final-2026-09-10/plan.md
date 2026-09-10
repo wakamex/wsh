@@ -8,3 +8,5 @@ The remaining question is whether the faster native directory owner preserves co
 4. Build and test the combined selected components on glibc 2.28, following the existing native floor SDK and installation contracts. Retain source and build identities, raw results, and the exact exercised scope. These remain unsigned local development artifacts.
 
 Each hypothesis is limited to two failed interventions or two hours before auditing its premise. A failed correctness gate prevents adoption; it does not justify broadening compatibility machinery. Commit completed slices separately. Do not push, publish, or alter the user's shell configuration.
+
+The first installed candidate passed correctness but failed the minimal-prompt startup gate: paired p95 +3.843738 ms against +3 ms, with median +0.959102 ms. Its generated native adapter was parsed from source while the pinned control plugin already had a compiled .zwc. The next counterfactual applies that existing build treatment to the generated adapter, preserving source and execution semantics. Retain the failed run and repeat the same 50-pair startup gate; no threshold change.

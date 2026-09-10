@@ -24,7 +24,7 @@ entries += [f"{home}/missing/project|99|1700000000\n", "malformed\n"]
 original_data = (home / "db").read_bytes()
 script = output / "compare.zsh"
 script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 2
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 2
 source $2
 shift 2
 ZSHZ_CASE=$1 ZSHZ_TRAILING_SLASH=$2 ZSHZ_UNCOMMON=$3
@@ -57,7 +57,7 @@ assert (home / "db").read_bytes() == original_data
 assert all(c["equal"] for c in cases), cases[-1]
 for owner in ("control", "candidate"):
     script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 2
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 2
 ZSHZ_CMD=jump
 source $2
 zshz --add "$HOME/project space" || exit 3

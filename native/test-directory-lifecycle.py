@@ -15,7 +15,7 @@ other = home/'other'
 other.mkdir(exist_ok=True)
 script = out/'run.zsh'
 script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 90
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 90
 source "$2"
 cd "$HOME/project"
 zshz -x "$PWD" || exit 1
@@ -43,7 +43,7 @@ assert all(row['equal'] and all(v['status'] == 0 and not v['stderr'] for v in ro
 
 extra = out/'custom-unload.zsh'
 extra.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 90
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 90
 ZSHZ_CMD=jump
 source "$2"
 _custom_cd() { print -r -- "CUSTOM:$1"; builtin cd "$1" }

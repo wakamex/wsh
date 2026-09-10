@@ -14,7 +14,7 @@ for name in ('project', 'other', 'tab\tpath', 'pipe|path'):
     (home / name).mkdir(exist_ok=True)
 script = out / 'compare.zsh'
 script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 90
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 90
 source $2
 shift 2
 local_setup=$1

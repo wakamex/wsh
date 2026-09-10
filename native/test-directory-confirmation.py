@@ -20,7 +20,7 @@ data = home/'db'
 initial = b'/one|2|1700000000\n/two|3|1700000000\n'
 script = out/'run.zsh'
 script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 90
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 90
 source "$2"
 zshz -xR /
 exit $?

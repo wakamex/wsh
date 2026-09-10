@@ -23,7 +23,7 @@ spec.loader.exec_module(base)
 base.OUT = out
 config = '''PROMPT='DIRECTORY> '
 module_path=($WSH_TEST_MODULE $module_path)
-zmodload wshdirectory
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory
 autoload -Uz compinit
 compinit -i -D
 ZSHZ_DATA=$HOME/db

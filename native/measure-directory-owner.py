@@ -16,7 +16,7 @@ home = out / 'home'
 home.mkdir(exist_ok=True)
 script = out / 'run.zsh'
 script.write_text('''module_path=($1 $module_path)
-zmodload wshdirectory || exit 90
+(( $+builtins[wsh-directory] )) || zmodload wshdirectory || exit 90
 source "$2"
 shift 2
 zshz "$@"

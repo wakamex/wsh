@@ -8,7 +8,11 @@ _wsh_load_directory_jump() {
     WSH_DIRECTORY_JUMP_OWNER=external
     return 0
   fi
-  source "$WSH_BUNDLE_ROOT/share/wsh/defaults/zsh-z/z.plugin.zsh"
+  if [[ -r $WSH_BUNDLE_ROOT/share/wsh/defaults/zsh-z/native.zsh ]]; then
+    source "$WSH_BUNDLE_ROOT/share/wsh/defaults/zsh-z/native.zsh"
+  else
+    source "$WSH_BUNDLE_ROOT/share/wsh/defaults/zsh-z/z.plugin.zsh"
+  fi
   autoload -Uz _zshz
   if (( $+functions[compdef] )); then
     compdef _zshz zshz "$jump_command"

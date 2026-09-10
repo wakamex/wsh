@@ -124,6 +124,12 @@ install -D -m 644 "${repository_root}/schemas/bundle.schema.json" "${stage}/shar
 install -D -m 644 "${repository_root}/schemas/theme.schema.json" "${stage}/share/wsh/schemas/theme.schema.json"
 install -D -m 644 "${repository_root}/integration/directory-jump.zsh" "${stage}/share/wsh/defaults/directory-jump.zsh"
 cp -R -- "${repository_root}/third_party/zsh-z" "${stage}/share/wsh/defaults/zsh-z"
+if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
+  python3 "${repository_root}/native/prepare-directory-owner.py" "${stage}/.directory-fixture"
+  install -D -m 644 "${stage}/.directory-fixture/candidate.zsh" "${stage}/share/wsh/defaults/zsh-z/native.zsh"
+  rm -rf "${stage}/.directory-fixture"
+  (cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile native.zsh.zwc native.zsh')
+fi
 mv "${stage}/share/wsh/defaults/zsh-z/_z" "${stage}/share/wsh/defaults/zsh-z/_zshz"
 (cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile z.plugin.zsh.zwc z.plugin.zsh')
 find "${stage}/share/wsh/defaults/zsh-z" -type f -exec chmod 644 {} +
