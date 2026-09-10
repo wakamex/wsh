@@ -94,3 +94,7 @@ The complete C helper now uses both parsers under the same pinned configurations
 ## Native compinit registration
 
 The native development build adds `cad0d67c-native-completion.patch`, which replaces only compinit's cold registration loop with the native scanner when its builtin is available. The original loop remains the fallback for regular Zsh. Security auditing, cache validation, completion definitions and widgets remain upstream-owned. The [installed qualification](benchmarks/native-adoption-2026-09-10/completion/report.md) retains full upstream build tests, normal/sanitized registration and editor checks, a DEBUG-trap lifetime regression, and both failed and passing timing experiments. The legacy release source lock is unchanged.
+
+## Native history ownership
+
+Native development builds now select the [qualified C history owner](benchmarks/native-adoption-2026-09-10/history/report.md). Zsh retains public settings, conservative widget registration, editor operations and highlighter composition. C owns search state, matching, navigation and search-region updates. The exact pinned plugin remains available for recognized-copy comparison and legacy builds. Normal and sanitizer editor comparisons, installed ownership/composition tests and paired editing/startup gates pass.

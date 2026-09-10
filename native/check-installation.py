@@ -23,6 +23,9 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
     source=re.sub(r'\$manager run --state-root \$[^\s]+', '$bundle/bin/wsh -d',source)
     source=re.sub(r'\$manager doctor --state-root \$[^\s)]+', '$bundle/bin/wsh --wsh-doctor',source)
     source=source.replace('${0:A:h}/fixtures/foreground-probe.c',str(ROOT/'tests/fixtures/foreground-probe.c'))
+    if name=='history-substring-search' and (BUNDLE/'share/wsh/defaults/native-history.zsh').is_file():
+        source=source.replace('${bundle}/share/wsh/defaults/zsh-history-substring-search.zsh\\|',
+                              '${bundle}/share/wsh/defaults/native-history.zsh\\|')
     if name=='zsh-config-coexistence':
         source=source.replace('WSH_CONFIG_STATE:${redirected_zdotdir}:${redirected_zdotdir}:1:off:on:2:2:',
                               'WSH_CONFIG_STATE:${redirected_zdotdir}:unset:1:off:on:2:2:')

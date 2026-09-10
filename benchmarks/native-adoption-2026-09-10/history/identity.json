@@ -1,0 +1,25 @@
+{
+  "source_revision": "799e1d6ad62b70c5847346a12aee22168638e165",
+  "bundle": "574e93e006915e120ead037ce844d1c7df4da37000defb47517d6a0a7d1c83ad",
+  "unsigned": true,
+  "selected": true,
+  "trace": "off",
+  "target": "x86_64-linux-gnu",
+  "binary_sha256": "92c42e5af7318ef8b1fc669c217d96dadc58c1d0330a325e044fcbfd7853921b",
+  "sanitized_binary_sha256": "1873bcbf142cabfc6d453eb81044178af849a166aeed431f9f268c94043b88f9",
+  "input_sha256": {
+    "native/history.c": "4540b5f330f22efb366788e8ed470f2147fe06cac1b2e6ab8e557a7e77c93260",
+    "native/history-owner-prototype.c": "62427b8beb27d491ec554a3962b4f21fea3b8c272ff224fe78c1258a151a25d1",
+    "native/startup.c": "ff3df283ba76c34f117f36572937d622a9fe8ac580971bf8a5df71c819b3d2c3",
+    "native/test-history-owner.py": "4a95489f09d2c17ce59c19bc53d71df967c915da13db5356dd945fea0abb6e2f",
+    "native/test-history-navigation-zle.py": "1a1a462fc8bc321d9bb4c7652827cb9561081d4bdbb54aab0cefe243b6312593",
+    "native/check-installation.py": "a17cabf2957c6b15f6a56484787e20c5c40deba81d0251b50211f0307637a8c3",
+    "native/measure-startup.py": "9648a32eaeee5c407d2f0a46890b9b109c83dd7897665fa9f449310836944aa2",
+    "integration/native-history.zsh": "633891b418d3c7976461f1770ea853f8f66feeb8369bb402f2b79b11c019cbf8",
+    "integration/history-substring-search.zsh": "28bd567654506031f2588c1b247de576c9e51aafe5307e0164baa156692fe54f",
+    "build/build-development-bundle.zsh": "56450e1771502ca207482c09297d05f68ae6415cb184d1329be4696bacba6609",
+    "build/update-native-lock.py": "0414501106bcbf42dd3af3824fca4a7f0215a00e671f2ce845552a227dd3a941",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "2fa39dc7f42d62429efb603167953a6d42075594bb676cd7d2e8add189469a68",
+    "benchmarks/deferred-completion-2026-09-06/run.py": "10140d6437d244aec4f35f5c9e0e9dd96ef25d8d0184f7197a1fe0a955c78880"
+  }
+}

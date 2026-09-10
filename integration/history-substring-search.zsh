@@ -87,7 +87,11 @@ _wsh_bind_history_substring_search() {
 _wsh_detect_history_substring_search
 unfunction _wsh_detect_history_substring_search
 if (( _WSH_HISTORY_SUBSTRING_SEARCH_LOAD )); then
-  source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-history-substring-search.zsh
+  if [[ -r ${WSH_BUNDLE_ROOT}/share/wsh/defaults/native-history.zsh ]]; then
+    source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/native-history.zsh
+  else
+    source ${WSH_BUNDLE_ROOT}/share/wsh/defaults/zsh-history-substring-search.zsh
+  fi
   WSH_HISTORY_SUBSTRING_SEARCH_OWNER=wsh
   _wsh_bind_history_substring_search
 fi
