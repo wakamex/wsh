@@ -56,6 +56,7 @@ def main():
     revision = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     lock = json.loads((ROOT / 'build/zsh-sources/zsh-cad0d67c.json').read_text())
     definitions = {
+        'WSH_BUILD_LABEL': 'unsigned development artifact',
         'WSH_VERSION': '0.3.1-native-tools', 'WSH_SOURCE_REVISION': revision,
         'WSH_INPUTS_SHA256': identity, 'WSH_ZSH_SOURCE_REVISION': lock['source_revision'],
         'WSH_TARGET': 'x86_64-linux-gnu',

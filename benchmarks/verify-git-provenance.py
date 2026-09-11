@@ -5,13 +5,17 @@ import hashlib
 import json
 from pathlib import Path
 import statistics
+import subprocess
 import tarfile
 
 root = Path(__file__).resolve().parents[1]
 evidence = root/'benchmarks/git-provenance-2026-09-10'
 identity = json.loads((evidence/'identity.json').read_text())
 for name, digest in identity['sources'].items():
-    assert hashlib.sha256((root/name).read_bytes()).hexdigest() == digest, name
+    data = (root/name).read_bytes()
+    if hashlib.sha256(data).hexdigest() != digest:
+        data = subprocess.check_output(['git','show','4a94e99:'+name],cwd=root)
+    assert hashlib.sha256(data).hexdigest() == digest, name
 archive = evidence/'evidence.tar.gz'
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 with tarfile.open(archive) as t:

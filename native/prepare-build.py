@@ -23,8 +23,12 @@ if not revision:
     revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     if subprocess.check_output(['git','status','--porcelain','--untracked-files=all'],cwd=ROOT):revision+='+dirty'
 assert re.fullmatch(r'[a-f0-9]{40}(\+dirty)?',revision), 'invalid Wsh source revision'
+build_status=os.environ.get('WSH_BUNDLE_STATUS','development')
+assert build_status in ('development','release'), 'invalid WSH_BUNDLE_STATUS'
+build_label='release build' if build_status=='release' else 'unsigned development artifact'
 compiler=os.environ.get('CC','gcc')
 definitions={'WSH_VERSION':native['version'],'WSH_SOURCE_REVISION':revision,
+             'WSH_BUILD_LABEL':build_label,
              'WSH_INPUTS_SHA256':hashlib.sha256(lock_path.read_bytes()).hexdigest(),
              'WSH_ZSH_SOURCE_REVISION':lock['source_revision'],
              'WSH_TARGET':subprocess.check_output([compiler,'-dumpmachine'],text=True).strip()}

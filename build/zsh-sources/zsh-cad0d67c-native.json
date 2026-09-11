@@ -52,7 +52,7 @@
       },
       {
         "path": "native/tools.c",
-        "sha256": "72027f31a44aed08ffa70be93880b0c56a3ce1d56be54f40b92dda6053f3825c"
+        "sha256": "d6a9b88e41ca0c06935c49e774271c22cd9ed4dbc2246180239fc36f05abff84"
       },
       {
         "path": "native/doctor.c",

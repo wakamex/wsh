@@ -37,7 +37,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-migration-') as temporary:
         assert result.returncode == expected, (argv, result)
         return result.stdout
     assert run(system/'bin/wsh', ['-dfc', 'whence -p wsh']).strip() == os.fsencode(old/'wsh')
-    assert b'unsigned development artifact' in run(system/'bin/wsh', ['--wsh-version'])
+    build_status = json.loads((bundle/'manifest.json').read_text())['status']
+    label = b'release build' if build_status == 'release' else b'unsigned development artifact'
+    assert label in run(system/'bin/wsh', ['--wsh-version'])
     assert run(system/'bin/wsh', ['-dlc', 'print -r -- NATIVE:$ZSH_VERSION']).startswith(b'NATIVE:')
     results.append({'case': 'absolute native path works despite earlier legacy launcher and corrupt private state', 'passed': True})
     # The user can retire only the executable after testing the package and account shell.

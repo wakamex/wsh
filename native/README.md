@@ -13,6 +13,8 @@ The native executable preserves Zsh argument handling. Wsh tools use an explicit
 | `wsh --wsh-run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell | `wsh -- <argv>` or `wsh run-foreground ...` |
 | `wsh --wsh-help` | Show the native Wsh interface | No equivalent |
 
+`wsh --wsh-version` reports the compiled build label: `unsigned development artifact` for development builds or `release build` for release-mode builds. The label does not verify installed resources or authenticate release provenance. Runtime environment variables and mutable installation metadata do not change it.
+
 `wsh --version` retains upstream Zsh's version output. Native options cannot be mixed into the middle of Zsh arguments; use the profile command's explicit separator or the foreground command's `--login` option. Arguments after a script name, `-c` command, or `--` are never reinterpreted as Wsh tools.
 
 Installation and updates belong to the system package manager. There is no native activation-state or self-update command. The [tested migration](../NATIVE-MIGRATION.md) preserves access to the old manager for published bundles and exceptional saved reports. Help lists the implemented native tools.

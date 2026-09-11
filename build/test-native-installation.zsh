@@ -14,6 +14,7 @@ $root/build/build-native-installation.zsh > $output/build.log 2>&1
 readonly bundle=$(tail -n 1 $output/build.log)
 readonly checks=$(mktemp -d $output/checks.XXXXXX)
 python3 $root/build/native_manifest.py verify $bundle
+python3 $root/tests/native-build-status.py $bundle
 python3 $root/tests/native-manifest.py $bundle
 python3 $root/native/test-highlight-roundtrip.py $bundle/bin/wsh $checks/highlight-roundtrip
 python3 $root/native/test-installed-highlighting.py $bundle $checks/highlighting

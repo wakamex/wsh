@@ -1,0 +1,24 @@
+{
+  "source_revision": "37e8d0a4d4e3b813c2c4534dd7a549a01446f134+dirty",
+  "installation": "f217fb8f7cc61149c9b3d811bfd4d1ec17aaf54715a1113179a93fea81a2c6e0",
+  "binary_sha256": "8900dd5741ff33705637c34f18a922725139bb3e769b4aeb4a576a4de1b68a57",
+  "sources": {
+    "native/tools.c": "d6a9b88e41ca0c06935c49e774271c22cd9ed4dbc2246180239fc36f05abff84",
+    "native/prepare-build.py": "8858697a5fe657a9fec6795bbad8993224ea1a33ab23ea07ef88b27c61f10e21",
+    "native/build-tools.py": "a06ebf5ec0c25a7864f6ad41883daab00e4829eccd298e2d13d9a5017a020573",
+    "native/test-migration.py": "80cfa8ed2c67112ad9f7f1738e165dff9513c54cf3d0e6df3142cf760c2d13b0",
+    "tests/native-build-status.py": "0a3f2c9988725ffd191ca92559ee58561bf26b0780afd6505ae88d7e38893f92",
+    "build/test-native-installation.zsh": "fa80f65c229414efe6bec0ffcef4a1f0d3ba49770cf3b2649586c9f812010324",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "cbd2e2049737fc486fd2e4aa7cde49529a872cbb551bc15830c3fb418d8849a1"
+  },
+  "archive_sha256": "e7629eb1d95cbdc22445f46651ba565adf28f6ea0d32ec60df5afc18b497a804",
+  "files": {
+    "build.log": "5ed63fac109dae9295b5373bfd802c05dafbe4702b0ec40bab4e1734e55f31ef",
+    "build-status-installed.log": "2f40cbe2abcef156704075a17c38d3634a502a6ffd57380ac377798f59e873a5",
+    "build-status-floor.log": "0639361cd8594153aec2fea220dd64b9ff0151f92ef1a0822a6543ddf92a5246",
+    "version.txt": "029f7a088fca3c814ade67b2edbb8aca3f53b8567a2f22eb104ab58756f8a1e6",
+    "manifest.json": "f217fb8f7cc61149c9b3d811bfd4d1ec17aaf54715a1113179a93fea81a2c6e0",
+    "source-lock.json": "cbd2e2049737fc486fd2e4aa7cde49529a872cbb551bc15830c3fb418d8849a1"
+  },
+  "build_command": "CPPFLAGS=-I/var/tmp/wsh-native-sdk/usr/include LDFLAGS=-L/var/tmp/wsh-native-sdk/usr/lib64 WSH_ZSH_OUTPUT_ROOT=/var/tmp/wsh-release-fixes/zsh WSH_BUNDLE_OUTPUT_ROOT=/var/tmp/wsh-release-fixes/bundles WSH_BUILD_JOBS=4 ./build/build-native-installation.zsh"
+}

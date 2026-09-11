@@ -37,14 +37,14 @@ wsh_cli(int argc, char **arguments)
             fputs("usage: wsh --wsh-version\n", stderr);
             return 2;
         }
-        printf("wsh %s (unsigned development artifact)\n"
+        printf("wsh %s (%s)\n"
                "wsh source: %s\n"
                "native inputs sha256: %s\n"
                "zsh: %s\n"
                "zsh source: %s\n"
                "target: %s\n"
                "identity: compiled build; installed resources not verified\n",
-               WSH_VERSION, WSH_SOURCE_REVISION, WSH_INPUTS_SHA256,
+               WSH_VERSION, WSH_BUILD_LABEL, WSH_SOURCE_REVISION, WSH_INPUTS_SHA256,
                ZSH_VERSION, WSH_ZSH_SOURCE_REVISION, WSH_TARGET);
         return fflush(stdout) == EOF || ferror(stdout) ? 1 : 0;
     }
