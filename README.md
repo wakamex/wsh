@@ -1,17 +1,16 @@
 # wsh
 
-`wsh` is a fast, tested Zsh distribution with the everyday conveniences people install Oh My Zsh for, while remaining compatible with existing `.zshrc` files and Oh My Zsh setups.
+`wsh` is a fast, tested Zsh distribution with autosuggestions, history search, syntax highlighting and directory jumping built in. Keep your existing `.zshrc`, Oh My Zsh setup and familiar Zsh commands.
 
-- Keep your `.zshrc`, Oh My Zsh setup, and familiar Zsh commands.
+This README describes the native RPM distribution under development. Published v0.3.1 uses the earlier per-user launcher; see its [installation instructions](https://github.com/wakamex/wsh/blob/v0.3.1/README.md) or the [native migration guide](NATIVE-MIGRATION.md).
+
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
-- Keep existing plugin configuration: cataloged copies and verified upstream Git checkouts use native implementations, while unrecognized copies keep running externally.
+- Use native implementations of recognized upstream plugins while keeping their supported settings; custom and unverified plugins keep running externally.
 - Jump back to frequently used directories with `z`.
 - Keep your existing prompt or choose Minimal, Wakamex, Robbyrussell, or Agnoster with asynchronous Git updates.
 - Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.
-- Use system packages for installation, upgrades and downgrades.
+- Use a system-owned login shell that starts without per-user bundle state, with installation, upgrades and downgrades managed through DNF.
 - Navigate prompts and command output in compatible terminals.
-
-The current source uses the native system-package architecture. Published v0.3.1 uses the earlier per-user launcher; see [migration](NATIVE-MIGRATION.md) for the command and installation changes.
 
 ## Motivation
 
@@ -37,7 +36,17 @@ The [`zsh-theme-bench` benchmark](https://github.com/wakamex/zsh-theme-bench/blo
 
 The native distribution targets x86-64 Fedora RPM installations, built against glibc 2.28. Native packages have not been published yet. Build instructions are in [DEVELOPMENT.md](DEVELOPMENT.md); local artifacts are unsigned development builds.
 
-Install a selected native package with `sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm`. Use DNF to upgrade or downgrade the complete package. Run `/usr/bin/wsh --wsh-version` and test `/usr/bin/wsh -l` before using `chsh -s /usr/bin/wsh`. The [migration guide](NATIVE-MIGRATION.md) covers login testing, an older launcher earlier in PATH, package removal and recovery.
+Once you have a selected native RPM, replace the placeholder filename below with its actual name and test it in an isolated machine with an independent recovery account:
+
+```sh
+sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
+/usr/bin/wsh --wsh-version
+/usr/bin/wsh -l
+```
+
+The absolute path selects the native package even when an older `~/.local/bin/wsh` is earlier in PATH. After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. Follow the [migration guide](NATIVE-MIGRATION.md) before retiring the old launcher.
+
+Install upgrades and downgrades explicitly through DNF using the selected RPM. There is no hosted DNF repository yet, and the legacy `wsh update` command does not migrate to the native distribution.
 
 Published v0.3.1 installation instructions remain available in its [versioned README](https://github.com/wakamex/wsh/blob/v0.3.1/README.md). Keep a system shell as the account shell when using that per-user launcher: missing activation state or an unavailable home executable can prevent login. Native package installation replaces that dependency with a system-owned executable.
 
@@ -83,6 +92,8 @@ Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keep
 
 ## Current status
 
+Two independent canonical release-mode builds produced identical RPMs and installation manifests. The selected package passed fresh Fedora QEMU installation, real PAM login, job control, legacy migration, optional-resource recovery and reboot with SELinux enforcing; see the [qualification report](benchmarks/release-qualification-2026-09-10/report.md). These remain unsigned local artifacts pending an authorized release.
+
 The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
 
 The bundled Zsh carries Wsh-maintained correctness fixes:
@@ -117,7 +128,7 @@ Zsh remains the shell engine. Applications remain authoritative for their comman
 - [PROFILING.md](PROFILING.md) defines the user-facing profile command, report, captured spans, privacy limits, and retained evidence.
 - [DEVELOPMENT.md](DEVELOPMENT.md) defines the local workflow, CI, testing, benchmarking, and evidence-retention rules.
 - [FEATURES.md](FEATURES.md) ranks later investigations and links their detailed experiment specifications.
-- [SECURITY.md](SECURITY.md) and [RELEASES.md](RELEASES.md) define theme authority, official artifacts, reproducibility, attestations, activation, and rollback.
+- [SECURITY.md](SECURITY.md) and [RELEASES.md](RELEASES.md) define theme authority, official artifacts, reproducibility, attestations and package-managed updates.
 - [VENDORED-COMPONENTS.md](VENDORED-COMPONENTS.md) records exact third-party snapshots and Wsh's behavior around them.
 
 ## License
