@@ -38,7 +38,7 @@ jobs:
       - name: Install evidence-checker requirements
         run: |
           sudo apt-get update
-          sudo apt-get install --yes gawk jq zsh
+          sudo apt-get install --yes gawk jq zsh python3-yaml
       - name: Verify the retained accepted evidence
         run: ./benchmarks/verify-retained-evidence.zsh
 

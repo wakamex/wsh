@@ -308,8 +308,8 @@ jobs:
           mkdir public-download
           gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.rpm' --dir public-download
           cmp public-download/*.rpm release-assets/*.rpm
-          podman run --rm --volume "$PWD/public-download:/packages:ro" fedora:44 bash -ec '
-            dnf -y install /packages/*.rpm
-            useradd -m -s /usr/bin/wsh wsh-test
-            su -l wsh-test -c '''[[ $ZSH_VERSION == 5.* ]] && print WSH_LOGIN_OK'''
-          '
+          podman run --rm --interactive --volume "$PWD/public-download:/packages:ro" fedora:44 bash -se <<'WSH_GUEST'
+          dnf -y install util-linux /packages/*.rpm
+          useradd -m -s /usr/bin/wsh wsh-test
+          su -l wsh-test -c '[[ $ZSH_VERSION == 5.* ]] && print WSH_LOGIN_OK'
+          WSH_GUEST

@@ -1,0 +1,36 @@
+Updating and loading repositories:
+ Fedora 44 openh264 (From Cisco) - x86_ 100% |   5.1 KiB/s |   5.3 KiB |  00m01s
+ Fedora 44 - x86_64 - Updates           100% |   6.0 MiB/s |  11.6 MiB |  00m02s
+ Fedora 44 - x86_64                     100% |  13.9 MiB/s |  36.8 MiB |  00m03s
+Repositories loaded.
+Package      Arch   Version         Repository        Size
+Installing:
+ util-linux  x86_64 0:2.41.5-1.fc44 updates        3.5 MiB
+ wsh         x86_64 0:0.3.1-0.1     @commandline  10.0 MiB
+Installing dependencies:
+ jansson     x86_64 0:2.14-4.fc44   fedora        88.9 KiB
+ libfdisk    x86_64 0:2.41.5-1.fc44 updates      388.3 KiB
+ liblastlog2 x86_64 0:2.41.5-1.fc44 updates       41.6 KiB
+
+Transaction Summary:
+ Installing:         5 packages
+
+Total size of inbound packages is 4 MiB. Need to download 1 MiB.
+After this operation, 14 MiB extra will be used (install 14 MiB, remove 0 B).
+[1/4] libfdisk-0:2.41.5-1.fc44.x86_64   100% | 749.5 KiB/s | 168.6 KiB |  00m00s
+[2/4] liblastlog2-0:2.41.5-1.fc44.x86_6 100% | 711.0 KiB/s |  24.2 KiB |  00m00s
+[3/4] jansson-0:2.14-4.fc44.x86_64      100% | 173.9 KiB/s |  47.1 KiB |  00m00s
+[4/4] util-linux-0:2.41.5-1.fc44.x86_64 100% |   3.3 MiB/s |   1.2 MiB |  00m00s
+--------------------------------------------------------------------------------
+[4/4] Total                             100% |   3.9 MiB/s |   1.4 MiB |  00m00s
+Running transaction
+[1/7] Verify package files              100% | 500.0   B/s |   5.0   B |  00m00s
+[2/7] Prepare transaction               100% | 192.0   B/s |   5.0   B |  00m00s
+[3/7] Installing liblastlog2-0:2.41.5-1 100% |   1.9 MiB/s |  43.7 KiB |  00m00s
+[4/7] Installing libfdisk-0:2.41.5-1.fc 100% | 126.8 MiB/s | 389.4 KiB |  00m00s
+[5/7] Installing jansson-0:2.14-4.fc44. 100% |   4.4 MiB/s |  90.3 KiB |  00m00s
+[6/7] Installing wsh-0:0.3.1-0.1.x86_64 100% |  39.3 MiB/s |  10.2 MiB |  00m00s
+[7/7] Installing util-linux-0:2.41.5-1. 100% |  29.4 MiB/s |   3.6 MiB |  00m00s
+Warning: skipped OpenPGP checks for 1 package from repository: @commandline
+Complete!
+WSH_LOGIN_OK

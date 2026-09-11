@@ -1,0 +1,14 @@
+{
+  "source_revision": "31bf505+dirty",
+  "sources": {
+    ".github/workflows/publish.yml": "343d68dcc59bd9e0584a7b7837b150def0fc81edaad0048a91034962e0dff78f",
+    ".github/workflows/validation.yml": "c3e669fd40fa1a13cf2b910af3fbf019d3c2786a6056a94cb6c0e13d8f492705",
+    "tests/public-release-login.py": "410e2534661d696935ef8cb6c80e8cf560027de882aa8d9f04d73f52e189c525"
+  },
+  "rpm_sha256": "3d05ca37a46036aeb75f2fcb326d9a1688af9c4a31b00b7a9cb9b94b365d4ac9",
+  "rpm_source": "retained plugin-catalog-2026-09-10 floor RPM; unsigned development artifact",
+  "image": "74d8893a22f206df7a713e9c39101040e7b1788102a810018f84a7982987dd3b",
+  "command": "bash /var/tmp/wsh-release-fixes/login-workflow.sh (exact podman command extracted from publish.yml; cwd /var/tmp/wsh-release-fixes)",
+  "result": "WSH_LOGIN_OK",
+  "log_sha256": "313ed343a4c502a67ec932589ee261cce96809efd61ed4912fc68b6a5e134077"
+}
