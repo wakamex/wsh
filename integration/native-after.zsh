@@ -20,5 +20,5 @@ source "${WSH_BUNDLE_ROOT}/share/wsh/integration.zsh"
 source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/git-prompt.zsh"
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event integration-end
 (( $+functions[_wsh_profile_install] )) && _wsh_profile_install
-unset _WSH_PLUGIN_REFERENCES _WSH_PLUGIN_HANDOFF
-unfunction _wsh_plugin_recognized _wsh_plugin_files_equal
+unset _WSH_PLUGIN_REFERENCES _WSH_PLUGIN_UPSTREAMS _WSH_PLUGIN_HANDOFF
+unfunction _wsh_plugin_recognized _wsh_plugin_files_equal _wsh_plugin_git_recognized _wsh_plugin_git

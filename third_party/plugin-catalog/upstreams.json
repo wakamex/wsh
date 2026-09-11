@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "upstreams": [
+    {
+      "component": "autosuggestions",
+      "repository": "https://github.com/zsh-users/zsh-autosuggestions",
+      "branch": "master",
+      "paths": [
+        "zsh-autosuggestions.zsh"
+      ]
+    },
+    {
+      "component": "history",
+      "repository": "https://github.com/zsh-users/zsh-history-substring-search",
+      "branch": "master",
+      "paths": [
+        "zsh-history-substring-search.zsh"
+      ]
+    },
+    {
+      "component": "history",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "branch": "master",
+      "paths": [
+        "plugins/history-substring-search/history-substring-search.zsh"
+      ]
+    },
+    {
+      "component": "syntax",
+      "repository": "https://github.com/zsh-users/zsh-syntax-highlighting",
+      "branch": "master",
+      "paths": [
+        "zsh-syntax-highlighting.zsh",
+        "highlighters/main/main-highlighter.zsh"
+      ]
+    },
+    {
+      "component": "directory",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "branch": "master",
+      "paths": [
+        "plugins/z/z.plugin.zsh"
+      ]
+    },
+    {
+      "component": "git-prompt",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "branch": "master",
+      "paths": [
+        "plugins/git-prompt/git-prompt.plugin.zsh",
+        "plugins/git-prompt/gitstatus.py"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# Git provenance and native-first takeover
+
+Baseline `e84d5d3` recognizes only cataloged bytes. The requested policy prefers Wsh's current native implementation for vanilla upstream copies even when newer upstream features are not implemented. Keep handoff correctness and customization preservation as requirements; do not require feature parity with the newly recognized upstream version.
+
+Prototype local Git provenance against actual upstream checkouts before adding a runtime path. Verify an official upstream remote and default-branch tracking reference, find the shared upstream commit, and compare actual relevant file bytes with that commit. A clean working tree or version string alone is insufficient. Unrelated local commits must be allowed; relevant committed/uncommitted changes, assume-unchanged files, mismatched file pairs and fork-only remotes must be rejected. Worktrees and downloaded-file catalog fallback must remain supported.
+
+Measure Git verification independently and then installed startup. Existing catalog matches must stay within the prior 3 ms paired-p95 startup overhead gate. For an uncataloged single plugin, require bounded local verification and measure its startup tradeoff explicitly before selection; a median verification cost over 10 ms triggers a simpler-path review. Do not add a persistent cache or new native Git parser without measurements demonstrating a need. Two failed interventions at a gate require a new hypothesis.

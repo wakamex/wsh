@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Measure takeover of the recognized older upstream autosuggestion implementation."""
+"""Measure catalog startup, or observe an explicit uncataloged plugin startup cost."""
 import hashlib
 import json
 import sys
@@ -8,6 +8,7 @@ from pathlib import Path
 import pty
 import select
 import signal
+import shlex
 import subprocess
 import tempfile
 import time
@@ -17,6 +18,8 @@ CONTROL=Path(sys.argv[1]).resolve()
 BUNDLE=Path(sys.argv[2]).resolve()
 OUT=Path(sys.argv[3]).resolve();OUT.mkdir(parents=True,exist_ok=True)
 NATIVE=BUNDLE/'bin/wsh'
+PLUGIN=Path(sys.argv[4]).resolve() if len(sys.argv)==5 else BUNDLE/'share/wsh/defaults/known-zsh-autosuggestions-0.7.0.zsh'
+GATE=None if len(sys.argv)==5 else 3
 READY=b'\x1b]133;B\x1b\\'
 PRIMARY=b'\x1b]133;P;k=i'
 
@@ -46,7 +49,7 @@ def stop(pid,fd):
 with tempfile.TemporaryDirectory(prefix='wsh-native-startup-measure-') as directory:
     home=Path(directory)
     env={'PATH':'/usr/bin:/bin','HOME':directory,'ZDOTDIR':directory,'TERM':'xterm-256color','LC_ALL':'C.UTF-8','TZ':'UTC','WSH_STATE_ROOT':str(home/'no-state')}
-    config='PROMPT="NATIVE> "\nZSHZ_DATA=$HOME/jump-data\nsource '+str(BUNDLE / 'share/wsh/defaults/known-zsh-autosuggestions-0.7.0.zsh')+'\n'
+    config='PROMPT="NATIVE> "\nZSHZ_DATA=$HOME/jump-data\nsource '+shlex.quote(str(PLUGIN))+'\n'
     (home/'.zshenv').write_text('unsetopt globalrcs\n')
     (home/'.zshrc').write_text(config)
     samples=[]
@@ -67,9 +70,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-startup-measure-') as direct
         rows=[row for row in samples if row['theme']==theme]
         data={v:[row['readiness_ms'] for row in rows if row['variant']==v] for v in ('control','native')}
         differences=sorted(data['native'][i]-data['control'][i] for i in range(50))
-        summary[theme]={'pairs':50,'paired_p95_ms':differences[47],'gate_ms':3,'passed':differences[47]<=3,
+        summary[theme]={'pairs':50,'paired_p95_ms':differences[47],'gate_ms':GATE,'passed':GATE is None or differences[47]<=GATE,
                         'control_median_ms':sorted(data['control'])[24],'native_median_ms':sorted(data['native'])[24]}
-    metadata={'command':'python3 native/measure-older-autosuggestions.py '+str(CONTROL)+' '+str(BUNDLE)+' '+str(OUT),'cpu':0,'trace_mode':'off','zshrc':config,
+    metadata={'command':'python3 native/measure-older-autosuggestions.py '+str(CONTROL)+' '+str(BUNDLE)+' '+str(OUT)+(' '+str(PLUGIN) if len(sys.argv)==5 else ''),'cpu':0,'plugin_sha256':hashlib.sha256(PLUGIN.read_bytes()).hexdigest(),'trace_mode':'off','zshrc':config,
               'zshenv':'unsetopt globalrcs\n','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
               'native_sha256':hashlib.sha256((BUNDLE/'bin/wsh').read_bytes()).hexdigest(),
               'control_sha256':hashlib.sha256((CONTROL/'bin/wsh').read_bytes()).hexdigest(),

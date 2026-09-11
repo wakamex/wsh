@@ -51,7 +51,7 @@ _wsh_detect_autosuggestions() {
 
     # Before v0.6.0, upstream excluded zle-* inside its binder rather than
     # through the configurable ignore list. Preserve that implicit rule.
-    if [[ $handoff == pending-widget-binding-legacy-zle-ignore ]]; then
+    if [[ $handoff == pending-widget-binding-legacy-zle-ignore || ${functions[_zsh_autosuggest_bind_widgets]:-} == *'zle-\*'* ]]; then
       ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=('zle-*')
     fi
 

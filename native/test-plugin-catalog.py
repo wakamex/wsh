@@ -9,10 +9,13 @@ import shlex
 import shutil
 import signal
 import sys
+import subprocess
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-bundle, output = [Path(p).resolve() for p in sys.argv[1:]]
+bundle, output = [Path(p).resolve() for p in sys.argv[1:3]]
+git_mode = sys.argv[3:] == ['--git']
+assert not sys.argv[3:] or git_mode
 output.mkdir(parents=True, exist_ok=True)
 catalog = json.loads((ROOT / 'third_party/plugin-catalog/catalog.json').read_text())
 parameters = {'autosuggestions': 'AUTOSUGGESTIONS', 'history': 'HISTORY_SUBSTRING_SEARCH', 'syntax': 'SYNTAX_HIGHLIGHTING', 'directory': 'DIRECTORY_JUMP', 'git-prompt': 'GIT_PROMPT'}
@@ -33,11 +36,27 @@ for entry in catalog['entries']:
         if component == 'syntax':
             shutil.copytree(ROOT / 'third_party/zsh-syntax-highlighting', home / 'plugin', dirs_exist_ok=True)
         for index, record in enumerate(entry['files']):
-            relative = record['upstream_path'] if component == 'syntax' else Path(record['upstream_path']).name
+            relative = record['upstream_path'] if component == 'syntax' or git_mode else Path(record['upstream_path']).name
             target = home / 'plugin' / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes((ROOT / record['source']).read_bytes() + (b'\n# modified fixture\n' if (variant == 'modified' and index == 0) or (variant == 'modified-second' and index == 1) else b''))
             paths.append(target)
+        if git_mode:
+            # Real Git fixtures simulate an unlisted upstream snapshot. Commit
+            # only pristine bytes; apply the user's edit after its upstream ref.
+            for target, record in zip(paths, entry['files']):
+                target.write_bytes((ROOT / record['source']).read_bytes() + b'\n# uncataloged upstream fixture\n')
+            git_env = dict(os.environ, GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL='/dev/null', GIT_AUTHOR_NAME='Fixture', GIT_AUTHOR_EMAIL='fixture@example.invalid', GIT_COMMITTER_NAME='Fixture', GIT_COMMITTER_EMAIL='fixture@example.invalid')
+            def git(*args):
+                subprocess.run(['git', '-C', str(home / 'plugin'), *args], env=git_env, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            git('init', '-b', 'master')
+            git('add', '.')
+            git('commit', '-m', 'upstream fixture')
+            git('remote', 'add', 'origin', entry['repository'])
+            git('update-ref', 'refs/remotes/origin/master', 'HEAD')
+            if variant in ('modified', 'modified-second'):
+                target = paths[variant == 'modified-second']
+                target.write_bytes(target.read_bytes() + b'# user modification\n')
         config = 'PROMPT="CATALOG> "\nHISTSIZE=100\nSAVEHIST=0\nZSHZ_DATA=$HOME/jump-data\n'
         config += 'source ' + shlex.quote(str(paths[0])) + '\n'
         config += 'ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=blue\nWSH_AUTOSUGGEST_ASYNC=0\nHISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND=fg=blue\n'
@@ -111,4 +130,4 @@ bindkey '^T' _catalog_observe
             os.kill(pid, signal.SIGHUP)
             os.waitpid(pid, 0)
             os.close(fd)
-print('PASS:', len(catalog['entries']), 'upstream snapshots;', len(rows), 'handoff, customization and editor cases')
+print('PASS:', len(catalog['entries']), 'upstream snapshots;', len(rows), 'handoff, customization and editor cases;', 'Git fallback' if git_mode else 'catalog')

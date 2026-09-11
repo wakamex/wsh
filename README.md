@@ -4,7 +4,7 @@
 
 - Keep your `.zshrc`, Oh My Zsh setup, and familiar Zsh commands.
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
-- Keep existing plugin configuration: verified upstream copies use native implementations, while unrecognized copies keep running externally.
+- Keep existing plugin configuration: cataloged copies and verified upstream Git checkouts use native implementations, while unrecognized copies keep running externally.
 - Jump back to frequently used directories with `z`.
 - Keep your existing prompt or choose Minimal, Wakamex, Robbyrussell, or Agnoster with asynchronous Git updates.
 - Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.

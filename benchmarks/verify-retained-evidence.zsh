@@ -18,4 +18,5 @@ python3 benchmarks/verify-git-prompt-ownership.py
 python3 benchmarks/verify-directory-takeover.py
 python3 benchmarks/verify-older-autosuggestions.py
 python3 benchmarks/verify-plugin-catalog.py
+python3 benchmarks/verify-git-provenance.py
 print -r -- 'PASS: complete retained-evidence suite'

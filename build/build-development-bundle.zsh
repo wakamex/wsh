@@ -85,6 +85,7 @@ install -D -m 644 "${repository_root}/integration/integration.zsh" "${stage}/sha
 install -D -m 644 "${repository_root}/integration/profile.zsh" "${stage}/share/wsh/profile.zsh"
 python3 "${repository_root}/build/plugin-catalog.py" "${stage}/share/wsh/defaults/plugin-catalog"
 install -D -m 644 "${repository_root}/integration/plugin-recognition.zsh" "${stage}/share/wsh/defaults/plugin-recognition.zsh"
+install -D -m 644 "${repository_root}/integration/plugin-git-provenance.zsh" "${stage}/share/wsh/defaults/plugin-git-provenance.zsh"
 install -D -m 644 "${repository_root}/integration/history-substring-search.zsh" "${stage}/share/wsh/defaults/history-substring-search.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/zsh-history-substring-search.zsh" "${stage}/share/wsh/defaults/zsh-history-substring-search.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/oh-my-zsh-history-substring-search.zsh" "${stage}/share/wsh/defaults/known-oh-my-zsh-history-substring-search.zsh"

@@ -51,6 +51,7 @@ _wsh_plugin_recognized() {
       return 0
     fi
   done
-  return 1
+  _wsh_plugin_git_recognized "$component" "$@"
 }
 source "$WSH_BUNDLE_ROOT/share/wsh/defaults/plugin-catalog/catalog.zsh"
+source "$WSH_BUNDLE_ROOT/share/wsh/defaults/plugin-git-provenance.zsh"

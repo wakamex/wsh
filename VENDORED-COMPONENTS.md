@@ -132,3 +132,7 @@ The unchanged plugin and Python collector from `ohmyzsh/ohmyzsh` commit `605a393
 ## Shared upstream recognition catalog
 
 The [catalog](third_party/plugin-catalog/README.md) consolidates reference provenance and exact-byte recognition for all five takeover adapters. It admits autosuggestions v0.5.2 through v0.7.1 at the listed releases and all four tagged history-substring-search releases alongside the existing pinned and OMZ snapshots. Highlighting, directory and Git-prompt retain their existing snapshot coverage. No vendored source bytes change. The v0.5.2 handoff makes its old binder's implicit `zle-*` exclusion explicit in the inherited ignore list. Later versions retain configurable lifecycle opt-ins. This fixes the reproduced old-version redraw recursion without changing native controller code or upstream Zsh. The catalog tests every snapshot against current native behavior rather than maintaining separate implementations per upstream version.
+
+## Local upstream Git recognition
+
+The [Git fallback qualification](benchmarks/git-provenance-2026-09-10/report.md) extends the shared recognizer to uncataloged official upstream checkouts using local tracking references and raw file bytes. No vendored bytes or C controller/parser code change. The installed matrix exercises every existing handoff family through a catalog miss; an unchanged actual upstream autosuggestions v0.5.1 checkout additionally verifies the older binder rule, display and acceptance. Known snapshots still use the catalog first.

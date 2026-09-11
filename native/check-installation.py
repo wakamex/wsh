@@ -35,3 +35,8 @@ with (OUT/'plugin-catalog.log').open('wb') as log:
 print('plugin-catalog', result.returncode, flush=True)
 if result.returncode:
     raise SystemExit(result.returncode)
+
+subprocess.run(['python3', str(ROOT/'tests/plugin-git-provenance.py'), str(BUNDLE), str(OUT/'plugin-git-boundaries')], cwd=ROOT, check=True)
+with (OUT/'plugin-git-handoff.log').open('wb') as log:
+    subprocess.run(['python3', str(ROOT/'native/test-plugin-catalog.py'), str(BUNDLE), str(OUT/'plugin-git-handoff'), '--git'], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, timeout=180, check=True)
+print('plugin-git-handoff passed', flush=True)

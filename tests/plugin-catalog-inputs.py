@@ -34,3 +34,26 @@ with tempfile.TemporaryDirectory() as tmp:
         else:
             raise AssertionError('invalid catalog accepted')
 print('PASS: catalog schema, duplicates, components, handoffs, revisions, arity, fingerprints and source boundaries')
+
+original_upstreams = module.upstreams()
+with tempfile.TemporaryDirectory() as tmp:
+    module.UPSTREAMS = Path(tmp) / 'upstreams.json'
+    mutations = [
+        lambda d: d.update(schema_version=2),
+        lambda d: d['upstreams'][0].update(component='unknown'),
+        lambda d: d['upstreams'][0].update(paths=[]),
+        lambda d: d['upstreams'][0].update(repository='https://example.com/fork'),
+        lambda d: d['upstreams'][0].update(branch='master|bad'),
+        lambda d: d['upstreams'][0].update(paths=['../outside']),
+    ]
+    for mutate in mutations:
+        data = dict(schema_version=1, upstreams=copy.deepcopy(original_upstreams))
+        mutate(data)
+        module.UPSTREAMS.write_text(json.dumps(data))
+        try:
+            module.upstreams()
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('invalid upstream mapping accepted')
+print('PASS: upstream mapping schema, components, arity, repositories, branches and paths')

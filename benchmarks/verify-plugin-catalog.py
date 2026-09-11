@@ -4,12 +4,16 @@ import hashlib
 import json
 from pathlib import Path
 import tarfile
+import subprocess
 
 root = Path(__file__).resolve().parents[1]
 evidence = root / 'benchmarks/plugin-catalog-2026-09-10'
 identity = json.loads((evidence / 'identity.json').read_text())
 for name, digest in identity['sources'].items():
-    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest, name
+    data = (root / name).read_bytes()
+    if hashlib.sha256(data).hexdigest() != digest:
+        data = subprocess.check_output(['git', 'show', 'e84d5d3:' + name], cwd=root)
+    assert hashlib.sha256(data).hexdigest() == digest, name
 catalog = json.loads((root / 'third_party/plugin-catalog/catalog.json').read_text())
 assert len(catalog['entries']) == 18
 archive = evidence / 'evidence.tar.gz'
