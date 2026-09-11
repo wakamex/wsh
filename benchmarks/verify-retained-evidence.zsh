@@ -3,6 +3,7 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 builtin cd -q -- "${0:A:h:h}"
 python3 build/plugin-catalog.py --check
 python3 tests/plugin-catalog-inputs.py
+python3 tests/plugin-upstream-monitor.py
 python3 benchmarks/verify-historical.py
 python3 benchmarks/verify-native-distribution.py
 python3 benchmarks/verify-native-retirement.py
@@ -19,4 +20,5 @@ python3 benchmarks/verify-directory-takeover.py
 python3 benchmarks/verify-older-autosuggestions.py
 python3 benchmarks/verify-plugin-catalog.py
 python3 benchmarks/verify-git-provenance.py
+python3 benchmarks/verify-plugin-upstreams.py
 print -r -- 'PASS: complete retained-evidence suite'

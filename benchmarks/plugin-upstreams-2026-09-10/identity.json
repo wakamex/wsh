@@ -1,0 +1,33 @@
+{
+  "source_revision": "4a94e990b3e7134cebb8c486e8eabe1c60630a87+dirty",
+  "sources": {
+    ".github/workflows/plugin-upstreams.yml": "a6fc4909df2547b17aa2a2b01b6365f62ba42b6b23b9eea307b1b85047088edc",
+    "build/check-plugin-upstreams.py": "592b8de1d79e714e05bb77769512fadd49490626402d1f78f5af605623c3c2db",
+    "tests/plugin-upstream-monitor.py": "7a0a37f23646b3d279b6caf6e191651a9b894ab67632948ba75e6142f2b78617",
+    "build/plugin-catalog.py": "370e35d1b1bfb8a0b6f6228fa436c6f88ab42a95f4d2917b3350bf50b3e675e5",
+    "third_party/plugin-catalog/upstreams.json": "ddef8c616a00e74ef50687317691983c7b1e3174aa9c1f555cc2463de2188a65",
+    "third_party/plugin-catalog/catalog.json": "7c4b2cc96dd92abe905fccac8f58ef8632e58db77adac4b0e1d0d498d5c276ac"
+  },
+  "archive_sha256": "1f7bc0dfdc385beb85c8302b51a959c42837bd6dfafba849b040da9ead629c6a",
+  "files": {
+    "4f9129fd2000dfaca06734c7471934fb179c91a83b0cdb13bd63142d99be432d": "4f9129fd2000dfaca06734c7471934fb179c91a83b0cdb13bd63142d99be432d",
+    "results.json": "3e1b04a1c48584dcd76c46876fd1ce028e90728228881a19f155e2621438c539",
+    "156ebe9530eb991dcef54d476967e2ff4338d35dabaaff9e5462673a287cc63b": "156ebe9530eb991dcef54d476967e2ff4338d35dabaaff9e5462673a287cc63b",
+    "eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a": "eec7ba8f7a71414ace0ea0fab0908d005b24cf65d83b169c0ff97815d3cfc51a",
+    "summary.md": "9f2ea0eb3c4c1554b7f83ca52d1c25ef6df7086874efe9043ba9e20c0599627a",
+    "d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd": "d63bf09783100d426d0eb068872ea42b87d9609c49deb0d063daaa173223e7fd",
+    "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7": "ccd085ac09a6a0e771e12bc4c531cfde1ecab804f6d04b5ea2275f131c841ff7",
+    "b2f8ffceca6006eadfdca72a487adb572fe3dccbd5ac3e9f95c50127968454b9": "b2f8ffceca6006eadfdca72a487adb572fe3dccbd5ac3e9f95c50127968454b9",
+    "2485a9e27dd30afa01d4b12e1bdf344933ab4f9927cb42c7c0505c39c05a611d": "2485a9e27dd30afa01d4b12e1bdf344933ab4f9927cb42c7c0505c39c05a611d",
+    "0b864862a3b48992d7316cc7e585a1315fa389d730c17bf16e2f2bd5918089f3": "0b864862a3b48992d7316cc7e585a1315fa389d730c17bf16e2f2bd5918089f3",
+    "tests.log": "450abe204b32e5c69666960c57e0bdbd9c7b97fbde115f6069781fa47b6839f1",
+    "actionlint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "actionlint-release.json": "3f7e96b1299fa79781fa93bd7345cb6e6f6cfe2888ba805df82b1e5c9fca6530"
+  },
+  "commands": [
+    "python3 build/check-plugin-upstreams.py /var/tmp/wsh-git-provenance/upstream-check",
+    "python3 tests/plugin-upstream-monitor.py",
+    "/var/tmp/wsh-git-provenance/actionlint/actionlint .github/workflows/plugin-upstreams.yml"
+  ],
+  "actionlint_status": 0
+}

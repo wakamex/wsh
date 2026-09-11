@@ -1,0 +1,31 @@
+name: Plugin upstream changes
+
+on:
+  schedule:
+    - cron: '23 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out the reviewed catalog
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Check relevant upstream files
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 build/check-plugin-upstreams.py upstream-check
+      - name: Retain upstream identities and source bytes
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: plugin-upstreams
+          path: upstream-check/
+          retention-days: 30
+          if-no-files-found: error
