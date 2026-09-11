@@ -53,7 +53,7 @@ cd /tmp
 z my-project
 ```
 
-The native directory implementation ranks visited directories by frequency and recency, persisting them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Existing OMZ, zoxide, and custom command definitions remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
+The native directory implementation ranks visited directories by frequency and recency, persisting them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Recognized unmodified OMZ `z` copies use the native implementation with their existing data and settings. Zoxide and custom or unverified implementations remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
 
 ## Prompt selection
 
@@ -85,14 +85,13 @@ Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keep
 
 The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
 
-It also includes three Wsh-maintained Zsh source patches:
+The bundled Zsh carries Wsh-maintained correctness fixes:
 
 - Terminal reporting fixes produce valid OSC 133 prompt identifiers and restore the shell's OSC 7 working directory after foreground applications change the terminal's reported directory, including when the optional terminal query is disabled. See the [terminal integration tests and results](benchmarks/native-terminal-integration-2026-09-04/report.md).
 - The `zcompile` fix zeroes uninitialized alignment padding in compiled functions, making bundle builds reproducible and preventing those bytes from containing stale heap data. See the [reproducibility tests and results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
-- Wsh-owned syntax highlighting parses each redraw in C, keeping typing responsive on long commands while preserving upstream styles and existing external plugins. See the [compatibility and performance comparison](benchmarks/native-highlighting-full-2026-09-10/report.md).
 - Neutral syntax-highlight regions retain their ownership markers, so plugins can remove them on subsequent redraws instead of accumulating stale regions. See the [Zsh upstream candidate and reproducer](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata).
 
-These patches are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
+These fixes are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [native source definition](build/zsh-sources/zsh-cad0d67c-native.json) additionally selects native startup, completion scanning and the C interactive components. Wsh-owned main syntax highlighting parses each redraw in C while preserving upstream styles and optional highlighters; see the [installed comparison](benchmarks/native-highlighting-installed-2026-09-10/report.md). The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
 
 The current source includes native loading of existing Zsh configuration, the three interactive defaults above, native diagnostics for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified native package assembly and system-managed updates, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Recognized upstream `z` copies use native directory queries and persistence while keeping their existing database and configuration. When Wsh owns the prompt, it also deactivates the recognized Oh My Zsh `git-prompt` collector hooks. Recognized upstream syntax-highlighting copies, including the tested older `0.8.0-alpha2-dev` revision, use Wsh’s native main parser while retaining styles and additional highlighters. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
 

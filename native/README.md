@@ -1,6 +1,6 @@
 # Native Wsh workbench
 
-This directory contains the native implementation under development. Local builds are unsigned development artifacts. Production remains on the existing bundle path until the startup, packaging, and migration gates pass.
+This directory contains the native implementation under development. Local builds are unsigned development artifacts. Published v0.3.1 remains on the legacy bundle path; the current source selects the native implementation and system-package workflow.
 
 The native executable preserves Zsh argument handling. Wsh tools use an explicit option in the first argument position. An ordinary script called `doctor`, `profile`, `version`, `update`, or `run` remains a script. `--` remains Zsh's end-of-options marker.
 
@@ -17,7 +17,7 @@ The native executable preserves Zsh argument handling. Wsh tools use an explicit
 
 Installation and updates belong to the system package manager. There is no native activation-state or self-update command. The [tested migration](../NATIVE-MIGRATION.md) preserves access to the old manager for published bundles and exceptional saved reports. Help lists the implemented native tools.
 
-Build the selected native path with `./build/build-native-installation.zsh`. The separate native source lock pins the C additions and startup patch, and the builder rejects stale locks or cached outputs with a different compiled identity. Run the resulting `bundles/<identity>/bin/wsh` directly. The native payload contains the tested C helper, its parser licenses and the effective native source/module configuration. The existing assembler still uses the Rust manager for build-time manifest verification and retains a duplicate private `bin/zsh` for bundle compatibility. It does not install the legacy startup-redirection directory.
+Build the selected native path with `./build/build-native-installation.zsh`. The separate native source lock pins the C additions and startup patch, and the builder rejects stale locks or cached outputs with a different compiled identity. Run the resulting `bundles/<identity>/bin/wsh` directly. The native payload contains the tested C helper, its parser licenses and the effective native source/module configuration. The assembler uses the Python native inventory verifier and retains a private `bin/zsh` for compatibility tests. Rust crates and toolchain requirements have been removed. It does not install the legacy startup-redirection directory.
 
 Native startup preserves ordinary Zsh file order, execution context, status, and ZDOTDIR behavior. Resource relocation also works under `-f`. Successfully loaded Wsh defaults suppress the automatic upstream new-user wizard, and no user startup files are created. Optional integration or runtime failures leave basic shell startup available. The [retained tests and measurements](../benchmarks/native-build-2026-09-08/report.md) establish local behavior; [final system-package login qualification](../benchmarks/native-qualification-2026-09-09/package-report.md) also passes.
 
