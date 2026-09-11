@@ -22,4 +22,4 @@ Users explicitly select packages through DNF. Native Wsh has no second updater, 
 
 Ordinary removal refuses while a local `/etc/passwd` entry uses `/usr/bin/wsh` or `/bin/wsh`. Administrators must check remote identity directories and nonstandard aliases separately. Forced scriptlet bypass and deletion of system binaries or required libraries remain system-administration actions outside that guard.
 
-The [migration guide](NATIVE-MIGRATION.md) covers the legacy per-user launcher, native command arguments and recovery. The earlier release contract and its evidence remain available in the v0.3.1 source history. Publication of the native architecture requires a new authorized release; editing this workflow does not publish it.
+The native release assumes fresh installations; migration from older Wsh releases is not a release requirement. The [installation guide](NATIVE-INSTALLATION.md) covers native commands, account-shell setup and recovery. The earlier release contract and its evidence remain available in the v0.3.1 source history. Publication of the native architecture requires a new authorized release; editing this workflow does not publish it.

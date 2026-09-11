@@ -12,13 +12,13 @@ Reviewed the 65 commits from published v0.3.1 (`950bde5`) through `b12185f`. The
 
 The Bash reproduction replaces only the external `podman` executable with an argument recorder, leaving parsing to real Bash. No container, package transaction or GitHub mutation occurs. Extract the `Install and launch the public RPM` step with a YAML parser, retain its text from `podman run` onward, prepend `podman() { python3 -c 'import sys,json; print(json.dumps(sys.argv[1:]))' "$@"; }`, and execute that text with `bash -c`. The captured tail is `"bash", "-ec", "\n  dnf -y install /packages/*.rpm\n  useradd -m -s /usr/bin/wsh wsh-test\n  su -l wsh-test -c [[", "==", "5.*", "]]"`; stderr reports `print: command not found`. This proves the quoting failure independently of Podman or DNF behavior.
 
-## Release scope and migration
+## Release scope
 
 | Area | Selected current behavior | Release-note treatment |
 | --- | --- | --- |
-| Shell and account login | Native Zsh entrypoint, linked bundled modules, system-owned executable, no per-user activation dependency | Lead with this change and the explicit account/PATH migration |
-| Command interface | `--wsh-version`, `--wsh-doctor`, `--wsh-profile`, `--wsh-profile-report`, `--wsh-run`; ordinary Zsh argument semantics preserved | Include the migration table, especially `--version`, `--` and old manager subcommands |
-| Distribution | x86-64 Fedora RPM, glibc 2.28 build floor, DNF ownership, no self-updater or hosted package repository | Explain that `wsh update` does not migrate legacy installations; do not imply general Linux package support |
+| Shell and account login | Native Zsh entrypoint, linked bundled modules, system-owned executable, no per-user activation dependency | Lead with direct startup and system-package installation |
+| Command interface | `--wsh-version`, `--wsh-doctor`, `--wsh-profile`, `--wsh-profile-report`, `--wsh-run`; ordinary Zsh argument semantics preserved | Document native tool options and normal Zsh argument handling |
+| Distribution | x86-64 Fedora RPM, glibc 2.28 build floor, DNF ownership, no self-updater or hosted package repository | Document explicit DNF installation and updates on the supported Fedora target |
 | Implementation | C shell additions and one C helper per session; obsolete Rust crates/toolchain removed; Zsh remains the editor/language and retains selected lifecycle/configuration adapters | Describe consolidation and retained compatibility without claiming every file or plugin is C |
 | Interactive components | Native compinit registration, history navigation, directory queries/persistence, complete autosuggestion controller and main highlighter | Include installed outcomes; automatic/deferred compinit initialization and approximate highlighting prototypes remain unselected |
 | Plugin ownership | Catalog-first matching, bounded local Git fallback, modified/unverified implementations preserved, recognized Git-prompt hooks removed under Wsh prompt ownership | State native-first behavior and possible upstream feature lag, with the measured uncataloged startup cost |
@@ -26,7 +26,7 @@ The Bash reproduction replaces only the external `podman` executable with an arg
 | Existing conveniences | `z`, four themes, prompt selection, suggestions, history search, highlighting and profiling already existed in v0.3.1 | Explain implementation and compatibility improvements rather than advertising these as newly introduced features |
 | Maintenance automation | Daily upstream source check with ordinary GitHub Actions notifications | Document for maintainers; it does not add a user-side update process or change plugins automatically |
 
-The release notes preserve the existing theme format, shared `.zshrc` use and optional OMZ loading. They explicitly describe system-package migration and the public command changes. Local `/etc/passwd` removal protection is described at its actual scope; remote identity directories and arbitrary shell-path aliases retain the migration guide's administrator checks.
+The release notes preserve the existing theme format, shared `.zshrc` use and optional OMZ loading. The release assumes fresh installations and needs no older-Wsh migration or command compatibility. Local `/etc/passwd` removal protection is described at its actual scope; remote identity directories and arbitrary shell-path aliases retain the installation guide's administrator checks. Historical migration tests remain evidence, not a publication gate.
 
 ## Documentation corrected during review
 

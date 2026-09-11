@@ -2,7 +2,7 @@
 
 `wsh` is a fast, tested Zsh distribution with autosuggestions, history search, syntax highlighting and directory jumping built in. Keep your existing `.zshrc`, Oh My Zsh setup and familiar Zsh commands.
 
-This README describes the native RPM distribution under development. Published v0.3.1 uses the earlier per-user launcher; see its [installation instructions](https://github.com/wakamex/wsh/blob/v0.3.1/README.md) or the [native migration guide](NATIVE-MIGRATION.md).
+This README describes the native Fedora RPM distribution under development. Native packages have not been published yet.
 
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
 - Use native implementations of recognized upstream plugins while keeping their supported settings; custom and unverified plugins keep running externally.
@@ -11,6 +11,8 @@ This README describes the native RPM distribution under development. Published v
 - Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.
 - Use a system-owned login shell that starts without per-user bundle state, with installation, upgrades and downgrades managed through DNF.
 - Navigate prompts and command output in compatible terminals.
+
+The C implementations reduced complete highlighting redraw time by 35–91% and large-history autosuggestion editing time by 29% in the installed comparisons. The C prompt helper was about 78% smaller than its Rust predecessor. See [performance results](PERFORMANCE.md) for workloads, baselines and measurements.
 
 ## Motivation
 
@@ -44,11 +46,9 @@ sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
 /usr/bin/wsh -l
 ```
 
-The absolute path selects the native package even when an older `~/.local/bin/wsh` is earlier in PATH. After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. Follow the [migration guide](NATIVE-MIGRATION.md) before retiring the old launcher.
+After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. The [installation guide](NATIVE-INSTALLATION.md) covers commands, package updates and recovery.
 
-Install upgrades and downgrades explicitly through DNF using the selected RPM. There is no hosted DNF repository yet, and the legacy `wsh update` command does not migrate to the native distribution.
-
-Published v0.3.1 installation instructions remain available in its [versioned README](https://github.com/wakamex/wsh/blob/v0.3.1/README.md). Keep a system shell as the account shell when using that per-user launcher: missing activation state or an unavailable home executable can prevent login. Native package installation replaces that dependency with a system-owned executable.
+Install upgrades and downgrades explicitly through DNF using the selected RPM. There is no hosted DNF repository yet.
 
 Native Wsh preserves Zsh command-line parsing. Run `wsh` normally, `wsh --wsh-doctor` for diagnostics, `wsh --wsh-version` for distribution identity and `wsh --wsh-profile -- -i` for an interactive profile. `wsh --wsh-run -- PROGRAM ARG...` starts an exact foreground command with native job control and returns to the prompt. See [PROFILING.md](PROFILING.md) for profiling and recovery.
 

@@ -17,7 +17,7 @@ The native executable preserves Zsh argument handling. Wsh tools use an explicit
 
 `wsh --version` retains upstream Zsh's version output. Native options cannot be mixed into the middle of Zsh arguments; use the profile command's explicit separator or the foreground command's `--login` option. Arguments after a script name, `-c` command, or `--` are never reinterpreted as Wsh tools.
 
-Installation and updates belong to the system package manager. There is no native activation-state or self-update command. The [tested migration](../NATIVE-MIGRATION.md) preserves access to the old manager for published bundles and exceptional saved reports. Help lists the implemented native tools.
+Installation and updates belong to the system package manager. There is no native activation-state or self-update command. The [installation guide](../NATIVE-INSTALLATION.md) documents native commands and account-shell setup. Help lists the implemented native tools.
 
 Build the selected native path with `./build/build-native-installation.zsh`. The separate native source lock pins the C additions and startup patch, and the builder rejects stale locks or cached outputs with a different compiled identity. Run the resulting `bundles/<identity>/bin/wsh` directly. The native payload contains the tested C helper, its parser licenses and the effective native source/module configuration. The assembler uses the Python native inventory verifier and retains a private `bin/zsh` for compatibility tests. Rust crates and toolchain requirements have been removed. It does not install the legacy startup-redirection directory.
 
