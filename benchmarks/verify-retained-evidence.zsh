@@ -24,4 +24,5 @@ python3 benchmarks/verify-plugin-catalog.py
 python3 benchmarks/verify-git-provenance.py
 python3 benchmarks/verify-plugin-upstreams.py
 python3 benchmarks/verify-release-fixes.py
+python3 benchmarks/verify-release-qualification.py
 print -r -- 'PASS: complete retained-evidence suite'

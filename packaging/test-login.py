@@ -40,11 +40,12 @@ try:
     assert b'uid=' in output and account.encode() in output, output
     if '--job-control' in sys.argv:
         sock.sendall(b'''python3 -c 'import signal,time; signal.signal(signal.SIGCONT,lambda *a:print("CHILD_"+"RESUMED",flush=True)); print("CHILD_"+"READY",flush=True); time.sleep(30)'\n''')
-        wait(b'CHILD_READY')
+        # Do not signal while the child is still emitting its acknowledgement.
+        wait(b'CHILD_READY\r\n')
         sock.sendall(b'\x1a')
         wait(b'suspended')
         sock.sendall(b'fg\n')
-        wait(b'CHILD_RESUMED')
+        wait(b'CHILD_RESUMED\r\n')
         sock.sendall(b'\x03')
         wait(b'\x1b]133;D')
         sock.sendall(b'print -r -- JOB_STATUS:$?\n')
