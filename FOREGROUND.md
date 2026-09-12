@@ -1,6 +1,6 @@
 # Foreground startup and job lifecycle
 
-Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh provides that transition through `wsh -- <command> [arguments...]`, with `wsh run-foreground` as the explicit form. Wakterm's existing process cache now passes the separate managed-identity lifecycle fixture, so no new foreground-job event protocol is planned.
+Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh provides that transition through `wsh --wsh-run [--login] -- <command> [arguments...]`. Wakterm's existing process cache now passes the separate managed-identity lifecycle fixture, so no new foreground-job event protocol is planned.
 
 ## Both shell wrappers lose stopped jobs
 
@@ -16,18 +16,17 @@ The positional-argument counterfactual removes source reconstruction and preserv
 shell -l -i -c '"$@"; exec "$0" -l' shell <exact provider argv...>
 ```
 
-Both wrappers replace the shell after the provider stops. The replacement does not own the stopped job, and `fg` reports `fg: no current job`. The current Wakterm unit test passes one argument containing spaces but does not exercise suspension, Unix non-UTF-8 arguments, foreground process groups, signals, reaping, or terminal state.
+Both wrappers replace the shell after the provider stops. The replacement does not own the stopped job, and `fg` reports `fg: no current job`. The Wakterm unit test inspected in that baseline passed one argument containing spaces but did not exercise suspension, Unix non-UTF-8 arguments, foreground process groups, signals, reaping, or terminal state.
 
 ## One interactive Zsh owns the application and prompt
 
 The accepted command is:
 
 ```text
-wsh -- <command> [arguments...]
-wsh run-foreground [--state-root <directory>] [--login] -- <command> [arguments...]
+wsh --wsh-run [--login] -- <command> [arguments...]
 ```
 
-The manager reads the compact active-bundle state and replaces itself with the bundled Zsh using `-i -s`. Bundle startup captures the remaining positional parameters before user startup files run. A one-shot `precmd` hook removes itself and executes the captured array directly. That Zsh owns the foreground job, retains it in its job table across Ctrl-Z, and becomes the normal prompt without a second shell initialization. An explicit `--bundle` remains available for diagnostics but performs full bundle verification and is intentionally outside the installed startup timing path.
+The native executable captures the exact argument vector before user startup and schedules it as the first foreground job in the same interactive Zsh that will present the prompt. That Zsh retains the job table across Ctrl-Z and `fg`. No per-user activation record, manager, reconstructed command string or second shell initialization is needed. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) covers the current implementation.
 
 Wakterm continues to own executable selection, arguments, environment, cwd, provider session, restore policy, and whether the shell is a login shell. It can pass an argument vector to Wsh without constructing shell source. Wsh owns the exact transition into its bundled Zsh and no application identity or restore policy.
 
@@ -35,13 +34,13 @@ Wakterm continues to own executable selection, arguments, environment, cwd, prov
 
 The retained C probe records byte-exact arguments, PID, process group, terminal foreground process group, signals, and a nested child. The PTY test covers normal and nonzero exit, default and consumed Ctrl-C, Ctrl-Z followed by `fg`, terminal-mode restoration, login and non-login startup files, an existing alias and `precmd` hook, twenty fresh repeated launches, process exit, and zombie detection.
 
-Every correctness case passed. Empty arguments, whitespace, quotes, newlines, wildcard characters, dollar signs, leading dashes, Unicode, and a Unix byte sequence containing `0xff` arrived unchanged. The foreground process group owned the terminal, a nested child remained in that group, consumed Ctrl-C produced no premature prompt, and `fg` resumed the same PID and process group after Ctrl-Z. The concise and explicit forms behave identically, and the first application is enclosed by OSC 133 `C` and `D` before native Zsh emits the first editable prompt. Disabling native integration through `.term.extensions` suppresses those markers as well.
+Every correctness case passed. Empty arguments, whitespace, quotes, newlines, wildcard characters, dollar signs, leading dashes, Unicode, and a Unix byte sequence containing `0xff` arrived unchanged. The foreground process group owned the terminal, a nested child remained in that group, consumed Ctrl-C produced no premature prompt, and `fg` resumed the same PID and process group after Ctrl-Z. The original experiment tested both former command forms; current invocation uses the single option above. The first application is enclosed by OSC 133 `C` and `D` before native Zsh emits the first editable prompt. Disabling native integration through `.term.extensions` suppresses those markers as well.
 
-## Startup cost stays within the fixed gates
+## Historical wrapper comparison
 
-The comparison used the same complete development bundle, isolated user configuration, CPU affinity, probe, and blocking PTY marker instrumentation for all three paths. Each timing retained 40 launches after 5 warmups. Candidate PTY-to-probe-ready p90 was 11.675 ms, 1.534 ms below the positional wrapper's 13.209 ms p90 and within the fixed +1 ms regression gate. Probe-exit-to-editable-prompt p90 was 0.851 ms, compared with 514.209 ms for the current wrapper in this fixture because the current wrapper initialized a second interactive shell.
+The original launcher-era comparison used the same complete development bundle, isolated user configuration, CPU affinity, probe, and blocking PTY marker instrumentation for all three paths. Each timing retained 40 launches after 5 warmups. Candidate PTY-to-probe-ready p90 was 11.675 ms, 1.534 ms below the positional wrapper's 13.209 ms p90 and within the fixed +1 ms regression gate. Probe-exit-to-editable-prompt p90 was 0.851 ms, compared with 514.209 ms for the current wrapper in this fixture because the current wrapper initialized a second interactive shell.
 
-The dormant adapter remained within its ordinary-startup gate. Interleaved managed first-editable p90 changed from 29.872 ms to 30.297 ms, a 0.425 ms increase under the fixed +0.5 ms limit. Process tracing observed one Zsh execution on the accepted path and two on the current wrapper. The accepted path otherwise starts only the manager, existing per-session runtime and Git scan, and requested application.
+The dormant adapter remained within its ordinary-startup gate. Interleaved managed first-editable p90 changed from 29.872 ms to 30.297 ms, a 0.425 ms increase under the fixed +0.5 ms limit. Process tracing observed one Zsh execution on the accepted path and two on the current wrapper. That historical candidate otherwise started only the manager, existing per-session runtime and Git scan, and requested application.
 
 The [retained report](benchmarks/foreground-startup-2026-09-03/report.md) contains the exact gates, raw samples, process traces, source identities, and reproduction commands.
 

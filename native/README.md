@@ -4,14 +4,14 @@ This directory contains the native implementation under development. Local build
 
 The native executable preserves Zsh argument handling. Wsh tools use an explicit option in the first argument position. An ordinary script called `doctor`, `profile`, `version`, `update`, or `run` remains a script. `--` remains Zsh's end-of-options marker.
 
-| Native invocation | Purpose | Previous invocation |
-|---|---|---|
-| `wsh --wsh-version` | Detailed compiled Wsh and Zsh identity, without loading configuration | `wsh version` |
-| `wsh --doctor` | Inspect an isolated interactive startup and report ownership findings | `wsh doctor` |
-| `wsh --profile [--functions] -- <zsh arguments>` | Profile a shell | `wsh profile ...` |
-| `wsh --profile-report <directory>` | Recover a saved profile | `wsh profile report ...` |
-| `wsh --wsh-run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell | `wsh -- <argv>` or `wsh run-foreground ...` |
-| `wsh --wsh-help` | Show the native Wsh interface | No equivalent |
+| Native invocation | Purpose |
+| --- | --- |
+| `wsh --wsh-version` | Detailed compiled Wsh and Zsh identity, without loading configuration |
+| `wsh --doctor` | Inspect an isolated interactive startup and report ownership findings |
+| `wsh --profile [--functions] -- <zsh arguments>` | Profile a shell |
+| `wsh --profile-report <directory>` | Recover a saved profile |
+| `wsh --wsh-run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell |
+| `wsh --wsh-help` | Show the native Wsh interface |
 
 `wsh --wsh-version` reports the compiled build label: `unsigned development artifact` for development builds or `release build` for release-mode builds. The label does not verify installed resources or authenticate release provenance. Runtime environment variables and mutable installation metadata do not change it.
 
