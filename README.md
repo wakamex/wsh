@@ -17,9 +17,9 @@ For supported plugins installed without modifications, Wsh can provide the same 
 
 ## Install
 
-Wsh currently supports 64-bit x86 Fedora installations. Packages are still in development and have not been published, and there is no hosted DNF repository yet. [Build Wsh from source](DEVELOPMENT.md#native-development-installation) for local testing, or [build an RPM from source](packaging/SOURCE-RPM.md) using your Fedora release’s libraries. Local builds are unsigned development artifacts.
+[Build Wsh from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation directly on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. System-package installation and login-shell setup are currently qualified on x86-64 Fedora through the [source RPM](packaging/SOURCE-RPM.md). Packages have not been published, and there is no hosted DNF repository yet. Local builds are unsigned development artifacts.
 
-Once you have built an RPM package, replace the filename below with its actual name. Try it on a test machine where you can still log in to another account using an existing shell:
+For a Fedora RPM, install and test it before changing your login shell:
 
 ```sh
 sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
