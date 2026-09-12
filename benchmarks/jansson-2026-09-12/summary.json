@@ -1,0 +1,101 @@
+{
+  "git": {
+    "clean/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 8.955247,
+      "candidate_median_ms": 8.877175,
+      "paired_p95_ms": 0.23335499999999954,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "clean/warm": {
+      "pairs": 50,
+      "control_median_ms": 8.628139,
+      "candidate_median_ms": 8.684571,
+      "paired_p95_ms": 0.2949970000000004,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "dirty/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 3.968661,
+      "candidate_median_ms": 3.971602,
+      "paired_p95_ms": 0.15563400000000005,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "dirty/warm": {
+      "pairs": 50,
+      "control_median_ms": 3.813628,
+      "candidate_median_ms": 3.844349,
+      "paired_p95_ms": 0.13189299999999982,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "untracked/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 4.203187,
+      "candidate_median_ms": 4.250888,
+      "paired_p95_ms": 0.21464400000000072,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "untracked/warm": {
+      "pairs": 50,
+      "control_median_ms": 4.078614,
+      "candidate_median_ms": 4.114235,
+      "paired_p95_ms": 0.17997400000000052,
+      "limit_ms": 3,
+      "passed": true
+    }
+  },
+  "startup": {
+    "existing": {
+      "pairs": 50,
+      "paired_p95_ms": 0.5535840000000007,
+      "gate_ms": 3,
+      "passed": true,
+      "control_median_ms": 20.033373,
+      "native_median_ms": 20.047423
+    },
+    "minimal": {
+      "pairs": 50,
+      "paired_p95_ms": 0.359888999999999,
+      "gate_ms": 3,
+      "passed": true,
+      "control_median_ms": 22.198452,
+      "native_median_ms": 22.174732
+    }
+  },
+  "memory": {
+    "median_kib": {
+      "control": 3676.0,
+      "candidate": 3417.5
+    },
+    "max_delta_kib": -192,
+    "p95_delta_kib": -214,
+    "limit_kib": 4096,
+    "passed": true
+  },
+  "ping": {
+    "pairs": 1000,
+    "median_ns": {
+      "control": 10950.0,
+      "candidate": 12730.0
+    },
+    "paired_p95_delta_ns": 3460
+  },
+  "executables": {
+    "control": 372320,
+    "candidate": 114912
+  },
+  "correctness": {
+    "decoder_cases": 2237,
+    "differences": 7,
+    "representable_snapshots": 400,
+    "lifecycle_cases_per_binary": 15,
+    "sanitized": true,
+    "installed_profile": true,
+    "named_themes": 4
+  }
+}
