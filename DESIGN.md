@@ -1,232 +1,79 @@
-# wsh runtime design
+# Wsh architecture
 
-`wsh` provides a measured service and distribution layer around upstream Zsh. It keeps Zsh language semantics, job control, and ZLE editing while supplying curated defaults, tested adapters, shared state providers, and enough profiling to attribute their cost. The first service is a shared structured Git-state runtime between Zsh events and prompt rendering. Its provider adapts the asynchronous precursor worker measured by `zsh-theme-bench`; later provider implementations can change without changing theme definitions. Structured foreground startup and native terminal reporting are accepted features outside the provider boundary. Generic environment state, completion, foreground-job events, pane history, and terminal metadata remain evidence-gated in [`FEATURES.md`](FEATURES.md), [`FOREGROUND.md`](FOREGROUND.md), [`COMPLETION.md`](COMPLETION.md), and [`TERMINAL-INTEGRATION.md`](TERMINAL-INTEGRATION.md).
+Wsh is a pinned Zsh distribution with native C additions, thin Zsh integration and one optional C prompt helper per shell. Zsh owns the language, startup-file evaluation, job control and ZLE. System packages own installation and updates. This document describes the current source; earlier designs remain in Git history.
 
-This document describes the current released architecture. The locked native development build now replaces startup redirection with Zsh-owned startup and passes the [native build gates](benchmarks/native-build-2026-09-08/report.md). The selected native destination and ordered testing stages are in [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IMPLEMENTATION-PLAN.md); the [architecture evidence record](ARCHITECTURE-EVIDENCE.md) retains the comparisons behind those decisions. The transition evaluates C replacements and runtime boundaries while preserving local prompt and shell ownership.
+## Native entrypoint and system installation
 
-## State collection and rendering have separate contracts
+The executable handles explicit Wsh tool options in the first argument position and delegates ordinary arguments to Zsh. Script names, `-c`, login flags and `--` retain their Zsh meanings. The [command reference](NATIVE-INSTALLATION.md#commands) documents diagnostics, profiling, version reporting and foreground invocation.
 
-```text
-Zsh events
-    |
-    v
-registered field requirements
-    |
-    v
-resident runtime and providers
-    |
-    v
-complete versioned snapshot
-    |
-    v
-trusted prompt components configured by a non-executable theme
-    |
-    v
-one composed prompt, with at most one asynchronous repaint per transition
-```
+Native startup resolves resources and applies Wsh integration around Zsh's own user-file loading. It does not reconstruct startup semantics by manually sourcing configuration. The RPM installs the account shell at `/usr/bin/wsh`, resources under `/usr/libexec/wsh`, and registers the supported paths in `/etc/shells`. Bundled modules are linked into the executable; external module loading retains Zsh's ABI requirements.
 
-A trusted prompt component registers the fields selected by the active theme definition. The runtime collects the union of active requirements once per relevant state transition and publishes a complete snapshot. Requirements can change when themes or prompt components are reconfigured.
+The original login failure demonstrated that mandatory per-user activation state could prevent account access. An installation-owned default bundle was a viable smaller launcher counterfactual; the [native entrypoint experiment](benchmarks/native-entrypoint-2026-09-08/report.md) supported removing duplicated argument and startup handling altogether. [Native startup qualification](benchmarks/native-build-2026-09-08/report.md) and [Fedora login qualification](benchmarks/release-qualification-2026-09-10/report.md) establish the selected path. Missing optional helper resources do not become a prerequisite for basic shell access.
 
-A minimal theme definition conceptually selects the Git prompt component and fields:
+## Editing and compatibility ownership
 
-```text
-theme-version: 1
-left: cwd, git, prompt-character
-git.fields: branch, staged, modified, untracked
-git.staged-marker: " +"
-git.modified-marker: " !"
-git.untracked-marker: " ?"
-```
+| Component | Selected responsibility | Evidence |
+| --- | --- | --- |
+| Completion | C registration scanner inside compinit; Zsh retains initialization policy, auditing and candidate handling | [Installed completion](benchmarks/native-adoption-2026-09-10/completion/report.md) |
+| History substring search | Native history navigation with existing ZLE and configuration contracts | [Installed history](benchmarks/native-adoption-2026-09-10/history/report.md) |
+| Directory jumping | C data/query and persistence owner, with pinned Zsh editor and lifecycle adapters | [Installed directory qualification](benchmarks/native-directory-final-2026-09-10/installed-report.md) |
+| Autosuggestions | Complete C controller with generated Zsh configuration and widget adapter | [Installed autosuggestions](benchmarks/native-autosuggestions-installed-2026-09-10/report.md) |
+| Main syntax highlighting | Complete C main parser with generated configuration/predicate adapter; upstream Zsh redraw lifecycle and optional highlighters remain | [Installed highlighting](benchmarks/native-highlighting-installed-2026-09-10/report.md) |
 
-A trusted Git prompt component queries a caller-owned associative array internally. The theme cannot supply executable Zsh:
+A native replacement is selected from behavior, maintenance cost and measurements, rather than implementation language alone. Existing upstream implementations remain behavioral references and support external-plugin compatibility. [Performance results](PERFORMANCE.md) link the comparisons, including unsuccessful and intermediate approaches through their qualification reports.
 
-```zsh
-wsh_component_git_render() {
-  local -A state
-  prompt_query state
+Recognition checks the shared upstream catalog first and bounded local Git provenance on a miss. Supported unmodified upstream implementations prefer Wsh ownership, even when a newer upstream release has features Wsh has not incorporated yet. Modified or unverified implementations retain ownership. Component-specific tests preserve settings, custom widgets and unrelated hooks. [Catalog qualification](benchmarks/plugin-catalog-2026-09-10/report.md), [Git provenance qualification](benchmarks/git-provenance-2026-09-10/report.md) and [component compatibility](VENDORED-COMPONENTS.md) define this boundary. Daily upstream monitoring detects changes for review.
 
-  [[ -n $state[git.branch] ]] && print -nr -- "$state[git.branch]"
-  (( state[git.staged] )) && print -nr -- " +"
-  (( state[git.modified] )) && print -nr -- " !"
-  (( state[git.untracked] )) && print -nr -- " ?"
-}
-```
+Wsh does not initialize compinit automatically. The user's configuration or framework owns that choice. Automatic and deferred initialization remain unselected because their tested startup or first-use costs exceeded the gates; the adopted scanner is a separate improvement. [Completion](COMPLETION.md) distinguishes those outcomes.
 
-The component does not know which provider produced the values and does not launch repository commands. The definition can select and configure that component only through its versioned schema.
+## Prompt ownership and collection
 
-## Themes are data and prompt components are trusted code
+An unset or empty `WSH_THEME` preserves the existing prompt and does not start Wsh's prompt helper. A bundled name or definition path selects Wsh's prompt, right prompt, Git collection and repainting. The choice remains local to the Wsh session. Shared OMZ configuration should skip its executable theme when Wsh owns the prompt; doctor diagnoses overlap without rewriting configuration. [Theme setup](THEMES.md#session-selection-and-shared-configuration) gives the exact conditional.
 
-The public theme surface is a versioned non-executable definition format. Definitions arrange trusted prompt components, select named styles, provide bounded validated literals, choose declared variants, and request typed provider fields. The format has no general expression evaluator, function definition, command substitution, hook registration, file include, environment lookup, network reference, native extension, or raw prompt and terminal escape mechanism.
-
-Provider strings are untrusted even when their provider is part of `wsh`. Prompt components render them through context-specific encoders, and only the renderer emits Zsh prompt escapes or terminal controls. Named operations represent styles, line breaks, hyperlinks, and other terminal behaviors without exposing their byte sequences to a definition.
-
-The definition validator enforces byte, segment, nesting, output, provider-requirement, and render-time limits. The runtime attributes provider work and render cost to the active theme, but a definition cannot add authority beyond the prompt components it selects. Trusted prompt components are executable runtime code and enter through the ordinary source, benchmark, release, and update process.
-
-The theme directory accepts every definition version that passes mechanical schema, namespace, metadata, resource, and terminal-safety checks. Visual taste, duplication, popularity, and optional field cost do not determine admission. Bundled and recommended views are curated separately. [`SECURITY.md`](SECURITY.md) defines the exact admission, installation, hostile-input, and update contracts.
-
-## The first wsh provider has a bounded Git field scope
-
-The first `wsh` Git contract covers fields already produced by the benchmarked source collector:
+The per-session helper collects Git state and renders validated theme data. The Zsh adapter owns shell hooks, ZLE callbacks, prompt installation and repaint application. One optional-lock-safe Git process per prompt transition supplies a complete snapshot. Cancellation, generation checks and process cleanup prevent superseded work from replacing newer state; repainting depends on a changed rendered result.
 
 ```text
-git.root
-git.branch
-git.detached_sha
-git.exact_tag
-git.staged
-git.modified
-git.untracked
-git.ahead
-git.behind
-git.operation
-git.worktree
+Zsh prompt transition
+  -> per-session C helper
+  -> Git collection and complete snapshot
+  -> C renderer using the selected theme
+  -> Zsh adapter applies the prompt and any changed repaint
 ```
 
-Field definitions and fixtures belong to `wsh`, not to a particular collector. The initial benchmark established rendered semantics only for clean, staged, modified, untracked, and detached-HEAD scenarios. Ahead, behind, exact tags, and repository operations are present in the current collector's advertised scope but require their own fixtures before `wsh` claims them as validated service behavior.
+The [runtime protocol](schemas/runtime-protocol-v1.md) records requests, snapshots and publication semantics. [C collector qualification](benchmarks/native-git-2026-09-08/report.md) and [complete helper qualification](benchmarks/native-render-2026-09-08/runtime-report.md) retain state, cancellation, resource and timing checks.
 
-Additional fields remain explicit and lazy. Stash count, commit age, conflict classification, submodule detail, or other expensive state is added only with a definition, provider support, fixtures, and a requesting renderer. A broader renderer does not silently increase the cost paid by every renderer.
+Themes share collection behavior because independently implemented theme collectors repeated Git work and tied response time to appearance. The [original comparison](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md) motivated this separation; [current theme comparisons](PERFORMANCE.md#built-in-prompts-compared-with-omz) measure the implemented result.
 
-Collectors own:
+## Helper-process boundary
 
-- Cache keys and invalidation
-- External process execution
-- Optional lock suppression
-- Asynchronous scheduling
-- Deadlines and cancellation
-- Result and schema versioning
-- Error and unsupported-state handling
-- Snapshot freshness metadata
-- Snapshot publication
+The [in-process experiment](benchmarks/native-runtime-boundary-2026-09-09/report.md) failed child-ownership requirements: direct embedding conflicted with shell child handling, and suppressing that handling broke shell waiting. The passing helper's measured IPC cost was 11.850 microseconds p95. Keeping one helper per shell preserved a simpler passing ownership boundary.
 
-Themes consume completed snapshots. A snapshot can remain visible while its replacement is collected, but partial results do not mutate it in place.
+Prompt rendering and shell lifecycle remain local. Cross-shell Git collection is deferred until measurements show material duplicate work or aggregate memory cost, after comparing simpler per-session coalescing and caching. A generic provider framework, shared runtime and in-process replacement are not required parts of the architecture. [Remaining work](FEATURES.md) records the conditions for reconsideration.
 
-Every accepted provider exposes measurements through the same runtime boundary: request identity, requested fields, queue and execution duration, cache decision, external process count, cancellation reason, result age, publication, and repaint cause. Values that can disclose command text, arbitrary paths, environment contents, credentials, or provider payloads are omitted or redacted by default. A provider that cannot be measured cannot satisfy the feature admission gates.
+## Themes and rendering
 
-## The first wsh provider adapts the benchmarked worker
+Definitions use strict versioned TOML with layout, named styles, bounded literals and supported component settings. The validator rejects unknown fields and invalid layouts. Definitions cannot execute shell code or supply raw terminal controls; the renderer escapes runtime values and emits formatting. [THEMES.md](THEMES.md) documents actual syntax, examples and the four bundled presentations.
 
-The shell integration and per-session runtime are implemented in C. System packages own distribution. A thin trusted Zsh adapter owns only the interfaces that must live in the shell process: hooks, ZLE callbacks, prompt installation, snapshot transfer, and repaint requests. The C Git provider adapts the semantics and lifecycle demonstrated by the precursor worker, including staged asynchronous results, a bounded identity wait, cancellation, refresh coalescing, stale-result rejection, process cleanup, optional-lock suppression, and repaint-on-change behavior.
+The format does not provide a general expression language or dynamic provider registry. A public theme directory is not implemented. [Security boundaries](SECURITY.md) separate data-only themes from executable user configuration and trusted Wsh components.
 
-Generalizing it requires separating its structured Git result from its current glyph and prompt decisions. The provider publishes the existing field scope while trusted prompt components interpret the active definition's validated choices about whether `main` is hidden, whether a branch appears only after it changes, and which symbols and named styles represent each state.
+## Foreground jobs and terminal reporting
 
-The C runtime communicates with the Zsh adapter through the existing versioned protocol. The measured in-process prototype did not justify moving child-process ownership into the shell. Rendering and shell lifecycle stay local; shared Git collection remains deferred until measurements justify it.
+`wsh --wsh-run -- PROGRAM ARG...` passes exact argument bytes into one interactive Zsh. That shell owns the first foreground job and the subsequent prompt, preserving Ctrl-C, Ctrl-Z and `fg`. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) tests the boundary. [Foreground integration](FOREGROUND.md) records the original stopped-job failure and the deferred event-protocol question.
 
-## Git provider implementations remain replaceable
+Native Zsh emits OSC 7 directory reports and OSC 133 command zones. Wsh's source fixes correct prompt identifiers and restore shell directory reporting after child applications change it. Wsh disables the optional startup terminal query by default, following its measured 500 ms unanswered-query cost. The `WSH_NATIVE_TERMINAL_INTEGRATION` marker lets terminal integrations omit duplicate standard reporters. [Terminal integration](TERMINAL-INTEGRATION.md) records the consumer contract and qualification.
 
-[`gitstatusd`](https://github.com/romkatv/gitstatus) demonstrates a useful provider shape: a long-lived native process accepts directory and request identifiers, retains repository state in memory, and returns machine-readable status. Its bindings expose branch, commit, tag, ahead, behind, stash, conflict, staged, unstaged, untracked, and repository-operation data.
+## Profiling and diagnostics
 
-`wsh` can adapt gitstatusd behind its field contract and compare it with the initial process-backed `wsh` provider. The gitstatus project states that support is limited, no new features are planned, and most bugs will remain unfixed, so reuse does not transfer ownership of semantics, fixtures, supervision, or fallback behavior.
+Native profiling records startup boundaries, component work and the initial Git prompt transition. The reporter reads private bounded traces and can recover completed events after interruption. Function mode uses Zsh's zprof. Trace processing stays off the path it measures; experiments compare matching instrumentation and observe editor readiness after ZLE initialization.
 
-A later provider could use system Git, libgit2, a maintained fork, or a purpose-built scanner. The benchmark does not establish persistence as the required implementation. The choice follows measurements of warm and cold latency, CPU time, filesystem work, semantic parity, memory, and invalidation behavior on repositories of different sizes. Renderers do not change when the provider changes.
+[Profiling](PROFILING.md) documents supported commands, attribution, privacy and recovery. [Native profile qualification](benchmarks/native-profile-2026-09-08/report.md), [startup lifecycle](benchmarks/native-lifecycle-2026-09-08/report.md) and [child isolation](benchmarks/native-profile-isolation-2026-09-08/report.md) retain their gates. Doctor evaluates configuration ownership without editing it; [doctor qualification](benchmarks/native-doctor-2026-09-08/report.md) covers that tool.
 
-[Nushell's persistent-plugin results](https://www.nushell.sh/blog/2024-04-02-nushell_0_92_0.html) demonstrate that residency can amortize meaningful process startup, but also that persistence introduces idle lifetime, cleanup, protocol migration, retained memory, and crash behavior. `wsh` therefore begins with the smallest measured worker. A provider becomes resident only when the short-lived path's cold-start cost is isolated, an idle-expiration policy is tested, and the resident comparison improves the accepted workload without weakening cleanup or fallback.
+## Build and package ownership
 
-## Prompt transitions follow observable rules
+The [source lock](build/zsh-sources/zsh-cad0d67c-native.json) selects exact upstream bytes, source patches and native inputs. Wsh's source corrections cover terminal reporting, reproducible compiled-function output and highlight ownership metadata; [upstream bug records](UPSTREAM-ZSH-BUGS.md) distinguish confirmed defects and submission status.
 
-1. The first editable prompt does not wait for slow optional fields.
-2. A collector publishes a complete versioned replacement.
-3. Completed asynchronous work is coalesced into at most one repaint for a state transition.
-4. A repaint occurs only when the rendered result changed.
-5. Previous state can remain visible during collection, but its freshness is explicit and bounded.
-6. Active field requirements determine collection cost.
-7. Starting a command or changing context cancels work that can no longer produce a valid snapshot.
-8. Bundled renderers do not launch repository commands directly.
+The active build and distribution tools no longer require Rust or Cargo. [Build consolidation](benchmarks/native-consolidation-2026-09-10/build-report.md) records the retirement. The installation manifest identifies payload files, source, target, toolchain and dependencies. DNF replaces installed packages; there is no launcher activation record or Wsh self-updater.
 
-These rules are tested through both deterministic protocol tests and interactive terminal tests because worker lifecycle and ZLE integration have different failure modes.
+Running shells retain their linked executable and bundled modules across package replacement. Autoload functions, external modules and helper protocols require compatible resources or an explicit restart policy before an incompatible release. [Installation and recovery](NATIVE-INSTALLATION.md) define account-shell and removal boundaries.
 
-## The accepted post-5.9 Zsh revision supplies tested interfaces
-
-Official release `v0.1.3` uses stable Zsh 5.9.2. Current development pins upstream commit `cad0d67c76e2be7371cf3526b79ea2581810d35a` as one exact Zsh identity after it passed the complete floor, correctness, compatibility, resource, and performance gates. The retained [edge-Zsh result](benchmarks/edge-zsh-2026-09-03/report.md) directly tests current-shell command substitutions, named references, named layered ZLE highlights, and `ZSH_EXEPATH`. Other post-5.9 interfaces remain candidates until a fixture verifies their behavior in the selected revision.
-
-| Zsh feature | Use in `wsh` |
-|---|---|
-| Named references | Populate caller-owned associative arrays without serializing and reparsing state |
-| Namespaced parameter and function names | Group runtime state and reduce collisions with plugins; namespaces are organizational rather than a security boundary |
-| Non-forking command substitutions | Capture output from pure Zsh renderers without creating a subshell |
-| Named ZLE highlight groups and numeric layers | Compose syntax, selection, search, diagnostic, and mode highlighting with explicit precedence |
-| Terminal capability parameters | Centralize terminal feature detection instead of repeating heuristics in themes |
-| Native OSC 7 and OSC 133 reporting | Give compatible terminals one shell-owned working-directory, prompt, command, and output lifecycle without injected prompt hooks or prompt-time helpers |
-| Cursor form controls | Express editing modes and interactive states through a common presentation service |
-| Monotonic high-resolution timing | Drive deadlines, cache ages, command duration, and internal measurements without wall-clock jumps |
-| `ZSH_EXEPATH` | Locate the bundled runtime and helper programs |
-| GNU-style `zparseopts` | Provide consistent argument parsing for `wsh` commands |
-
-When available in the selected Zsh identity, these features improve the boundary but do not remove the cost of external programs. Field registration and providers remain responsible for avoiding unnecessary work and keeping unavoidable work away from the first editable prompt.
-
-## Native Zsh owns standard terminal reporting
-
-The bundled Zsh emits OSC 7 working-directory reports and OSC 133 prompt and command zones from its native ZLE and command loop. Wsh disables only the optional startup query by default, because an unanswered query added 500 ms in the retained edge-Zsh experiment. The accepted source patch makes directory reporting independent of that query, produces a prompt identifier accepted by Wakterm's real parser, and reasserts the shell's local directory before every editable prompt after child applications may have emitted their own OSC 7 value.
-
-Wsh sets `WSH_NATIVE_TERMINAL_INTEGRATION=1` so a terminal's existing shell script can omit duplicate standard reporters while retaining unrelated integration. Wakterm uses this signal to skip its OSC 7 and OSC 133 paths and keep OSC 1337 user variables. It does not need to parse shell commands, reconstruct arguments, or understand Zsh job control.
-
-The exact first application launched with `wsh -- <command> [arguments...]` runs before the first ordinary editable command, so a one-shot adapter emits its OSC 133 `C` and `D` boundaries around that array. Every later command and prompt marker comes from native Zsh. A general lifecycle bus and shell-specific terminal protocol are not part of this design.
-
-## Existing Zsh configuration remains executable and compatible
-
-`wsh` aims to preserve ordinary Zsh startup behavior for existing `.zshrc` files, Oh My Zsh setups, completion functions, and executable plugins. Compatibility does not mean reimplementing every Oh My Zsh plugin as a `wsh` builtin. Existing code continues to run with normal shell authority, while `wsh` can provide measured replacements for common subsystems.
-
-The default experience provides substring history search, autosuggestions, and syntax highlighting through pinned, configured, tested upstream components. The native implementation plan authorizes separate C comparisons for these features and directory jumping. Evaluate simpler configuration changes alongside each port, and accept replacements using behavior, composition, maintenance complexity, and resource measurements. Existing implementations supply executable references for those comparisons.
-
-The first accepted default is history substring search from pinned `zsh-users/zsh-history-substring-search` source. The bundle retains that source byte for byte and precompiles it with the paired Zsh. Its adapter loads after `.zshrc`, binds the terminal's advertised Up and Down keys in the active keymap when their existing behavior is ordinary history navigation, and preserves custom bindings. Exact pinned upstream and Oh My Zsh copies are replaced with the bundled runtime definitions after a bounded in-process comparison. Modified or unknown implementations remain active and are reported as external ownership. The redundant `.zshrc` declaration remains until a later doctor result can identify it as safely removable.
-
-The second accepted default is the pinned upstream autosuggestions implementation. Wsh precompiles it and selects its documented manual-rebind mode after user startup and the bundled history widgets are present. This removes the measured per-prompt widget rescan while retaining upstream suggestion semantics and an explicit `_zsh_autosuggest_bind_widgets` path for widgets added later. Exact copies that have not started are replaced; active wrapper stacks, modified implementations, and unknown definitions remain external. Wsh exposes explicit automatic-rebind, synchronous-fetch, and disable settings without introducing a new line editor or widget broker.
-
-The third accepted default is the pinned upstream syntax-highlighting implementation. An ordinary source declaration through Wsh's nested user-startup path sees ZLE as inactive and installs no redraw hooks. Wsh defers clean bundled loading to the first prompt, when ZLE is active, and preserves upstream's redraw-hook design, highlighter selection, and style map. Exact core and active shipped highlighter files can be activated without a second source pass. Modified active files, custom highlighters, incomplete installations, and unknown implementations remain external. This keeps ZLE responsible for editing and highlighting while fixing the reproduced lifecycle failure.
-
-Startup coexistence has explicit ownership. An unset or empty `WSH_THEME` is the default and preserves the user's renderer without starting Wsh's prompt runtime or registering its prompt hooks. Selecting a bundled theme name (`minimal`, `wakamex`, `robbyrussell`, or `agnoster`) or an explicit definition path through `WSH_THEME` opts into ownership of `PROMPT`, `RPROMPT`, the Git provider, and repainting. The selector is available before user startup and is not exported to child shells. Existing plugins retain unrelated functions, aliases, completions, widgets, and hooks in both modes. OMZ users skip their executable theme with a conditional before OMZ loads; Wsh does not unload arbitrary theme hooks afterward. Doctor reports a configured OMZ theme alongside Wsh ownership and suggests conditional loading or existing-prompt mode. The [real-configuration matrix](benchmarks/real-config-2026-09-05/report.md) and [theme-off counterfactual](benchmarks/omz-theme-off-2026-09-05/report.md) retain the overlapping-renderer baseline that motivated this choice.
-
-`wsh` handles a compatibility case automatically only when detection and treatment are deterministic, local, reversible, and covered by a fixture. If active components have ambiguous or overlapping ownership, the component preserves user behavior and exposes the specific conflict for a focused doctor check. Doctor explains the observed owners and alternatives; it does not silently rewrite arbitrary startup source or make an ambiguous choice.
-
-- A plugin adapter can provide selected lifecycle variables, hook behavior, and loading conventions.
-- A migration tool or maintained port can map an existing theme's visual choices into a non-executable `wsh` definition.
-- Unmodified themes and plugins remain explicitly executable Zsh configuration outside the `wsh` theme directory, validator, and non-executable guarantee.
-
-An adapter or automatic compatibility rule is accepted when it has a pinned reproducer, tests, and one clear owner. Code that can merely be sourced is not automatically a subsystem that `wsh` should replace.
-
-## Release bundles keep one exact Zsh build and runtime together
-
-A wsh release bundle is the complete runnable distribution for one supported target. It contains the exact Zsh binary and modules, the matching wsh runtime, trusted prompt components and providers, schemas, bundled themes and adapters, and a manifest that identifies every input and payload file. The common release identifies one Zsh source revision and every common or target-specific patch, while each target records its build configuration, toolchain, and binary digests.
-
-The release-to-Zsh mapping is exact but not mathematically one-to-one. Every wsh release maps to one Zsh source and build identity per target, while multiple wsh releases may reuse that identity when only the wsh runtime changes. Any change to the Zsh revision, patches, configuration, toolchain-sensitive output, or target binary creates a new wsh release candidate and reruns the complete validation suite.
-
-Installed release directories are immutable. Zsh, the runtime, a trusted prompt component, a schema, or a bundled adapter is never replaced independently inside one. Updating any component installs a new complete directory, verifies it, and atomically changes the active selection. Rollback selects the previous complete directory rather than reconstructing an older combination of components.
-
-```text
-wsh installation
-├── stable manager and launcher
-├── immutable release bundles
-│   ├── exact Zsh binary and modules
-│   ├── matching wsh runtime and trusted prompt components
-│   └── schemas, bundled definitions, adapters, and manifest
-└── mutable user state
-    ├── configuration and local overrides
-    ├── third-party theme definitions
-    ├── history
-    └── caches and traces
-```
-
-The launcher and release installer remain outside the active release directory and implement bundle listing, verification, installation, selection, and rollback without starting the active Zsh or runtime. Activation writes a bounded launch record derived from the completely verified manifest. Ordinary startup reads only that record, checks required entrypoint metadata, and replaces itself with the selected Zsh through `exec`; it does not retain a manager process or perform update work. Direct bundle activation does not replace either native tool. The explicit update command resolves a canonical exact release and delegates installation to that release's bootstrap, which installs the matching launcher and installer together with the complete release. A package-manager installation leaves those tools to that package manager.
-
-Official wsh-managed bundles always use their recorded Zsh build. A development or compatibility command may test an external system Zsh, but that combination is outside the official bundle's correctness, performance, reproducibility, and rollback guarantees.
-
-## Candidate snapshots pass distribution and runtime gates
-
-Every candidate Zsh snapshot should pass:
-
-- The upstream Zsh test suite
-- `wsh` startup and interactive smoke tests
-- Provider and renderer API contract tests
-- Theme-schema, hostile-value, terminal-control, and resource-bound tests
-- Clean, staged, modified, untracked, and detached fixtures for the first provider, plus fixtures for each additional advertised field
-- First-editable and final-state latency measurements
-- Repaint and external-process limits
-- Optional-lock checks
-- Release-attestation, build-attestation, reproducible-build, interrupted-update, atomic-activation, and offline-rollback tests
-- Full-bundle immutability and recovery tests that reject component replacement and keep rollback usable when the active Zsh or runtime cannot start
-
-The Wsh semantic version identifies the complete distribution. The bundled Zsh version and revision identify the shell component selected and tested for that distribution release. `wsh --version` reports the installed launcher version without requiring active state. `wsh version` verifies the active bundle and reports its release or development identity, Wsh and Zsh source revisions, exact Zsh version, target, and bundle digest. The verified manifest retains the complete Zsh build configuration, compiler, patch set, and payload identities. Benchmark artifacts record the executable hash as well as the printed Zsh version so development snapshots cannot be confused.
-
-The current patch queue contains two digest-pinned patches against the selected post-5.9 revision. The terminal-integration patch corrects the native OSC 133 prompt-marker identifier and restores the shell's OSC 7 directory after each completed foreground command. Both failures occur inside the native producer and cannot be corrected by a function or wrapper without installing a second lifecycle owner. The compiled-function patch replaces uninitialized alignment bytes with zeroes so independent builds produce the same `.zwc` bytes without exposing stale heap contents. Both patches have focused reproducers and pass the complete upstream Zsh and Wsh suites. The terminal behavior is tied to the real Wakterm parser, isolated PTY transcripts, process tracing, and the retained [terminal-integration result](benchmarks/native-terminal-integration-2026-09-04/report.md). Further patches remain exceptional so the distribution can continue following upstream. [`IMPLEMENTATION.md`](IMPLEMENTATION.md) fixes the first target, source release, bundle layout, language boundary, theme scope, and milestone thresholds.
-
-## Qualified native development architecture
-
-The native path now owns Wsh tools and startup directly in C, retains Zsh language/ZLE/job control, and selects one complete C runtime per shell. The embedded-runtime experiment failed child-ownership requirements; the helper passes protocol, cleanup, resource and floor gates. Bundled modules are linked into the shell while external loading remains available. System RPM transactions replace update/activation authority for this path. Published bundles retain the legacy architecture described above until an approved cutover. [Native progress](NATIVE-PROGRESS.md), [installation](NATIVE-INSTALLATION.md) and the [responsibility inventory](benchmarks/native-qualification-2026-09-09/inventory-report.md) identify accepted changes and retained decisions.
+[DEVELOPMENT.md](DEVELOPMENT.md) owns build and test procedures; [RELEASES.md](RELEASES.md) owns exact-commit validation, reproducible artifacts, provenance and publication. Source RPMs support downstream builds with their own identity. Native package publication still requires an authorized version and release.

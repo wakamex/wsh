@@ -1,18 +1,22 @@
 # Completion experiments
 
-## Native initialization exceeds startup or first-Tab budgets
+## Native scanner adopted; automatic initialization remains unselected
 
-Standalone Wsh currently supplies its bundled completion functions but does not initialize native `compinit`. A user configuration or framework such as Oh My Zsh can initialize it. The [eager experiment](benchmarks/native-completion-2026-09-06/report.md) enables Git branch and `z` completion but exceeds startup budgets. The [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) passes its correctness and startup gates but takes 256.865 ms p95 on first Tab without a completion dump and 115.254 ms with one, exceeding the 100 ms budget. The [component experiment](benchmarks/completion-costs-2026-09-06/report.md) identifies native initialization and first native completion as the large diagnostic spans. The [native scan experiment](benchmarks/native-completion-scan-2026-09-09/report.md) locates most cold cost in registration scanning. A read-only installation dump passes normal startup and first Tab, but stale/unusable fallback exceeds its startup budget; a bounded-read shell wrapper makes fallback slower. The seed remains a prototype pending a new admission decision. Completion defaults remain unchanged.
+Wsh includes the native compinit registration scanner. Its [installed comparison](benchmarks/native-adoption-2026-09-10/completion/report.md) reduced cold startup p95 from 155.429 ms to 123.600 ms, with warm startup approximately 37.6–37.8 ms, while passing the matched correctness, cache and first-Tab gates. Zsh retains completion auditing, candidate handling and the user's initialization policy.
+
+Standalone Wsh does not invoke compinit automatically. A user configuration or framework such as Oh My Zsh initializes it. Automatic initialization is a separate decision: the [eager experiment](benchmarks/native-completion-2026-09-06/report.md) exceeded startup budgets, and the [deferred experiment](benchmarks/deferred-completion-2026-09-06/report.md) exceeded its 100 ms first-Tab gate with both missing and reusable dumps. The [component investigation](benchmarks/completion-costs-2026-09-06/report.md) and [scan experiment](benchmarks/native-completion-scan-2026-09-09/report.md) isolated registration cost. A read-only installation seed passed its valid path but failed stale/unusable fallback; its bounded-read wrapper was also rejected. These historical results explain the unselected approaches, not a failure of the later adopted scanner.
+
+Reopen automatic initialization only with a new hypothesis tested against current source for startup, first Tab, reusable/stale/unusable dumps, user configuration and unchanged security checks.
 
 ## Wakterm dynamic completion comparison
 
-Wakterm currently ships 9,246 lines of generated completion across Bash, Fish, and Zsh even though its live Clap model remains authoritative. This establishes duplicated generated structure and installed size, but it does not yet establish that a resident endpoint is faster or equally correct. The first experiment compares the current assets with direct dynamic completion and a Wakterm-owned mux endpoint.
+The recorded Wakterm baseline contained 9,246 lines of generated completion across Bash, Fish, and Zsh even though its live Clap model remains authoritative. This establishes duplicated generated structure and installed size, but it does not yet establish that a resident endpoint is faster or equally correct. The first experiment compares the current assets with direct dynamic completion and a Wakterm-owned mux endpoint.
 
 Zsh continues to own candidate matching, grouping, presentation, and selection. Wakterm owns its command model. A generic broker is not part of this experiment and becomes a candidate only if a second application demonstrates the same lifecycle need. Caching remains optional and provider-specific because broad caching would produce stale paths, configuration, repository state, credentials, or remote results.
 
-## A Wakterm endpoint complements native Zsh completion
+## Proposed Wakterm endpoint
 
-Zsh already has a rich completion system with shell-local context, matching, grouping, descriptions, and selection behavior. The endpoint should not replace it. A ZLE adapter sends structured context only for Wakterm commands and converts the response into ordinary Zsh candidates. Conventional completion functions remain the fallback.
+Zsh already has a rich completion system with shell-local context, matching, grouping, descriptions, and selection behavior. The endpoint should not replace it. A proposed ZLE adapter would send structured context only for Wakterm commands and convert the response into ordinary Zsh candidates. Conventional completion functions remain the fallback.
 
 ```text
 command line and cursor
@@ -57,7 +61,7 @@ These systems show that rich completion presentation already belongs in the shel
 
 ## Wakterm provides a concrete first provider
 
-[Wakterm issue 41](https://github.com/wakamex/wakterm/issues/41) records duplicated command trees and growing static output. The current assets establish this baseline:
+[Wakterm issue 41](https://github.com/wakamex/wakterm/issues/41) records duplicated command trees and growing static output. The recorded assets establish this baseline; recapture the application revision and generated bytes before starting a new comparison:
 
 | Shell | Lines | Bytes |
 |---|---:|---:|
@@ -66,7 +70,7 @@ These systems show that rich completion presentation already belongs in the shel
 | Zsh | 3,534 | 138,266 |
 | Total | 9,246 | 404,616 |
 
-The Zsh asset contains 266 command-context functions after the agent command tree was added. These counts establish generation and distribution cost, not a runtime performance result.
+The recorded Zsh asset contains 266 command-context functions after the agent command tree was added. These counts establish generation and distribution cost, not a runtime performance result.
 
 [`clap_complete::CompleteEnv`](https://docs.rs/clap_complete/latest/clap_complete/env/struct.CompleteEnv.html) generates a small shell wrapper that invokes a completer with command-line context. The engine builds candidates from the live Clap model, and its `completer` setting can direct the wrapper to a dedicated frontend instead of the application binary.
 
@@ -82,7 +86,7 @@ For Wakterm, that frontend can send requests to the existing mux server. This te
 | Repository values | Repository identity, revision or state version, arguments, and typed prefix | Invalidate on relevant repository transitions |
 | Remote and SSH values | Configuration, connection identity, authorization context, and typed prefix | Bound result age and invalidate configuration or connection changes |
 
-The endpoint stores a result only when the provider supplies its cache key and freshness policy. Sensitive environment and authorization state are excluded from requests by default and included only when the provider contract requires them.
+Any candidate endpoint may store a result only when the provider supplies its cache key and freshness policy. Sensitive environment and authorization state are excluded from requests by default and included only when the provider contract requires them.
 
 The first cache remains bounded and disposable. Nushell's current completion cache provides a useful minimum model: a bounded least-recently-used set keyed by text through the cursor and invalidated when the working directory, `PATH`, or available commands change. `wsh` does not copy those exact keys for every provider, but it requires an equally explicit identity and invalidation rule before storing a result.
 
@@ -105,7 +109,7 @@ Dynamic completion runs on an editor hot path and must remain safe when a provid
 
 Cancellation is complete only when provider work stops or is detached from further resource use under a separately measured supervisor policy. Ignoring a late response while an abandoned process continues scanning is not sufficient.
 
-This does not provide automatic structured completion for arbitrary executables. A command needs a registered provider, an exported schema, a dynamic completion protocol, or a conventional Zsh completion function. Initial experiments cover Wakterm and `wsh`, where the project owns both sides and can validate requests against the real Clap parser.
+This does not provide automatic structured completion for arbitrary executables. A command needs a registered provider, an exported schema, a dynamic completion protocol, or a conventional Zsh completion function. The initial application experiment covers Wakterm, whose command model can be validated against its real Clap parser. Wsh uses native option parsing and is not a Clap completion provider.
 
 `CompleteEnv` remains behind Clap's `unstable-dynamic` feature, its shell protocol can change, and its documentation recommends regenerating wrappers when an application is upgraded. The experiment therefore validates the generated wrapper and Wakterm version together. An accepted `wsh` adapter must fail back cleanly when the endpoint or protocol version does not match.
 

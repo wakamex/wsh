@@ -33,7 +33,7 @@ The release notes preserve the existing theme format, shared `.zshrc` use and op
 - README directory ownership now agrees with native takeover of recognized OMZ `z` copies.
 - README separates the three upstream correctness fixes from native entrypoint, completion and highlighter implementation, removing the contradictory patch count.
 - `native/README.md` no longer claims that assembly uses the deleted Rust manager.
-- `NATIVE-PROGRESS.md` and the implementation plan now point to the selected completion and interactive owners, superseding their earlier partial-port status.
+- [DESIGN.md](DESIGN.md) records selected completion and interactive owners; [FEATURES.md](FEATURES.md) records remaining work. Completed migration plans and status logs remain in Git history.
 - Existing benchmark reports remain historical records of their measured revisions. Their earlier ownership statements are not rewritten to describe later implementations.
 
 ## Validation still required on the release candidate

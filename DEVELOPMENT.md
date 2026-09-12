@@ -2,7 +2,7 @@
 
 `wsh` changes enter through reproducible correctness tests and benchmarks. Development starts with the smallest local runnable bundle, fixes acceptance gates before implementation, changes one causal factor at a time, and retains enough evidence to reproduce every accepted performance or correctness claim.
 
-The selected native transition follows [NATIVE-IMPLEMENTATION-PLAN.md](NATIVE-IMPLEMENTATION-PLAN.md). It authorizes prototypes aimed at reducing code, dependencies, duplicated responsibilities, and compatibility glue, including C replacements for working components. Record those costs and test the resulting simplification alongside correctness and performance. The current build and release contracts below remain applicable until their replacements are implemented and validated.
+The selected architecture and its comparative evidence are recorded in [DESIGN.md](DESIGN.md). Remaining feature experiments and their admission triggers are in [FEATURES.md](FEATURES.md). Architecture changes can be justified by measured reductions in responsibilities, dependencies or compatibility glue alongside passing behavior and resource gates.
 
 ## Native installation and distribution
 
@@ -61,7 +61,7 @@ Run `./build/build-native-installation.zsh` for the host loop, then `python3 bui
 
 The canonical script runs upstream Zsh tests, native integration contracts, inventory tampering, profile and recovery checks before RPM assembly. Local output remains an unsigned development artifact. `./build/test-reproducible-development-bundles.zsh NEW_OUTPUT [REVISION]` builds two fresh worktrees with separate build directories and compares native manifests and RPM bytes. It requires a clean source tree and preserves failed workers.
 
-Historical benchmark inputs remain immutable. `benchmarks/verify-historical.py` checks their current bytes and executes their original verifiers against the recorded pre-migration Git tree. This preserves comparisons without retaining obsolete crates in the active build. New accepted evidence verifiers belong in the shared entrypoint.
+Historical benchmark inputs remain immutable. Read historical reports and their relative documentation links at the source revision recorded by the experiment; obsolete top-level documents are retained in Git history rather than the active documentation set. `benchmarks/verify-historical.py` checks their current bytes and executes their original verifiers against the recorded pre-migration Git tree. This preserves comparisons without retaining obsolete crates in the active build. New accepted evidence verifiers belong in the shared entrypoint.
 
 ## Source RPM builds
 
