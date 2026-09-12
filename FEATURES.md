@@ -21,12 +21,18 @@ Architectural simplification can justify an experiment when it removes demonstra
 
 Before implementation, fix a runnable baseline, the smallest counterfactual, correctness and resource gates, and an attempt/time budget. Run correctness and sanitizer checks where applicable before matched timing comparisons. After two failed interventions at one gate, audit the premise and require a new hypothesis. A new subsystem needs a concrete consumer benefit that simpler owner-local changes cannot provide. Follow [DEVELOPMENT.md](DEVELOPMENT.md) for retained identities and verification.
 
+## Settled decisions
+
+Native startup, system-package updates, the C component owners, one prompt helper per shell and fresh-installation release scope are selected. The legacy Rust crates and toolchain are retired. The source RPM is implemented and passes offline Fedora rebuild and login qualification. Published canonical artifacts use GitHub provenance; a separate maintainer RPM signature and hosted repository are not part of the current release contract.
+
+The older [migration inventory](benchmarks/native-qualification-2026-09-09/inventory-report.md) retains decisions that were open at its recorded revision. Its component-adoption, legacy-retirement and distribution-contract questions have since been resolved by [architecture qualification](DESIGN.md), [source-RPM qualification](benchmarks/source-rpm-2026-09-11/report.md) and the [release contract](RELEASES.md). Historical decision tables are evidence, not the current backlog.
+
 ## Remaining work
 
 | Work | Current decision and next gate |
 | --- | --- |
 | Native release | Installation and package qualification are complete for their recorded revisions. Choose an authorized version, prepare its committed notes and pass exact-candidate CI before publication. [RELEASE-REVIEW.md](RELEASE-REVIEW.md) tracks preparation; [RELEASES.md](RELEASES.md) defines authorization. |
-| Additional package targets and incompatible resources | Fedora x86-64 is the supported installation target. Qualify each new distribution or architecture independently. Future incompatible autoload functions, external modules or helper protocols need an explicit compatibility or restart policy before shipping; adding a recovery subsystem without that trigger is unnecessary. |
+| Distribution channel and additional targets | The Fedora source RPM is implemented and qualified. Choose whether to pursue a hosted repository such as COPR or downstream distro inclusion, and qualify that channel before advertising it. No repository or submission is configured. Fedora x86-64 remains the supported installation target; qualify each new distribution or architecture independently. This does not block the existing direct-RPM release path. |
 | Standalone completion initialization | Native compinit registration scanning is adopted. Automatic/deferred initialization and installation dump seeds remain unselected. Reopen only with a new hypothesis that passes startup, first-Tab and stale/unusable-cache fallback gates while preserving user initialization and security checks. [COMPLETION.md](COMPLETION.md) retains outcomes. |
 | Wakterm completion | Compare pruned static completion, direct application completion and the existing mux against freshly captured application inputs. Select the smallest passing path for installed size, cold/warm latency, candidate correctness, cancellation and fallback. A generic broker needs a second demonstrated consumer. |
 | Pane history | Wakterm must persist a stable logical pane token first. Compare a small native `fc -p` integration with bounded Wsh-managed history across mux restart; keep shell history local and terminal scrollback in the terminal. Private-history work must test that sentinel commands never reach configured durable sinks or diagnostics after normal and interrupted exit. |
@@ -40,6 +46,7 @@ A release does not require pane history, a theme directory, shared Git collectio
 
 | Candidate | Evidence required before design work |
 |---|---|
+| Incompatible package resources | A proposed release changes autoload-function compatibility, external-module ABI or helper protocol. Define and test compatibility or an explicit restart policy before that release; the current compatible package path does not need an additional recovery subsystem |
 | Lazy provider registration | A second provider whose eager parsing or startup has measurable cost; the counterfactual is conventional Zsh autoloading without a registry service |
 | Resident provider idle expiration | A provider whose repeated cold start dominates direct execution or IPC; compare short-lived execution with measured idle lifetimes, retained memory, cleanup, crash recovery, and protocol migration cost |
 | Git-state sharing across shells | Multiple Wsh shells must first demonstrate material duplicate Git work or aggregate memory cost. Compare same-repository and different-repository panes against the current per-session runtimes, measuring total memory, Git executions, CPU, and prompt freshness. Test simpler per-session request coalescing and caching before a per-user Git service; keep rendering and shell lifecycle local. Any shared prototype must preserve repository and worktree identity, relevant per-shell Git environment, invalidation after external changes, cancellation, mixed-version compatibility, disconnect cleanup, and usable prompts after service failure. Sharing the entire runtime remains deferred without separate evidence |
