@@ -53,15 +53,11 @@ WSH_THEME=wakamex wsh
 
 Choose `minimal`, `wakamex`, `robbyrussell`, or `agnoster`. Selecting Robbyrussell or Agnoster through OMZ uses the OMZ version; select it through `WSH_THEME` to get Wsh's version and its measured performance benefits. [The theme guide](THEMES.md) covers appearance, custom layouts and colors, and differences from the OMZ versions.
 
-If you share `.zshrc` with regular Zsh and use OMZ, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
+Choose how to configure it:
 
-```zsh
-if [[ -n ${WSH_THEME-} ]]; then
-  ZSH_THEME=""
-fi
-```
-
-This avoids loading the OMZ theme when selecting a Wsh prompt. Keep `WSH_THEME` unset for regular Zsh, and avoid assigning or globally exporting it unconditionally in shared configuration. See [shared configuration and doctor advice](THEMES.md#session-selection-and-shared-configuration) for details.
+- Keep using Zsh and Wsh interchangeably: leave `.zshrc` unchanged and select a Wsh theme with the command above. Zsh keeps your existing theme.
+- Switch entirely to Wsh: set `WSH_THEME=wakamex` in `.zshrc`. If you keep OMZ, set `ZSH_THEME=""` before sourcing it to skip its theme.
+- Optionally avoid loading the OMZ theme in Wsh while keeping it in Zsh: add the [shared-configuration conditional](THEMES.md#session-selection-and-shared-configuration). This saves duplicate theme work; it is not required to use both shells.
 
 ## Testing and bundled Zsh
 

@@ -25,7 +25,11 @@ WSH_THEME=/path/to/theme.toml wsh
 
 Run these commands in your terminal to try a theme for that Wsh session. You can customize layout and colors in a theme file without writing shell scripts. Selecting Robbyrussell or Agnoster through OMZ uses the OMZ version; select it through `WSH_THEME` to get Wsh's version and its measured performance benefits. The presentation table above describes which OMZ features the ports cover; the definition format below explains customization.
 
-In a shared `.zshrc`, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
+If you use Zsh and Wsh interchangeably, you can leave your shared `.zshrc` unchanged and select the Wsh theme on the command line as above. OMZ loads its existing theme, then Wsh installs the selected prompt. Any theme work and unrelated hooks from OMZ still run.
+
+If you switch entirely to Wsh, set `WSH_THEME=wakamex` in `.zshrc`. If OMZ still loads, set `ZSH_THEME=""` before sourcing `oh-my-zsh.sh`. Removing OMZ is a separate choice; its other plugins and configuration can remain useful.
+
+The following conditional is an optional optimization for using both shells: it skips OMZ's theme when a Wsh theme is selected, while retaining the OMZ theme in regular Zsh. Put it after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
 
 ```zsh
 if [[ -n ${WSH_THEME-} ]]; then
