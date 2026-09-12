@@ -6,7 +6,7 @@ Wsh’s Fedora packages are still in development and have not been published.
 
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
 - Jump back to frequently used directories with `z`.
-- Keep your existing Zsh theme, or choose Minimal, Wakamex, Robbyrussell, or Agnoster and keep typing while Git status updates in the background.
+- Keep your existing Zsh theme, or choose Wsh’s built-in Minimal, Wakamex, Robbyrussell, or Agnoster prompts, with [up to 95% shorter prompt waits for Agnoster compared with OMZ](PERFORMANCE.md#built-in-prompts-compared-with-omz).
 - Find which parts of your configuration slow startup and which plugins duplicate features you already have.
 - Make Wsh your default shell and install, update or downgrade it through Fedora’s package manager, DNF.
 - Jump between prompts, select command output, and open new tabs in the current directory in compatible terminals.
