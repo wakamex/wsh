@@ -53,7 +53,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-foreground-') as directory:
     byte_program.write_text('#!/usr/bin/python3\nimport json,os,sys\nos.write(1,b"ARGV:"+json.dumps([os.fsencode(x).hex() for x in sys.argv]).encode()+b"\\n")\nsys.exit(7)\n')
     byte_program.chmod(0o755)
     values=[b'',b'\xff',b'line\nbreak',b'$(printf INJECTED)',b'%F{red}',b'--doctor']
-    _,pid,fd=start(['--wsh-run','--',byte_program,*values],env,home)
+    _,pid,fd=start(['--run','--',byte_program,*values],env,home)
     try:
         output=wait(fd)
         actual=json.loads(output.split(b'ARGV:',1)[1].splitlines()[0])
@@ -68,7 +68,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-foreground-') as directory:
     finally:
         if pid is not None:stop(pid,fd)
         else:os.close(fd)
-    for arguments in (['--wsh-run'],['--wsh-run','--'],['--wsh-run','--',''],['--wsh-run','--login','--'],['--wsh-run','--login','--login','--','true'],['--wsh-run',b'\xff']):
+    for arguments in (['--run'],['--run','--'],['--run','--',''],['--run','--login','--'],['--run','--login','--login','--','true'],['--run',b'\xff']):
         result=subprocess.run([NATIVE,*arguments],env=env,input=b'',capture_output=True,timeout=3)
         assert result.returncode==2 and not result.stdout and b'usage:' in result.stderr,result
     samples=[]
@@ -79,7 +79,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-foreground-') as directory:
                 if variant=='callback':
                     arguments=['-i','-s','--','/usr/bin/true']
                     environment['WSH_RUN_FOREGROUND']='1'
-                else:arguments=['--wsh-run','--','/usr/bin/true']
+                else:arguments=['--run','--','/usr/bin/true']
                 before,pid,fd=start(arguments,environment,home)
                 try:
                     output=wait(fd);elapsed=(time.monotonic_ns()-before)/1e6

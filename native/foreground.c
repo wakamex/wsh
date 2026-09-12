@@ -15,7 +15,7 @@ wsh_foreground_parse(int argc, char **arguments)
         ++first;
     }
     if (first >= argc || strcmp(arguments[first], "--") || first + 1 >= argc || !*arguments[first + 1]) {
-        fputs("usage: wsh --wsh-run [--login] -- <command> [arguments...]\n", stderr);
+        fputs("usage: wsh --run [--login] -- <command> [arguments...]\n", stderr);
         return 2;
     }
     wsh_foreground_count = argc - first - 1;

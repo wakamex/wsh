@@ -58,7 +58,7 @@ The format does not provide a general expression language or dynamic provider re
 
 ## Foreground jobs and terminal reporting
 
-`wsh --wsh-run -- PROGRAM ARG...` passes exact argument bytes into one interactive Zsh. That shell owns the first foreground job and the subsequent prompt, preserving Ctrl-C, Ctrl-Z and `fg`. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) tests the boundary. [Foreground integration](FOREGROUND.md) records the original stopped-job failure and the deferred event-protocol question.
+`wsh --run -- PROGRAM ARG...` passes exact argument bytes into one interactive Zsh. That shell owns the first foreground job and the subsequent prompt, preserving Ctrl-C, Ctrl-Z and `fg`. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) tests the boundary. [Foreground integration](FOREGROUND.md) records the original stopped-job failure and the deferred event-protocol question.
 
 Native Zsh emits OSC 7 directory reports and OSC 133 command zones. Wsh's source fixes correct prompt identifiers and restore shell directory reporting after child applications change it. Wsh disables the optional startup terminal query by default, following its measured 500 ms unanswered-query cost. The `WSH_NATIVE_TERMINAL_INTEGRATION` marker lets terminal integrations omit duplicate standard reporters. [Terminal integration](TERMINAL-INTEGRATION.md) records the consumer contract and qualification.
 

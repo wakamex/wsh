@@ -38,7 +38,7 @@ After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as y
 | Find interactive startup slowdowns | `wsh --profile -- -i` |
 | Read a saved profiling report | `wsh --profile-report DIRECTORY` |
 | See the installed Wsh version | `wsh --wsh-version` |
-| Run a program, then return to a Wsh prompt | `wsh --wsh-run -- PROGRAM ARG...` |
+| Run a program, then return to a Wsh prompt | `wsh --run -- PROGRAM ARG...` |
 | List Wsh’s command options | `wsh --wsh-help` |
 
 Foreground programs retain normal Ctrl-C, Ctrl-Z and `fg` behavior. See [profiling](PROFILING.md) for interpreting startup measurements and [the command reference](NATIVE-INSTALLATION.md#commands) for Zsh argument handling.

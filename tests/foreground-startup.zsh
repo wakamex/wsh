@@ -92,14 +92,14 @@ foreground_child() {
       exec $bundle/bin/zsh -d -l -i -c '"$@"; exec "$0" -d -l -i' $bundle/bin/zsh $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate)
-      exec $bundle/bin/wsh --wsh-run --login -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --run --login -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate-non-login)
-      exec $bundle/bin/wsh --wsh-run -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --run -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate-shorthand)
       export WSH_STATE_ROOT=$state_root
-      exec $bundle/bin/wsh --wsh-run -- $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh --run -- $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     *)
       print -u2 -- "error: unknown foreground variant: $current_variant"

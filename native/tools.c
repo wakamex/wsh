@@ -22,7 +22,7 @@ wsh_cli(int argc, char **arguments)
         }
         return wsh_profile_report(arguments[2]);
     }
-    if (!strcmp(option, "--wsh-run"))
+    if (!strcmp(option, "--run"))
         return wsh_foreground_parse(argc, arguments);
     if (!strcmp(option, "--doctor")) {
         if (argc != 2) {
@@ -58,7 +58,7 @@ wsh_cli(int argc, char **arguments)
               "       wsh --doctor\n"
               "       wsh --profile [--functions] -- [Zsh arguments]\n"
               "       wsh --profile-report <directory>\n"
-              "       wsh --wsh-run [--login] -- <command> [arguments...]\n"
+              "       wsh --run [--login] -- <command> [arguments...]\n"
               "       wsh --wsh-help\n"
               "Ordinary script names and -- retain their Zsh meanings.\n",
               stdout);

@@ -81,11 +81,12 @@ if len(sys.argv) == 2:
         assert run(executable,['--wsh-version','extra']).returncode == 2
         help_result = run(executable,['--wsh-help'])
         assert help_result.returncode == 0
-        for option in ('--doctor', '--profile', '--profile-report'):
+        for option in ('--doctor', '--profile', '--profile-report', '--run'):
             assert option in help_result.stdout
             assert '--wsh-' + option[2:] not in help_result.stdout
         for args in (['--doctor', 'extra'], ['--profile', 'extra'],
-                     ['--profile-report'], ['--profile-report', 'a', 'b']):
+                     ['--profile-report'], ['--profile-report', 'a', 'b'],
+                     ['--run'], ['--run', '--'], ['--run', '--login', '--']):
             result = run(executable, args)
             assert result.returncode == 2 and 'usage: wsh ' in result.stderr
             assert 'STARTUP_LEAK' not in result.stdout
@@ -94,7 +95,7 @@ if len(sys.argv) == 2:
         (home/'version').write_text('print -r -- "$1"; exit 23\n')
         result = run(executable,['-f','version','literal argument'])
         assert result.returncode == 23 and result.stdout == 'literal argument\n'
-        for name in ('doctor', 'profile', 'profile-report', '--doctor', '--profile', '--profile-report'):
+        for name in ('doctor', 'profile', 'profile-report', 'run', '--doctor', '--profile', '--profile-report', '--run'):
             (home/name).write_text('print -r -- "$1"; exit 23\n')
             args = ['--', name] if name.startswith('--') else [name]
             result = run(executable, [*args, 'literal argument'])

@@ -26,7 +26,7 @@ After testing your configuration and terminal behavior, use `chsh -s /usr/bin/ws
 | Interactive startup profile | `wsh --profile -- -i` |
 | Function-level profile | `wsh --profile --functions -- -i` |
 | Saved profile report | `wsh --profile-report DIRECTORY` |
-| Foreground application, then prompt | `wsh --wsh-run -- PROGRAM ARG...` |
+| Foreground application, then prompt | `wsh --run -- PROGRAM ARG...` |
 | Native tool help | `wsh --wsh-help` |
 
 Wsh preserves Zsh command-line parsing: `--` ends option parsing, ordinary positional arguments name shell scripts, and `-c`, `-s` and `-f` keep their Zsh meanings. See [PROFILING.md](PROFILING.md) for profile options and reports.

@@ -10,7 +10,7 @@ The native executable preserves Zsh argument handling. Wsh tools use an explicit
 | `wsh --doctor` | Inspect an isolated interactive startup and report ownership findings |
 | `wsh --profile [--functions] -- <zsh arguments>` | Profile a shell |
 | `wsh --profile-report <directory>` | Recover a saved profile |
-| `wsh --wsh-run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell |
+| `wsh --run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell |
 | `wsh --wsh-help` | Show the native Wsh interface |
 
 `wsh --wsh-version` reports the compiled build label: `unsigned development artifact` for development builds or `release build` for release-mode builds. The label does not verify installed resources or authenticate release provenance. Runtime environment variables and mutable installation metadata do not change it.

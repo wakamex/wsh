@@ -52,7 +52,7 @@
       },
       {
         "path": "native/tools.c",
-        "sha256": "2f8f0297ce46fd84a9f59a2a90f333c5d698a17064de7a8cf2997ef01932b722"
+        "sha256": "1698efe5bc0ca0a7aa14d21076d87b90f66c360de86d0b102fb4907ec4f91841"
       },
       {
         "path": "native/doctor.c",
@@ -60,7 +60,7 @@
       },
       {
         "path": "native/foreground.c",
-        "sha256": "66bb584aadf11b3a55ac5221fed8a8de2cf24e5ab093f89504b007ccb31854f1"
+        "sha256": "ad8084b38d4df1f4ca7ca327e80a5d3ab4abe97c25b69a014a53f220f75996ba"
       },
       {
         "path": "native/profile.c",

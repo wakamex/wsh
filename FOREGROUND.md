@@ -1,6 +1,6 @@
 # Foreground startup and job lifecycle
 
-Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh provides that transition through `wsh --wsh-run [--login] -- <command> [arguments...]`. Wakterm's existing process cache now passes the separate managed-identity lifecycle fixture, so no new foreground-job event protocol is planned.
+Wakterm needs to launch an exact provider command as the first foreground job and present an interactive shell after it exits or stops. Wsh provides that transition through `wsh --run [--login] -- <command> [arguments...]`. Wakterm's existing process cache now passes the separate managed-identity lifecycle fixture, so no new foreground-job event protocol is planned.
 
 ## Both shell wrappers lose stopped jobs
 
@@ -23,7 +23,7 @@ Both wrappers replace the shell after the provider stops. The replacement does n
 The accepted command is:
 
 ```text
-wsh --wsh-run [--login] -- <command> [arguments...]
+wsh --run [--login] -- <command> [arguments...]
 ```
 
 The native executable captures the exact argument vector before user startup and schedules it as the first foreground job in the same interactive Zsh that will present the prompt. That Zsh retains the job table across Ctrl-Z and `fg`. No per-user activation record, manager, reconstructed command string or second shell initialization is needed. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) covers the current implementation.
