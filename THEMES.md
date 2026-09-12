@@ -13,7 +13,7 @@ Robbyrussell and Agnoster are Wsh ports of the OMZ presentations at commit `9112
 
 ## Definition format
 
-Definitions are TOML data validated by the runtime against a strict schema. [The JSON Schema](schemas/theme.schema.json) describes the decoded structure; the Rust validator additionally checks layout membership and component enablement. Unknown fields, unrecognized colors, oversized literals, and control characters are rejected. Literal text and provider values are escaped for Zsh prompt expansion. Definitions cannot source files, execute commands, or inject terminal escapes.
+Definitions are TOML data validated by the runtime against a strict schema. [The JSON Schema](schemas/theme.schema.json) describes the decoded structure; the native validator additionally checks layout membership and component enablement. Unknown fields, unrecognized colors, oversized literals, and control characters are rejected. Literal text and provider values are escaped for Zsh prompt expansion. Definitions cannot source files, execute commands, or inject terminal escapes.
 
 The left and right layouts contain each enabled component at most once: context, cwd, git, duration, or prompt-character. A prompt character must be enabled and present. The existing theme files provide complete examples of the required component fields.
 

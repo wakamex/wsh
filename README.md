@@ -7,12 +7,14 @@ This README describes the native Fedora RPM distribution under development. Nati
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
 - Use native implementations of recognized upstream plugins while keeping their supported settings; custom and unverified plugins keep running externally.
 - Jump back to frequently used directories with `z`.
-- Keep your existing prompt or choose Minimal, Wakamex, Robbyrussell, or Agnoster with asynchronous Git updates.
+- Keep your existing Zsh theme, or use Wsh’s built-in Minimal, Wakamex, Robbyrussell, or Agnoster prompts, rendered in C with shared asynchronous Git updates.
 - Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.
 - Use a system-owned login shell that starts without per-user bundle state, with installation, upgrades and downgrades managed through DNF.
 - Navigate prompts and command output in compatible terminals.
 
 The C implementations reduced complete highlighting redraw time by 35–91% and large-history autosuggestion editing time by 29% in the installed comparisons. The C prompt helper was about 78% smaller than its Rust predecessor. See [performance results](PERFORMANCE.md) for workloads, baselines and measurements.
+
+Matched prompt comparisons measured Agnoster input readiness at about 3 ms with Wsh versus 45–56 ms with OMZ. Robbyrussell’s main gain was fresh Git status arriving about 9 ms sooner. See the [theme comparison](PERFORMANCE.md#built-in-prompts-compared-with-omz) for repository sizes, timing boundaries and the smaller readiness difference for already-asynchronous Robbyrussell.
 
 ## Motivation
 
@@ -76,7 +78,7 @@ WSH_THEME=agnoster wsh
 WSH_THEME=/path/to/theme.toml wsh
 ```
 
-These are terminal commands. All four bundled names and explicit theme-definition paths are supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt.
+These are terminal commands. The four bundled themes are data-only definitions rendered by Wsh's C implementation, with Git state supplied by its shared asynchronous collector. Existing Zsh and OMZ themes continue to use their own prompt code; selecting a similarly named OMZ theme does not select Wsh's implementation. Explicit theme-definition paths are also supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt.
 
 In a shared `.zshrc`, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
 
