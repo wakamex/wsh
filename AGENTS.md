@@ -6,6 +6,8 @@ Write for a first-time visitor who knows nothing about Wsh's implementation or d
 
 Include technical details in the README only when they help users install, configure, use or evaluate Wsh. Explain necessary terms where they first appear. Review the entire README for this distinction, not just its introduction, and preserve the evidence and scope behind quantitative claims without making visitors learn the plumbing.
 
+Use short, descriptive link text. Link the relevant term or concise phrase instead of an entire sentence or feature bullet when the shorter label identifies the destination clearly. Keep surrounding explanation outside the link; retain a longer label only when its detail helps readers understand the destination or the evidence it supports.
+
 ## Development and validation
 
 Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmarks, release tooling, bundle layout, providers, renderers, themes, or performance-sensitive integration code.

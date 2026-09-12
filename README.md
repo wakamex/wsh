@@ -9,7 +9,7 @@
 - Keep your existing Zsh theme, or choose Wsh’s built-in [Minimal, Wakamex, Robbyrussell, or Agnoster prompts](THEMES.md), with [up to 95% shorter prompt waits for Agnoster compared with OMZ](PERFORMANCE.md#built-in-prompts-compared-with-omz).
 - [Find startup slowdowns](PROFILING.md) and use `wsh --doctor` to find plugins that duplicate features you already have.
 - Use [terminal integration](TERMINAL-INTEGRATION.md) to jump between prompts, select command output, and open tabs in the current directory. Available features depend on your terminal.
-- Make Wsh your default shell and [manage installation and updates through DNF](NATIVE-INSTALLATION.md).
+- Make Wsh your default shell and manage installation and updates through [DNF](NATIVE-INSTALLATION.md).
 
 ## Compatibility
 
