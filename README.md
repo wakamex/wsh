@@ -3,11 +3,11 @@
 `wsh` is a fast, tested Zsh distribution with autosuggestions, history search, syntax highlighting and directory jumping built in. Keep your existing `.zshrc`, Oh My Zsh setup and familiar Zsh commands.
 
 - Type less and spot mistakes sooner with built-in autosuggestions, history search and syntax highlighting: [35–91% shorter highlighting updates and 29% less autosuggestion editing time with large histories](PERFORMANCE.md) compared with the tested Zsh plugins.
-- [Jump back to frequently used directories with `z`](NATIVE-INSTALLATION.md#directory-jumping).
+- Jump back to frequently used directories with [`z`](NATIVE-INSTALLATION.md#directory-jumping).
 - Keep your existing Zsh theme, or choose Wsh’s built-in [Minimal, Wakamex, Robbyrussell, or Agnoster prompts](THEMES.md), with [up to 95% shorter prompt waits for Agnoster compared with OMZ](PERFORMANCE.md#built-in-prompts-compared-with-omz).
-- [Find which parts of your configuration slow startup](PROFILING.md) and use `wsh --doctor` to find plugins that duplicate features you already have.
-- [Jump between prompts, select command output, and open new tabs in the current directory](TERMINAL-INTEGRATION.md) in compatible terminals; available features depend on your terminal.
-- [Make Wsh your default shell and install, update or downgrade it through Fedora’s package manager, DNF](NATIVE-INSTALLATION.md).
+- [Find startup slowdowns](PROFILING.md) and use `wsh --doctor` to find plugins that duplicate features you already have.
+- Use [terminal integration](TERMINAL-INTEGRATION.md) to jump between prompts, select command output, and open tabs in the current directory. Available features depend on your terminal.
+- Make Wsh your default shell and [manage installation and updates through DNF](NATIVE-INSTALLATION.md).
 
 ## Compatibility
 
