@@ -15,7 +15,7 @@ Moving repeated plugin work into C reduced editing, highlighting, directory-comm
 
 ## Built-in prompts compared with OMZ
 
-Wsh's Agnoster prompt accepted input in about 3 ms versus 45–56 ms for OMZ Agnoster. Robbyrussell accepted input in about 3 ms versus 4 ms, with fresh Git status arriving about 9 ms sooner in Wsh. The comparison ran both prompt implementations on the same native Wsh binary, loading the same archived OMZ framework and preserving its default async policy. Each theme, repository size and Git state used 50 alternating pairs with normal CPU affinity. [Full report and retained evidence](https://github.com/wakamex/zsh-theme-bench/blob/e67ca009a4145eef02dc3def5afa59a1523d3b75/research/wsh-comparison-2026-09-12/report.md).
+Wsh's Agnoster reduced median prompt wait time by 93.2–94.6% compared with OMZ Agnoster, rounded to ‘up to 95%’ in the README. It accepted input in about 3 ms versus 45–56 ms. The percentage is calculated as `100 × (1 - Wsh median / OMZ median)` for each matched workload. Robbyrussell accepted input in about 3 ms versus 4 ms, with fresh Git status arriving about 9 ms sooner in Wsh. The comparison ran both prompt implementations on the same native Wsh binary, loading the same archived OMZ framework and preserving its default async policy. Each theme, repository size and Git state used 50 alternating pairs with normal CPU affinity. [Full report and retained evidence](https://github.com/wakamex/zsh-theme-bench/blob/e67ca009a4145eef02dc3def5afa59a1523d3b75/research/wsh-comparison-2026-09-12/report.md).
 
 | Theme | Tracked files | OMZ input-ready median (ms) | Wsh input-ready median (ms) | OMZ fresh-Git median (ms) | Wsh fresh-Git median (ms) |
 | --- | ---: | ---: | ---: | ---: | ---: |

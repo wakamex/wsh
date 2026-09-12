@@ -14,7 +14,7 @@ This README describes the native Fedora RPM distribution under development. Nati
 
 The C implementations reduced complete highlighting redraw time by 35–91% and large-history autosuggestion editing time by 29% in the installed comparisons. The C prompt helper was about 78% smaller than its Rust predecessor. See [performance results](PERFORMANCE.md) for workloads, baselines and measurements.
 
-Matched prompt comparisons measured Agnoster input readiness at about 3 ms with Wsh versus 45–56 ms with OMZ. Robbyrussell’s main gain was fresh Git status arriving about 9 ms sooner. See the [theme comparison](PERFORMANCE.md#built-in-prompts-compared-with-omz) for repository sizes, timing boundaries and the smaller readiness difference for already-asynchronous Robbyrussell.
+Get [up to 95% shorter prompt waits](PERFORMANCE.md#built-in-prompts-compared-with-omz) with Wsh’s built-in Agnoster compared with OMZ Agnoster in the tested Git repositories. Robbyrussell’s main gain was fresh Git status arriving about 9 ms sooner. See the [theme comparison](PERFORMANCE.md#built-in-prompts-compared-with-omz) for repository sizes, timing boundaries and the smaller readiness difference for already-asynchronous Robbyrussell.
 
 ## Motivation
 
