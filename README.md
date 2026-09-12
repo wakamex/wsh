@@ -2,45 +2,36 @@
 
 `wsh` is a fast, tested Zsh distribution with autosuggestions, history search, syntax highlighting and directory jumping built in. Keep your existing `.zshrc`, Oh My Zsh setup and familiar Zsh commands.
 
-This README describes the native Fedora RPM distribution under development. Native packages have not been published yet.
+Wsh’s Fedora packages are still in development and have not been published.
 
 - Type less with autosuggestions and history substring search, and spot mistakes with syntax highlighting built in.
-- Use native implementations of recognized upstream plugins while keeping their supported settings; custom and unverified plugins keep running externally.
 - Jump back to frequently used directories with `z`.
-- Keep your existing Zsh theme, or use Wsh’s built-in Minimal, Wakamex, Robbyrussell, or Agnoster prompts, rendered in C with shared asynchronous Git updates.
-- Find startup slowdowns with `wsh --wsh-profile -- -i` and redundant plugin setup with `wsh --wsh-doctor`.
-- Use a system-owned login shell that starts without per-user bundle state, with installation, upgrades and downgrades managed through DNF.
-- Navigate prompts and command output in compatible terminals.
+- Keep your existing Zsh theme, or choose Minimal, Wakamex, Robbyrussell, or Agnoster and keep typing while Git status updates in the background.
+- Find which parts of your configuration slow startup and which plugins duplicate features you already have.
+- Make Wsh your default shell and install, update or downgrade it through Fedora’s package manager, DNF.
+- Jump between prompts, select command output, and open new tabs in the current directory in compatible terminals.
 
-The C implementations reduced complete highlighting redraw time by 35–91% and large-history autosuggestion editing time by 29% in the installed comparisons. The C prompt helper was about 78% smaller than its Rust predecessor. See [performance results](PERFORMANCE.md) for workloads, baselines and measurements.
+Spend less time waiting as you edit: syntax-highlighting updates took 35–91% less time with Wsh, and editing with autosuggestions took 29% less time in tests with 10,000 history entries. Both comparisons used the corresponding Zsh plugins as baselines. See [performance results](PERFORMANCE.md) for the tested commands and measurements.
 
-Get [up to 95% shorter prompt waits](PERFORMANCE.md#built-in-prompts-compared-with-omz) with Wsh’s built-in Agnoster compared with OMZ Agnoster in the tested Git repositories. Robbyrussell’s main gain was fresh Git status arriving about 9 ms sooner. See the [theme comparison](PERFORMANCE.md#built-in-prompts-compared-with-omz) for repository sizes, timing boundaries and the smaller readiness difference for already-asynchronous Robbyrussell.
+Get [up to 95% shorter prompt waits](PERFORMANCE.md#built-in-prompts-compared-with-omz) with Wsh’s built-in Agnoster compared with OMZ Agnoster in the tested Git repositories. Wsh’s Robbyrussell also displayed updated Git status about 9 ms sooner than OMZ’s version. The [theme comparison](PERFORMANCE.md#built-in-prompts-compared-with-omz) explains the tested repositories and the difference between being able to type and seeing updated Git status.
+
+## Compatibility
+
+Use familiar Zsh commands, scripts, completions and Oh My Zsh configuration. Wsh bundles Zsh itself, so you keep its language, line editor and job control.
+
+For supported plugins installed without modifications, Wsh can provide the same features more quickly while keeping supported settings. Plugins you have customized, or that Wsh cannot identify, continue to run as configured. Some features from newer plugin versions may not yet be available through Wsh; [component compatibility](VENDORED-COMPONENTS.md) records what is supported. Run `wsh --wsh-doctor` to find redundant setup and suggested cleanup. Doctor never edits your startup files.
+
+Wsh's editing features also work with your existing prompt.
 
 ## Motivation
 
-Zsh is a capable shell, but building a polished interactive environment usually means assembling a framework, themes, plugins, completion files, and terminal integration. Those pieces often own overlapping machinery for Git state, hooks, caching, background work, and prompt repainting. Choosing a visual theme can therefore also choose its performance and correctness behavior.
-
-The [`zsh-theme-bench` benchmark](https://github.com/wakamex/zsh-theme-bench/blob/main/research/core-theme-benchmark-2026-09-02.md) ran representative prompt architectures in fresh interactive terminals against the same 1,000-file Git fixture. The tested paths ranged from one optional-lock-safe background Git scan to 16 synchronous Git calls per transition, with corresponding differences in prompt latency and state correctness. The detailed evidence and scope are recorded in [MOTIVATION.md](MOTIVATION.md).
-
-`wsh` separates presentation from state collection. A theme definition selects trusted prompt components and declares the structured fields it needs without executing shell code. Shared providers own external commands, asynchronous work, cache invalidation, cancellation, freshness, and publication. Fixing a provider can then improve every theme that uses it.
-
-## What wsh aims to provide
-
-- Fish-like interactive usability while retaining existing `.zshrc` files, Oh My Zsh setups, shell commands, Zsh scripts, completion functions, and executable plugins
-- Shared structured state providers, beginning with Git prompt state
-- Non-executable theme definitions and an open-submission directory governed by mechanical safety and resource checks rather than stylistic approval
-- Fast editable prompts, bounded asynchronous refresh, and composed repainting
-- Exact foreground application startup with native Zsh job control and one prompt afterward
-- System packages that pair one exact Zsh build with its tested Wsh runtime
-- Reproducible packages with explicit system-managed updates and no update work during shell startup
-- Built-in profiling and tracing for startup, prompts, providers, child processes, and repaints
-- Reproducible correctness fixtures and benchmarks for performance claims and new feature decisions
+Setting up a comfortable Zsh environment often means assembling plugins, themes and terminal integration yourself. Those pieces can repeat work or delay the next prompt. Wsh supplies tested defaults, helps identify redundant configuration and measures whether changes improve everyday editing and prompt response. [MOTIVATION.md](MOTIVATION.md) records the comparisons behind that direction; [DESIGN.md](DESIGN.md) describes the implementation.
 
 ## Install
 
-The native distribution targets x86-64 Fedora RPM installations, built against glibc 2.28. Native packages have not been published yet. Build instructions are in [DEVELOPMENT.md](DEVELOPMENT.md); local artifacts are unsigned development builds.
+Wsh currently supports 64-bit x86 Fedora installations. Until packages are published, testing requires building an unsigned development package. See [DEVELOPMENT.md](DEVELOPMENT.md) for build instructions or [the source-RPM guide](packaging/SOURCE-RPM.md) to build a package using your Fedora release’s libraries.
 
-Once you have a selected native RPM, replace the placeholder filename below with its actual name and test it in an isolated machine with an independent recovery account:
+Once you have built an RPM package, replace the filename below with its actual name. Try it on a test machine where you can still log in to another account using an existing shell:
 
 ```sh
 sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
@@ -52,7 +43,7 @@ After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as y
 
 Install upgrades and downgrades explicitly through DNF using the selected RPM. There is no hosted DNF repository yet.
 
-Native Wsh preserves Zsh command-line parsing. Run `wsh` normally, `wsh --wsh-doctor` for diagnostics, `wsh --wsh-version` for distribution identity and `wsh --wsh-profile -- -i` for an interactive profile. `wsh --wsh-run -- PROGRAM ARG...` starts an exact foreground command with native job control and returns to the prompt. See [PROFILING.md](PROFILING.md) for profiling and recovery.
+Run `wsh` to open a shell, `wsh --wsh-doctor` to inspect your setup, and `wsh --wsh-version` to see the installed version. Use `wsh --wsh-profile -- -i` to find startup slowdowns. `wsh --wsh-run -- PROGRAM ARG...` starts a program and returns to a Wsh prompt when it exits, with Ctrl-C, Ctrl-Z and `fg` available as usual. See [PROFILING.md](PROFILING.md) for reading and recovering profiling reports.
 
 ## Directory jumping
 
@@ -64,11 +55,11 @@ cd /tmp
 z my-project
 ```
 
-The native directory implementation ranks visited directories by frequency and recency, persisting them in `~/.z`. It uses the same data format and `ZSHZ_*` settings as OMZ's `z` plugin, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. Recognized unmodified OMZ `z` copies use the native implementation with their existing data and settings. Zoxide and custom or unverified implementations remain in charge. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup; Wsh does not initialize a new completion framework.
+Wsh learns which directories you visit most often and most recently, saving them in `~/.z`. You can keep your existing OMZ `z` history and `ZSHZ_*` settings, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. If you use Zoxide or a directory-jump command that Wsh cannot identify as a supported plugin, Wsh leaves it in place. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup.
 
 ## Prompt selection
 
-Wsh preserves your existing prompt when `WSH_THEME` is unset or empty. Select a Wsh theme to enable its prompt and asynchronous Git collector:
+Wsh preserves your existing prompt when `WSH_THEME` is unset or empty. Select a built-in theme to keep typing while its Git status updates:
 
 ```sh
 WSH_THEME=wakamex wsh
@@ -78,7 +69,7 @@ WSH_THEME=agnoster wsh
 WSH_THEME=/path/to/theme.toml wsh
 ```
 
-These are terminal commands. The four bundled themes are data-only definitions rendered by Wsh's C implementation, with Git state supplied by its shared asynchronous collector. Existing Zsh and OMZ themes continue to use their own prompt code; selecting a similarly named OMZ theme does not select Wsh's implementation. Explicit theme-definition paths are also supported. [THEMES.md](THEMES.md) describes the ports and the strict format. Wsh's editing features remain enabled with or without its prompt.
+Run these commands in your terminal to try a theme for that Wsh session. You can customize layout and colors in a theme file without writing shell scripts. Selecting Robbyrussell or Agnoster through OMZ uses the OMZ version; select it through `WSH_THEME` to get Wsh's version and its measured performance benefits. [THEMES.md](THEMES.md) describes customization and which OMZ features the ports cover.
 
 In a shared `.zshrc`, put this after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
 
@@ -88,50 +79,39 @@ if [[ -n ${WSH_THEME-} ]]; then
 fi
 ```
 
-Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: that would also select it for regular Zsh and trigger the conditional there. Selection takes effect after `.zshrc`; changing it later does not switch an active renderer. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
+Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: the conditional would suppress your OMZ theme in regular Zsh too. Selection takes effect after `.zshrc`; changing it later does not switch the current prompt. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
 
-`WSH_THEME=wakamex wsh --wsh-doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Theme selection alone does not stop OMZ from loading its theme. Doctor never edits startup files or unloads arbitrary theme hooks. Further cleanup follows identified duplication; retain conditional declarations for plugins you still use in regular Zsh.
+`WSH_THEME=wakamex wsh --wsh-doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Use the conditional to avoid loading two themes in Wsh while keeping your OMZ theme in regular Zsh. Keep any plugin declarations needed by regular Zsh when following further cleanup advice.
 
-## Current status
+## Validation and Zsh fixes
 
-Two independent canonical release-mode builds produced identical RPMs and installation manifests. The selected package passed fresh Fedora QEMU installation, real PAM login, job control, legacy migration, optional-resource recovery and reboot with SELinux enforcing; see the [qualification report](benchmarks/release-qualification-2026-09-10/report.md). These remain unsigned local artifacts pending an authorized release.
+Tests cover installation, login, suspending and resuming programs, recovery and login after a reboot on Fedora with its SELinux security protections enabled. Two separate builds also produced identical packages. See the [package qualification report](benchmarks/release-qualification-2026-09-10/report.md) and [Fedora source-build results](benchmarks/source-rpm-2026-09-11/report.md) for the tested versions and configurations.
 
-The bundled Zsh build incorporates 1,074 upstream master commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)).
+The bundled Zsh incorporates 1,074 upstream commits since Zsh 5.9 ([upstream NEWS](https://github.com/zsh-users/zsh/blob/cad0d67c76e2be7371cf3526b79ea2581810d35a/NEWS), [Wsh validation](benchmarks/edge-zsh-2026-09-03/report.md)). It also includes Wsh-maintained fixes:
 
-The bundled Zsh carries Wsh-maintained correctness fixes:
+- Terminal navigation keeps working with correctly marked prompts, and new tabs can use the shell’s current directory after applications change the directory reported to the terminal. See the [terminal integration results](benchmarks/native-terminal-integration-2026-09-04/report.md).
+- Repeated package builds can produce identical files after a fix to Zsh’s compiled-function output. See the [reproducibility results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
+- Editing sessions avoid a buildup of obsolete highlighting data caused by a Zsh cleanup bug. See the [upstream candidate and reproducer](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata).
 
-- Terminal reporting fixes produce valid OSC 133 prompt identifiers and restore the shell's OSC 7 working directory after foreground applications change the terminal's reported directory, including when the optional terminal query is disabled. See the [terminal integration tests and results](benchmarks/native-terminal-integration-2026-09-04/report.md).
-- The `zcompile` fix zeroes uninitialized alignment padding in compiled functions, making bundle builds reproducible and preventing those bytes from containing stale heap data. See the [reproducibility tests and results](benchmarks/zcompile-reproducibility-2026-09-04/report.md).
-- Neutral syntax-highlight regions retain their ownership markers, so plugins can remove them on subsequent redraws instead of accumulating stale regions. See the [Zsh upstream candidate and reproducer](UPSTREAM-ZSH-BUGS.md#neutral-highlight-attributes-discard-ownership-metadata).
+Available prompt navigation, output selection and directory inheritance depend on your terminal; [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) describes the supported behavior. The exact Zsh version and included patches are recorded in the [source definition](build/zsh-sources/zsh-cad0d67c-native.json).
 
-These fixes are included in the [pinned Zsh source definition](build/zsh-sources/zsh-cad0d67c.json) and passed the upstream Zsh and Wsh test suites. The [native source definition](build/zsh-sources/zsh-cad0d67c-native.json) additionally selects native startup, completion scanning and the C interactive components. Wsh-owned main syntax highlighting parses each redraw in C while preserving upstream styles and optional highlighters; see the [installed comparison](benchmarks/native-highlighting-installed-2026-09-10/report.md). The [architecture evidence record](ARCHITECTURE-EVIDENCE.md) tracks these native fixes alongside launcher and startup integration findings.
+## Under consideration
 
-The current source includes native loading of existing Zsh configuration, the three interactive defaults above, native diagnostics for exact redundant plugin declarations, end-to-end shell profiling, structured foreground application startup, native OSC 7 and OSC 133 terminal integration, the shared asynchronous Git provider, four data-only theme presentations, verified native package assembly and system-managed updates, and a pinned post-5.9 Zsh revision that passed the complete Wsh correctness and performance gates. Recognized upstream `z` copies use native directory queries and persistence while keeping their existing database and configuration. When Wsh owns the prompt, it also deactivates the recognized Oh My Zsh `git-prompt` collector hooks. Recognized upstream syntax-highlighting copies, including the tested older `0.8.0-alpha2-dev` revision, use Wsh’s native main parser while retaining styles and additional highlighters. Doctor reports modified or unrecognized implementations without replacing them and never edits startup files. Development builds remain unsigned local artifacts until a tagged release passes the complete compatibility, correctness, performance, reproducibility, and provenance gates. The public theme directory is not implemented yet.
-
-Terminal integration currently covers OSC 7 working-directory reports and the OSC 133 `A`, `B`, `C`, and `D` prompt and output boundaries. Exit status, progress, and broader foreground-job transitions remain evidence-gated. [TERMINAL-INTEGRATION.md](TERMINAL-INTEGRATION.md) defines the exact sequences, ownership, and tested behavior.
-
-## Planned capabilities require evidence
-
-Current investigations include application-backed dynamic completion, stable pane identity with bounded pane-local and private history, terminal compatibility diagnostics, and allowlisted terminal metadata. A separate foreground-job event protocol is deferred because Wakterm's owner-local process-identity fix passes the current lifecycle reproducer.
-
-Each candidate begins with a reproducible current weakness, the cheapest owner-local counterfactual, and a measurable consumer improvement. A new daemon, database, protocol, or compatibility layer is not accepted solely because it is architecturally attractive. [FEATURES.md](FEATURES.md) records the admission rules, evidence, priorities, and deferred ideas.
-
-## What wsh is not
-
-`wsh` does not replace the Zsh language, parser, job-control engine, or ZLE line editor. It is not a new shell language, an Oh My Zsh fork, a sandbox for arbitrary Zsh configuration, a promise to support every executable plugin, a terminal emulator, a multiplexer, or a generic daemon for every kind of shell state.
-
-Zsh remains the shell engine. Applications remain authoritative for their command models and state. Terminals remain responsible for panes, rendering, scrollback, focus, and input encoding. `wsh` owns only the distribution, shared services, integrations, and measurements that pass its evidence gates.
+Possible additions include completions supplied by applications, separate command history for each terminal pane, help diagnosing terminal compatibility problems, and a directory of contributed themes. These are not available yet. [FEATURES.md](FEATURES.md) records the priorities and the evidence needed before adding them.
 
 ## Documentation
 
-- [MOTIVATION.md](MOTIVATION.md) explains the benchmark evidence and product direction.
-- [DESIGN.md](DESIGN.md) defines the provider, renderer, theme, runtime, and distribution contracts.
-- [IMPLEMENTATION.md](IMPLEMENTATION.md) records the current implementation, accepted results, target, bundle format, and performance gates.
-- [PROFILING.md](PROFILING.md) defines the user-facing profile command, report, captured spans, privacy limits, and retained evidence.
-- [DEVELOPMENT.md](DEVELOPMENT.md) defines the local workflow, CI, testing, benchmarking, and evidence-retention rules.
-- [FEATURES.md](FEATURES.md) ranks later investigations and links their detailed experiment specifications.
-- [SECURITY.md](SECURITY.md) and [RELEASES.md](RELEASES.md) define theme authority, official artifacts, reproducibility, attestations and package-managed updates.
-- [VENDORED-COMPONENTS.md](VENDORED-COMPONENTS.md) records exact third-party snapshots and Wsh's behavior around them.
+- [MOTIVATION.md](MOTIVATION.md) explains the problems Wsh addresses and the comparisons behind its priorities.
+- [DESIGN.md](DESIGN.md) explains Wsh’s architecture.
+- [IMPLEMENTATION.md](IMPLEMENTATION.md) records what has been implemented and tested.
+- [PROFILING.md](PROFILING.md) explains how to find startup costs and read profiling reports.
+- [PERFORMANCE.md](PERFORMANCE.md) collects measured editing, completion and prompt improvements.
+- [THEMES.md](THEMES.md) covers theme selection and customization.
+- [NATIVE-INSTALLATION.md](NATIVE-INSTALLATION.md) covers installation, login-shell setup and recovery.
+- [DEVELOPMENT.md](DEVELOPMENT.md) explains how to build, test and contribute changes.
+- [FEATURES.md](FEATURES.md) lists possible future features and their priorities.
+- [SECURITY.md](SECURITY.md) and [RELEASES.md](RELEASES.md) explain security boundaries and how to verify official packages.
+- [VENDORED-COMPONENTS.md](VENDORED-COMPONENTS.md) lists included components, their versions and compatibility details.
 
 ## License
 

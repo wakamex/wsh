@@ -1,5 +1,13 @@
 # wsh repository instructions
 
+## README and user-facing writing
+
+Write for a first-time visitor who knows nothing about Wsh's implementation or development history. Lead with what users can do, what improves for them, and measured benefits with clear comparison baselines. Implementation languages, rewrites, providers, runtimes and other internal mechanisms are not user benefits. Do not introduce phrases such as "the C implementations" or explain how a migration achieved an improvement in introductory product copy. Put that explanation in linked architecture, development or performance-methodology documentation.
+
+Include technical details in the README only when they help users install, configure, use or evaluate Wsh. Explain necessary terms where they first appear. Review the entire README for this distinction, not just its introduction, and preserve the evidence and scope behind quantitative claims without making visitors learn the plumbing.
+
+## Development and validation
+
 Read [`DEVELOPMENT.md`](DEVELOPMENT.md) before changing implementation, benchmarks, release tooling, bundle layout, providers, renderers, themes, or performance-sensitive integration code.
 
 - Build the smallest runnable local vertical slice before adding remote distribution, registry, or compatibility machinery.
