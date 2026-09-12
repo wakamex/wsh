@@ -17,7 +17,7 @@ for name, startup, flags in [
     ('no-rcs-environment', base, ['-dfc', '/usr/bin/env > "$HOME/child-env"; exit 19']),
     ('ordinary-environment', base, ['-dc', '/usr/bin/env > "$HOME/child-env"; exit 19']),
     ('sh-emulation-environment', base, ['--emulate', 'sh', '-c', '/usr/bin/env > "$HOME/child-env"; exit 19']),
-    ('explicit-child-profile', base, ['-dc', '"$WSH_TEST_BINARY" --wsh-profile -- -dc "exit 3"; [[ $? == 3 ]] || exit 97; exit 19']),
+    ('explicit-child-profile', base, ['-dc', '"$WSH_TEST_BINARY" --profile -- -dc "exit 3"; [[ $? == 3 ]] || exit 97; exit 19']),
     ('missing-integration-environment', base, ['-dc', '/usr/bin/env > "$HOME/child-env"; exit 19']),
 ]:
     case = OUT / name; case.mkdir(); home = case / 'home'; home.mkdir()
@@ -28,7 +28,7 @@ for name, startup, flags in [
     binary = BINARY
     if name.startswith('missing-integration'):
         binary = case / 'bare/bin/wsh'; binary.parent.mkdir(parents=True); shutil.copy2(BINARY, binary)
-    r = subprocess.run([binary, '--wsh-profile', '--', *flags], env=env, capture_output=True, timeout=10)
+    r = subprocess.run([binary, '--profile', '--', *flags], env=env, capture_output=True, timeout=10)
     (case / 'stdout').write_bytes(r.stdout); (case / 'stderr').write_bytes(r.stderr)
     assert r.returncode == 19, (name, r)
     profiles = list((case / 'state/profiles').iterdir())

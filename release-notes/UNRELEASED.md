@@ -13,10 +13,10 @@ Wsh preserves Zsh's command-line parsing and provides explicit tool options:
 | Task | Command |
 | --- | --- |
 | Distribution identity | `wsh --wsh-version` |
-| Diagnostics | `wsh --wsh-doctor` |
-| Interactive profile | `wsh --wsh-profile -- -i` |
-| Function-level profile | `wsh --wsh-profile --functions -- -i` |
-| Saved profile report | `wsh --wsh-profile-report DIRECTORY` |
+| Diagnostics | `wsh --doctor` |
+| Interactive profile | `wsh --profile -- -i` |
+| Function-level profile | `wsh --profile --functions -- -i` |
+| Saved profile report | `wsh --profile-report DIRECTORY` |
 | Foreground application, then prompt | `wsh --wsh-run -- PROGRAM ARG...` |
 
 `wsh --version` reports Zsh's version, and `--` keeps its normal Zsh meaning. `wsh --wsh-help` lists the native tools. ([Command boundaries](https://github.com/wakamex/wsh/commit/1abf1a9))

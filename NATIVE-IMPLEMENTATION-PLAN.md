@@ -49,7 +49,7 @@ This is the default order. Stages 5 through 9 are separately admitted replacemen
 
 ### 1. Native command interface, detailed version reporting, and doctor
 
-Define the public syntax before wiring every feature to it. Prototype explicit options for doctor, profiling, detailed version information, and exact foreground invocation. Names such as `--wsh-doctor` are candidates, not a settled interface. Native `-c`, `-l`, `-i`, `-s`, `-f`, ordinary script arguments, and `--` keep their Zsh meanings. Record how existing `wsh doctor`, `wsh profile`, `wsh version`, and `wsh -- <argv>` callers migrate.
+Define the public syntax before wiring every feature to it. Prototype explicit options for doctor, profiling, detailed version information, and exact foreground invocation. Names such as `--doctor` are candidates, not a settled interface. Native `-c`, `-l`, `-i`, `-s`, `-f`, ordinary script arguments, and `--` keep their Zsh meanings. Record how existing `wsh doctor`, `wsh profile`, `wsh version`, and `wsh -- <argv>` callers migrate.
 
 Implement detailed version reporting first, followed by doctor, directly in C. Version reporting must provide useful executable identity without user state; optional installed metadata can add provenance and component identities. Doctor must inspect the same effective configuration and deterministic plugin/theme ownership cases as today, without editing files or unloading user hooks. Compare a direct native implementation with the existing Rust commands; temporary delegation may support development but counts as retained glue.
 

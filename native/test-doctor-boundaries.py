@@ -19,7 +19,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-doctor-boundaries-') as directory:
          'WSH_STATE_ROOT':str(home/'absent-state'),'ASAN_OPTIONS':'detect_leaks=0:abort_on_error=1',
          'UBSAN_OPTIONS':'halt_on_error=1:print_stacktrace=1'}
     (home/'.zshenv').write_text('unsetopt globalrcs\n')
-    def run(config='',arguments=('--wsh-doctor',), binary=BINARY,environment=env):
+    def run(config='',arguments=('--doctor',), binary=BINARY,environment=env):
         (home/'.zshrc').write_text(config)
         return subprocess.run([binary,*arguments],env=environment,input=b'',capture_output=True,timeout=13)
     for state in ('absent','corrupt','unreadable'):
@@ -32,7 +32,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-doctor-boundaries-') as directory:
         state_dir.chmod(0o700) if state_dir.exists() else None
         results.append(state+' activation state ignored')
     for argument in (b'extra',b'\xff',b'--'):
-        result=run(arguments=('--wsh-doctor',argument))
+        result=run(arguments=('--doctor',argument))
         assert result.returncode==2 and not result.stdout
     results.append('doctor extra and non-UTF-8 arguments rejected')
     for value in ('invalid', 'x'*100000, '\\e]52;c;secret\\a'):
@@ -57,7 +57,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-doctor-boundaries-') as directory:
     (home/'.zshrc').write_text('[[ ${WSH_GLOBAL_DOCTOR_FIXTURE-} == seen ]] || exit 42\n')
     for present in (True,False):
         command=['bwrap','--unshare-user','--unshare-pid','--die-with-parent','--ro-bind','/','/',
-                 '--dev-bind','/dev','/dev','--proc','/proc','--ro-bind',str(global_file if present else empty),'/etc/zshrc','--',str(BINARY),'--wsh-doctor']
+                 '--dev-bind','/dev','/dev','--proc','/proc','--ro-bind',str(global_file if present else empty),'/etc/zshrc','--',str(BINARY),'--doctor']
         result=subprocess.run(command,env=env,input=b'',capture_output=True,timeout=13)
         assert result.returncode==(0 if present else 1),(present,result)
     results.append('real global startup is read; empty-file counterfactual fails the startup assertion')

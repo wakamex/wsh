@@ -52,7 +52,7 @@
       },
       {
         "path": "native/tools.c",
-        "sha256": "d6a9b88e41ca0c06935c49e774271c22cd9ed4dbc2246180239fc36f05abff84"
+        "sha256": "2f8f0297ce46fd84a9f59a2a90f333c5d698a17064de7a8cf2997ef01932b722"
       },
       {
         "path": "native/doctor.c",
@@ -64,7 +64,7 @@
       },
       {
         "path": "native/profile.c",
-        "sha256": "385dbe77c81256130efe11df16d1d7e1c3495455a6fc1c90b778934e0fa44e7a"
+        "sha256": "24b1e3e08c7edf6a3390af9f05a8b54aadc3734fd91090dcc8f3b55c6f32cb28"
       },
       {
         "path": "native/profile-report.c",

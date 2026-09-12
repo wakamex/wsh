@@ -10,7 +10,7 @@ import tempfile
 
 BINARY = Path(sys.argv[1]).resolve()
 OUT = Path(sys.argv[2]).resolve(); OUT.mkdir(parents=True, exist_ok=True)
-arguments = ['--wsh-profile-report'] if len(sys.argv) > 3 else []
+arguments = ['--profile-report'] if len(sys.argv) > 3 else []
 digest = 'a' * 64
 metadata = {'schema_version': 2, 'wsh_version': '0.3.1', 'source_revision': 'c4ac10f', 'native_inputs_sha256': digest,
             'zsh_version': '5.9.999.3-test', 'zsh_source_revision': 'cad0d67c', 'target': 'x86_64-linux-gnu'}

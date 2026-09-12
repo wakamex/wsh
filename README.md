@@ -19,7 +19,7 @@ Get [up to 95% shorter prompt waits](PERFORMANCE.md#built-in-prompts-compared-wi
 
 Use familiar Zsh commands, scripts, completions and Oh My Zsh configuration. Wsh bundles Zsh itself, so you keep its language, line editor and job control.
 
-For supported plugins installed without modifications, Wsh can provide the same features more quickly while keeping supported settings. Plugins you have customized, or that Wsh cannot identify, continue to run as configured. Some features from newer plugin versions may not yet be available through Wsh; [component compatibility](VENDORED-COMPONENTS.md) records what is supported. Run `wsh --wsh-doctor` to find redundant setup and suggested cleanup. Doctor never edits your startup files.
+For supported plugins installed without modifications, Wsh can provide the same features more quickly while keeping supported settings. Plugins you have customized, or that Wsh cannot identify, continue to run as configured. Some features from newer plugin versions may not yet be available through Wsh; [component compatibility](VENDORED-COMPONENTS.md) records what is supported. Run `wsh --doctor` to find redundant setup and suggested cleanup. Doctor never edits your startup files.
 
 Wsh's editing features also work with your existing prompt.
 
@@ -43,7 +43,7 @@ After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as y
 
 Install upgrades and downgrades explicitly through DNF using the selected RPM. There is no hosted DNF repository yet.
 
-Run `wsh` to open a shell, `wsh --wsh-doctor` to inspect your setup, and `wsh --wsh-version` to see the installed version. Use `wsh --wsh-profile -- -i` to find startup slowdowns. `wsh --wsh-run -- PROGRAM ARG...` starts a program and returns to a Wsh prompt when it exits, with Ctrl-C, Ctrl-Z and `fg` available as usual. See [PROFILING.md](PROFILING.md) for reading and recovering profiling reports.
+Run `wsh` to open a shell, `wsh --doctor` to inspect your setup, and `wsh --wsh-version` to see the installed version. Use `wsh --profile -- -i` to find startup slowdowns. `wsh --wsh-run -- PROGRAM ARG...` starts a program and returns to a Wsh prompt when it exits, with Ctrl-C, Ctrl-Z and `fg` available as usual. See [PROFILING.md](PROFILING.md) for reading and recovering profiling reports.
 
 ## Directory jumping
 
@@ -81,7 +81,7 @@ fi
 
 Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: the conditional would suppress your OMZ theme in regular Zsh too. Selection takes effect after `.zshrc`; changing it later does not switch the current prompt. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
 
-`WSH_THEME=wakamex wsh --wsh-doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Use the conditional to avoid loading two themes in Wsh while keeping your OMZ theme in regular Zsh. Keep any plugin declarations needed by regular Zsh when following further cleanup advice.
+`WSH_THEME=wakamex wsh --doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Use the conditional to avoid loading two themes in Wsh while keeping your OMZ theme in regular Zsh. Keep any plugin declarations needed by regular Zsh when following further cleanup advice.
 
 ## Validation and Zsh fixes
 

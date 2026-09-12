@@ -66,7 +66,7 @@ def main():
                  'TERM':'xterm-256color','LC_ALL':'C.UTF-8','TZ':'UTC'}
             environments[name]=env
             def invoke(native):
-                return subprocess.run([NATIVE,'--wsh-doctor'] if native else [MANAGER,'doctor','--state-root',state],
+                return subprocess.run([NATIVE,'--doctor'] if native else [MANAGER,'doctor','--state-root',state],
                                       env=env,input=b'',capture_output=True,timeout=15)
             rust=invoke(False);c=invoke(True)
             assert rust.returncode==c.returncode==0,(name,rust,c)
@@ -78,20 +78,20 @@ def main():
         for name,config in [('early-success','exit 0\n'),('early-failure','exit 27\n'),('hung','sleep 30\n')]:
             config_path.write_text(config)
             start=time.monotonic()
-            result=subprocess.run([NATIVE,'--wsh-doctor'],env=env,input=b'',capture_output=True,timeout=13)
+            result=subprocess.run([NATIVE,'--doctor'],env=env,input=b'',capture_output=True,timeout=13)
             elapsed=time.monotonic()-start
             assert result.returncode==1 and not result.stdout,(name,result)
             assert elapsed<12 and (name!='hung' or elapsed>=9.9)
             results.append({'fixture':name,'status':result.returncode,'elapsed_seconds':elapsed,'error':result.stderr.decode()})
         config_path.write_text('sleep 30\n')
-        child=subprocess.Popen([NATIVE,'--wsh-doctor'],env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        child=subprocess.Popen([NATIVE,'--doctor'],env=env,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         time.sleep(.2);child.terminate();stdout,stderr=child.communicate(timeout=2)
         assert child.returncode==143 and not stdout
         results.append({'fixture':'interrupt','status':child.returncode})
         config_path.write_text('')
         # Exercise repeated startup to expose report-close versus child-exit races.
         for _ in range(50):
-            result=subprocess.run([NATIVE,'--wsh-doctor'],env=env,capture_output=True,timeout=15)
+            result=subprocess.run([NATIVE,'--doctor'],env=env,capture_output=True,timeout=15)
             assert result.returncode==0 and not result.stderr,result
         results.append({'fixture':'50 repeated native reports','status':0})
         affinity=sorted(os.sched_getaffinity(0));os.sched_setaffinity(0,{affinity[0]})
@@ -100,7 +100,7 @@ def main():
             row={'pair':pair}
             for native in ([False,True] if pair%2==0 else [True,False]):
                 start=time.perf_counter_ns()
-                result=subprocess.run([NATIVE,'--wsh-doctor'] if native else [MANAGER,'doctor','--state-root',state],
+                result=subprocess.run([NATIVE,'--doctor'] if native else [MANAGER,'doctor','--state-root',state],
                                       env=env,input=b'',capture_output=True,timeout=15)
                 assert result.returncode==0 and not result.stderr
                 row['native_ms' if native else 'rust_ms']=(time.perf_counter_ns()-start)/1e6

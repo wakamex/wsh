@@ -16,7 +16,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-profile-storage-') as directory:
     env.update({key: os.environ[key] for key in ('ASAN_OPTIONS', 'UBSAN_OPTIONS') if key in os.environ})
     def check(name, overrides, expected, command='exit 7'):
         environment = dict(env, **overrides)
-        r = subprocess.run([BINARY, '--wsh-profile', '--', '-dfc', command], cwd=root, env=environment, capture_output=True, timeout=5)
+        r = subprocess.run([BINARY, '--profile', '--', '-dfc', command], cwd=root, env=environment, capture_output=True, timeout=5)
         passed = r.returncode == expected
         results.append({'case': name, 'status': r.returncode, 'expected': expected, 'passed': passed})
         (OUT / (name + '.out')).write_bytes(r.stdout + r.stderr)

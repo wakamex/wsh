@@ -17,7 +17,7 @@ The Bash reproduction replaces only the external `podman` executable with an arg
 | Area | Selected current behavior | Release-note treatment |
 | --- | --- | --- |
 | Shell and account login | Native Zsh entrypoint, linked bundled modules, system-owned executable, no per-user activation dependency | Lead with direct startup and system-package installation |
-| Command interface | `--wsh-version`, `--wsh-doctor`, `--wsh-profile`, `--wsh-profile-report`, `--wsh-run`; ordinary Zsh argument semantics preserved | Document native tool options and normal Zsh argument handling |
+| Command interface | `--wsh-version`, `--doctor`, `--profile`, `--profile-report`, `--wsh-run`; ordinary Zsh argument semantics preserved | Document native tool options and normal Zsh argument handling |
 | Distribution | x86-64 Fedora RPM, glibc 2.28 build floor, DNF ownership, no self-updater or hosted package repository | Document explicit DNF installation and updates on the supported Fedora target |
 | Implementation | C shell additions and one C helper per session; obsolete Rust crates/toolchain removed; Zsh remains the editor/language and retains selected lifecycle/configuration adapters | Describe consolidation and retained compatibility without claiming every file or plugin is C |
 | Interactive components | Native compinit registration, history navigation, directory queries/persistence, complete autosuggestion controller and main highlighter | Include installed outcomes; automatic/deferred compinit initialization and approximate highlighting prototypes remain unselected |

@@ -9,7 +9,7 @@ Native packages have not been published yet. Build instructions are in [DEVELOPM
 ```sh
 sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
 /usr/bin/wsh --wsh-version
-/usr/bin/wsh --wsh-doctor
+/usr/bin/wsh --doctor
 /usr/bin/wsh -l
 ```
 
@@ -22,10 +22,10 @@ After testing your configuration and terminal behavior, use `chsh -s /usr/bin/ws
 | Interactive shell | `wsh` |
 | Distribution identity | `wsh --wsh-version` |
 | Zsh version | `wsh --version` |
-| Diagnostics | `wsh --wsh-doctor` |
-| Interactive startup profile | `wsh --wsh-profile -- -i` |
-| Function-level profile | `wsh --wsh-profile --functions -- -i` |
-| Saved profile report | `wsh --wsh-profile-report DIRECTORY` |
+| Diagnostics | `wsh --doctor` |
+| Interactive startup profile | `wsh --profile -- -i` |
+| Function-level profile | `wsh --profile --functions -- -i` |
+| Saved profile report | `wsh --profile-report DIRECTORY` |
 | Foreground application, then prompt | `wsh --wsh-run -- PROGRAM ARG...` |
 | Native tool help | `wsh --wsh-help` |
 

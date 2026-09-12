@@ -13,20 +13,20 @@ wsh_cli(int argc, char **arguments)
     const char *option = argc > 1 ? arguments[1] : "";
 
 #ifndef WSH_CLI_STANDALONE
-    if (!strcmp(option, "--wsh-profile"))
+    if (!strcmp(option, "--profile"))
         return wsh_profile_start(argc, arguments);
-    if (!strcmp(option, "--wsh-profile-report")) {
+    if (!strcmp(option, "--profile-report")) {
         if (argc != 3) {
-            fputs("usage: wsh --wsh-profile-report <directory>\n", stderr);
+            fputs("usage: wsh --profile-report <directory>\n", stderr);
             return 2;
         }
         return wsh_profile_report(arguments[2]);
     }
     if (!strcmp(option, "--wsh-run"))
         return wsh_foreground_parse(argc, arguments);
-    if (!strcmp(option, "--wsh-doctor")) {
+    if (!strcmp(option, "--doctor")) {
         if (argc != 2) {
-            fputs("usage: wsh --wsh-doctor\n", stderr);
+            fputs("usage: wsh --doctor\n", stderr);
             return 2;
         }
         return wsh_doctor_start(arguments[0]);
@@ -55,9 +55,9 @@ wsh_cli(int argc, char **arguments)
         }
         fputs("usage: wsh [native Zsh arguments]\n"
               "       wsh --wsh-version\n"
-              "       wsh --wsh-doctor\n"
-              "       wsh --wsh-profile [--functions] -- [Zsh arguments]\n"
-              "       wsh --wsh-profile-report <directory>\n"
+              "       wsh --doctor\n"
+              "       wsh --profile [--functions] -- [Zsh arguments]\n"
+              "       wsh --profile-report <directory>\n"
               "       wsh --wsh-run [--login] -- <command> [arguments...]\n"
               "       wsh --wsh-help\n"
               "Ordinary script names and -- retain their Zsh meanings.\n",

@@ -39,7 +39,7 @@ env.update({name: os.environ[name] for name in ('ASAN_OPTIONS', 'UBSAN_OPTIONS')
 pid, fd = pty.fork()
 if not pid:
     os.chdir(repo)
-    os.execve(BINARY, [str(BINARY), '--wsh-profile', '--functions', '--', '-d', '-i'], env)
+    os.execve(BINARY, [str(BINARY), '--profile', '--functions', '--', '-d', '-i'], env)
 transcript = bytearray()
 def wait(marker, timeout=8):
     output = bytearray(); deadline = time.monotonic() + timeout
@@ -55,7 +55,7 @@ try:
     assert os.readlink('/proc/' + str(pid) + '/exe') == str(BINARY)
     deadline = time.monotonic() + 5
     while True:
-        r = subprocess.run([BINARY, '--wsh-profile-report', profile], env=env, capture_output=True, timeout=3)
+        r = subprocess.run([BINARY, '--profile-report', profile], env=env, capture_output=True, timeout=3)
         if r.returncode == 0 and b'Child processes: 1' in r.stdout and b'Theme: minimal' in r.stdout: break
         assert time.monotonic() < deadline, (r.stdout, r.stderr)
         time.sleep(.03)
@@ -91,7 +91,7 @@ finally:
     (OUT / 'interactive.bin').write_bytes(transcript)
 assert before == {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in home.glob('.zsh*')}
 for flags in (['-fc', 'exit 7'], ['-dc', 'exit 9'], ['-dlc', 'exit 11'], ['-dfc', 'print -r -- ${(qqq)1}; exit 13', 'profile-argv', b'\xff\n$(false)']):
-    r = subprocess.run([BINARY, '--wsh-profile', '--', *flags], env=env, capture_output=True, timeout=5)
+    r = subprocess.run([BINARY, '--profile', '--', *flags], env=env, capture_output=True, timeout=5)
     expected = (7, 9, 11, 13)[len(results) - 1]
     assert r.returncode == expected and b'Wsh profile' in r.stdout, (flags, r)
     if expected == 13:
@@ -99,7 +99,7 @@ for flags in (['-fc', 'exit 7'], ['-dc', 'exit 9'], ['-dlc', 'exit 11'], ['-dfc'
         assert plain.returncode == 13 and plain.stdout and r.stdout.startswith(plain.stdout), (plain, r)
     results.append({'case': 'exact Zsh arguments ' + str(flags[:-1]), 'status': r.returncode})
 for flags in (['--bad'], ['--functions', '--functions'], ['-ic', 'exit'], [b'\xff']):
-    r = subprocess.run([BINARY, '--wsh-profile', *flags], env=env, capture_output=True, timeout=3)
+    r = subprocess.run([BINARY, '--profile', *flags], env=env, capture_output=True, timeout=3)
     assert r.returncode == 2 and b'usage:' in r.stderr
     results.append({'case': 'malformed profile invocation', 'status': 2})
 count = len(list((state / 'profiles').iterdir()))

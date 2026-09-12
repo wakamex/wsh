@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-foreground-') as directory:
     byte_program=home/'program \udcff'
     byte_program.write_text('#!/usr/bin/python3\nimport json,os,sys\nos.write(1,b"ARGV:"+json.dumps([os.fsencode(x).hex() for x in sys.argv]).encode()+b"\\n")\nsys.exit(7)\n')
     byte_program.chmod(0o755)
-    values=[b'',b'\xff',b'line\nbreak',b'$(printf INJECTED)',b'%F{red}',b'--wsh-doctor']
+    values=[b'',b'\xff',b'line\nbreak',b'$(printf INJECTED)',b'%F{red}',b'--doctor']
     _,pid,fd=start(['--wsh-run','--',byte_program,*values],env,home)
     try:
         output=wait(fd)

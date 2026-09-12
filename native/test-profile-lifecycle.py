@@ -19,7 +19,7 @@ def run(name, files, flags, status, present, absent=(), delays=(), binary=BINARY
     env = {'HOME': str(home), 'ZDOTDIR': str(home), 'WSH_STATE_ROOT': str(case / 'state'), 'PATH': '/usr/bin:/bin', 'TERM': 'xterm-256color', 'LC_ALL': 'C.UTF-8'}
     env.update({key: os.environ[key] for key in ['ASAN_OPTIONS', 'UBSAN_OPTIONS'] if key in os.environ})
     before = {p.name: p.read_bytes() for p in home.iterdir()}
-    process = subprocess.run([binary, '--wsh-profile', '--', *flags], env=env, capture_output=True, timeout=8)
+    process = subprocess.run([binary, '--profile', '--', *flags], env=env, capture_output=True, timeout=8)
     (case / 'stdout').write_bytes(process.stdout); (case / 'stderr').write_bytes(process.stderr)
     assert process.returncode == status, (name, process)
     profile = next((case / 'state/profiles').iterdir())
@@ -31,7 +31,7 @@ def run(name, files, flags, status, present, absent=(), delays=(), binary=BINARY
         a = next(e['elapsed_us'] for e in events if e['event'] == start)
         b = next(e['elapsed_us'] for e in events if e['event'] == end)
         assert b - a >= minimum, (name, start, end, b - a)
-    report = subprocess.run([BINARY, '--wsh-profile-report', profile], capture_output=True, timeout=3)
+    report = subprocess.run([BINARY, '--profile-report', profile], capture_output=True, timeout=3)
     assert report.returncode == 0, (name, report)
     (case / 'report.txt').write_bytes(report.stdout)
     assert before == {p.name: p.read_bytes() for p in home.iterdir() if p.name in before}

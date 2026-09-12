@@ -7,9 +7,9 @@ The native executable preserves Zsh argument handling. Wsh tools use an explicit
 | Native invocation | Purpose | Previous invocation |
 |---|---|---|
 | `wsh --wsh-version` | Detailed compiled Wsh and Zsh identity, without loading configuration | `wsh version` |
-| `wsh --wsh-doctor` | Inspect an isolated interactive startup and report ownership findings | `wsh doctor` |
-| `wsh --wsh-profile [--functions] -- <zsh arguments>` | Profile a shell | `wsh profile ...` |
-| `wsh --wsh-profile-report <directory>` | Recover a saved profile | `wsh profile report ...` |
+| `wsh --doctor` | Inspect an isolated interactive startup and report ownership findings | `wsh doctor` |
+| `wsh --profile [--functions] -- <zsh arguments>` | Profile a shell | `wsh profile ...` |
+| `wsh --profile-report <directory>` | Recover a saved profile | `wsh profile report ...` |
 | `wsh --wsh-run [--login] -- <command> [arguments...]` | Run exact argv as a foreground job, then present an interactive shell | `wsh -- <argv>` or `wsh run-foreground ...` |
 | `wsh --wsh-help` | Show the native Wsh interface | No equivalent |
 
@@ -25,4 +25,4 @@ Native startup preserves ordinary Zsh file order, execution context, status, and
 
 Native builds link the configured bundled Zsh modules into the executable while preserving dynamic loading for external modules. A running shell keeps its bundled module code after package replacement. [The comparison](../benchmarks/native-qualification-2026-09-09/modules-report.md) passes startup, memory, upstream and external-module checks. Installation-relative function lookup also [removes stale build-directory fallbacks](../benchmarks/native-qualification-2026-09-09/paths-report.md) while preserving explicitly exported `FPATH`.
 
-Native profiling is available with `bin/wsh --wsh-profile -- -i`, optionally adding `--functions` before the separator. Exit normally for a report, or recover a saved directory with `bin/wsh --wsh-profile-report <directory>`. The native build now requires Jansson development headers and its system shared library. [Invocation and report tests](../benchmarks/native-profile-2026-09-08/report.md), native startup recovery, and [child isolation](../benchmarks/native-profile-isolation-2026-09-08/report.md) pass. Function tables describe initialization through the first editable prompt. [Local package/floor qualification](../benchmarks/native-qualification-2026-09-09/floor-report.md) passes; publication decisions are retained.
+Native profiling is available with `bin/wsh --profile -- -i`, optionally adding `--functions` before the separator. Exit normally for a report, or recover a saved directory with `bin/wsh --profile-report <directory>`. The native build now requires Jansson development headers and its system shared library. [Invocation and report tests](../benchmarks/native-profile-2026-09-08/report.md), native startup recovery, and [child isolation](../benchmarks/native-profile-isolation-2026-09-08/report.md) pass. Function tables describe initialization through the first editable prompt. [Local package/floor qualification](../benchmarks/native-qualification-2026-09-09/floor-report.md) passes; publication decisions are retained.

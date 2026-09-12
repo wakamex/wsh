@@ -82,7 +82,7 @@ run_doctor() {
   local home=$1 output=$2
   local before=$(sha256sum $home/.zshrc)
   HOME=$home ZDOTDIR=$home WSH_STATE_ROOT=$state_root \
-    $bundle/bin/wsh --wsh-doctor >| $output
+    $bundle/bin/wsh --doctor >| $output
   local after=$(sha256sum $home/.zshrc)
   [[ $before == $after ]] || {
     print -u2 -- "error: doctor changed ${home}/.zshrc"

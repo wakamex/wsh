@@ -74,7 +74,7 @@ for case in ('pending', 'active', 'modified', 'disabled', 'automatic', 'older-pe
             wait(b'PROBE-READY', offset)
             os.write(fd, b'\x03')
             wait(b'\x1b]133;B', offset)
-        doctor = subprocess.run([bundle / 'bin/wsh', '--wsh-doctor'], env=env, capture_output=True, start_new_session=True, timeout=15)
+        doctor = subprocess.run([bundle / 'bin/wsh', '--doctor'], env=env, capture_output=True, start_new_session=True, timeout=15)
         (home / 'doctor.txt').write_bytes(doctor.stdout + doctor.stderr)
         assert doctor.returncode == 0, doctor.stderr
         expected_advice = b'this external implementation is not verified by Wsh' if mode == 'modified' else b'no redundant or unrecognized external implementations detected' if mode == 'disabled' else b'an exact external copy is redundant'

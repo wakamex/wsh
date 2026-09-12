@@ -79,12 +79,26 @@ if len(sys.argv) == 2:
         moved.chmod(0o755)
         assert run(moved,['--wsh-version']).stdout == result.stdout
         assert run(executable,['--wsh-version','extra']).returncode == 2
-        assert run(executable,['--wsh-help']).returncode == 0
+        help_result = run(executable,['--wsh-help'])
+        assert help_result.returncode == 0
+        for option in ('--doctor', '--profile', '--profile-report'):
+            assert option in help_result.stdout
+            assert '--wsh-' + option[2:] not in help_result.stdout
+        for args in (['--doctor', 'extra'], ['--profile', 'extra'],
+                     ['--profile-report'], ['--profile-report', 'a', 'b']):
+            result = run(executable, args)
+            assert result.returncode == 2 and 'usage: wsh ' in result.stderr
+            assert 'STARTUP_LEAK' not in result.stdout
         assert run(executable,['--version']).stdout.startswith('zsh ')
         (home/'.zshenv').write_text('')
         (home/'version').write_text('print -r -- "$1"; exit 23\n')
         result = run(executable,['-f','version','literal argument'])
         assert result.returncode == 23 and result.stdout == 'literal argument\n'
+        for name in ('doctor', 'profile', 'profile-report', '--doctor', '--profile', '--profile-report'):
+            (home/name).write_text('print -r -- "$1"; exit 23\n')
+            args = ['--', name] if name.startswith('--') else [name]
+            result = run(executable, [*args, 'literal argument'])
+            assert result.returncode == 23 and result.stdout == 'literal argument\n', (args, result)
         result = run(executable,['-dfc','print -r -- NATIVE_SHELL_OK'])
         assert result.returncode == 0 and result.stdout == 'NATIVE_SHELL_OK\n'
     print('PASS: installed label, missing resources, corrupt metadata, startup isolation and native shell arguments')

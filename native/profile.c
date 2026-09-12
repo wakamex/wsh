@@ -142,7 +142,7 @@ wsh_profile_start(int argc, char **argv)
     }
     if (first < argc) {
         if (strcmp(argv[first], "--")) {
-            fputs("usage: wsh --wsh-profile [--functions] -- [Zsh arguments]\n", stderr);
+            fputs("usage: wsh --profile [--functions] -- [Zsh arguments]\n", stderr);
             return 2;
         }
         ++first;

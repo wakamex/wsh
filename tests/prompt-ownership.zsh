@@ -96,7 +96,7 @@ child() {
   esac
   command stty -echo
   if [[ $mode == profile-* ]]; then
-    exec $bundle/bin/wsh --wsh-profile -- -d
+    exec $bundle/bin/wsh --profile -- -d
   elif [[ $mode == regular ]]; then
     exec $WSH_TEST_ZSH -di ${=login_flag}
   else
@@ -134,7 +134,7 @@ for login_flag in '' -l; do
     if [[ $mode == profile-* ]]; then
       wait_for $'\r\nStartup\r\n'
       profile_dirs=($state/profiles/*(/om[1]))
-      report=$($bundle/bin/wsh --wsh-profile-report $profile_dirs[1])
+      report=$($bundle/bin/wsh --profile-report $profile_dirs[1])
       [[ $report == *'Wsh ZLE initialization hook:'* ]] || exit 1
       if [[ $mode == profile-existing ]]; then
         ! grep -q '"source":"runtime"' $profile_dirs[1]/trace.jsonl
@@ -160,14 +160,14 @@ if [[ -n $omz ]]; then
   cp $home/.zshrc $scratch/conditional.zshrc
   sed '/^if \[\[ -n ${WSH_THEME-} \]\]; then$/,/^fi$/d' $scratch/conditional.zshrc > $home/.zshrc
   before=$(sha256sum $home/.zshrc)
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --wsh-doctor)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --doctor)
   [[ $report == *'before sourcing oh-my-zsh.sh'* && $report == *'alone does not skip'* ]]
   [[ $(sha256sum $home/.zshrc) == $before ]]
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME= $bundle/bin/wsh --wsh-doctor)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME= $bundle/bin/wsh --doctor)
   [[ $report != *'Prompt compatibility:'* ]]
   cp $scratch/conditional.zshrc $home/.zshrc
   before=$(sha256sum $home/.zshrc)
-  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --wsh-doctor)
+  report=$(HOME=$home ZDOTDIR=$home WSH_TEST_OMZ=$omz WSH_THEME=minimal $bundle/bin/wsh --doctor)
   [[ $report != *'Prompt compatibility:'* && $(sha256sum $home/.zshrc) == $before ]]
   print -r -- 'PASS: real OMZ overlap advice, conditional resolution, existing-mode silence, unchanged configuration'
 else
