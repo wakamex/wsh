@@ -1,0 +1,7 @@
+# Source RPM build qualification
+
+The current packaging/wsh-native.spec has an empty build phase and embeds a precompiled payload. It cannot serve as a source build recipe for COPR or distro builders. The smallest intervention adds a source recipe using the existing pinned native builder and shared installation checks, with the upstream archive included as an RPM source. Existing canonical GitHub artifact packaging remains separate while this path is qualified.
+
+Require a source RPM containing source and build/test inputs, no Git checkout or prebuilt Wsh executable, complete declared build dependencies, a clean Fedora rebuild without network access, RPM processing with an accurate installed inventory, upstream and Wsh correctness tests, and installation/login/removal checks in a disposable Fedora VM. Tampered or missing offline source must fail. Source archives must reproduce with a fixed source revision/epoch. Preserve source identity, toolchain/package inventories, commands and logs. No COPR configuration, push, tag or publication is authorized by this implementation task.
+
+After two failed interventions at a gate, inspect the failing layer and require a new hypothesis. Package-layout or compiler differences require local qualification; they do not inherit the canonical GitHub artifact identity. This changes build/distribution machinery and makes no runtime performance claim.

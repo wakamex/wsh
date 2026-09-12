@@ -63,9 +63,13 @@ The canonical script runs upstream Zsh tests, native integration contracts, inve
 
 Historical benchmark inputs remain immutable. `benchmarks/verify-historical.py` checks their current bytes and executes their original verifiers against the recorded pre-migration Git tree. This preserves comparisons without retaining obsolete crates in the active build. New accepted evidence verifiers belong in the shared entrypoint.
 
+## Source RPM builds
+
+`python3 packaging/build-source-rpm.py NEW_OUTPUT` creates a self-contained SRPM using `packaging/wsh.spec`. The unpacked sources carry explicit source identity instead of Git metadata. Rebuilds use the target distribution's normal flags and RPM processing, with verified cached upstream bytes and networking disabled. Both the canonical build and source RPM call `build/check-native-installation.zsh` for installed correctness. See [source RPM instructions](packaging/SOURCE-RPM.md) for generation, rebuilds and the distinction from canonical GitHub artifacts.
+
 ## CI and release authorization
 
-Validation runs the native floor suite and retained evidence, and its final `validate` job requires both to pass. Main-push `release-eligibility.yml` produces `release-eligible / validate`. The annotated version tag must match `VERSION`, point to the eligible exact main commit and include nonempty committed release notes. Never push a release tag without explicit user authorization.
+Validation runs the native floor suite, the offline Fedora source-RPM rebuild and retained evidence. Its final `validate` job requires all three to pass. Main-push `release-eligibility.yml` produces `release-eligible / validate`. The annotated version tag must match `VERSION`, point to the eligible exact main commit and include nonempty committed release notes. Never push a release tag without explicit user authorization.
 
 Publication reruns validation and exact-commit eligibility, builds independently on two GitHub workers, compares the RPM and native manifest, retains both build records, attests the asset set and publishes the immutable Release using the committed notes. Reruns validate existing immutable assets instead of replacing them. Downstream verification downloads the public RPM and exercises installation and login in a disposable Fedora container. Package transaction and account-removal guard qualification also runs in a disposable Fedora VM before accepting distribution changes.
 

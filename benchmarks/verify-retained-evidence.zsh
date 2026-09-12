@@ -25,4 +25,5 @@ python3 benchmarks/verify-git-provenance.py
 python3 benchmarks/verify-plugin-upstreams.py
 python3 benchmarks/verify-release-fixes.py
 python3 benchmarks/verify-release-qualification.py
+python3 benchmarks/verify-source-rpm.py
 print -r -- 'PASS: complete retained-evidence suite'

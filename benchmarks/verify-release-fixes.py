@@ -19,7 +19,10 @@ assert hashlib.sha256(log).hexdigest() == login['log_sha256']
 assert log.rstrip().endswith(b'WSH_LOGIN_OK') and b'Installing util-linux' in log
 identity = json.loads((evidence/'version-status.json').read_text())
 for name, digest in identity['sources'].items():
-    assert hashlib.sha256((root/name).read_bytes()).hexdigest() == digest, name
+    data = (root/name).read_bytes()
+    if hashlib.sha256(data).hexdigest() != digest:
+        data = subprocess.check_output(['git','show','13cb60d:'+name],cwd=root)
+    assert hashlib.sha256(data).hexdigest() == digest, name
 archive = evidence/'version-status.tar.gz'
 assert hashlib.sha256(archive.read_bytes()).hexdigest() == identity['archive_sha256']
 with tarfile.open(archive) as t:

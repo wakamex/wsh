@@ -25,6 +25,34 @@ jobs:
       - name: Build and test the development bundle on the glibc 2.28 floor
         run: ./build/build-glibc-2.28-development-bundle.zsh
 
+  source-rpm:
+    name: Source RPM and offline Fedora rebuild
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install source-package tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes podman zsh rpm
+      - name: Build source RPM and rebuild without network access
+        run: ./packaging/test-source-rpm.zsh "$RUNNER_TEMP/source-rpm"
+      - name: Retain build results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: source-rpm-results
+          path: |
+            ${{ runner.temp }}/source-rpm/*.log
+            ${{ runner.temp }}/source-rpm/builder.json
+            ${{ runner.temp }}/source-rpm/source/SRPMS/
+            ${{ runner.temp }}/source-rpm/rebuild/RPMS/
+            ${{ runner.temp }}/source-rpm/rebuild/packages.txt
+          if-no-files-found: warn
+
   retained-resource-gates:
     name: Retained benchmark evidence
     runs-on: ubuntu-24.04
@@ -47,11 +75,13 @@ jobs:
     if: always()
     needs:
       - floor-bundle
+      - source-rpm
       - retained-resource-gates
     runs-on: ubuntu-24.04
     steps:
       - name: Require every validation job to pass
         env:
           FLOOR_RESULT: ${{ needs.floor-bundle.result }}
+          SOURCE_RPM_RESULT: ${{ needs.source-rpm.result }}
           RESOURCE_RESULT: ${{ needs.retained-resource-gates.result }}
-        run: test "$FLOOR_RESULT" = success && test "$RESOURCE_RESULT" = success
+        run: test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$RESOURCE_RESULT" = success

@@ -1,0 +1,6 @@
+FROM registry.fedoraproject.org/fedora:44
+COPY wsh.src.rpm /tmp/wsh.src.rpm
+RUN dnf -y install dnf5-plugins rpm-build redhat-rpm-config && dnf -y builddep /tmp/wsh.src.rpm && dnf clean all && rm /tmp/wsh.src.rpm
+RUN useradd -m -u 1000 builder && mkdir -p /builddir && chown builder:builder /builddir
+USER builder
+WORKDIR /builddir

@@ -135,7 +135,13 @@ if [[ -x ${output_dir}/bin/zsh ]]; then
   exit 1
 fi
 
-curl --fail --location --retry 3 --output "$archive" "$source_url"
+if [[ ! -f $archive ]]; then
+  [[ ${WSH_OFFLINE:-0} != 1 ]] || {
+    print -u2 -- "error: offline Zsh source archive is missing: $archive"
+    exit 1
+  }
+  curl --fail --location --retry 3 --output "$archive" "$source_url"
+fi
 print -r -- "${source_sha256}  ${archive}" | sha256sum --check --status
 
 work_dir=$(mktemp -d "${output_root}/.${output_name}.XXXXXX")
@@ -232,7 +238,9 @@ fi
 
 mv -- "$staged_install" "$output_dir"
 trap - EXIT INT TERM
-rm -rf -- "$work_dir"
+if [[ ${WSH_KEEP_BUILD_SOURCE:-0} != 1 ]]; then
+  rm -rf -- "$work_dir"
+fi
 
 actual_version=$(${output_dir}/bin/zsh --version)
 if [[ $actual_version != "zsh ${zsh_version}"* ]]; then
