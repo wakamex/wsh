@@ -31,6 +31,18 @@ After testing your configuration and terminal behavior, use `chsh -s /usr/bin/ws
 
 Wsh preserves Zsh command-line parsing: `--` ends option parsing, ordinary positional arguments name shell scripts, and `-c`, `-s` and `-f` keep their Zsh meanings. See [PROFILING.md](PROFILING.md) for profile options and reports.
 
+## Directory jumping
+
+Wsh supplies `z` when your configuration has not already defined a directory-jump command. Visit a directory, then use part of its name to return:
+
+```sh
+cd /code/my-project
+cd /tmp
+z my-project
+```
+
+Wsh learns which directories you visit most often and most recently, saving them in `~/.z`. You can keep your existing OMZ `z` history and `ZSHZ_*` settings, including `ZSHZ_DATA` for another database path and `ZSHZ_CMD` for another command name. If you use Zoxide or a directory-jump command that Wsh cannot identify as a supported plugin, Wsh leaves it in place. Set `WSH_DISABLE_DIRECTORY_JUMP=1` in `.zshrc` to disable Wsh's default. Tab completion uses your existing Zsh completion setup.
+
 ## Package updates and recovery
 
 For a selected native RPM, use `sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm`, `sudo dnf upgrade ./NEW_PACKAGE.rpm`, or `sudo dnf downgrade ./OLDER_PACKAGE.rpm` with the intended single local package file. The package name is `wsh`. A hosted DNF repository is not configured. There is no second native updater or mutable activation record.
