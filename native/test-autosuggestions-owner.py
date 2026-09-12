@@ -12,7 +12,7 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 BINARY,MODULE,FIXTURE,OUT=[Path(p).resolve() for p in sys.argv[1:5]]
 MODE=sys.argv[5]
-spec=importlib.util.spec_from_file_location('pty_fixture',ROOT/'benchmarks/deferred-completion-2026-09-06/run.py')
+spec=importlib.util.spec_from_file_location('pty_fixture',ROOT/'native/pty-fixture.py')
 base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base);base.OUT=OUT
 OUT.mkdir(parents=True,exist_ok=True);(OUT/'transcripts').mkdir(exist_ok=True)
 CONFIG=r'''

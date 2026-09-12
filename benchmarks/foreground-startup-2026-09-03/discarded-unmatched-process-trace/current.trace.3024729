@@ -1,2 +1,0 @@
-execve("/var/tmp/wsh-foreground-trace.amSrHj/foreground-probe", ["/var/tmp/wsh-foreground-trace.am"..., "/var/tmp/wsh-foreground-trace.am"..., "exit0"], 0x7ffe540c1e78 /* 89 vars */) = 0
-exit_group(0)                           = ?

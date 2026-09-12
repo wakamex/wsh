@@ -14,17 +14,12 @@ import time
 ROOT=Path(__file__).resolve().parents[1]
 BUNDLE,PROTO,OUT=[Path(p).resolve() for p in sys.argv[1:4]]
 MODE=sys.argv[4]
-spec=importlib.util.spec_from_file_location('pty_fixture',ROOT/'benchmarks/deferred-completion-2026-09-06/run.py')
+spec=importlib.util.spec_from_file_location('pty_fixture',ROOT/'native/pty-fixture.py')
 base=importlib.util.module_from_spec(spec);spec.loader.exec_module(base);base.OUT=OUT
 VARIANTS=['baseline']+[f'{owner}-{state}' for owner in ('control','candidate') for state in ('cold','warm','stale','unusable')]
 ALL=VARIANTS+['candidate-vi','candidate-z-first','custom-tab','existing']
 CONFIG=base.CONFIG
-block='''if [[ $COMP_CASE == deferred-* || $COMP_CASE == existing || $COMP_CASE == custom-tab || $COMP_CASE == vi || $COMP_CASE == z-first ]]; then
-  source "$HOME/deferred.zsh"
-fi
-'''
-assert block in CONFIG
-CONFIG=CONFIG.replace(block,'').replace('[[ $COMP_CASE == vi ]]','[[ $COMP_CASE == candidate-vi ]]')
+CONFIG=CONFIG.replace('[[ $COMP_CASE == vi ]]','[[ $COMP_CASE == candidate-vi ]]')
 CONFIG+='''
 if [[ $COMP_CASE == control-* ]]; then
  autoload -Uz compinit

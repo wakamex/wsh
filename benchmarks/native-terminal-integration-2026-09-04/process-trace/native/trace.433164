@@ -1,2 +1,0 @@
-execve("/usr/bin/grep", ["grep", "-c", "^preexec$", "/var/tmp/wsh-native-terminal-int"...], 0x7fff2719eac8 /* 84 vars */) = 0
-exit_group(0)                           = ?

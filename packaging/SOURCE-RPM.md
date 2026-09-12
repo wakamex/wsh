@@ -26,7 +26,7 @@ COPR and Mock can consume the same source RPM. The build uses the target distrib
 
 `tests/source-rpm.py SOURCE_RPM` inspects the actual package, verifies its source-only contents and dependencies, and tests missing or altered offline sources. `build/check-native-installation.zsh` is shared with the canonical installation suite. Source-package preparation generates a fresh source inventory; changes covered by the native lock must also update that lock.
 
-For the local check used by CI, run `./packaging/test-source-rpm.zsh NEW_OUTPUT` with Podman, Zsh, Python 3 and rpmbuild installed. It prepares the dependency image, rebuilds with networking disabled and retains the image identity, package inventory, build logs and output RPMs. See the [Fedora rebuild and login qualification](../benchmarks/source-rpm-2026-09-11/report.md) for the tested result.
+For the local check used by CI, run `./packaging/test-source-rpm.zsh NEW_OUTPUT` with Podman, Zsh, Python 3 and rpmbuild installed. It prepares the dependency image, rebuilds with networking disabled and retains the image identity, package inventory, build logs and output RPMs. See the [Fedora rebuild and login qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/source-rpm-2026-09-11/report.md) for the tested result.
 
 ## Artifact identity and existing publication
 

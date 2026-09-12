@@ -53,8 +53,8 @@ jobs:
             ${{ runner.temp }}/source-rpm/rebuild/packages.txt
           if-no-files-found: warn
 
-  retained-resource-gates:
-    name: Retained benchmark evidence
+  source-contracts:
+    name: Current source contracts
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -63,12 +63,12 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Install evidence-checker requirements
+      - name: Install source-check requirements
         run: |
           sudo apt-get update
-          sudo apt-get install --yes gawk jq zsh python3-yaml gcc
-      - name: Verify the retained accepted evidence
-        run: ./benchmarks/verify-retained-evidence.zsh
+          sudo apt-get install --yes git zsh python3-yaml gcc
+      - name: Verify current source contracts
+        run: ./tests/verify-current.zsh
 
   validate:
     name: validate
@@ -76,12 +76,12 @@ jobs:
     needs:
       - floor-bundle
       - source-rpm
-      - retained-resource-gates
+      - source-contracts
     runs-on: ubuntu-24.04
     steps:
       - name: Require every validation job to pass
         env:
           FLOOR_RESULT: ${{ needs.floor-bundle.result }}
           SOURCE_RPM_RESULT: ${{ needs.source-rpm.result }}
-          RESOURCE_RESULT: ${{ needs.retained-resource-gates.result }}
-        run: test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$RESOURCE_RESULT" = success
+          SOURCE_CONTRACTS_RESULT: ${{ needs.source-contracts.result }}
+        run: test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$SOURCE_CONTRACTS_RESULT" = success

@@ -55,7 +55,7 @@ functions[compinit]="$(< $2)"
 compinit -i -D || exit 1
 [[ $_comps[git] == _git ]] || exit 2
 ''')
-    raw = os.environ.get('WSH_REFERENCE_ZSH', '/var/tmp/wsh-native-entry-prototype/launcher/bin/zsh')
+    raw = os.environ.get('WSH_REFERENCE_ZSH', str(REFERENCE / 'bin/zsh'))
     run = subprocess.run([raw, '-df', fallback, functions, next((BUNDLE / 'share/zsh').glob('*/functions/compinit'))], env=dict(PATH='/usr/bin:/bin', HOME=str(OUT), LC_ALL='C.UTF-8'), capture_output=True)
     assert run.returncode == 0 and not run.stderr, run
     results.append(dict(test='regular-zsh-fallback', status=0))

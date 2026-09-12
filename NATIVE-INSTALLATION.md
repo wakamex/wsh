@@ -53,6 +53,6 @@ Ordinary package removal refuses while a local `/etc/passwd` entry names `/usr/b
 
 ## Verified login coverage
 
-The [Fedora QEMU qualification](benchmarks/release-qualification-2026-09-10/report.md) exercises real serial-getty/PAM login, prompt readiness, Ctrl-Z, `fg`, Ctrl-C, authenticated unprivileged `chsh`, enforcing SELinux with a confined account and login after reboot. Missing optional helper or integration resources preserve the tested native shell path. Package verification passes after restoring the deliberately removed resources.
+The [Fedora QEMU qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/release-qualification-2026-09-10/report.md) exercises real serial-getty/PAM login, prompt readiness, Ctrl-Z, `fg`, Ctrl-C, authenticated unprivileged `chsh`, enforcing SELinux with a confined account and login after reboot. Missing optional helper or integration resources preserve the tested native shell path. Package verification passes after restoring the deliberately removed resources.
 
 This covers actual TTY/PAM login, not a complete graphical GDM session. Broken user startup code and failures in PAM or a display manager require recovery at their respective owners; the package removal guard cannot prevent those failures. [Package behavior](packaging/README.md) and the [release contract](RELEASES.md) record the corresponding distribution checks.

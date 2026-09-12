@@ -34,9 +34,9 @@ Missing executables or required system libraries, broken user startup code, PAM 
 
 ## Verification evidence
 
-- [Theme parsing and rendering qualification](benchmarks/native-render-2026-09-08/theme-parser-report.md) and [renderer parity](benchmarks/native-render-2026-09-08/renderer-report.md) cover accepted definitions, rejected inputs and escaped output.
+- [Theme parsing and rendering qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-render-2026-09-08/theme-parser-report.md) and [renderer parity](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-render-2026-09-08/renderer-report.md) cover accepted definitions, rejected inputs and escaped output.
 - [Installed manifest tests](tests/native-manifest.py) cover resource inventory and tampering. [Release validation](DEVELOPMENT.md#ci-and-release-authorization) checks the current build and public-install paths.
-- [Fedora package qualification](benchmarks/release-qualification-2026-09-10/report.md) covers PAM login, job control, package transactions, recovery and reboot with enforcing SELinux. It does not establish a complete graphical GDM session.
+- [Fedora package qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/release-qualification-2026-09-10/report.md) covers PAM login, job control, package transactions, recovery and reboot with enforcing SELinux. It does not establish a complete graphical GDM session.
 - [Profiling](PROFILING.md#privacy-and-bounds) documents private storage, bounded input and the command, environment and path data excluded from default traces.
 
 Historical launcher activation, bootstrap and manager rollback experiments describe the retired distribution. Current native guarantees come from the package and installed-shell checks above.

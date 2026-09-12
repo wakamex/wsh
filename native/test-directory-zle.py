@@ -17,7 +17,7 @@ for owner in ('control','candidate'):
     (completion_fixture/(owner+'.zsh')).write_bytes((fixture/(owner+'.zsh')).read_bytes())
 (completion_fixture/'_zshz').write_bytes((root/'third_party/zsh-z/_z').read_bytes())
 fixture=completion_fixture
-spec = importlib.util.spec_from_file_location('pty_fixture',root/'benchmarks/deferred-completion-2026-09-06/run.py')
+spec = importlib.util.spec_from_file_location('pty_fixture',root/'native/pty-fixture.py')
 base = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(base)
 base.OUT = out

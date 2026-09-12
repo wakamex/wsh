@@ -25,7 +25,7 @@ Before implementation, fix a runnable baseline, the smallest counterfactual, cor
 
 Native startup, system-package updates, the C component owners, one prompt helper per shell and fresh-installation release scope are selected. The legacy Rust crates and toolchain are retired. The source RPM is implemented and passes offline Fedora rebuild and login qualification. Published canonical artifacts use GitHub provenance; a separate maintainer RPM signature and hosted repository are not part of the current release contract.
 
-The older [migration inventory](benchmarks/native-qualification-2026-09-09/inventory-report.md) retains decisions that were open at its recorded revision. Its component-adoption, legacy-retirement and distribution-contract questions have since been resolved by [architecture qualification](DESIGN.md), [source-RPM qualification](benchmarks/source-rpm-2026-09-11/report.md) and the [release contract](RELEASES.md). Historical decision tables are evidence, not the current backlog.
+The older [migration inventory](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-qualification-2026-09-09/inventory-report.md) retains decisions that were open at its recorded revision. Its component-adoption, legacy-retirement and distribution-contract questions have since been resolved by [architecture qualification](DESIGN.md), [source-RPM qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/source-rpm-2026-09-11/report.md) and the [release contract](RELEASES.md). Historical decision tables are evidence, not the current backlog.
 
 ## Remaining work
 
@@ -67,7 +67,7 @@ A release does not require pane history, a theme directory, shared Git collectio
 
 Mature utilities remain authoritative for their domains. [Atuin](https://docs.atuin.sh/) owns structured history and synchronization, [zoxide](https://zoxide.net/) owns directory ranking, and project environment managers own trust and tool selection. `wsh` can replace duplicated shell hooks when evidence supports it, but it should not absorb their databases, ranking algorithms, or policy.
 
-Reopen runtime embedding only for a measured need large enough to justify coordinating child ownership with Zsh. The [previous comparison](benchmarks/native-runtime-boundary-2026-09-09/report.md) selected the per-shell helper. Keep rendering and shell lifecycle local in any future collection-sharing experiment.
+Reopen runtime embedding only for a measured need large enough to justify coordinating child ownership with Zsh. The [previous comparison](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-runtime-boundary-2026-09-09/report.md) selected the per-shell helper. Keep rendering and shell lifecycle local in any future collection-sharing experiment.
 
 ## Ownership boundaries
 

@@ -35,6 +35,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-srpm-') as directory:
         # The preceding checks restrict this self-produced archive to regular relative files.
         t.extractall(work/'source')
     root = next((work/'source').iterdir())
+    assert (root/'native/pty-fixture.py').is_file()
+    assert not (root/'benchmarks').exists()
+    assert not list(root.rglob('*.rs'))
     metadata = json.loads((root/'source-info.json').read_text())
     lock = json.loads((root/'build/zsh-sources/zsh-cad0d67c-native.json').read_text())
     cache = root/'build/cache';cache.mkdir()

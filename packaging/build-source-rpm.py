@@ -48,7 +48,7 @@ def main():
         if not name: continue
         path = ROOT/name
         if not path.exists() or output in path.parents: continue
-        if Path(name).parts[0] not in roots and name != 'benchmarks/deferred-completion-2026-09-06/run.py' and not (len(Path(name).parts) == 1 and (path.suffix == '.md' or name in ('VERSION','LICENSE'))): continue
+        if Path(name).parts[0] not in roots and not (len(Path(name).parts) == 1 and (path.suffix == '.md' or name in ('VERSION','LICENSE'))): continue
         assert path.is_file() and not path.is_symlink(), name
         data = path.read_bytes()
         assert not data.startswith(b'\x7fELF') and path.suffix not in ('.zwc','.o','.so'), 'prebuilt input: '+name

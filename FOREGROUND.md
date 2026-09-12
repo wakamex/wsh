@@ -26,7 +26,7 @@ The accepted command is:
 wsh --run [--login] -- <command> [arguments...]
 ```
 
-The native executable captures the exact argument vector before user startup and schedules it as the first foreground job in the same interactive Zsh that will present the prompt. That Zsh retains the job table across Ctrl-Z and `fg`. No per-user activation record, manager, reconstructed command string or second shell initialization is needed. The [native foreground qualification](benchmarks/native-foreground-2026-09-08/report.md) covers the current implementation.
+The native executable captures the exact argument vector before user startup and schedules it as the first foreground job in the same interactive Zsh that will present the prompt. That Zsh retains the job table across Ctrl-Z and `fg`. No per-user activation record, manager, reconstructed command string or second shell initialization is needed. The [native foreground qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-foreground-2026-09-08/report.md) covers the current implementation.
 
 Wakterm continues to own executable selection, arguments, environment, cwd, provider session, restore policy, and whether the shell is a login shell. It can pass an argument vector to Wsh without constructing shell source. Wsh owns the exact transition into its bundled Zsh and no application identity or restore policy.
 
@@ -42,7 +42,7 @@ The original launcher-era comparison used the same complete development bundle, 
 
 The dormant adapter remained within its ordinary-startup gate. Interleaved managed first-editable p90 changed from 29.872 ms to 30.297 ms, a 0.425 ms increase under the fixed +0.5 ms limit. Process tracing observed one Zsh execution on the accepted path and two on the current wrapper. That historical candidate otherwise started only the manager, existing per-session runtime and Git scan, and requested application.
 
-The [retained report](benchmarks/foreground-startup-2026-09-03/report.md) contains the exact gates, raw samples, process traces, source identities, and reproduction commands.
+The [retained report](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/foreground-startup-2026-09-03/report.md) contains the exact gates, raw samples, process traces, source identities, and reproduction commands.
 
 ## Managed identity follows the native frontend process
 
