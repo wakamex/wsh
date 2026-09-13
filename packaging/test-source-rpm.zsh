@@ -16,8 +16,9 @@ identity=$(sha256sum $packages[1])
 readonly image=localhost/wsh-source-rpm:${identity[1,16]}
 podman build --tag $image $destination/context > $destination/builder.log 2>&1
 podman image inspect $image > $destination/builder.json
+# Map the host owner to the image's builder account, including CI runners with a different UID.
 # The builder sees the SRPM and test driver, not the repository or host caches.
-podman run --rm --init --userns=keep-id --network=none \
+podman run --rm --init --userns=keep-id:uid=1000,gid=1000 --network=none \
   --volume $destination/source/SRPMS:/sources:ro,Z \
   --volume $destination/rebuild:/builddir:Z \
   --volume $root/tests/source-rpm.py:/test-source-rpm.py:ro,z \
