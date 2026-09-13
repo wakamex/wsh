@@ -1,21 +1,22 @@
 /* Standalone comparison driver. This JSON snapshot interface is not shipped. */
 #define _GNU_SOURCE
 #include "render.h"
-#include "yyjson.h"
+#include <jansson.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 
-static yyjson_val *field(yyjson_val *object, const char *key) { yyjson_val *v = yyjson_obj_get(object, key); assert(v); return v; }
-static const char *text(yyjson_val *object, const char *key)
+static int nonnegative(json_t *v) { return json_is_integer(v) && json_integer_value(v) >= 0; }
+static json_t *field(json_t *object, const char *key) { json_t *v = json_object_get(object, key); assert(v); return v; }
+static const char *text(json_t *object, const char *key)
 {
-    yyjson_val *v = field(object, key); if (yyjson_is_null(v)) return NULL;
-    assert(yyjson_is_str(v)); const char *s = yyjson_get_str(v); assert(strlen(s) == yyjson_get_len(v)); return s;
+    json_t *v = field(object, key); if (json_is_null(v)) return NULL;
+    assert(json_is_string(v)); const char *s = json_string_value(v); assert(strlen(s) == json_string_length(v)); return s;
 }
-static int flag(yyjson_val *object, const char *key) { yyjson_val *v = field(object, key); assert(yyjson_is_bool(v)); return yyjson_get_bool(v); }
-static uint64_t number(yyjson_val *object, const char *key) { yyjson_val *v = field(object, key); assert(yyjson_is_uint(v)); return yyjson_get_uint(v); }
+static int flag(json_t *object, const char *key) { json_t *v = field(object, key); assert(json_is_boolean(v)); return json_is_true(v); }
+static uint64_t number(json_t *object, const char *key) { json_t *v = field(object, key); assert(nonnegative(v)); return json_integer_value(v); }
 static char *unhex(const char *source)
 {
     if (!source) return NULL;
@@ -37,9 +38,9 @@ int main(int argc, char **argv)
     char *line = NULL; size_t capacity = 0; ssize_t length;
     while ((length = getline(&line, &capacity, stdin)) >= 0) {
         assert(length <= 65536);
-        yyjson_doc *doc = yyjson_read(line, (size_t)length, 0); assert(doc);
-        yyjson_val *request = yyjson_doc_get_root(doc), *snapshot = field(request, "snapshot");
-        assert(yyjson_is_obj(request) && yyjson_is_obj(snapshot));
+        json_t *doc = json_loadb(line, (size_t)length, JSON_REJECT_DUPLICATES, NULL); assert(doc);
+        json_t *request = doc, *snapshot = field(request, "snapshot");
+        assert(json_is_object(request) && json_is_object(snapshot));
         char *cwd = unhex(text(snapshot, "cwd_hex")); assert(cwd);
         struct wsh_git_result git = {0}; git.root = unhex(text(snapshot, "root_hex"));
         git.branch = (char *)text(snapshot, "branch"); git.exact_tag = (char *)text(snapshot, "exact_tag"); git.detached_sha = (char *)text(snapshot, "detached_sha");
@@ -48,19 +49,17 @@ int main(int argc, char **argv)
         const char *operation = text(snapshot, "operation");
         const char *operations[] = {"rebase", "merge", "cherry-pick", "revert", "bisect"};
         if (operation) { for (size_t i = 0; i < 5; ++i) if (!strcmp(operation, operations[i])) git.operation = (int)i + 1; assert(git.operation); }
-        yyjson_val *status = field(request, "status"), *duration = field(request, "duration");
-        assert(yyjson_is_int(status) && (yyjson_is_null(duration) || yyjson_is_uint(duration)));
+        json_t *status = field(request, "status"), *duration = field(request, "duration");
+        assert(json_is_integer(status) && (json_is_null(duration) || nonnegative(duration)));
         int privileged = flag(request, "privileged");
         if (flag(request, "reset")) wsh_renderer_reset(&renderer);
         char *left, *right; uint64_t start = now();
-        wsh_render(&renderer, cwd, &git, (int)yyjson_get_sint(status), !yyjson_is_null(duration), yyjson_get_uint(duration), privileged, &left, &right);
+        wsh_render(&renderer, cwd, &git, (int)json_integer_value(status), !json_is_null(duration), json_integer_value(duration), privileged, &left, &right);
         uint64_t elapsed = now() - start;
         start = now(); uint64_t empty = now() - start;
-        yyjson_mut_doc *response = yyjson_mut_doc_new(NULL); assert(response);
-        yyjson_mut_val *array = yyjson_mut_arr(response); yyjson_mut_doc_set_root(response, array);
-        assert(yyjson_mut_arr_add_strcpy(response, array, left) && yyjson_mut_arr_add_strcpy(response, array, right) && yyjson_mut_arr_add_uint(response, array, elapsed) && yyjson_mut_arr_add_uint(response, array, empty));
-        char *encoded = yyjson_mut_write(response, 0, NULL); assert(encoded); puts(encoded); fflush(stdout);
-        free(encoded); yyjson_mut_doc_free(response); free(left); free(right); free(cwd); free(git.root); yyjson_doc_free(doc);
+        json_t *response = json_pack("[ssII]", left, right, (json_int_t)elapsed, (json_int_t)empty); assert(response);
+        char *encoded = json_dumps(response, JSON_COMPACT); assert(encoded); puts(encoded); fflush(stdout);
+        free(encoded); json_decref(response); free(left); free(right); free(cwd); free(git.root); json_decref(doc);
     }
     free(line); wsh_renderer_free(&renderer); wsh_theme_free(&theme); return 0;
 }

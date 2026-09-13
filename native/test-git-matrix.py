@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare complete snapshots against the retained Rust collector on real Git states."""
+"""Compare complete snapshots against the reference helper on real Git states."""
 import hashlib
 import json
 import os
@@ -10,7 +10,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNTIMES = dict(rust=Path(sys.argv[1]).resolve(), native=Path(sys.argv[2]).resolve())
+RUNTIMES = dict(control=Path(sys.argv[1]).resolve(), native=Path(sys.argv[2]).resolve())
 OUT = Path(sys.argv[3]).resolve(); OUT.mkdir(parents=True)
 home = OUT / 'home'; home.mkdir()
 env = dict(HOME=str(home), PATH='/usr/bin:/bin', LC_ALL='C.UTF-8', TZ='UTC', GIT_CONFIG_NOSYSTEM='1')
@@ -38,14 +38,14 @@ def snapshot(binary, cwd, environment, parent=None):
     def send(value): p.stdin.write(json.dumps(value).encode() + b'\n'); p.stdin.flush()
     try:
         assert read()['type'] == 'ready'
-        send(dict(type='refresh', version=1, id=2**64-1, generation=2**64-1, cwd_hex=os.fsencode(cwd).hex(), exit_status=0, duration_ms=None, privileged=False, reset_transient=False))
+        send(dict(type='refresh', version=1, id=2**63-1, generation=2**63-1, cwd_hex=os.fsencode(cwd).hex(), exit_status=0, duration_ms=None, privileged=False, reset_transient=False))
         response = read()
         send(dict(type='shutdown', version=1, id=2)); assert read()['type'] == 'stopping'
         assert p.wait(timeout=3) == 0
         diagnostics = p.stderr.read()
         assert not diagnostics, diagnostics
         if response['type'] == 'snapshot':
-            assert response['generation'] == 2**64-1 and response['id'] == 2**64-1
+            assert response['generation'] == 2**63-1 and response['id'] == 2**63-1
             return response['snapshot']
         return {'error_type': response['type'], 'error': response.get('error')}
     finally:
@@ -55,7 +55,7 @@ def compare(name, cwd=repo, environment=env, parent=None, error=False):
     outputs = {variant: snapshot(binary, cwd, environment, parent) for variant, binary in RUNTIMES.items()}
     # Exact snapshot parity; error text is diagnostic rather than a protocol enum.
     passed = (all(o.get('error_type') == 'error' for o in outputs.values()) if error else
-              outputs['rust'] == outputs['native'] and all('error_type' not in o for o in outputs.values()))
+              outputs['control'] == outputs['native'] and all('error_type' not in o for o in outputs.values()))
     results.append(dict(case=name, passed=passed, snapshots=outputs))
     (OUT / 'results.json').write_text(json.dumps(results, indent=2) + '\n')
     print(name, 'PASS' if passed else 'FAIL', flush=True)
@@ -104,4 +104,4 @@ raw = os.fsencode(OUT) + b'/raw-\xff-space name'; os.mkdir(raw); git('init', '-q
 compare('outside-repository', home)
 (OUT / 'metadata.json').write_text(json.dumps(dict(runtimes={v:dict(path=str(b), sha256=hashlib.sha256(b.read_bytes()).hexdigest()) for v,b in RUNTIMES.items()}, command='python3 native/test-git-matrix.py ' + ' '.join(sys.argv[1:]), environment=env), indent=2) + '\n')
 assert all(r['passed'] for r in results), [r['case'] for r in results if not r['passed']]
-print('PASS: real Git matrix and unsigned-64-bit generation/id parity')
+print('PASS: real Git matrix and signed-range generation/id parity')

@@ -1,6 +1,7 @@
 #ifndef WSH_RUNTIME_JSON_H
 #define WSH_RUNTIME_JSON_H
-#include "yyjson.h"
+#include <jansson.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,32 +20,34 @@ static inline uint64_t clock_ns(clockid_t clock)
         abort();
     return (uint64_t)t.tv_sec * 1000000000 + (uint64_t)t.tv_nsec;
 }
-static inline yyjson_mut_doc *object(void)
+static inline json_t *object(void)
 {
-    yyjson_mut_doc *d = yyjson_mut_doc_new(NULL);
-    if (!d)
-        abort();
-    yyjson_mut_val *v = yyjson_mut_obj(d);
-    if (!v)
-        abort();
-    yyjson_mut_doc_set_root(d, v);
+    json_t *d = json_object();
+    if (!d) abort();
     return d;
 }
-static inline void string_field(yyjson_mut_doc *d, const char *k, const char *v)
+static inline char *encode(json_t *d, size_t *length)
 {
-    if (!(v ? yyjson_mut_obj_add_strcpy(d, yyjson_mut_doc_get_root(d), k, v)
-            : yyjson_mut_obj_add_null(d, yyjson_mut_doc_get_root(d), k)))
-        abort();
+    char *line = json_dumps(d, JSON_COMPACT);
+    if (!line) abort();
+    *length = strlen(line);
+    return line;
 }
-static inline void uint_field(yyjson_mut_doc *d, const char *k, uint64_t v)
+static inline void string_field(json_t *d, const char *k, const char *v)
 {
-    if (!yyjson_mut_obj_add_uint(d, yyjson_mut_doc_get_root(d), k, v))
-        abort();
+    if (json_object_set_new(d, k, v ? json_string(v) : json_null())) abort();
 }
-static inline void bool_field(yyjson_mut_doc *d, const char *k, int v)
+static inline void uint_field(json_t *d, const char *k, uint64_t v)
 {
-    if (!yyjson_mut_obj_add_bool(d, yyjson_mut_doc_get_root(d), k, v != 0))
-        abort();
+    if (v > LLONG_MAX || json_object_set_new(d, k, json_integer((json_int_t)v))) abort();
+}
+static inline void bool_field(json_t *d, const char *k, int v)
+{
+    if (json_object_set_new(d, k, json_boolean(v))) abort();
+}
+static inline int nonnegative(json_t *v)
+{
+    return json_is_integer(v) && json_integer_value(v) >= 0;
 }
 static inline char *hex(const char *text)
 {

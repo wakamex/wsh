@@ -13,6 +13,8 @@ Paths cross the protocol as lowercase hexadecimal filesystem bytes. This avoids 
 {"type":"shutdown","version":1,"id":4}
 ```
 
+IDs, generations, durations and snapshot counters are integers from 0 through 9,223,372,036,854,775,807 (INT64_MAX), matching the shell’s signed integer range. A duration may also be null or omitted. Exit status is a signed 32-bit integer. JSON `-0` is accepted as zero; fractional numbers, duplicate fields and out-of-range integers are rejected.
+
 Request IDs correlate direct responses. Generations identify prompt state. Refresh generations must increase strictly within a runtime process. A newer refresh cancels active work and replaces any older pending refresh. `cancel` suppresses publication through the named generation and clears pending work. `reset_transient` clears renderer memory used by changed-only components, including the behavior expected after `clear`.
 
 ## Responses

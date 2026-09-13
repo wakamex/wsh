@@ -381,7 +381,7 @@ static uint64_t counter(const unsigned char *text, size_t length, char sign)
     for (; i < length; ++i) {
         if (text[i] < '0' || text[i] > '9') return 0;
         unsigned digit = text[i] - '0';
-        if (result > (UINT64_MAX - digit) / 10) return 0;
+        if (result > ((uint64_t)INT64_MAX - digit) / 10) return 0;
         result = result * 10 + digit;
     }
     return result;

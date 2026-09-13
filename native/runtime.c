@@ -55,13 +55,13 @@ static void trace_event(struct runtime *r, const char *name, int has_generation,
                                  wsh_runtime_trace_event(name, has_generation, generation),
                                  wsh_runtime_trace_time(&r->trace));
 }
-static void response(struct runtime *r, yyjson_mut_doc *doc)
+static void response(struct runtime *r, json_t *doc)
 {
     size_t length;
-    char *line = yyjson_mut_write(doc, 0, &length);
+    char *line = encode(doc, &length);
     if (!line)
         abort();
-    yyjson_mut_doc_free(doc);
+    json_decref(doc);
     line[length++] = '\n';
     size_t offset = 0;
     while (offset < length) {
@@ -76,16 +76,16 @@ static void response(struct runtime *r, yyjson_mut_doc *doc)
     }
     free(line);
 }
-static yyjson_mut_doc *message(const char *type)
+static json_t *message(const char *type)
 {
-    yyjson_mut_doc *d = object();
+    json_t *d = object();
     uint_field(d, "version", 1);
     string_field(d, "type", type);
     return d;
 }
 static void reply(struct runtime *r, const char *type, int has_id, uint64_t id, const char *error)
 {
-    yyjson_mut_doc *d = message(type);
+    json_t *d = message(type);
     if (has_id)
         uint_field(d, "id", id);
     else
@@ -138,7 +138,7 @@ static void record_worker(struct runtime *r, struct worker *w, const char *event
     if (r->trace.fd < 0)
         return;
     record_received(r, w);
-    yyjson_mut_doc *d = wsh_runtime_trace_event(event, 1, w->request.generation);
+    json_t *d = wsh_runtime_trace_event(event, 1, w->request.generation);
     uint_field(d, "duration_us", w->elapsed_ns / 1000);
     uint_field(d, "repository_discovery_us", w->git.discovery_ns / 1000);
     if (w->git.child_processes)
@@ -165,7 +165,7 @@ static void snapshot(struct runtime *r, struct worker *w)
     uint64_t render_ns = clock_ns(CLOCK_MONOTONIC) - start;
     int changed = !r->last_left || strcmp(r->last_left, left) || strcmp(r->last_right, right);
     start = clock_ns(CLOCK_MONOTONIC);
-    yyjson_mut_doc *d = message("snapshot"), *s = object();
+    json_t *d = message("snapshot"), *s = object();
     uint_field(d, "id", q->id);
     uint_field(d, "generation", q->generation);
     char *encoded = hex(left);
@@ -194,10 +194,8 @@ static void snapshot(struct runtime *r, struct worker *w)
     bool_field(s, "worktree", g->worktree);
     const char *operations[] = {NULL, "rebase", "merge", "cherry-pick", "revert", "bisect"};
     string_field(s, "operation", operations[g->operation]);
-    yyjson_mut_val *value = yyjson_mut_val_mut_copy(d, yyjson_mut_doc_get_root(s));
-    if (!value || !yyjson_mut_obj_add_val(d, yyjson_mut_doc_get_root(d), "snapshot", value))
+    if (json_object_set_new(d, "snapshot", s))
         abort();
-    yyjson_mut_doc_free(s);
     response(r, d);
     uint64_t write_ns = clock_ns(CLOCK_MONOTONIC) - start;
     if (r->trace.fd >= 0) {
@@ -270,10 +268,10 @@ static void stop_worker(struct runtime *r)
     free(w);
     r->active = NULL;
 }
-static int equals(yyjson_val *v, const char *text)
+static int equals(json_t *v, const char *text)
 {
-    return yyjson_is_str(v) && yyjson_get_len(v) == strlen(text) &&
-           !memcmp(yyjson_get_str(v), text, strlen(text));
+    return json_is_string(v) && json_string_length(v) == strlen(text) &&
+           !memcmp(json_string_value(v), text, strlen(text));
 }
 static int digit(unsigned char ch)
 {
@@ -282,10 +280,10 @@ static int digit(unsigned char ch)
            : ch >= 'A' && ch <= 'F' ? ch - 'A' + 10
                                     : -1;
 }
-static char *decode(yyjson_val *v, const char **error)
+static char *decode(json_t *v, const char **error)
 {
-    size_t n = yyjson_get_len(v);
-    const unsigned char *s = (const unsigned char *)yyjson_get_str(v);
+    size_t n = json_string_length(v);
+    const unsigned char *s = (const unsigned char *)json_string_value(v);
     if (n > 8192 || n % 2) {
         *error = "cwd_hex is malformed or too long";
         return NULL;
@@ -315,21 +313,21 @@ static char *decode(yyjson_val *v, const char **error)
 }
 static void request_line(struct runtime *r, const char *line, size_t length)
 {
-    yyjson_doc *doc = yyjson_read(line, length, 0);
-    yyjson_val *root = doc ? yyjson_doc_get_root(doc) : NULL;
+    json_t *doc = json_loadb(line, length, JSON_REJECT_DUPLICATES | JSON_ALLOW_NUL, NULL);
+    json_t *root = doc;
     const char *keys[] = {"type",        "version",     "id",         "generation",     "cwd_hex",
                           "exit_status", "duration_ms", "privileged", "reset_transient"};
-    yyjson_val *fields[9] = {0};
+    json_t *fields[9] = {0};
     unsigned mask = 0;
-    size_t i, max;
-    yyjson_val *key, *value;
-    if (!yyjson_is_obj(root))
+    const char *key;
+    json_t *value;
+    if (!json_is_object(root))
         goto malformed;
-    yyjson_obj_foreach(root, i, max, key, value)
+    json_object_foreach(root, key, value)
     {
         unsigned index;
         for (index = 0; index < 9; ++index)
-            if (equals(key, keys[index]))
+            if (!strcmp(key, keys[index]))
                 break;
         if (index == 9 || fields[index])
             goto malformed;
@@ -344,23 +342,23 @@ static void request_line(struct runtime *r, const char *line, size_t length)
     unsigned expected = type == 2 ? 511 : type == 3 ? 15 : 7;
     if (!type || (type == 2 ? (mask | 64) != expected : mask != expected))
         goto malformed;
-    if (!yyjson_is_uint(fields[1]) || yyjson_get_uint(fields[1]) > UINT32_MAX ||
-        !yyjson_is_uint(fields[2]))
+    if (!nonnegative(fields[1]) || json_integer_value(fields[1]) > UINT32_MAX ||
+        !nonnegative(fields[2]))
         goto malformed;
-    if ((type == 2 || type == 3) && !yyjson_is_uint(fields[3]))
+    if ((type == 2 || type == 3) && !nonnegative(fields[3]))
         goto malformed;
     if (type == 2) {
-        if (!yyjson_is_str(fields[4]) || !yyjson_is_int(fields[5]) || !yyjson_is_bool(fields[7]) ||
-            !yyjson_is_bool(fields[8]))
+        if (!json_is_string(fields[4]) || !json_is_integer(fields[5]) || !json_is_boolean(fields[7]) ||
+            !json_is_boolean(fields[8]))
             goto malformed;
-        if (yyjson_is_uint(fields[5]) ? yyjson_get_uint(fields[5]) > INT32_MAX
-                                      : yyjson_get_sint(fields[5]) < INT32_MIN)
+        if (nonnegative(fields[5]) ? json_integer_value(fields[5]) > INT32_MAX
+                                      : json_integer_value(fields[5]) < INT32_MIN)
             goto malformed;
-        if (fields[6] && !yyjson_is_null(fields[6]) && !yyjson_is_uint(fields[6]))
+        if (fields[6] && !json_is_null(fields[6]) && !nonnegative(fields[6]))
             goto malformed;
     }
-    uint64_t id = yyjson_get_uint(fields[2]), generation = yyjson_get_uint(fields[3]);
-    if (yyjson_get_uint(fields[1]) != 1) {
+    uint64_t id = json_integer_value(fields[2]), generation = json_integer_value(fields[3]);
+    if (json_integer_value(fields[1]) != 1) {
         reply(r, "error", 1, id, "unsupported protocol version");
         goto done;
     }
@@ -399,11 +397,11 @@ static void request_line(struct runtime *r, const char *line, size_t length)
         q->id = id;
         q->generation = generation;
         q->cwd = cwd;
-        q->status = (int)yyjson_get_sint(fields[5]);
-        q->has_duration = yyjson_is_uint(fields[6]);
-        q->duration = yyjson_get_uint(fields[6]);
-        q->privileged = yyjson_get_bool(fields[7]);
-        q->reset = yyjson_get_bool(fields[8]);
+        q->status = (int)json_integer_value(fields[5]);
+        q->has_duration = nonnegative(fields[6]);
+        q->duration = json_integer_value(fields[6]);
+        q->privileged = json_is_true(fields[7]);
+        q->reset = json_is_true(fields[8]);
         if (r->trace.buffered)
             q->received_us = wsh_runtime_trace_time(&r->trace);
         else
@@ -421,7 +419,7 @@ malformed:
     reply(r, "error", 0, 0, "malformed request");
 done:
     if (doc)
-        yyjson_doc_free(doc);
+        json_decref(doc);
 }
 static int serve(const struct wsh_theme *theme)
 {
@@ -436,12 +434,12 @@ static int serve(const struct wsh_theme *theme)
         r.failed = 1;
         goto done;
     }
-    yyjson_mut_doc *ready = message("ready");
+    json_t *ready = message("ready");
     const char *id = wsh_theme_get(theme, "id").u.s;
     string_field(ready, "theme", id);
     response(&r, ready);
     if (r.trace.fd >= 0) {
-        yyjson_mut_doc *d = wsh_runtime_trace_event("runtime-ready", 0, 0);
+        json_t *d = wsh_runtime_trace_event("runtime-ready", 0, 0);
         string_field(d, "theme", id);
         wsh_runtime_trace_record(&r.trace, d, wsh_runtime_trace_time(&r.trace));
     }

@@ -1,0 +1,71 @@
+{
+  "git": {
+    "clean/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 9.168842,
+      "candidate_median_ms": 9.104181,
+      "paired_p95_ms": 0.44392999999999994,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "clean/warm": {
+      "pairs": 50,
+      "control_median_ms": 8.556258,
+      "candidate_median_ms": 8.534567,
+      "paired_p95_ms": 0.5713439999999999,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "dirty/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 4.066954,
+      "candidate_median_ms": 4.120175,
+      "paired_p95_ms": 0.242305,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "dirty/warm": {
+      "pairs": 50,
+      "control_median_ms": 3.933431,
+      "candidate_median_ms": 3.960191,
+      "paired_p95_ms": 0.21721600000000008,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "untracked/process-cold": {
+      "pairs": 50,
+      "control_median_ms": 4.33028,
+      "candidate_median_ms": 4.33594,
+      "paired_p95_ms": 0.3944290000000006,
+      "limit_ms": 3,
+      "passed": true
+    },
+    "untracked/warm": {
+      "pairs": 50,
+      "control_median_ms": 4.169866,
+      "candidate_median_ms": 4.202497,
+      "paired_p95_ms": 0.2862279999999995,
+      "limit_ms": 3,
+      "passed": true
+    }
+  },
+  "startup": {
+    "existing": {
+      "pairs": 50,
+      "paired_p95_ms": 0.7783179999999987,
+      "gate_ms": 3,
+      "passed": true,
+      "control_median_ms": 20.593007,
+      "native_median_ms": 20.28191
+    },
+    "minimal": {
+      "pairs": 50,
+      "paired_p95_ms": 0.5814730000000026,
+      "gate_ms": 3,
+      "passed": true,
+      "control_median_ms": 22.833408,
+      "native_median_ms": 22.627684
+    }
+  },
+  "host_helper_bytes": 114912
+}

@@ -68,7 +68,6 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 644 "$zsh_source_lock" "$stage/share/wsh/native-source-lock.json"
   install -D -m 644 "$zsh_root/.wsh-config.modules" "$stage/share/wsh/config.modules"
   install -D -m 644 "$repository_root/third_party/tomlc17/LICENSE" "$stage/share/wsh/licenses/tomlc17-LICENSE"
-  install -D -m 644 "$repository_root/third_party/yyjson/LICENSE" "$stage/share/wsh/licenses/yyjson-LICENSE"
 
 fi
 if [[ -d ${zsh_root}/lib ]]; then

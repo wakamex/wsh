@@ -9,8 +9,8 @@ struct wsh_runtime_trace {
 };
 int wsh_runtime_trace_open(struct wsh_runtime_trace *t);
 uint64_t wsh_runtime_trace_time(const struct wsh_runtime_trace *t);
-yyjson_mut_doc *wsh_runtime_trace_event(const char *event, int has_generation, uint64_t generation);
-void wsh_runtime_trace_record(struct wsh_runtime_trace *t, yyjson_mut_doc *d, uint64_t elapsed_us);
+json_t *wsh_runtime_trace_event(const char *event, int has_generation, uint64_t generation);
+void wsh_runtime_trace_record(struct wsh_runtime_trace *t, json_t *d, uint64_t elapsed_us);
 void wsh_runtime_trace_flush(struct wsh_runtime_trace *t);
 void wsh_runtime_trace_close(struct wsh_runtime_trace *t);
 #endif

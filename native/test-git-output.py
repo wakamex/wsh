@@ -8,7 +8,7 @@ for args in [['init','-q','-b','main'],['config','user.name','output-test'],['co
 (repo/'file').write_text('seed\n')
 subprocess.run(['git','-C',repo,'add','file'],check=True)
 subprocess.run(['git','-C',repo,'commit','-qm','seed'],check=True)
-for name,script in [('oversized','/usr/bin/git "$@" || exit\n/usr/bin/head -c 4194305 /dev/zero\n'),('invalid-utf8','/usr/bin/git "$@" || exit\nprintf "\\377"\n'),('nonzero','/usr/bin/git "$@" || exit\nexit 42\n'),('closed-output-slow','/usr/bin/git "$@" || exit\nexec 1>&-\nexec /usr/bin/sleep 30\n')]:
+for name,script in [('oversized','/usr/bin/git "$@" || exit\n/usr/bin/head -c 4194305 /dev/zero\n'),('invalid-utf8','/usr/bin/git "$@" || exit\nprintf "\\377"\n'),('nonzero','/usr/bin/git "$@" || exit\nexit 42\n'),('closed-output-slow','/usr/bin/git "$@" || exit\nexec 1>&-\nexec /usr/bin/sleep 30\n'), ('counter-max', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +9223372036854775807 -9223372036854775807\\n"\n'), ('counter-overflow', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +9223372036854775808 -9223372036854775808\\n"\n'), ('counter-u64-max', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +18446744073709551615 -18446744073709551615\\n"\n')]:
     case=out/name;case.mkdir();binary=case/'git';binary.write_text('#!/bin/sh\n[ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99\n'+script);binary.chmod(0o755)
     p=subprocess.Popen([runtime,'serve','--theme',root/'themes/minimal.toml'],env=dict(os.environ,PATH=str(case)+':/usr/bin:/bin'),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     buffer=bytearray()
@@ -23,7 +23,11 @@ for name,script in [('oversized','/usr/bin/git "$@" || exit\n/usr/bin/head -c 41
     try:
         assert read()['type']=='ready'
         t=time.monotonic();send(dict(type='refresh',version=1,id=1,generation=1,cwd_hex=os.fsencode(repo).hex(),exit_status=0,duration_ms=None,privileged=False,reset_transient=False));response=read();elapsed=time.monotonic()-t
-        assert response['type']=='error',response
+        if name.startswith('counter-'):
+            expected=2**63-1 if name=='counter-max' else 0
+            assert response['type']=='snapshot' and response['snapshot']['ahead']==expected and response['snapshot']['behind']==expected,response
+        else:
+            assert response['type']=='error',response
         if name=='oversized':assert '4194304' in response['error'],response
         if name=='invalid-utf8':assert 'UTF-8' in response['error'],response
         if name=='nonzero':assert '42' in response['error'],response
@@ -33,4 +37,4 @@ for name,script in [('oversized','/usr/bin/git "$@" || exit\n/usr/bin/head -c 41
         results.append(dict(case=name,response=response,elapsed_seconds=elapsed,status=p.returncode))
     finally:
         if p.poll() is None:p.kill();p.wait()
-(out/'results.json').write_text(json.dumps(results,indent=2)+'\n');print('PASS: four real-Git output faults, optional locks, runtime liveness and bounded timeout')
+(out/'results.json').write_text(json.dumps(results,indent=2)+'\n');print('PASS: real-Git output faults, signed counter boundaries, optional locks, liveness and bounded timeout')

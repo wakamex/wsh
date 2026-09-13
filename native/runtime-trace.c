@@ -52,9 +52,9 @@ uint64_t wsh_runtime_trace_time(const struct wsh_runtime_trace *t)
     }
     return (clock_ns(CLOCK_MONOTONIC) - t->started_ns) / 1000;
 }
-yyjson_mut_doc *wsh_runtime_trace_event(const char *event, int has_generation, uint64_t generation)
+json_t *wsh_runtime_trace_event(const char *event, int has_generation, uint64_t generation)
 {
-    yyjson_mut_doc *d = object();
+    json_t *d = object();
     uint_field(d, "schema_version", 1);
     string_field(d, "source", "runtime");
     string_field(d, "event", event);
@@ -76,18 +76,18 @@ static void write_bytes(struct wsh_runtime_trace *t, const char *p, size_t n)
         n -= (size_t)used;
     }
 }
-void wsh_runtime_trace_record(struct wsh_runtime_trace *t, yyjson_mut_doc *d, uint64_t elapsed_us)
+void wsh_runtime_trace_record(struct wsh_runtime_trace *t, json_t *d, uint64_t elapsed_us)
 {
     if (t->fd < 0 || t->failed) {
-        yyjson_mut_doc_free(d);
+        json_decref(d);
         return;
     }
     uint_field(d, "elapsed_us", elapsed_us);
     size_t n;
-    char *line = yyjson_mut_write(d, 0, &n);
+    char *line = encode(d, &n);
     if (!line)
         abort();
-    yyjson_mut_doc_free(d);
+    json_decref(d);
     if (t->bytes < t->limit && n < t->limit - t->bytes) {
         line[n++] = '\n';
         t->bytes += n;

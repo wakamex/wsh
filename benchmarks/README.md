@@ -11,3 +11,5 @@ python3 benchmarks/verify-historical.py
 The checker extracts the pinned tree, then runs that tree's original complete suite, including its earlier source revisions. It requires Python 3 with PyYAML, a C compiler, Git, tar, Zsh, jq and GNU awk. It verifies retained measurements and identities without rerunning timing experiments.
 
 Run `./tests/verify-current.zsh` and the relevant installed tests for current changes. [Development](../DEVELOPMENT.md) describes current component measurement commands. Preserve new experiment inputs, raw results, commands and summaries in a Git commit, and link accepted claims to that immutable revision. Keep reusable test helpers with the current tests.
+
+The [Jansson comparison](https://github.com/wakamex/wsh/blob/ee6e97c/benchmarks/jansson-2026-09-12/report.md), including its prototype, reproducer and raw evidence, is retained at `ee6e97c`. Run its verification and reproduction commands from that revision; current builds use system Jansson.
