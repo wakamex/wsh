@@ -1,6 +1,6 @@
 # Wsh security boundaries
 
-Wsh's theme format separates appearance from executable shell code. Installation and updates belong to the system package manager. These boundaries apply to the current native implementation; native packages have not yet been published.
+Wsh's theme format separates appearance from executable shell code. Installation and updates belong to the system package manager. These boundaries apply to the published native implementation.
 
 ## Non-executable themes
 
@@ -8,7 +8,7 @@ A theme is TOML data selecting layout, named colors, bounded literals and suppor
 
 The [native validator](native/theme.c) limits a definition to 64 KiB, rejects unknown fields and control characters, and checks component membership, unique layout entries, required fields and field-specific bounds. The renderer escapes theme literals and runtime values for Zsh prompt expansion and supplies styling itself. Theme text cannot provide raw terminal controls. A definition can still display misleading words or symbols; validation does not endorse its appearance or claims.
 
-Theme selection supports bundled names and local files. There is no public theme directory, publisher-namespace service, signed directory index or automatic theme-update service. A contributed directory remains a [future feature](FEATURES.md#remaining-work).
+Theme selection supports bundled names and local files. There is no public theme directory, publisher-namespace service, signed directory index or automatic theme-update service. A contributed directory remains a [future feature](FEATURES.md#deferred-candidates-and-admission-triggers).
 
 ## Executable configuration and plugin ownership
 
@@ -22,7 +22,7 @@ Supported unmodified upstream plugins can hand ownership to Wsh's implementation
 
 The [release contract](RELEASES.md) requires two isolated builds with identical RPM and installation-manifest bytes, exact-commit validation and GitHub build provenance for official artifacts. A checksum establishes integrity; provenance binds the artifact to its source and workflow. Two workers in the same trust domain establish repeatability, not independent trust in their shared inputs.
 
-Local builds are unsigned development artifacts. RPMs currently have no separate maintainer GPG signature, and no hosted DNF repository is configured. Source RPMs rebuilt by users or downstream distributions have their own build identities; they do not inherit official binary provenance.
+Canonical GitHub RPMs use GitHub provenance and have no separate maintainer GPG signature. The [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/) rebuilds the source RPM and signs packages with its project key. Its generated repository configuration uses HTTPS and enables package-signature verification; repository metadata signature verification is disabled by COPR. These distro builds have their own identities and do not inherit the canonical binaries’ GitHub provenance or glibc 2.28 qualification. Local builds are unsigned development artifacts.
 
 DNF owns installation, upgrades and downgrades. Wsh's startup has no self-update check, bootstrap installer or activation record. User configuration, history and profile data remain outside the package-owned resources.
 

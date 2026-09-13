@@ -30,6 +30,21 @@ For the local check used by CI, run `./packaging/test-source-rpm.zsh NEW_OUTPUT`
 
 ## Artifact identity and existing publication
 
-A distro rebuild has its own compiler, dependencies, package processing and installation identity. It does not inherit the glibc 2.28 floor or GitHub attestation of the separately built canonical package. `packaging/wsh-native.spec` and `packaging/build-rpm.py` remain the canonical payload-packaging path and disposable transaction-fixture tools; `packaging/wsh.spec` is the source-build recipe. No COPR project, repository, release trigger or publication is configured by preparing an SRPM.
+A distro rebuild has its own compiler, dependencies, package processing and installation identity. It does not inherit the glibc 2.28 floor or GitHub attestation of the separately built canonical package. `packaging/wsh-native.spec` and `packaging/build-rpm.py` remain the canonical payload-packaging path and disposable transaction-fixture tools; `packaging/wsh.spec` is the source-build recipe. Preparing an SRPM does not publish it. The hosted COPR channel is managed separately below.
 
 The [Fedora review](FEDORA-REVIEW.md) records the policy checks and scoped rpmlint interpretations. CI retains raw lint output, requires the reviewed lint gate, and tests installation, login and removal against the actual RPM in a disposable container.
+
+## COPR publication
+
+The `wakamex/wsh` project builds Fedora 44 x86-64 source RPMs with build networking disabled. COPR signs the resulting packages and hosts DNF metadata. The [repository qualification](../benchmarks/copr-2026-09-13/report.md) records the exact source commit, build and package identities, signature checks and real installation/login results. This channel uses Fedora build dependencies and flags; the canonical GitHub artifact contract remains separate.
+
+For an explicitly authorized update, run the current-source and relevant installed checks, push the clean source commit to `main`, require `release-eligible / validate` to pass on that exact commit, and confirm remote `main` still matches. Generate a release-mode SRPM from that checkout with `packaging/build-source-rpm.py`. Increase `--release` for a packaging update at the same product version so DNF selects the new package; the first COPR package uses `0.4.0-1.fc44`.
+
+Submit the resulting single SRPM with:
+
+```sh
+copr-cli build wakamex/wsh /path/to/wsh-VERSION-RELEASE.src.rpm --chroot fedora-44-x86_64 --enable-net off --nowait
+copr-cli status BUILD_ID
+```
+
+A successful build publishes its packages automatically. Require the full `%check` suite, then exercise DNF installation and upgrade from the hosted repository in the disposable VM, with package signature checking enabled. Repeat login, job-control, reboot and removal checks when packaging or startup changes. Retain the build URL, source identity, signed package hashes, effective repository configuration and test results. Preparing or submitting a COPR build does not authorize a new GitHub version tag.

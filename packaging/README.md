@@ -1,6 +1,6 @@
 # Native RPM distribution
 
-For a distro build from source, use [the source RPM recipe](SOURCE-RPM.md). It declares build dependencies, compiles all native product code offline and runs the shared correctness suite. The payload-packaging procedure below remains the separate canonical GitHub artifact path and transaction-fixture builder.
+The [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/) provides Fedora 44 x86-64 packages and DNF updates. For a distro build from source or an authorized COPR update, use [the source RPM recipe](SOURCE-RPM.md). It declares build dependencies, compiles all native product code offline and runs the shared correctness suite. The payload-packaging procedure below remains the separate canonical GitHub artifact path and transaction-fixture builder.
 
 This directory builds the Fedora native package and tests login and package transactions. It installs `/usr/bin/wsh`, the private helper under `/usr/libexec/wsh`, and data under `/usr/share/wsh`. The RPM owns registration of `/usr/bin/wsh` and `/bin/wsh` in `/etc/shells`. Immutable directories are 0755, data and modules are 0644, and executable entrypoints are 0755. The package includes the selected C runtime and development provenance. Local artifacts are unsigned development builds. Official releases are available on GitHub.
 

@@ -14,7 +14,7 @@ The main-push `release-eligible / validate` check must pass on the exact release
 
 The publication workflow repeats validation and eligibility checks, builds on two fresh workers, compares the two deterministic product files, retains both build records, attests all staged assets and creates the immutable GitHub Release with the committed notes. A rerun validates existing immutable assets and provenance instead of replacing them. Public verification downloads the actual RPM, verifies its bytes and exercises native login after package installation.
 
-Agreement between two GitHub workers demonstrates repeatability within the same trust domain. It does not independently establish the trustworthiness of their shared inputs. The published provenance is the authenticity evidence; a bare SHA-256 checksum is only an integrity check. RPMs do not currently have a separate maintainer GPG signature or a hosted DNF repository.
+Agreement between two GitHub workers demonstrates repeatability within the same trust domain. It does not independently establish the trustworthiness of their shared inputs. The published provenance is the authenticity evidence; a bare SHA-256 checksum is only an integrity check. Canonical GitHub RPMs have no separate maintainer GPG signature. The [COPR channel](packaging/SOURCE-RPM.md#copr-publication) independently rebuilds source RPMs and provides packages signed with its project key through DNF; it has separate build identity and qualification.
 
 ## Updates and login compatibility
 

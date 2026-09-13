@@ -19,17 +19,18 @@ For supported plugins installed without modifications, Wsh can provide the same 
 
 ## Install
 
-[Build Wsh from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation directly on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. System-package installation and login-shell setup are currently qualified on x86-64 Fedora through the [source RPM](packaging/SOURCE-RPM.md). [Release RPMs](https://github.com/wakamex/wsh/releases/latest) are available; there is no hosted DNF repository yet. Local builds are unsigned development artifacts.
-
-For a Fedora RPM, install and test it before changing your login shell:
+On Fedora 44 x86-64, enable the [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/) and install:
 
 ```sh
-sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
-/usr/bin/wsh --wsh-version
-/usr/bin/wsh -l
+sudo dnf copr enable wakamex/wsh
+sudo dnf install wsh
+wsh --wsh-version
+wsh -l
 ```
 
-After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. Use DNF with the selected RPM for upgrades and downgrades. The [installation guide](NATIVE-INSTALLATION.md) covers account setup, package updates and recovery.
+After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. Update with `sudo dnf upgrade wsh`. The [installation guide](NATIVE-INSTALLATION.md) covers account setup, direct RPMs and recovery.
+
+You can also [build from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. Local builds are unsigned development artifacts.
 
 ## Usage
 
