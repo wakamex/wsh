@@ -37,7 +37,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-migration-') as temporary:
         assert result.returncode == expected, (argv, result)
         return result.stdout
     assert run(system/'bin/wsh', ['-dfc', 'whence -p wsh']).strip() == os.fsencode(old/'wsh')
-    build_status = json.loads((bundle/'manifest.json').read_text())['status']
+    build_status = json.loads((bundle/'share/wsh/manifest.json').read_text())['status']
     label = b'release build' if build_status == 'release' else b'unsigned development artifact'
     assert label in run(system/'bin/wsh', ['--wsh-version'])
     assert run(system/'bin/wsh', ['-dlc', 'print -r -- NATIVE:$ZSH_VERSION']).startswith(b'NATIVE:')

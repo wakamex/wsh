@@ -15,6 +15,6 @@ readonly bundle=$(tail -n 1 $output/build.log)
 readonly checks=$(mktemp -d $output/checks.XXXXXX)
 $root/build/check-native-installation.zsh $bundle $output/reference/zsh-cad0d67c-wsh2 $checks
 python3 $root/packaging/build-rpm.py $bundle $output/rpm
-python3 $root/tests/native-release.py $output/rpm/RPMS/x86_64/*.rpm $bundle/manifest.json
+python3 $root/tests/native-release.py $output/rpm/RPMS/x86_64/*.rpm $bundle/share/wsh/manifest.json
 print -r -- $checks > $output/checks-path
 print -r -- $bundle > $output/installation-path

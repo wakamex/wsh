@@ -8,7 +8,7 @@ import subprocess
 import sys
 
 BUNDLE,PROTO,OUT=[Path(x).resolve() for x in sys.argv[1:]];OUT.mkdir(parents=True,exist_ok=True)
-functions=next((BUNDLE/'share/zsh').glob('*/functions'));rows=[]
+functions=(BUNDLE/'share/wsh/functions');rows=[]
 script=OUT/'run.zsh';script.write_text('''fpath=($1)
 [[ -d $HOME/extra ]] && fpath=($HOME/extra $fpath)
 if [[ $2 == candidate ]]; then

@@ -19,7 +19,7 @@ For supported plugins installed without modifications, Wsh can provide the same 
 
 ## Install
 
-[Build Wsh from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation directly on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. System-package installation and login-shell setup are currently qualified on x86-64 Fedora through the [source RPM](packaging/SOURCE-RPM.md). Packages have not been published, and there is no hosted DNF repository yet. Local builds are unsigned development artifacts.
+[Build Wsh from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation directly on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. System-package installation and login-shell setup are currently qualified on x86-64 Fedora through the [source RPM](packaging/SOURCE-RPM.md). [Release RPMs](https://github.com/wakamex/wsh/releases/latest) are available; there is no hosted DNF repository yet. Local builds are unsigned development artifacts.
 
 For a Fedora RPM, install and test it before changing your login shell:
 

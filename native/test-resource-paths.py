@@ -21,8 +21,8 @@ def run(code, extra=None):
     return result.stdout.decode().splitlines()
 defaults = run(query)
 assert not any(str(compiled) in p for p in defaults), defaults
-assert defaults[0] == str(relocated / 'share/zsh/5.9.999.3-test/functions')
-assert defaults[-1] == str(relocated / 'lib/zsh/5.9.999.3-test')
+assert defaults[0] == str(relocated / 'share/wsh/functions')
+assert defaults[-1] == str(relocated / 'libexec/wsh/modules/5.9.999.3-test')
 assert '/usr/local/share/zsh/site-functions' in defaults
 custom = output / 'custom functions'
 custom.mkdir()
@@ -34,7 +34,7 @@ assert run('autoload -Uz wsh_custom_probe; wsh_custom_probe', dict(FPATH=explici
 assert run('zmodload zsh/datetime; autoload -Uz is-at-least; is-at-least 5.9; print WSH_RESOURCES_OK') == ['WSH_RESOURCES_OK']
 # A missing relocated function must not silently resolve from the still-present build tree.
 function = 'is-at-least'
-(relocated / 'share/zsh/5.9.999.3-test/functions' / function).unlink()
+(relocated / 'share/wsh/functions' / function).unlink()
 failed = subprocess.run([relocated / 'bin/wsh', '-dfc', 'autoload -Uz is-at-least; is-at-least 5.9'],
                         env=env, capture_output=True, timeout=10)
 assert failed.returncode != 0 and b'function definition file not found' in failed.stderr, failed

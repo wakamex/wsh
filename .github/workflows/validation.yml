@@ -39,6 +39,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes podman zsh rpm
       - name: Build source RPM and rebuild without network access
+        env:
+          WSH_SOURCE_RPM_STATUS: ${{ github.event_name == 'pull_request' && 'development' || 'release' }}
         run: ./packaging/test-source-rpm.zsh "$RUNNER_TEMP/source-rpm"
       - name: Retain build results
         if: always()
@@ -51,6 +53,11 @@ jobs:
             ${{ runner.temp }}/source-rpm/source/SRPMS/
             ${{ runner.temp }}/source-rpm/rebuild/RPMS/
             ${{ runner.temp }}/source-rpm/rebuild/packages.txt
+            ${{ runner.temp }}/source-rpm/rebuild/*.log
+            ${{ runner.temp }}/source-rpm/rebuild/BUILD/**/.rpm-build/native-build.log
+            ${{ runner.temp }}/source-rpm/rebuild/BUILD/**/.rpm-build/checks/**/*.log
+            ${{ runner.temp }}/source-rpm/rebuild/BUILD/**/.rpm-build/checks/**/*.json
+          include-hidden-files: true
           if-no-files-found: warn
 
   source-contracts:

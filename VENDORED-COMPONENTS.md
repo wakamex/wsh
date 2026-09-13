@@ -136,3 +136,7 @@ The [catalog](third_party/plugin-catalog/README.md) consolidates reference prove
 ## Local upstream Git recognition
 
 The [Git fallback qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/git-provenance-2026-09-10/report.md) extends the shared recognizer to uncataloged official upstream checkouts using local tracking references and raw file bytes. No vendored bytes or C controller/parser code change. The installed matrix exercises every existing handoff family through a catalog miss; an unchanged actual upstream autosuggestions v0.5.1 checkout additionally verifies the older binder rule, display and acceptance. Known snapshots still use the catalog first.
+
+## Fedora package license inventory
+
+The source RPM preserves the existing upstream source bytes and installs distinct `%license` files for Wsh, Zsh, tomlc17, the plugins, the ISC OpenSSH-derived wrappers and the GPL-2.0-only `_qdbus` completion. `packaging/licenses/GPL-2.0-only.txt` supplies the complete GPL version 2 text. Patched tomlc17 and the four plugin-derived implementations have versioned bundled-dependency declarations; the [package review](packaging/FEDORA-REVIEW.md) records their identities and the system-library decision.

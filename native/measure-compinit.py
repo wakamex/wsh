@@ -9,7 +9,7 @@ import sys
 from decimal import Decimal
 
 ROOT=Path(__file__).resolve().parents[1];BUNDLE=Path(sys.argv[1]).resolve();OUT=Path(sys.argv[2]).resolve();OUT.mkdir(parents=True)
-source=next((BUNDLE/'share/zsh').glob('*/functions/compinit'));text=source.read_text()
+source=(BUNDLE/'share/wsh/functions/compinit');text=source.read_text()
 markers=[('autoload -RUz compaudit\n','audit_start'),('# Make sure compdump is available, even if we aren\'t going to use it.','audit_end'),('  for _i_dir in $fpath; do','scan_start'),('  # If autodumping was requested, do it now.','scan_end'),('    compdump\n','dump')]
 for old,label in markers:
     assert text.count(old)==1,(label,text.count(old))
@@ -55,5 +55,5 @@ for state in ['cold','warm']:
         v={r['mode']:r['spans_ms']['total'] for r in a if r['pair']==pair};d.append(v['timed']-v['plain'])
     summary[state]=dict(instrumentation_paired_p95_ms=sorted(d)[47],spans_median_ms={key:sorted(r['spans_ms'][key] for r in a if r['mode']=='timed')[24] for key in ['total','audit','scan','dump']})
 (OUT/'samples.json').write_text(json.dumps(rows,indent=2)+'\n');(OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
-(OUT/'metadata.json').write_text(json.dumps(dict(command=sys.argv,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),timed_sha256=hashlib.sha256(text.encode()).hexdigest(),bundle_sha256=hashlib.sha256((BUNDLE/'manifest.json').read_bytes()).hexdigest(),cpu=0),indent=2)+'\n')
+(OUT/'metadata.json').write_text(json.dumps(dict(command=sys.argv,source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),timed_sha256=hashlib.sha256(text.encode()).hexdigest(),bundle_sha256=hashlib.sha256((BUNDLE/'share/wsh/manifest.json').read_bytes()).hexdigest(),cpu=0),indent=2)+'\n')
 print(json.dumps(summary,indent=2))

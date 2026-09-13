@@ -27,7 +27,7 @@ for security in ('secure','insecure','refuse'):
  first.chmod(0o755 if security=='secure' else 0o777)
  variants=[]
  for owner in ('control','candidate'):
-  result=subprocess.run([bundle/'bin/wsh','-df',script,next((bundle/'share/zsh').glob('*/functions')),owner,proto/'compinit',security],env=dict(os.environ,PATH='/usr/bin:/bin',HOME=str(home),LC_ALL='C.UTF-8'),capture_output=True,timeout=10)
+  result=subprocess.run([bundle/'bin/wsh','-df',script,(bundle/'share/wsh/functions'),owner,proto/'compinit',security],env=dict(os.environ,PATH='/usr/bin:/bin',HOME=str(home),LC_ALL='C.UTF-8'),capture_output=True,timeout=10)
   # Function-name prefixes in diagnostics identify the reader being tested.
   stderr=result.stderr.decode(errors='backslashreplace').replace('_wsh_completion_autoload:autoload:','compinit:autoload:')
   variants.append(dict(status=result.returncode,stdout=sorted(result.stdout.decode(errors='backslashreplace').splitlines()),stderr=stderr))

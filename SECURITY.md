@@ -28,9 +28,9 @@ DNF owns installation, upgrades and downgrades. Wsh's startup has no self-update
 
 ## Login and recovery boundaries
 
-The system-owned executable starts without per-user activation state. Bundled Zsh modules are linked into it, and unavailable optional integration or helper resources preserve the tested native shell path. Ordinary RPM removal refuses while local accounts name the registered shell paths.
+The system-owned executable starts without per-user activation state. Bundled Zsh modules are linked into it, and unavailable optional integration or helper resources preserve the tested native shell path. Administrators must change account shells before uninstalling Wsh; package scriptlets follow Fedora Zsh and do not veto removal.
 
-Missing executables or required system libraries, broken user startup code, PAM failures and display-manager failures require recovery at their respective owners. Administrators must check remote identity directories and nonstandard shell aliases; bypassing package scriptlets bypasses the removal guard. See [installation and recovery](NATIVE-INSTALLATION.md#package-updates-and-recovery).
+Missing executables or required system libraries, broken user startup code, PAM failures and display-manager failures require recovery at their respective owners. Administrators must check remote identity directories and nonstandard shell aliases; package removal leaves account records unchanged. See [installation and recovery](NATIVE-INSTALLATION.md#package-updates-and-recovery).
 
 ## Verification evidence
 

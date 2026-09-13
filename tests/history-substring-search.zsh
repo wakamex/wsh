@@ -21,7 +21,7 @@ readonly omz_revision=9112b53fa8b5ab556c7c893aa8be8a247ac512a0
 readonly autosuggestions_revision=85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 readonly syntax_revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
 
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
+[[ -x $bundle/bin/wsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
   print -u2 -- 'error: manager, bundle, or expectation is invalid'
   exit 2
 }

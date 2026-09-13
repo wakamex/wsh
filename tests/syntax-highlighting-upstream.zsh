@@ -11,7 +11,7 @@ readonly bundle=${1:A}
 readonly repository=${2:A}
 readonly output=${3:A}
 readonly revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
-[[ -x $bundle/bin/zsh && ! -e $output && ! -L $output ]] || {
+[[ -x $bundle/bin/wsh && ! -e $output && ! -L $output ]] || {
   print -u2 -- 'error: bundle is invalid or output already exists'
   exit 2
 }
@@ -30,8 +30,8 @@ git -C $repository archive $revision | tar -xf - -C $upstream
 command cp -R -- $upstream/. $candidate
 command cp -R -- $bundle/share/wsh/defaults/zsh-syntax-highlighting/. $candidate
 
-make -C $upstream quiet-test ZSH=$bundle/bin/zsh > $test_root/upstream.log 2>&1
-make -C $candidate quiet-test ZSH=$bundle/bin/zsh > $test_root/candidate.log 2>&1
+make -C $upstream quiet-test ZSH=$bundle/bin/wsh > $test_root/upstream.log 2>&1
+make -C $candidate quiet-test ZSH=$bundle/bin/wsh > $test_root/candidate.log 2>&1
 {
   print -r -- "revision=${revision}"
   print -r -- 'variant=upstream'

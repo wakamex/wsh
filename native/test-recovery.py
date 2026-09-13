@@ -22,9 +22,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-recovery-') as directory:
         if mode!='empty-home':
             (home/'.zshenv').write_text('unsetopt globalrcs\n')
             (home/'.zshrc').write_text('PROMPT="SAFE> "\nWSH_THEME=minimal\n')
-        if mode=='missing-runtime':(installation/'bin/wsh-runtime').unlink()
-        if mode=='unreadable-runtime':(installation/'bin/wsh-runtime').chmod(0)
-        if mode=='incompatible-runtime':(installation/'bin/wsh-runtime').write_text('#!/bin/sh\nexit 64\n')
+        if mode=='missing-runtime':(installation/'libexec/wsh/wsh-runtime').unlink()
+        if mode=='unreadable-runtime':(installation/'libexec/wsh/wsh-runtime').chmod(0)
+        if mode=='incompatible-runtime':(installation/'libexec/wsh/wsh-runtime').write_text('#!/bin/sh\nexit 64\n')
         if mode=='missing-integration':shutil.rmtree(installation/'share/wsh')
         env={'PATH':'/usr/bin:/bin','HOME':str(home),'ZDOTDIR':str(home),'TERM':'xterm-256color','LC_ALL':'C.UTF-8','WSH_STATE_ROOT':str(root/'no-state')}
         env.update({key:os.environ[key] for key in ('ASAN_OPTIONS','UBSAN_OPTIONS') if key in os.environ})

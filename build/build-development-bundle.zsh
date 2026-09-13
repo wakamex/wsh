@@ -57,29 +57,20 @@ stage=$(mktemp -d "${output_root}/.development.XXXXXX")
 trap 'rm -rf -- "$stage"' EXIT INT TERM
 chmod 700 "$stage"
 
-install -D -m 755 "${zsh_root}/bin/zsh" "${stage}/bin/zsh"
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 755 "${zsh_root}/bin/wsh" "${stage}/bin/wsh"
 fi
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   "${repository_root}/native/build-runtime.zsh" "$stage/.runtime-build"
-  install -D -m 755 "$stage/.runtime-build/wsh-runtime" "${stage}/bin/wsh-runtime"
+  install -D -m 755 "$stage/.runtime-build/wsh-runtime" "${stage}/libexec/wsh/wsh-runtime"
   rm -rf -- "$stage/.runtime-build"
   install -D -m 644 "$zsh_source_lock" "$stage/share/wsh/native-source-lock.json"
   install -D -m 644 "$zsh_root/.wsh-config.modules" "$stage/share/wsh/config.modules"
   install -D -m 644 "$repository_root/third_party/tomlc17/LICENSE" "$stage/share/wsh/licenses/tomlc17-LICENSE"
 
 fi
-if [[ -d ${zsh_root}/lib ]]; then
-  cp -R -- "${zsh_root}/lib" "$stage/lib"
-elif jq -e '.native.linked_modules == true' "$zsh_source_lock" >/dev/null; then
-  mkdir -p -- "$stage/lib/zsh/${zsh_version}"
-else
-  print -u2 -- 'error: dynamic Zsh build is missing its module directory'
-  exit 1
-fi
-mkdir -p -- "${stage}/share/zsh/${zsh_version}"
-cp -R -- "${zsh_root}/share/zsh/${zsh_version}/functions" "${stage}/share/zsh/${zsh_version}/functions"
+mkdir -p -- "${stage}/share/wsh"
+cp -R -- "${zsh_root}/share/zsh/${zsh_version}/functions" "${stage}/share/wsh/functions"
 install -D -m 644 "${repository_root}/integration/integration.zsh" "${stage}/share/wsh/integration.zsh"
 install -D -m 644 "${repository_root}/integration/profile.zsh" "${stage}/share/wsh/profile.zsh"
 python3 "${repository_root}/build/plugin-catalog.py" "${stage}/share/wsh/defaults/plugin-catalog"
@@ -90,14 +81,14 @@ install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/z
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/oh-my-zsh-history-substring-search.zsh" "${stage}/share/wsh/defaults/known-oh-my-zsh-history-substring-search.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/PROVENANCE.md" "${stage}/share/wsh/defaults/zsh-history-substring-search-PROVENANCE.md"
 install -D -m 644 "${repository_root}/third_party/zsh-history-substring-search/OH-MY-ZSH-LICENSE.txt" "${stage}/share/wsh/defaults/zsh-history-substring-search-OH-MY-ZSH-LICENSE.txt"
-(cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-history-substring-search.zsh.zwc zsh-history-substring-search.zsh')
+(cd "${stage}/share/wsh/defaults" && "${stage}/bin/wsh" -fc 'zcompile zsh-history-substring-search.zsh.zwc zsh-history-substring-search.zsh')
 chmod 644 "${stage}/share/wsh/defaults/zsh-history-substring-search.zsh.zwc"
 install -D -m 644 "${repository_root}/integration/autosuggestions.zsh" "${stage}/share/wsh/defaults/autosuggestions.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/zsh-autosuggestions.zsh" "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/known-0.7.0.zsh" "${stage}/share/wsh/defaults/known-zsh-autosuggestions-0.7.0.zsh"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/PROVENANCE.md" "${stage}/share/wsh/defaults/zsh-autosuggestions-PROVENANCE.md"
 install -D -m 644 "${repository_root}/third_party/zsh-autosuggestions/LICENSE" "${stage}/share/wsh/defaults/zsh-autosuggestions-LICENSE"
-(cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')
+(cd "${stage}/share/wsh/defaults" && "${stage}/bin/wsh" -fc 'zcompile zsh-autosuggestions.zsh.zwc zsh-autosuggestions.zsh')
 chmod 644 "${stage}/share/wsh/defaults/zsh-autosuggestions.zsh.zwc"
 install -D -m 644 "${repository_root}/integration/git-prompt.zsh" "${stage}/share/wsh/defaults/git-prompt.zsh"
 cp -R -- "${repository_root}/third_party/oh-my-zsh-git-prompt" "${stage}/share/wsh/defaults/oh-my-zsh-git-prompt"
@@ -106,13 +97,13 @@ cp -R -- "${repository_root}/third_party/zsh-syntax-highlighting" "${stage}/shar
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   python3 "${repository_root}/native/prepare-highlighting.py" "${stage}/share/wsh/defaults/zsh-syntax-highlighting/highlighters/main"
 fi
-(cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/zsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
+(cd "${stage}/share/wsh/defaults/zsh-syntax-highlighting" && "${stage}/bin/wsh" -fc 'zcompile zsh-syntax-highlighting.zsh.zwc zsh-syntax-highlighting.zsh; for source in highlighters/*/*-highlighter.zsh; do zcompile ${source}.zwc $source; done')
 find "${stage}/share/wsh/defaults/zsh-syntax-highlighting" -type f -exec chmod 644 {} +
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   python3 "${repository_root}/native/prepare-autosuggestions.py" "${stage}/.autosuggestion-fixture"
   install -D -m 644 "${stage}/.autosuggestion-fixture/candidate.zsh" "${stage}/share/wsh/defaults/native-autosuggestions.zsh"
   rm -rf "${stage}/.autosuggestion-fixture"
-  (cd "${stage}/share/wsh/defaults" && "${stage}/bin/zsh" -fc 'zcompile native-autosuggestions.zsh.zwc native-autosuggestions.zsh')
+  (cd "${stage}/share/wsh/defaults" && "${stage}/bin/wsh" -fc 'zcompile native-autosuggestions.zsh.zwc native-autosuggestions.zsh')
   chmod 644 "${stage}/share/wsh/defaults/native-autosuggestions.zsh.zwc"
   install -D -m 644 "${repository_root}/integration/native-history.zsh" "${stage}/share/wsh/defaults/native-history.zsh"
   install -D -m 644 "${repository_root}/integration/native-before.zsh" "${stage}/share/wsh/native-before.zsh"
@@ -127,10 +118,10 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 644 "${stage}/.directory-fixture/candidate.zsh" "${stage}/share/wsh/defaults/zsh-z/native.zsh"
   install -D -m 644 "${stage}/.directory-fixture/takeover.zsh" "${stage}/share/wsh/defaults/zsh-z/takeover.zsh"
   rm -rf "${stage}/.directory-fixture"
-  (cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile native.zsh.zwc native.zsh')
+  (cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/wsh" -fc 'zcompile native.zsh.zwc native.zsh')
 fi
 mv "${stage}/share/wsh/defaults/zsh-z/_z" "${stage}/share/wsh/defaults/zsh-z/_zshz"
-(cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/zsh" -fc 'zcompile z.plugin.zsh.zwc z.plugin.zsh')
+(cd "${stage}/share/wsh/defaults/zsh-z" && "${stage}/bin/wsh" -fc 'zcompile z.plugin.zsh.zwc z.plugin.zsh')
 find "${stage}/share/wsh/defaults/zsh-z" -type f -exec chmod 644 {} +
 install -D -m 644 "${repository_root}/themes/OMZ-LICENSE.txt" "${stage}/share/wsh/themes/OMZ-LICENSE.txt"
 install -D -m 644 "${repository_root}/themes/robbyrussell.toml" "${stage}/share/wsh/themes/robbyrussell.toml"
@@ -145,7 +136,7 @@ fi
 
 if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   find "$stage" -type f -exec chmod 644 {} +
-  chmod 755 "${stage}"/bin/*
+  chmod 755 "${stage}"/bin/* "${stage}"/libexec/wsh/wsh-runtime
   identity=$(python3 "${script_dir}/native_manifest.py" create "$stage" "$zsh_source_lock")
   destination=${output_root}/${identity}
   if [[ -e $destination ]]; then

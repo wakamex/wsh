@@ -60,7 +60,7 @@ print('PASS: compiled development/release labels, cache separation, default/inva
 # The canonical installation suite supplies its freshly built installation.
 if len(sys.argv) == 2:
     bundle = Path(sys.argv[1]).resolve()
-    manifest = json.loads((bundle/'manifest.json').read_text())
+    manifest = json.loads((bundle/'share/wsh/manifest.json').read_text())
     expected = 'release build' if manifest['status'] == 'release' else 'unsigned development artifact'
     with tempfile.TemporaryDirectory(prefix='wsh-installed-version-') as tmp:
         home = Path(tmp)

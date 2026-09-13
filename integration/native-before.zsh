@@ -1,4 +1,4 @@
-typeset -gx WSH_BUNDLE_ROOT WSH_RUNTIME=$WSH_BUNDLE_ROOT/bin/wsh-runtime
+typeset -gx WSH_BUNDLE_ROOT WSH_RUNTIME=$WSH_BUNDLE_ROOT/libexec/wsh/wsh-runtime
 typeset -gx WSH_NATIVE_TERMINAL_INTEGRATION=1
 unset WSH_USER_ZDOTDIR WSH_STARTUP_BUNDLE_ZDOTDIR WSH_STARTUP_RCS WSH_RUN_FOREGROUND
 # The prompt choice belongs to this shell, not to child shells.

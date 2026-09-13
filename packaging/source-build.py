@@ -59,15 +59,24 @@ def main():
     elif action == 'install':
         bundle = Path((OUT/'installation-path').read_text().strip())
         destination = Path(sys.argv[2])
-        shutil.copytree(bundle, destination)
+        shutil.copytree(bundle, destination, dirs_exist_ok=True)
         for path in (destination, *destination.rglob('*')):
             if path.is_dir(): path.chmod(0o755)
     elif action in ('finalize', 'check'):
-        bundle = Path(sys.argv[2]).resolve()
+        installed = Path(sys.argv[2]).resolve()
+        bundle = OUT/'packaged'
         env.update(json.loads((OUT/'environment.json').read_text()))
         env['LIBS'] = env.get('LIBS', '') + ' -ljansson'
         if action == 'finalize':
+            # Inventory only Wsh's payload, excluding RPM's documentation and
+            # separate debug subpackages. Test copies of the post-processed bytes.
+            if bundle.exists(): shutil.rmtree(bundle)
+            (bundle/'bin').mkdir(parents=True)
+            shutil.copy2(installed/'bin/wsh', bundle/'bin/wsh')
+            for name in ('share/wsh', 'libexec/wsh'):
+                shutil.copytree(installed/name, bundle/name)
             subprocess.run(['python3', ROOT/'build/native_manifest.py', 'create', bundle, LOCK], env=env, check=True)
+            shutil.copy2(bundle/'share/wsh/manifest.json', installed/'share/wsh/manifest.json')
             return
         subprocess.run([ROOT/'build/check-native-installation.zsh', bundle,
                         OUT/'reference/zsh-cad0d67c-wsh2', OUT/'checks'], env=env, check=True)

@@ -13,7 +13,7 @@ srpm = Path(sys.argv[1]).resolve()
 with tempfile.TemporaryDirectory(prefix='wsh-srpm-') as directory:
     work = Path(directory)
     names = subprocess.check_output(['rpm','-qpl',srpm],text=True).splitlines()
-    assert len(names) == 3 and all(Path(n).name == n for n in names), names
+    assert len(names) == 4 and all(Path(n).name == n for n in names), names
     source = subprocess.Popen(['rpm2cpio', srpm], stdout=subprocess.PIPE)
     subprocess.run(['cpio','-idm','--quiet'],stdin=source.stdout,cwd=work,check=True)
     source.stdout.close()
@@ -29,16 +29,18 @@ with tempfile.TemporaryDirectory(prefix='wsh-srpm-') as directory:
     archive = next(work.glob('wsh-*.tar.gz'))
     with tarfile.open(archive) as t:
         for member in t.getmembers():
-            assert member.isfile() and not Path(member.name).is_absolute() and '..' not in Path(member.name).parts
+            assert (member.isfile() or member.isdir()) and not Path(member.name).is_absolute() and '..' not in Path(member.name).parts
+            if member.isdir(): continue
             assert '.git' not in Path(member.name).parts and Path(member.name).suffix not in ('.o','.so','.zwc')
             assert not t.extractfile(member).read(4) == b'\x7fELF', member.name
         # The preceding checks restrict this self-produced archive to regular relative files.
         t.extractall(work/'source')
     root = next((work/'source').iterdir())
+    shutil.copyfile(work/'wsh-source-info.json', root/'source-info.json')
     assert (root/'native/pty-fixture.py').is_file()
-    assert not (root/'benchmarks').exists()
     assert not list(root.rglob('*.rs'))
     metadata = json.loads((root/'source-info.json').read_text())
+    if metadata['status'] == 'development': assert not (root/'benchmarks').exists()
     lock = json.loads((root/'build/zsh-sources/zsh-cad0d67c-native.json').read_text())
     cache = root/'build/cache';cache.mkdir()
     upstream = cache/lock['archive_name']

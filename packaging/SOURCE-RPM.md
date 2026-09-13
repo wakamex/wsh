@@ -1,6 +1,6 @@
 # Build Wsh from a source RPM
 
-`packaging/wsh.spec` compiles the pinned Zsh sources and Wsh C implementation inside the RPM build environment. The source RPM includes the Wsh sources, patches, vendored inputs, tests and pinned upstream archive. No prebuilt Wsh executable, Git checkout or network access is needed for the rebuild. This recipe currently targets x86-64 Fedora.
+`packaging/wsh.spec` compiles the pinned Zsh sources and Wsh C implementation inside the RPM build environment. The source RPM includes the Wsh sources, patches, vendored inputs, tests and pinned upstream archive. No prebuilt Wsh executable, Git checkout or network access is needed for the rebuild. The recipe is qualified on x86-64 Fedora; it does not artificially exclude other architectures from source builds.
 
 ## Prepare the source package
 
@@ -12,7 +12,7 @@ python3 packaging/build-source-rpm.py /var/tmp/wsh-srpm
 
 Use a new output directory. The generator verifies the cached upstream archive or downloads and verifies it before packaging, records the source revision and exact input hashes, and runs `rpmbuild -bs`. Development snapshots include `+dirty` in their identity when appropriate. `--status release` requires a clean worktree and selects release-mode diagnostics; it does not publish or authenticate an artifact. `--release` sets the RPM release field.
 
-The generated source archives have fixed ordering, modes, ownership and timestamps. RPM itself also records build-environment metadata, including expanded source paths on current Fedora; compare source archives separately from the SRPM wrapper.
+Release mode downloads the exact public GitHub commit archive, checks its source files against the clean checkout, and keeps generated identity in a separate Source2 file. The commit must already be public. Development mode creates a local source snapshot with fixed ordering, modes, ownership and timestamps; it is marked as development and is not an upstream-source matching submission. RPM itself also records build-environment metadata, including expanded source paths on current Fedora; compare source archives separately from the SRPM wrapper.
 
 ## Rebuild in the target distribution
 
@@ -26,8 +26,10 @@ COPR and Mock can consume the same source RPM. The build uses the target distrib
 
 `tests/source-rpm.py SOURCE_RPM` inspects the actual package, verifies its source-only contents and dependencies, and tests missing or altered offline sources. `build/check-native-installation.zsh` is shared with the canonical installation suite. Source-package preparation generates a fresh source inventory; changes covered by the native lock must also update that lock.
 
-For the local check used by CI, run `./packaging/test-source-rpm.zsh NEW_OUTPUT` with Podman, Zsh, Python 3 and rpmbuild installed. It prepares the dependency image, rebuilds with networking disabled and retains the image identity, package inventory, build logs and output RPMs. See the [Fedora rebuild and login qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/source-rpm-2026-09-11/report.md) for the tested result.
+For the local check used by CI, run `./packaging/test-source-rpm.zsh NEW_OUTPUT` with Podman, Zsh, Python 3 and rpmbuild installed. It prepares the dependency image, rebuilds with networking disabled and retains the image identity, package inventory, build logs and output RPMs. See the [Fedora packaging qualification](../benchmarks/fedora-packaging-2026-09-13/report.md) for the tested result.
 
 ## Artifact identity and existing publication
 
 A distro rebuild has its own compiler, dependencies, package processing and installation identity. It does not inherit the glibc 2.28 floor or GitHub attestation of the separately built canonical package. `packaging/wsh-native.spec` and `packaging/build-rpm.py` remain the canonical payload-packaging path and disposable transaction-fixture tools; `packaging/wsh.spec` is the source-build recipe. No COPR project, repository, release trigger or publication is configured by preparing an SRPM.
+
+The [Fedora review](FEDORA-REVIEW.md) records the policy checks and scoped rpmlint interpretations. CI retains raw lint output, requires the reviewed lint gate, and tests installation, login and removal against the actual RPM in a disposable container.

@@ -76,8 +76,8 @@ with tempfile.TemporaryDirectory(prefix='wsh-native-startup-measure-') as direct
               'zshenv':'unsetopt globalrcs\n','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
               'native_sha256':hashlib.sha256((BUNDLE/'bin/wsh').read_bytes()).hexdigest(),
               'control_sha256':hashlib.sha256((CONTROL/'bin/wsh').read_bytes()).hexdigest(),
-              'runtime_sha256':hashlib.sha256((BUNDLE/'bin/wsh-runtime').read_bytes()).hexdigest(),
-              'manifest_sha256':hashlib.sha256((BUNDLE/'manifest.json').read_bytes()).hexdigest(),
+              'runtime_sha256':hashlib.sha256((BUNDLE/'libexec/wsh/wsh-runtime').read_bytes()).hexdigest(),
+              'manifest_sha256':hashlib.sha256((BUNDLE/'share/wsh/manifest.json').read_bytes()).hexdigest(),
               'correctness':'primary editable marker and direct native PID; separate startup and contract suites'}
     (OUT/'samples.json').write_text(json.dumps(samples,indent=2)+'\n')
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')

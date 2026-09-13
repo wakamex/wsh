@@ -17,7 +17,7 @@ readonly syntax_repository=${3:-}
 readonly external_sources=$(( $# == 3 ))
 readonly autosuggestions_revision=85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
 readonly syntax_revision=2fc57d63067c18b1100ecdbf684fa5baf49459d1
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh ]] || {
+[[ -x $bundle/bin/wsh ]] || {
   print -u2 -- 'error: manager or bundle is invalid'
   exit 2
 }

@@ -15,7 +15,7 @@ def collect(tag,worker,output):
     assert re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+',tag) and worker in ('a','b')
     output=Path(output);output.mkdir()
     floor=ROOT/'build/portable/glibc-2.28'
-    bundles=list((floor/'bundles').glob('*/manifest.json'))
+    bundles=list((floor/'bundles').glob('*/share/wsh/manifest.json'))
     rpms=list((floor/'rpm/RPMS').rglob('*.rpm'))
     assert len(bundles)==len(rpms)==1
     manifest=json.loads(bundles[0].read_text())

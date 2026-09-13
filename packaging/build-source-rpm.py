@@ -16,10 +16,21 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def download_sources(revision, records, destination):
+    """Preserve a public archive and check the build inputs against the checkout."""
+    url = 'https://github.com/wakamex/wsh/archive/'+revision+'.tar.gz'
+    urllib.request.urlretrieve(url, destination)
+    with tarfile.open(destination) as archive:
+        entries = {m.name.split('/', 1)[1]: archive.extractfile(m).read()
+                   for m in archive.getmembers() if m.isfile()}
+    for name, data, mode in records:
+        assert entries[name] == data, 'published source differs: '+name
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
-    parser.add_argument('--release', default='0.1')
+    parser.add_argument('--release', default='1')
     parser.add_argument('--status', choices=('development', 'release'), default='development')
     args = parser.parse_args()
     assert re.fullmatch(r'[0-9]+(?:\.[0-9]+)*', args.release), 'invalid RPM release'
@@ -53,22 +64,33 @@ def main():
         data = path.read_bytes()
         assert not data.startswith(b'\x7fELF') and path.suffix not in ('.zwc','.o','.so'), 'prebuilt input: '+name
         records.append((name, data, 0o755 if path.stat().st_mode & 0o111 else 0o644))
+    source_url = 'https://github.com/wakamex/wsh/archive/'+revision+'.tar.gz'
+    source_archive = sources/f'wsh-{revision}.tar.gz'
+    if args.status == 'release':
+        # Keep the published upstream archive byte-for-byte. Do not inject build
+        # metadata into it or pretend that a local repack has an upstream URL.
+        download_sources(revision, records, source_archive)
+    else:
+        with source_archive.open('wb') as raw:
+            with gzip.GzipFile(fileobj=raw, mode='wb', filename='', mtime=epoch) as compressed:
+                with tarfile.open(fileobj=compressed, mode='w', format=tarfile.PAX_FORMAT) as archive:
+                    for name, data, mode in records:
+                        info = tarfile.TarInfo(f'wsh-{revision}/'+name)
+                        info.size, info.mode, info.mtime = len(data), mode, epoch
+                        archive.addfile(info, io.BytesIO(data))
     metadata = dict(version=version, source_revision=revision, source_date_epoch=epoch, status=args.status,
                     files={name:hashlib.sha256(data).hexdigest() for name,data,mode in records})
-    records.append(('source-info.json', (json.dumps(metadata, indent=2)+'\n').encode(), 0o644))
-    with (sources/f'wsh-{version}.tar.gz').open('wb') as raw:
-        with gzip.GzipFile(fileobj=raw, mode='wb', filename='', mtime=epoch) as compressed:
-            with tarfile.open(fileobj=compressed, mode='w', format=tarfile.PAX_FORMAT) as archive:
-                for name, data, mode in records:
-                    info = tarfile.TarInfo(f'wsh-{version}/'+name)
-                    info.size, info.mode, info.mtime = len(data), mode, epoch
-                    archive.addfile(info, io.BytesIO(data))
+    (sources/'wsh-source-info.json').write_text(json.dumps(metadata, indent=2)+'\n')
     spec = (ROOT/'packaging/wsh.spec').read_text()
-    spec = spec.replace('%{!?wsh_version:%global wsh_version 0.3.1}', '%global wsh_version '+version)
-    spec = spec.replace('%{!?wsh_release:%global wsh_release 0.1}', '%global wsh_release '+args.release)
-    spec = re.sub(r'^Source1:.*$', 'Source1:        '+lock['archive_name'], spec, flags=re.M)
+    spec = '%global wsh_commit '+revision+'\n'+spec
+    source = source_url+'#/'+source_archive.name if args.status == 'release' else source_archive.name
+    spec = re.sub(r'^Source0:.*$', 'Source0:        '+source, spec, flags=re.M)
+    spec = spec.replace('%{!?wsh_version:%global wsh_version 0.4.0}', '%global wsh_version '+version)
+    spec = spec.replace('%{!?wsh_release:%global wsh_release 1}', '%global wsh_release '+args.release)
+    spec = re.sub(r'^Source1:.*$', 'Source1:        '+lock['archive_url']+'#/'+lock['archive_name'], spec, flags=re.M)
     (specs/'wsh.spec').write_text(spec)
     for path in [*sources.iterdir(), *specs.iterdir()]:
+        path.chmod(0o644)
         os.utime(path, (epoch, epoch))
     subprocess.run(['rpmbuild','-bs','--nodeps','--define','_topdir '+str(output),
                     '--define','use_source_date_epoch_as_buildtime 1', '--define','_buildhost wsh-source',

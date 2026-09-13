@@ -1,0 +1,69 @@
+.TH WSH 1 "September 2026" "Wsh" "User Commands"
+.SH NAME
+wsh \- Zsh-compatible shell with interactive defaults
+.SH SYNOPSIS
+.B wsh
+.RI [ "Zsh options" ]
+.br
+.B wsh --doctor
+.br
+.B wsh --profile
+.RB [ --functions ]
+.B --
+.RI [ "Zsh options" ]
+.br
+.B wsh --profile-report
+.I directory
+.br
+.B wsh --run
+.RB [ --login ]
+.B --
+.I program
+.RI [ arguments... ]
+.SH DESCRIPTION
+Wsh runs the Zsh language and line editor with history search, autosuggestions,
+syntax highlighting and directory jumping. It loads ordinary Zsh startup files.
+Existing user configuration and plugins remain supported.
+.SH OPTIONS
+.TP
+.B --doctor
+Inspect startup configuration and report duplicate or unverified plugins.
+Configuration files are not edited.
+.TP
+.B --profile
+Record startup measurements. Use --functions to include function profiling.
+.TP
+.B --profile-report
+Read a previously saved profile directory.
+.TP
+.B --run
+Run the exact program arguments in the foreground, then return to a prompt.
+.TP
+.B --wsh-version
+Print Wsh version and compiled build identity.
+.TP
+.B --wsh-help
+Print Wsh-specific command usage.
+.PP
+Wsh options must appear first. Other arguments retain their Zsh meanings;
+--version reports the underlying Zsh version.
+.SH ENVIRONMENT
+.TP
+.B WSH_THEME
+Select minimal, wakamex, robbyrussell, agnoster, or a theme definition path.
+When unset, the prompt from user configuration is preserved.
+.SH FILES
+.TP
+.I ~/.zshrc
+Interactive shell configuration, shared with ordinary Zsh.
+.TP
+.I ~/.z
+Directory-jump history, unless ZSHZ_DATA selects another path.
+.SH REMOVAL
+Change account shells to another installed shell before removing Wsh.
+Package removal does not rewrite account records or refuse the transaction.
+.SH SEE ALSO
+.BR zsh (1),
+.BR chsh (1)
+.PP
+https://github.com/wakamex/wsh

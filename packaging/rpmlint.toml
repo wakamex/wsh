@@ -1,0 +1,8 @@
+# Each filter is explained in FEDORA-REVIEW.md. Keep raw, unfiltered output too.
+Filters = [
+  '^wsh\.[^:]+: E: call-to-mktemp /usr/bin/wsh$',
+  '^wsh\.[^:]+: E: non-executable-script /usr/share/wsh/(defaults|functions)/',
+  '^wsh\.[^:]+: W: hidden-file-or-dir /usr/share/wsh/defaults/zsh-syntax-highlighting/\.(version|revision-hash)$',
+  '^wsh\.[^:]+: W: binary-or-shlib-calls-gethostbyname /usr/bin/wsh$',
+  '^wsh\.spec: W: invalid-url Source2: wsh-source-info.json$',
+]

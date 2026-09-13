@@ -12,7 +12,7 @@ export WSH_THEME=minimal
 
 readonly bundle=${1:A}
 readonly expectation=$2
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == present || $expectation == missing ) ]] || {
+[[ -x $bundle/bin/wsh && ( $expectation == present || $expectation == missing ) ]] || {
   print -u2 -- 'error: invalid installation, or expectation'
   exit 2
 }

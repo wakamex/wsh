@@ -23,15 +23,15 @@ def inventory(root):
         if not stat.S_ISREG(info.st_mode):
             raise ValueError('non-regular payload: '+str(path))
         name = path.relative_to(root).as_posix()
-        if name == 'manifest.json':
+        if name == 'share/wsh/manifest.json':
             continue
         records.append(dict(path=name, kind='file', mode=stat.S_IMODE(info.st_mode), size=info.st_size, sha256=digest(path)))
     return records
 
 def verify(root):
-    if root.is_symlink() or not root.is_dir() or (root/'manifest.json').is_symlink():
+    if root.is_symlink() or not root.is_dir() or (root/'share/wsh/manifest.json').is_symlink():
         raise ValueError('installation and manifest must not be symlinks')
-    manifest = json.loads((root/'manifest.json').read_text())
+    manifest = json.loads((root/'share/wsh/manifest.json').read_text())
     if manifest.get('schema_version') != 2 or manifest.get('format') != 'wsh-native-installation':
         raise ValueError('unsupported native installation format')
     if manifest.get('status') not in ('development', 'release') or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', manifest.get('version', '')):
@@ -46,14 +46,14 @@ def verify(root):
     for item in files:
         name = item['path']
         path = PurePosixPath(name)
-        if not name or path.is_absolute() or '..' in path.parts or path.as_posix() != name or name in names or name == 'manifest.json':
+        if not name or path.is_absolute() or '..' in path.parts or path.as_posix() != name or name in names or name == 'share/wsh/manifest.json':
             raise ValueError('invalid or duplicate inventory path: '+name)
         names.add(name)
         if item['kind'] != 'file' or item['mode'] not in (0o644, 0o755) or type(item['size']) is not int or item['size'] < 0 or not re.fullmatch('[0-9a-f]{64}', item['sha256']):
             raise ValueError('invalid inventory record: '+name)
     if files != inventory(root):
         raise ValueError('payload inventory mismatch')
-    for name in ('bin/wsh', 'bin/wsh-runtime'):
+    for name in ('bin/wsh', 'libexec/wsh/wsh-runtime'):
         if name not in names or (root/name).stat().st_mode & 0o777 != 0o755:
             raise ValueError('missing native executable: '+name)
     lock = json.loads((root/'share/wsh/native-source-lock.json').read_text())
@@ -85,9 +85,9 @@ def create(root, lock_path):
                     zsh=dict(version=lock['version'], source_revision=lock['source_revision'], source_sha256=lock['archive_sha256']),
                     requirements=dict(dynamic_libraries=sorted(libraries), minimum_glibc=os.environ.get('WSH_MINIMUM_GLIBC')),
                     files=inventory(root))
-    (root/'manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    (root/'share/wsh/manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
     verify(root)
-    return digest(root/'manifest.json')
+    return digest(root/'share/wsh/manifest.json')
 
 if __name__ == '__main__':
     try:

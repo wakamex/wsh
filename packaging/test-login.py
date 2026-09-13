@@ -36,7 +36,7 @@ try:
     wait(b'\x1b]133;B')
     sock.sendall(b'print -r -- VM_LOGIN:$ZSH_VERSION:$SHELL:$ZSH_EXEPATH; id; print -r -- VM_DONE\n')
     output = wait(b'VM_DONE\r\n')
-    assert b'VM_LOGIN:5.9.999.3-test:/usr/bin/wsh:/usr/libexec/wsh/bin/wsh' in output, output
+    assert b'VM_LOGIN:5.9.999.3-test:/usr/bin/wsh:/usr/bin/wsh' in output, output
     assert b'uid=' in output and account.encode() in output, output
     if '--job-control' in sys.argv:
         sock.sendall(b'''python3 -c 'import signal,time; signal.signal(signal.SIGCONT,lambda *a:print("CHILD_"+"RESUMED",flush=True)); print("CHILD_"+"READY",flush=True); time.sleep(30)'\n''')

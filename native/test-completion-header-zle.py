@@ -32,7 +32,7 @@ fi
 class Shell(base.Shell):
     def __init__(self,variant,label):
         self.label=label;self.output=bytearray();self.home=OUT/'work'/variant
-        env=dict(PATH='/usr/bin:/bin',HOME=str(self.home),ZDOTDIR=str(self.home),FPATH=str(next((BUNDLE/'share/zsh').glob('*/functions'))),TERM='xterm-256color',LC_ALL='C.UTF-8',WSH_THEME='',COMP_CASE=variant,WSH_COMPINIT_PROTOTYPE=str(PROTO/'compinit'))
+        env=dict(PATH='/usr/bin:/bin',HOME=str(self.home),ZDOTDIR=str(self.home),FPATH=str((BUNDLE/'share/wsh/functions')),TERM='xterm-256color',LC_ALL='C.UTF-8',WSH_THEME='',COMP_CASE=variant,WSH_COMPINIT_PROTOTYPE=str(PROTO/'compinit'))
         env.update({k:v for k,v in os.environ.items() if k.endswith('SAN_OPTIONS')})
         self.started=time.monotonic_ns();self.pid,self.fd=pty.fork()
         if self.pid==0:

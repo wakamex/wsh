@@ -24,6 +24,6 @@ python3 $root/native/test-installed-completion.py $bundle $reference $checks/com
 python3 $root/native/test-history-owner.py $bundle/bin/wsh installed $checks/history correctness
 python3 $root/native/prepare-directory-owner.py $checks/directory-fixture
 python3 $root/native/test-directory-owner.py $bundle/bin/wsh installed $checks/directory-fixture $checks/directory
-python3 $root/native/test-runtime-lifecycle.py $bundle/bin/wsh-runtime $checks/runtime-lifecycle
-python3 $root/native/test-runtime-protocol.py $bundle/bin/wsh-runtime $checks/runtime-protocol
-python3 $root/native/test-git-output.py $bundle/bin/wsh-runtime $checks/git-output
+python3 $root/native/test-runtime-lifecycle.py $bundle/libexec/wsh/wsh-runtime $checks/runtime-lifecycle
+python3 $root/native/test-runtime-protocol.py $bundle/libexec/wsh/wsh-runtime $checks/runtime-protocol
+python3 $root/native/test-git-output.py $bundle/libexec/wsh/wsh-runtime $checks/git-output

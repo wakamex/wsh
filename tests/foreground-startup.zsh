@@ -20,7 +20,7 @@ typeset -g current_pty= pty_output= current_variant= current_mode= current_repor
 typeset -gi current_disable_terminal=0
 typeset -ga current_extra_args=()
 
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
+[[ -x $bundle/bin/wsh && ( $expectation == baseline || $expectation == candidate ) ]] || {
   print -u2 -- 'error: manager, bundle, or expectation is invalid'
   exit 2
 }
@@ -75,7 +75,7 @@ foreground_child() {
   export ZDOTDIR=$current_home
   export WSH_USER_ZDOTDIR=$current_home
   export WSH_BUNDLE_ROOT=$bundle
-  export WSH_RUNTIME=$bundle/bin/wsh-runtime
+  export WSH_RUNTIME=$bundle/libexec/wsh/wsh-runtime
   # Preserve the explicitly selected theme, including empty existing-prompt mode.
   export WSH_THEME
   export WSH_TEST_STARTUP_LOG=$current_home/startup.log
@@ -86,10 +86,10 @@ foreground_child() {
   case $current_variant in
     current)
       local invocation="${probe} ${current_report} ${current_mode}"
-      exec $bundle/bin/zsh -d -l -i -c "${invocation}; exec \"\$0\" -d -l -i" $bundle/bin/zsh
+      exec $bundle/bin/wsh -d -l -i -c "${invocation}; exec \"\$0\" -d -l -i" $bundle/bin/wsh
       ;;
     positional)
-      exec $bundle/bin/zsh -d -l -i -c '"$@"; exec "$0" -d -l -i' $bundle/bin/zsh $probe $current_report $current_mode "${current_extra_args[@]}"
+      exec $bundle/bin/wsh -d -l -i -c '"$@"; exec "$0" -d -l -i' $bundle/bin/wsh $probe $current_report $current_mode "${current_extra_args[@]}"
       ;;
     candidate)
       exec $bundle/bin/wsh --run --login -- $probe $current_report $current_mode "${current_extra_args[@]}"

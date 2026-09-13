@@ -22,7 +22,7 @@ readonly modified_source=$test_root/modified
 readonly custom_source=$test_root/custom
 typeset -g current_pty= pty_output= child_home= child_buffer_log= child_state_log=
 
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || {
+[[ -x $bundle/bin/wsh && -f $bundle/share/wsh/defaults/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || {
   print -u2 -- 'error: manager or bundle is invalid'
   exit 2
 }

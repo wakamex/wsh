@@ -38,7 +38,8 @@ def command(source, marker):
             transcript.extend(data)
     return bytes(output)
 
-def rpm_path(release): return '/var/tmp/wsh-0.3.1-' + release + '.x86_64.rpm'
+version = subprocess.check_output(['rpm', '-q', '--qf', '%{VERSION}', 'wsh'], text=True)
+def rpm_path(release): return '/var/tmp/wsh-' + version + '-' + release + '.x86_64.rpm'
 def run(name, argv, expected=None):
     result = subprocess.run(argv, capture_output=True, timeout=120)
     (OUT / (name + '.log')).write_bytes(result.stdout + result.stderr)
@@ -56,7 +57,7 @@ try:
     assert os.stat('/proc/' + str(shell.pid) + '/exe').st_ino == before
     output = command("zmodload zsh/zselect zsh/mathfunc; autoload -Uz colors; colors; print -r -- OLD_MODULES:$?:$((sin(1)))", b'OLD_MODULES:')
     assert b'OLD_MODULES:0:' in output, output
-    output = command('''print -rl -- '{"type":"ping","version":1,"id":7}' '{"type":"shutdown","version":1,"id":8}' | /usr/libexec/wsh/bin/wsh-runtime serve --theme /usr/libexec/wsh/share/wsh/themes/minimal.toml; print -r -- OLD_RUNTIME:$?''', b'OLD_RUNTIME:')
+    output = command('''print -rl -- '{"type":"ping","version":1,"id":7}' '{"type":"shutdown","version":1,"id":8}' | /usr/libexec/wsh/wsh-runtime serve --theme /usr/share/wsh/themes/minimal.toml; print -r -- OLD_RUNTIME:$?''', b'OLD_RUNTIME:')
     assert b'"type":"pong"' in output and b'OLD_RUNTIME:0' in output, output
     results.append({'case': 'old-shell-after-upgrade', 'pid': shell.pid, 'executable': executable, 'module_and_helper': True, 'same_zsh_abi': True})
     failed = run('rpm-pre-failure', ['rpm', '-Uvh', rpm_path('0.3')])

@@ -15,7 +15,7 @@ for worker in a b; do
   git -C $root worktree add --detach $source $revision
   (cd $source && ./build/build-glibc-2.28-development-bundle.zsh) > $destination/build-$worker.log 2>&1
   mkdir $destination/$worker
-  manifests=($source/build/portable/glibc-2.28/bundles/*/manifest.json(N))
+  manifests=($source/build/portable/glibc-2.28/bundles/*/share/wsh/manifest.json(N))
   packages=($source/build/portable/glibc-2.28/rpm/RPMS/**/*.rpm(N))
   (( $#manifests == 1 && $#packages == 1 ))
   cp $manifests[1] $destination/$worker/manifest.json

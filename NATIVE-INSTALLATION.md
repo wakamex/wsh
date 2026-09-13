@@ -1,10 +1,10 @@
 # Native package installation
 
-Wsh installs as an x86-64 Fedora RPM. The package owns `/usr/bin/wsh`, its `/bin/wsh` alias on Fedora, and resources under `/usr/libexec/wsh`. The native release assumes fresh installations. Compatibility with existing Zsh configuration, Oh My Zsh and supported plugin settings remains part of the product; compatibility with earlier Wsh launchers and manager commands is not a release requirement.
+Wsh installs as an x86-64 Fedora RPM. The package owns `/usr/bin/wsh`, its `/bin/wsh` alias on Fedora, a private helper under `/usr/libexec/wsh`, and data under `/usr/share/wsh`. The native release assumes fresh installations. Compatibility with existing Zsh configuration, Oh My Zsh and supported plugin settings remains part of the product; compatibility with earlier Wsh launchers and manager commands is not a release requirement.
 
 ## Installation and account shell
 
-Native packages have not been published yet. Build instructions are in [DEVELOPMENT.md](DEVELOPMENT.md); local artifacts are unsigned development builds. Test a selected RPM in an isolated machine with an independent recovery account. Replace the placeholder filename with the actual package:
+Download a [release RPM](https://github.com/wakamex/wsh/releases/latest) for Fedora. Build instructions are in [DEVELOPMENT.md](DEVELOPMENT.md); local artifacts are unsigned development builds. Test a selected RPM in an isolated machine with an independent recovery account. Replace the placeholder filename with the actual package:
 
 ```sh
 sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rpm
@@ -49,10 +49,12 @@ For a selected native RPM, use `sudo dnf install ./wsh-VERSION-RELEASE.x86_64.rp
 
 Bundled modules are linked into each shell executable, so a running shell retains them when RPM replaces the executable. External module loading remains available and follows Zsh's ABI requirements. Autoload functions and the optional helper use the installed package's resources; this qualification covers the current Zsh ABI and helper protocol. Future incompatible function/protocol changes need an explicit compatibility or restart policy before shipping.
 
-Ordinary package removal refuses while a local `/etc/passwd` entry names `/usr/bin/wsh` or `/bin/wsh`. Change those accounts to an installed alternative first. Remote identity directories and arbitrary aliases need administrator checks; bypassing scriptlets bypasses this guard. Missing shell executables, required system libraries, or damaged system files still require system recovery. Missing or malformed Wsh activation state, unavailable home configuration, or an unavailable optional helper does not prevent the tested native login path.
+Before removing Wsh, change every account using it to another installed shell and verify a new login. Current source packages follow Fedora Zsh: removal deletes the shell and its `/etc/shells` registrations without changing account records or vetoing the transaction. Include accounts from remote identity directories and custom shell aliases in that check. The published v0.4.0 package retains its earlier local-account removal veto. Missing shell executables or required libraries still require system recovery.
 
 ## Verified login coverage
 
 The [Fedora QEMU qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/release-qualification-2026-09-10/report.md) exercises real serial-getty/PAM login, prompt readiness, Ctrl-Z, `fg`, Ctrl-C, authenticated unprivileged `chsh`, enforcing SELinux with a confined account and login after reboot. Missing optional helper or integration resources preserve the tested native shell path. Package verification passes after restoring the deliberately removed resources.
 
-This covers actual TTY/PAM login, not a complete graphical GDM session. Broken user startup code and failures in PAM or a display manager require recovery at their respective owners; the package removal guard cannot prevent those failures. [Package behavior](packaging/README.md) and the [release contract](RELEASES.md) record the corresponding distribution checks.
+This covers actual TTY/PAM login, not a complete graphical GDM session. Broken user startup code and failures in PAM or a display manager require recovery at their respective owners; package registration cannot prevent those failures. [Package behavior](packaging/README.md) and the [release contract](RELEASES.md) record the corresponding distribution checks.
+
+After upgrading from the v0.4.0 private-directory layout, restart Wsh sessions so they use the new paths for functions and the helper. See the [layout boundary](packaging/FEDORA-REVIEW.md#upgrade-boundary).

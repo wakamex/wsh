@@ -19,7 +19,7 @@ readonly modified_history=$test_root/modified-history.zsh
 readonly modified_autosuggestions=$test_root/modified-autosuggestions.zsh
 readonly modified_syntax=$test_root/modified-syntax
 
-[[ -x $bundle/bin/wsh && -x $bundle/bin/zsh && -f $exact_history && -f $omz_history && -f $exact_autosuggestions && -f $exact_syntax/zsh-syntax-highlighting.zsh ]] || {
+[[ -x $bundle/bin/wsh && -f $exact_history && -f $omz_history && -f $exact_autosuggestions && -f $exact_syntax/zsh-syntax-highlighting.zsh ]] || {
   print -u2 -- 'error: manager or complete plugin bundle is invalid'
   exit 2
 }

@@ -35,7 +35,7 @@ def normalize(info):
     info.uid = info.gid = 0
     info.uname = info.gname = ''
     info.mtime = epoch
-    info.mode = 0o755 if info.isdir() or info.name.startswith('payload/bin/') else 0o644
+    info.mode = 0o755 if info.isdir() or info.name.startswith('payload/bin/') or info.name == 'payload/libexec/wsh/wsh-runtime' else 0o644
     return info
 with (top / 'SOURCES/native-payload.tar.gz').open('wb') as output:
     with gzip.GzipFile(filename='', mode='wb', fileobj=output, mtime=epoch) as compressed:

@@ -35,11 +35,11 @@ wsh_resource_paths(void)
 {
     if (!wsh_root)
         return;
-    wsh_prepend_path("module_path", tricat(wsh_root, "/lib/zsh/", ZSH_VERSION), MODULE_DIR, NULL);
+    wsh_prepend_path("module_path", tricat(wsh_root, "/libexec/wsh/modules/", ZSH_VERSION), MODULE_DIR, NULL);
     char *site = tricat(wsh_root, "/share/zsh/", "site-functions");
     /* An explicitly exported FPATH belongs to the user, including its fallbacks. */
     int explicit_fpath = getenv("FPATH") != NULL;
-    wsh_prepend_path("fpath", tricat(wsh_root, "/share/zsh/" ZSH_VERSION, "/functions"),
+    wsh_prepend_path("fpath", tricat(wsh_root, "/share/wsh/", "functions"),
                      explicit_fpath ? NULL : FPATH_DIR, explicit_fpath ? NULL : site);
     zsfree(site);
 }
