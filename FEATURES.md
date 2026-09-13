@@ -2,6 +2,35 @@
 
 Wsh supplies a tested Zsh distribution with built-in editing features, directory jumping, optional asynchronous prompts, diagnostics and profiling. Native startup, the C component owners and system-package distribution are selected. Completed architecture decisions and their evidence live in [DESIGN.md](DESIGN.md); this document records remaining work and the evidence required to expand scope.
 
+## Ordered priorities
+
+Prioritize reliable daily use and easier installation. Complete the immediate work below before expanding the feature set; later items retain their stated dependencies and experiment gates.
+
+| Priority | Work | User benefit and next gate |
+| --- | --- | --- |
+| 1 | Set up COPR distribution | Provide repository-backed installation and ordinary DNF updates. Qualify installation, upgrades and removal through the hosted channel before advertising it. Official Fedora repository inclusion has its own package-review process and can follow COPR. The existing direct-RPM release path remains available. |
+| 2 | Improve setup without OMZ | Test a fresh configuration for completion, history, bindings and prompts. Add concise setup guidance and doctor findings for demonstrated gaps, preserving existing configuration and users who alternate between Zsh and Wsh. Automatic completion initialization remains subject to a separate passing experiment. |
+| 3 | Add pane-local history | Make history useful within a restored terminal workflow. Wakterm must first persist a stable logical pane token. Test the smallest `fc -p` integration across mux restart before considering bounded Wsh-managed history. Keep shell history local and terminal scrollback in Wakterm. Private-history work must prove sentinel commands stay out of configured durable sinks and diagnostics after normal and interrupted exit. |
+| 4 | Qualify another installation target | Let additional users install Wsh through their usual package tools. Select one distribution or architecture from actual user demand, then qualify its build, package transactions and login lifecycle independently. Fedora x86-64 remains the supported installation target. |
+| 5 | Compare Wakterm completion paths | Test whether application completion can become smaller or faster without losing behavior. Recapture the application inputs, then compare current and pruned static completion with direct application completion. Consider the existing mux only if those paths leave a measured problem. Preserve candidate correctness, cancellation, deadlines and fallback; a generic broker needs a second demonstrated consumer. |
+
+## Ongoing maintenance
+
+| Work | Required practice |
+| --- | --- |
+| Upstream Zsh updates | Evaluate newer upstream changes, refresh the pinned source deliberately and rerun upstream, compatibility and package checks. Keep local fixes and potential upstream submissions current in [upstream bug records](UPSTREAM-ZSH-BUGS.md). |
+| Upstream plugin changes | Review changes reported by the daily monitor and incorporate relevant behavior promptly. Preserve component-specific handoff behavior, settings and customizations. [Component compatibility](VENDORED-COMPONENTS.md) records support and possible feature lag. |
+| Compatibility and release regressions | Treat reproduced startup, editing, completion, prompt, restore and login failures as maintenance priorities. Test real consumers alongside local component contracts. Existing package and shell correctness gates remain required for releases. |
+| Package resource transitions | Define and test compatibility or an explicit restart policy before changing autoload-function compatibility, external-module ABI or helper protocol. The current layout change has a documented [session restart boundary](packaging/FEDORA-REVIEW.md#upgrade-boundary). |
+
+## Settled decisions
+
+Wakterm now restores applications through `wsh --run --login -- PROGRAM ARG...`; the fix is pushed and deployed. Its real-Wsh PTY regression covers exact argument bytes, suspension, resumption, Ctrl-C and normal exit status.
+
+Native startup, system-package updates, the C component owners and one prompt helper per shell are selected. The legacy Rust crates and toolchain are retired. Compatibility with the earlier wrapper-based releases is outside the native release scope. The source RPM passes offline Fedora rebuild, packaging and login qualification. Published canonical artifacts use GitHub provenance; COPR remains unconfigured.
+
+The older [migration inventory](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-qualification-2026-09-09/inventory-report.md) retains decisions that were open at its recorded revision. Its component-adoption, legacy-retirement and distribution-contract questions have since been resolved by [architecture qualification](DESIGN.md), [package qualification](benchmarks/fedora-packaging-2026-09-13/report.md) and the [release contract](RELEASES.md).
+
 ## Admission and experiment limits
 
 A candidate becomes an accepted `wsh` feature only after its investigation records:
@@ -21,31 +50,14 @@ Architectural simplification can justify an experiment when it removes demonstra
 
 Before implementation, fix a runnable baseline, the smallest counterfactual, correctness and resource gates, and an attempt/time budget. Run correctness and sanitizer checks where applicable before matched timing comparisons. After two failed interventions at one gate, audit the premise and require a new hypothesis. A new subsystem needs a concrete consumer benefit that simpler owner-local changes cannot provide. Follow [DEVELOPMENT.md](DEVELOPMENT.md) for retained identities and verification.
 
-## Settled decisions
-
-Native startup, system-package updates, the C component owners, one prompt helper per shell and fresh-installation release scope are selected. The legacy Rust crates and toolchain are retired. The source RPM is implemented and passes offline Fedora rebuild and login qualification. Published canonical artifacts use GitHub provenance; a separate maintainer RPM signature and hosted repository are not part of the current release contract.
-
-The older [migration inventory](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-qualification-2026-09-09/inventory-report.md) retains decisions that were open at its recorded revision. Its component-adoption, legacy-retirement and distribution-contract questions have since been resolved by [architecture qualification](DESIGN.md), [source-RPM qualification](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/source-rpm-2026-09-11/report.md) and the [release contract](RELEASES.md). Historical decision tables are evidence, not the current backlog.
-
-## Remaining work
-
-| Work | Current decision and next gate |
-| --- | --- |
-| Distribution channel and additional targets | The Fedora source RPM is implemented and qualified. Choose whether to pursue a hosted repository such as COPR or downstream distro inclusion, and qualify that channel before advertising it. No repository or submission is configured. Fedora x86-64 remains the supported installation target; qualify each new distribution or architecture independently. This does not block the existing direct-RPM release path. |
-| Standalone completion initialization | Native compinit registration scanning is adopted. Automatic/deferred initialization and installation dump seeds remain unselected. Reopen only with a new hypothesis that passes startup, first-Tab and stale/unusable-cache fallback gates while preserving user initialization and security checks. [COMPLETION.md](COMPLETION.md) retains outcomes. |
-| Wakterm completion | Compare pruned static completion, direct application completion and the existing mux against freshly captured application inputs. Select the smallest passing path for installed size, cold/warm latency, candidate correctness, cancellation and fallback. A generic broker needs a second demonstrated consumer. |
-| Pane history | Wakterm must persist a stable logical pane token first. Compare a small native `fc -p` integration with bounded Wsh-managed history across mux restart; keep shell history local and terminal scrollback in the terminal. Private-history work must test that sentinel commands never reach configured durable sinks or diagnostics after normal and interrupted exit. |
-| Terminal diagnosis and metadata | Start from reproduced terminal-query, OSC or restore failures. Prefer deterministic advice over repair. Publish allowlisted metadata only when it eliminates measured terminal-side work or fills a concrete UI gap; exclude full commands. |
-| Contributed theme directory | Local theme selection and validation are implemented. Reopen directory work when there is a submission workflow to exercise. Preserve open submission and mechanical admission for supported, bounded, non-executable definitions; separate admission from curated recommendations. Publisher identity, immutable version/digest mapping and update trust need a concrete design and tests at that point. No directory or automatic theme-update service exists today. |
-| Upstream plugin changes | Catalog and bounded Git recognition are implemented, and the daily monitor reports changed upstream inputs for review. Incorporate relevant changes promptly while preserving component-specific handoff behavior. [Component compatibility](VENDORED-COMPONENTS.md) records support and possible feature lag. |
-
-A release does not require pane history, a theme directory, shared Git collection, a generic completion broker or a new foreground-job protocol. The existing package and shell correctness gates remain required.
-
 ## Deferred candidates and admission triggers
 
 | Candidate | Evidence required before design work |
 |---|---|
-| Incompatible package resources | A proposed release changes autoload-function compatibility, external-module ABI or helper protocol. Define and test compatibility or an explicit restart policy before that release; the current compatible package path does not need an additional recovery subsystem |
+| Automatic completion initialization | Native compinit registration scanning is adopted. Automatic/deferred initialization and installation dump seeds remain unselected. Require a new hypothesis that passes startup, first-Tab and stale/unusable-cache fallback gates while preserving user initialization and security checks. [Completion experiments](COMPLETION.md) retain the outcomes |
+| Further parser consolidation | A reproduced correctness problem or a measured maintenance or runtime cost in the remaining Zsh adapters, predicates or optional highlighters. Compare the complete replacement and compatibility burden with a smaller fix in the current owner |
+| Terminal diagnosis and metadata | Reproduced terminal-query, OSC or restore failures. Prefer deterministic advice over repair. Publish allowlisted metadata only when it eliminates measured terminal-side work or fills a concrete UI gap; exclude full commands |
+| Contributed theme directory | A real submission workflow to exercise. Local selection and validation already work. Preserve open submission and mechanical admission for bounded, non-executable definitions, with curated recommendations separate. Design publisher identity, immutable version/digest mapping and update trust when that workflow exists |
 | Lazy provider registration | A second provider whose eager parsing or startup has measurable cost; the counterfactual is conventional Zsh autoloading without a registry service |
 | Resident provider idle expiration | A provider whose repeated cold start dominates direct execution or IPC; compare short-lived execution with measured idle lifetimes, retained memory, cleanup, crash recovery, and protocol migration cost |
 | Git-state sharing across shells | Multiple Wsh shells must first demonstrate material duplicate Git work or aggregate memory cost. Compare same-repository and different-repository panes against the current per-session runtimes, measuring total memory, Git executions, CPU, and prompt freshness. Test simpler per-session request coalescing and caching before a per-user Git service; keep rendering and shell lifecycle local. Any shared prototype must preserve repository and worktree identity, relevant per-shell Git environment, invalidation after external changes, cancellation, mixed-version compatibility, disconnect cleanup, and usable prompts after service failure. Sharing the entire runtime remains deferred without separate evidence |
