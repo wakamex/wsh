@@ -10,6 +10,7 @@ export WSH_REFERENCE_ZSH=$reference/bin/zsh WSH_TEST_ZSH=$reference/bin/zsh
 python3 $root/build/native_manifest.py verify $bundle
 python3 $root/tests/native-build-status.py $bundle
 python3 $root/tests/native-manifest.py $bundle
+python3 $root/tests/history-persistence.py $bundle/bin/wsh $checks/history-persistence
 python3 $root/native/test-highlight-roundtrip.py $bundle/bin/wsh $checks/highlight-roundtrip
 python3 $root/native/test-installed-highlighting.py $bundle $checks/highlighting
 python3 $root/native/check-installation.py $bundle $checks/contracts

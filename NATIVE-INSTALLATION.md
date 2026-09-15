@@ -34,6 +34,14 @@ After testing your configuration and terminal behavior, use `chsh -s /usr/bin/ws
 
 Wsh preserves Zsh command-line parsing: `--` ends option parsing, ordinary positional arguments name shell scripts, and `-c`, `-s` and `-f` keep their Zsh meanings. See [PROFILING.md](PROFILING.md) for profile options and reports.
 
+## History
+
+Interactive Wsh sessions save history in `~/.zsh_history` by default, with 10,000-entry limits for saved and in-memory history. Commands are appended as they are entered. Concurrent sessions save to the same file but do not automatically import each other's new commands into their current history navigation; a new session reads the saved history.
+
+Existing environment settings and system/user startup configuration can override these defaults. Set `HISTFILE`, `HISTSIZE` and `SAVEHIST` in `.zshrc` to choose another path or limits. `SAVEHIST=0`, an empty `HISTFILE`, or `unset HISTFILE` disables saving. To save only on normal exit, use `unsetopt INC_APPEND_HISTORY` and `setopt APPEND_HISTORY`. Explicit `SHARE_HISTORY` or `INC_APPEND_HISTORY_TIME` settings take precedence over Wsh's incremental-saving default. Oh My Zsh's sharing setting remains effective.
+
+These defaults apply to interactive Wsh with startup files enabled. They do not change regular Zsh, noninteractive scripts, or `wsh -f`. Wsh does not create or edit `.zshrc`.
+
 ## Directory jumping
 
 Wsh supplies `z` when your configuration has not already defined a directory-jump command. Visit a directory, then use part of its name to return:

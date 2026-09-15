@@ -4,7 +4,7 @@
 
 - Type less and spot mistakes sooner with built-in autosuggestions, history search and syntax highlighting: [35–91% shorter highlighting updates and 29% less autosuggestion editing time with large histories](PERFORMANCE.md) compared with the tested Zsh plugins.
 - Jump back to frequently used directories with [`z`](NATIVE-INSTALLATION.md#directory-jumping), with [84% shorter lookup time](PERFORMANCE.md) than the tested Zsh plugin at 1,000 saved directories.
-- Navigate large histories with [23–72% less editing time](PERFORMANCE.md) compared with the tested history-search plugin.
+- Keep [history across logins](NATIVE-INSTALLATION.md#history) and navigate large histories with [23–72% less editing time](PERFORMANCE.md) compared with the tested history-search plugin.
 - Initialize completions with [20% shorter cold-start time](PERFORMANCE.md) compared with the tested Zsh compinit.
 - Keep your existing Zsh theme, or choose Wsh’s built-in [Minimal, Wakamex, Robbyrussell, or Agnoster prompts](THEMES.md), with [up to 95% shorter prompt waits for Agnoster compared with OMZ](PERFORMANCE.md#built-in-prompts-compared-with-omz).
 - [Find startup slowdowns](PROFILING.md) and use `wsh --doctor` to find plugins that duplicate features you already have.

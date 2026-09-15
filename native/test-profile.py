@@ -33,7 +33,11 @@ autoload -Uz add-zle-hook-widget
 wsh_profile_editor_delay() { sleep 0.08; }
 add-zle-hook-widget zle-line-init wsh_profile_editor_delay
 ''')
-before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in home.glob('.zsh*')}
+def startup_hashes():
+    return {name: hashlib.sha256((home / name).read_bytes()).hexdigest()
+            for name in ('.zshenv', '.zprofile', '.zshrc', '.zlogin', '.zlogout')
+            if (home / name).exists()}
+before = startup_hashes()
 env = {'HOME': str(home), 'ZDOTDIR': str(home), 'WSH_STATE_ROOT': str(state), 'PATH': '/usr/bin:/bin', 'TERM': 'xterm-256color', 'LC_ALL': 'C.UTF-8', 'TZ': 'UTC'}
 env.update({name: os.environ[name] for name in ('ASAN_OPTIONS', 'UBSAN_OPTIONS') if name in os.environ})
 pid, fd = pty.fork()
@@ -89,7 +93,7 @@ finally:
         os.killpg(pid, signal.SIGHUP); os.waitpid(pid, 0)
     os.close(fd)
     (OUT / 'interactive.bin').write_bytes(transcript)
-assert before == {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in home.glob('.zsh*')}
+assert before == startup_hashes()
 for flags in (['-fc', 'exit 7'], ['-dc', 'exit 9'], ['-dlc', 'exit 11'], ['-dfc', 'print -r -- ${(qqq)1}; exit 13', 'profile-argv', b'\xff\n$(false)']):
     r = subprocess.run([BINARY, '--profile', '--', *flags], env=env, capture_output=True, timeout=5)
     expected = (7, 9, 11, 13)[len(results) - 1]

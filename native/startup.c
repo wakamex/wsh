@@ -7,6 +7,7 @@
 /* Optional Wsh defaults surround Zsh-owned startup; user files stay native. */
 static char *wsh_root;
 static int wsh_integration;
+static int wsh_default_incremental_history;
 
 static void
 wsh_prepend_path(char *name, char *directory, char *compiled, char *site)
@@ -89,6 +90,25 @@ wsh_profile_parameters(void)
 }
 
 static void
+wsh_history_defaults(void)
+{
+    char *user_home = getsparam("HOME");
+    if (!interact)
+        return;
+    /* Environment values and all later startup files belong to the user. */
+    if (!getenv("HISTFILE") && user_home && *user_home)
+        setsparam("HISTFILE", tricat(user_home, "/", ".zsh_history"));
+    if (!getenv("HISTSIZE"))
+        setiparam("HISTSIZE", 10000);
+    if (!getenv("SAVEHIST"))
+        setiparam("SAVEHIST", 10000);
+    if (unset(INCAPPENDHISTORY) && unset(SHAREHISTORY) && unset(INCAPPENDHISTORYTIME)) {
+        opts[INCAPPENDHISTORY] = 1;
+        wsh_default_incremental_history = 1;
+    }
+}
+
+static void
 wsh_setup(void)
 {
     char *exepath = getsparam("ZSH_EXEPATH"), *slash, *file;
@@ -119,6 +139,7 @@ wsh_setup(void)
     }
     zsfree(file);
     wsh_integration = 1;
+    wsh_history_defaults();
     setsparam("WSH_BUNDLE_ROOT", ztrdup(wsh_root));
     wsh_source("native-before.zsh");
     return;
@@ -140,5 +161,9 @@ wsh_finish(void)
     wsh_profile_flush_startup();
     if (!wsh_integration)
         return;
+    /* These user-selected modes supersede our incremental-saving default. */
+    if (wsh_default_incremental_history &&
+        (isset(SHAREHISTORY) || isset(INCAPPENDHISTORYTIME)))
+        opts[INCAPPENDHISTORY] = 0;
     wsh_unexport("WSH_THEME");
 }
