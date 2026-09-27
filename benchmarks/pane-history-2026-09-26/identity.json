@@ -1,0 +1,425 @@
+{
+  "source_revision": "0bbb22a5d23a2464af86c910caac655aab7decf5+dirty",
+  "source_files": {
+    "native/pane-history.c": "82f9e1aa0aea44d884d87ed0bdadd7624135f640bbc91daed1362efc4397355a",
+    "native/startup.c": "c07054e4bd6159d97375be738f6aeee1b510f1bb825c87f34d2250040c2cea63",
+    "tests/pane-history.py": "e29bca8e33f0836c5c4bccd316df9eb21cca06ba0ae1cfe7dc807ba698f71423",
+    "tests/history-persistence.py": "145536e68efaf2a4345575158f1cea592aa5a38663aca0f97bb702941f1ae5f9",
+    "build/zsh-patches/cad0d67c-pane-history.patch": "d4bc0218ad92498f882a8b75db137dde48d95e2c835407901859166c51c3169a",
+    "build/zsh-patches/cad0d67c-native-entrypoint.patch": "bd2fc61e5cc6e129e7c811312d527b603be080f454f39f65c61bd44e11d95ce7",
+    "build/update-native-lock.py": "3fefbef3df6917e73f826b6210dceae3695c154f4cb35df42ed5641948f94438",
+    "build/zsh-sources/zsh-cad0d67c-native.json": "c189d65c8ede8cc23bf7185bcbddb0950a7abc902c37a32421257eede6734c75",
+    "build/check-native-installation.zsh": "c93d8657c873deceefb5ec639bc4551b3e30e800b8d97b89c814df729a8eb12b",
+    "benchmarks/pane-history-2026-09-26/measure.py": "b28be9e9411e1f314379d636873a24ac3d9967e3c7a1ee19106869516d478878"
+  },
+  "host": {
+    "kernel": "7.1.9-200.fc44.x86_64",
+    "architecture": "x86_64",
+    "cpu": "AMD Ryzen 9 3950X 16-Core Processor"
+  },
+  "builder_image": "localhost/wsh-native-builder:e1fdf68370077c882beeaa4b",
+  "container_id": "f714819ef1c9dc9a2741370a9b10c4c105a5798c49661fc94176dc36687527c0",
+  "bundles": {
+    "before": "build/portable/history-defaults-final/bundles/07c5c12c8bf31b0f8575355dbc435590d66256540fc5721c88bcda0292c2ace6",
+    "first": "build/portable/pane-history/bundles/83f4891c78dafb7f6185c876a43e4207febf5ee7d882bf2081459fa3cde3180e",
+    "second": "build/portable/pane-history-final/bundles/03198ff1596b8b24783ad921bcb4665243527fa693248c5144cefb22403a77ec",
+    "after": "build/portable/pane-history-qualified/bundles/41c855e66cc84478444c7865e5a68d55c2857f07cb06ad6dda1e3323ad86d9f9"
+  },
+  "benchmark": {
+    "samples": [
+      {
+        "pair": 0,
+        "variant": "before",
+        "startup_ms": 20.951816,
+        "command_ms": 1.887153
+      },
+      {
+        "pair": 0,
+        "variant": "after",
+        "startup_ms": 25.955722,
+        "command_ms": 1.808602
+      },
+      {
+        "pair": 1,
+        "variant": "after",
+        "startup_ms": 20.22994,
+        "command_ms": 1.669929
+      },
+      {
+        "pair": 1,
+        "variant": "before",
+        "startup_ms": 20.779832,
+        "command_ms": 1.783672
+      },
+      {
+        "pair": 2,
+        "variant": "before",
+        "startup_ms": 20.790742,
+        "command_ms": 1.918054
+      },
+      {
+        "pair": 2,
+        "variant": "after",
+        "startup_ms": 20.963807,
+        "command_ms": 1.962565
+      },
+      {
+        "pair": 3,
+        "variant": "after",
+        "startup_ms": 20.789502,
+        "command_ms": 1.861344
+      },
+      {
+        "pair": 3,
+        "variant": "before",
+        "startup_ms": 20.912785,
+        "command_ms": 1.898564
+      },
+      {
+        "pair": 4,
+        "variant": "before",
+        "startup_ms": 20.556407,
+        "command_ms": 1.682549
+      },
+      {
+        "pair": 4,
+        "variant": "after",
+        "startup_ms": 20.350952,
+        "command_ms": 2.031287
+      },
+      {
+        "pair": 5,
+        "variant": "after",
+        "startup_ms": 20.547757,
+        "command_ms": 1.75044
+      },
+      {
+        "pair": 5,
+        "variant": "before",
+        "startup_ms": 20.518536,
+        "command_ms": 1.864313
+      },
+      {
+        "pair": 6,
+        "variant": "before",
+        "startup_ms": 21.201122,
+        "command_ms": 1.868504
+      },
+      {
+        "pair": 6,
+        "variant": "after",
+        "startup_ms": 20.782892,
+        "command_ms": 1.836553
+      },
+      {
+        "pair": 7,
+        "variant": "after",
+        "startup_ms": 20.778272,
+        "command_ms": 1.840283
+      },
+      {
+        "pair": 7,
+        "variant": "before",
+        "startup_ms": 20.893305,
+        "command_ms": 1.883624
+      },
+      {
+        "pair": 8,
+        "variant": "before",
+        "startup_ms": 20.802213,
+        "command_ms": 1.764201
+      },
+      {
+        "pair": 8,
+        "variant": "after",
+        "startup_ms": 20.521906,
+        "command_ms": 1.678369
+      },
+      {
+        "pair": 9,
+        "variant": "after",
+        "startup_ms": 20.359262,
+        "command_ms": 1.850693
+      },
+      {
+        "pair": 9,
+        "variant": "before",
+        "startup_ms": 20.67292,
+        "command_ms": 1.797972
+      },
+      {
+        "pair": 10,
+        "variant": "before",
+        "startup_ms": 20.642909,
+        "command_ms": 1.73979
+      },
+      {
+        "pair": 10,
+        "variant": "after",
+        "startup_ms": 20.485885,
+        "command_ms": 1.71673
+      },
+      {
+        "pair": 11,
+        "variant": "after",
+        "startup_ms": 20.26651,
+        "command_ms": 1.680859
+      },
+      {
+        "pair": 11,
+        "variant": "before",
+        "startup_ms": 20.641329,
+        "command_ms": 1.658669
+      },
+      {
+        "pair": 12,
+        "variant": "before",
+        "startup_ms": 20.133097,
+        "command_ms": 1.660288
+      },
+      {
+        "pair": 12,
+        "variant": "after",
+        "startup_ms": 20.061816,
+        "command_ms": 1.73093
+      },
+      {
+        "pair": 13,
+        "variant": "after",
+        "startup_ms": 20.380633,
+        "command_ms": 1.863063
+      },
+      {
+        "pair": 13,
+        "variant": "before",
+        "startup_ms": 20.711,
+        "command_ms": 2.481848
+      },
+      {
+        "pair": 14,
+        "variant": "before",
+        "startup_ms": 20.655079,
+        "command_ms": 1.711159
+      },
+      {
+        "pair": 14,
+        "variant": "after",
+        "startup_ms": 20.492536,
+        "command_ms": 1.995026
+      },
+      {
+        "pair": 15,
+        "variant": "after",
+        "startup_ms": 22.693977,
+        "command_ms": 1.820503
+      },
+      {
+        "pair": 15,
+        "variant": "before",
+        "startup_ms": 20.563247,
+        "command_ms": 1.713739
+      },
+      {
+        "pair": 16,
+        "variant": "before",
+        "startup_ms": 20.432794,
+        "command_ms": 1.750631
+      },
+      {
+        "pair": 16,
+        "variant": "after",
+        "startup_ms": 20.793563,
+        "command_ms": 1.686109
+      },
+      {
+        "pair": 17,
+        "variant": "after",
+        "startup_ms": 20.394683,
+        "command_ms": 1.632138
+      },
+      {
+        "pair": 17,
+        "variant": "before",
+        "startup_ms": 20.382593,
+        "command_ms": 1.658218
+      },
+      {
+        "pair": 18,
+        "variant": "before",
+        "startup_ms": 20.019175,
+        "command_ms": 1.666008
+      },
+      {
+        "pair": 18,
+        "variant": "after",
+        "startup_ms": 20.398973,
+        "command_ms": 1.995656
+      },
+      {
+        "pair": 19,
+        "variant": "after",
+        "startup_ms": 20.511176,
+        "command_ms": 2.360234
+      },
+      {
+        "pair": 19,
+        "variant": "before",
+        "startup_ms": 20.70388,
+        "command_ms": 1.72159
+      },
+      {
+        "pair": 20,
+        "variant": "before",
+        "startup_ms": 20.352362,
+        "command_ms": 1.851863
+      },
+      {
+        "pair": 20,
+        "variant": "after",
+        "startup_ms": 20.860354,
+        "command_ms": 2.005017
+      },
+      {
+        "pair": 21,
+        "variant": "after",
+        "startup_ms": 22.096493,
+        "command_ms": 1.823192
+      },
+      {
+        "pair": 21,
+        "variant": "before",
+        "startup_ms": 20.910676,
+        "command_ms": 2.371805
+      },
+      {
+        "pair": 22,
+        "variant": "before",
+        "startup_ms": 21.1245,
+        "command_ms": 1.900764
+      },
+      {
+        "pair": 22,
+        "variant": "after",
+        "startup_ms": 20.943536,
+        "command_ms": 1.683239
+      },
+      {
+        "pair": 23,
+        "variant": "after",
+        "startup_ms": 20.382223,
+        "command_ms": 1.673859
+      },
+      {
+        "pair": 23,
+        "variant": "before",
+        "startup_ms": 20.526396,
+        "command_ms": 1.790331
+      },
+      {
+        "pair": 24,
+        "variant": "before",
+        "startup_ms": 21.028858,
+        "command_ms": 1.866913
+      },
+      {
+        "pair": 24,
+        "variant": "after",
+        "startup_ms": 20.769572,
+        "command_ms": 1.845333
+      },
+      {
+        "pair": 25,
+        "variant": "after",
+        "startup_ms": 20.69409,
+        "command_ms": 1.850023
+      },
+      {
+        "pair": 25,
+        "variant": "before",
+        "startup_ms": 20.192548,
+        "command_ms": 1.685809
+      },
+      {
+        "pair": 26,
+        "variant": "before",
+        "startup_ms": 20.097636,
+        "command_ms": 1.705769
+      },
+      {
+        "pair": 26,
+        "variant": "after",
+        "startup_ms": 20.283381,
+        "command_ms": 1.689109
+      },
+      {
+        "pair": 27,
+        "variant": "after",
+        "startup_ms": 20.510776,
+        "command_ms": 1.759001
+      },
+      {
+        "pair": 27,
+        "variant": "before",
+        "startup_ms": 20.581687,
+        "command_ms": 1.692739
+      },
+      {
+        "pair": 28,
+        "variant": "before",
+        "startup_ms": 20.23675,
+        "command_ms": 1.651959
+      },
+      {
+        "pair": 28,
+        "variant": "after",
+        "startup_ms": 20.147377,
+        "command_ms": 1.420793
+      },
+      {
+        "pair": 29,
+        "variant": "after",
+        "startup_ms": 20.050265,
+        "command_ms": 1.594307
+      },
+      {
+        "pair": 29,
+        "variant": "before",
+        "startup_ms": 20.129927,
+        "command_ms": 1.881834
+      }
+    ],
+    "summary": {
+      "startup_ms": {
+        "before_p90": 21.028858,
+        "after_p90": 22.096493,
+        "paired_p90_overhead": 1.1858170000000001,
+        "limit": 3,
+        "passed": true
+      },
+      "command_ms": {
+        "before_p90": 1.918054,
+        "after_p90": 2.005017,
+        "paired_p90_overhead": 0.32964800000000016,
+        "limit": 1,
+        "passed": true
+      }
+    },
+    "command_boundary": "Enter to OSC 133 B after 50 ms terminal-output quiet",
+    "binaries": {
+      "before": {
+        "path": "/code/wsh/build/portable/history-defaults-final/bundles/07c5c12c8bf31b0f8575355dbc435590d66256540fc5721c88bcda0292c2ace6/bin/wsh",
+        "sha256": "d18369cf1a97e134bbda1eeeaa8fe2e2a09ed206e72c978433b09ce4aafeeedc"
+      },
+      "after": {
+        "path": "/code/wsh/build/portable/pane-history-qualified/bundles/41c855e66cc84478444c7865e5a68d55c2857f07cb06ad6dda1e3323ad86d9f9/bin/wsh",
+        "sha256": "d61325172609f2208fefdaf0cf837d22e04ca5deeb36e903d51b45b8457a2426"
+      }
+    },
+    "harness_sha256": "145536e68efaf2a4345575158f1cea592aa5a38663aca0f97bb702941f1ae5f9"
+  },
+  "affinity_cpu": 11,
+  "omz_revision": "605a393f1c4734b23c6551370b9d542724e77879",
+  "wakterm_revision": "902d052c85d95ec139270f7342c38fcce38c4d03",
+  "wakterm_adapter_sha256": "4120ec9bcbe7dee3ef3255de94d5a06dcf8b73354d72162c538d49b67500a440",
+  "evidence_sha256": "3deb5a9ddfba586930b4e3edcb6e820d2bf37595fde46e364a1cb6878faddc44"
+}

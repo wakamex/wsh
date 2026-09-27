@@ -29,11 +29,15 @@
     },
     {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
-      "sha256": "45c9085d5e213eacdf9d15a65f35bf9be0b17c629ae22d3f1ff6f5bf737301b3"
+      "sha256": "bd2fc61e5cc6e129e7c811312d527b603be080f454f39f65c61bd44e11d95ce7"
     },
     {
       "path": "build/zsh-patches/cad0d67c-native-completion.patch",
       "sha256": "ed3c389b55b79a729115ebae86e53a439d42e826732fe16aa6b8dc7568b3c806"
+    },
+    {
+      "path": "build/zsh-patches/cad0d67c-pane-history.patch",
+      "sha256": "d4bc0218ad92498f882a8b75db137dde48d95e2c835407901859166c51c3169a"
     }
   ],
   "test_patches": [
@@ -48,7 +52,7 @@
     "sources": [
       {
         "path": "native/startup.c",
-        "sha256": "bcc60b6fcfd1ea4a26f39b7364b3b60bc83d34b4f84c3e4ddd5be38df4bfac2e"
+        "sha256": "c07054e4bd6159d97375be738f6aeee1b510f1bb825c87f34d2250040c2cea63"
       },
       {
         "path": "native/tools.c",
@@ -77,6 +81,10 @@
       {
         "path": "native/history.c",
         "sha256": "4540b5f330f22efb366788e8ed470f2147fe06cac1b2e6ab8e557a7e77c93260"
+      },
+      {
+        "path": "native/pane-history.c",
+        "sha256": "82f9e1aa0aea44d884d87ed0bdadd7624135f640bbc91daed1362efc4397355a"
       },
       {
         "path": "native/directory.c",

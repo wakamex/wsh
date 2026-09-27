@@ -8,6 +8,8 @@
 static char *wsh_root;
 static int wsh_integration;
 static int wsh_default_incremental_history;
+extern void wsh_pane_history_prepare(void);
+extern void wsh_pane_history_start(void);
 
 static void
 wsh_prepend_path(char *name, char *directory, char *compiled, char *site)
@@ -140,6 +142,7 @@ wsh_setup(void)
     zsfree(file);
     wsh_integration = 1;
     wsh_history_defaults();
+    wsh_pane_history_prepare();
     setsparam("WSH_BUNDLE_ROOT", ztrdup(wsh_root));
     wsh_source("native-before.zsh");
     return;

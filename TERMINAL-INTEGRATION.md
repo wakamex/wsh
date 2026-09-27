@@ -1,6 +1,6 @@
 # wsh terminal integration
 
-The bundled Zsh now owns standard OSC 7 working-directory reporting and OSC 133 prompt and command zones. Wakterm can omit its duplicate reporters when it launches Wsh while retaining its separate OSC 1337 metadata. Stable pane identity, bounded pane-local history, terminal diagnosis, and allowlisted metadata remain separate experiments.
+The bundled Zsh now owns standard OSC 7 working-directory reporting and OSC 133 prompt and command zones. Wakterm can omit its duplicate reporters when it launches Wsh while retaining its separate OSC 1337 metadata. Pane history uses the terminal-provided logical token and merges into shared history on exit. Terminal diagnosis and allowlisted metadata remain separate experiments.
 
 The accepted boundary is small: Zsh emits established terminal protocols from the native command and ZLE paths, Wsh carries two measured corrections and brackets its one synthetic first job, and the terminal consumes those sequences without understanding shell source or job-control mechanics.
 
@@ -60,75 +60,31 @@ The smallest accepted source patch writes the generated prompt identifier into i
 
 Wsh sets `WSH_NATIVE_TERMINAL_INTEGRATION=1` before startup. Wakterm uses it to skip only its OSC 7 and OSC 133 paths while retaining OSC 1337 metadata. The accepted coexistence path matched native-only correctness counts and executed no prompt-time Wakterm process. In 40 retained interleaved runs after 5 warmups, 100 no-op prompt cycles took 60.500 ms at p90 under coexistence and 60.552 ms under native-only, passing the fixed maximum regression of 0.5 ms. Leaving both reporters active took 499.381 ms at p90. The [retained report](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-terminal-integration-2026-09-04/report.md) contains raw transcripts, timings, process traces, exact identities, and reproduction commands.
 
-## A pane token is enough for pane-local history
+## Pane history merges on exit
 
-At pane creation, a terminal can set:
+Wakterm supplies `WAKTERM_PANE_TOKEN`, a lowercase UUID for the logical pane. It remains stable across shell replacement and mux restore; new panes receive new tokens. Wsh uses this token by default in the outermost interactive shell. Without a valid token, ordinary shared-file history remains active. Numeric pane IDs are not used as durable identity.
 
-```sh
-WSH_PANE_TOKEN=550e8400-e29b-41d4-a716-446655440000
-WSH_HISTORY_SCOPE=pane
-```
+A new shell first loads the configured shared `HISTFILE`, then appends that pane's retained history to its in-memory list. Up and history search therefore encounter the pane's recent commands first, with shared history available behind them. Already-open panes do not import new commands from other panes. On exit, the current shell's commands merge into both its pane file and the original shared history. A later shell in another pane can recall those commands through shared history.
 
-`WSH_PANE_TOKEN` is an opaque, globally unique token for the lifetime of the logical pane. A UUID works. A terminal may instead combine a stable terminal-server instance identifier with its internal pane identifier. The value is identity, not a filesystem path, and `wsh` hashes it before selecting storage.
+Storage is `${XDG_STATE_HOME:-$HOME/.local/state}/wsh/history/panes/<uuid>.zsh`, with a `.pending` journal and `.owner` lock beside it. Only canonical lowercase UUID filenames are accepted. These are Wsh-owned files; the generic Wakterm Bash/Zsh adapter uses its own directory. `HISTSIZE` bounds active memory and `SAVEHIST` bounds saved entries per file. Zsh's parser, history contexts, file locks and retention rules handle file merging. No database, daemon or keypress-time disk lookup is involved.
 
-An explicit token is preferable to terminal-specific detection. Wakterm currently exports a numeric `WAKTERM_PANE`, but restored panes receive new numeric IDs, so it can isolate one live incarnation but cannot reconnect restored history. During migration, `wsh` can derive a session-only namespaced token from identifiers such as `WAKTERM_PANE`, `WEZTERM_PANE`, `TMUX_PANE`, or `KITTY_WINDOW_ID`. These identifiers are not assumed to be globally unique or durable on their own. If terminals or multiplexers are nested, the innermost integration that creates the user's logical pane wins.
+Commands append to the pending journal while the shell runs. Normal exit merges the journal; after SIGKILL or `exec`, the next shell with the same token recovers it. Failed merges retain the journal for retry. Interruption between the two destination writes can replay entries, so this is recovery with possible duplicates rather than exactly-once delivery. Unused pane files are not automatically garbage-collected.
 
-Without a token, `wsh` can generate a session token. That preserves isolation for the current shell but cannot reconnect a replacement shell to the same pane after an `exec`, shell restart, or terminal-assisted restore.
+Wsh keeps the configured `HISTFILE` unchanged and redirects only automatic saves from the owning history context. Nested interactive shells retain the configured shared path, including exported custom paths. A process lock prevents two live owners from using the same token. `WAKTERM_PANE_HISTORY_OWNER` contains the owner's PID and is exported for the generic adapter; `WSH_NATIVE_PANE_HISTORY=1` is local to the Wsh process and makes Wakterm's adapter step aside. `exec` preserves the PID and can recover ownership. The token is a storage identifier, never authority over other processes.
 
-## Pane history uses bounded memory and durable files
+## History opt-outs and private contexts
 
-For pane scope, `wsh` selects a file such as:
+Set `WAKTERM_SHELL_SKIP_PANE_HISTORY=1` to keep ordinary shared history. An empty or unset `HISTFILE`, `SAVEHIST=0`, noninteractive execution, `-f`, or an already-pushed history context prevents pane activation. Unusable private storage also leaves ordinary history available. An invalid or relative `XDG_STATE_HOME` uses the standard home-directory fallback. Existing shared-history configuration is preserved when pane mode is inactive.
 
-```text
-~/.local/state/wsh/history/panes/<token-hash>.zsh
-```
+Pane mode disables live `SHARE_HISTORY`. It selects incremental saving, preserving `INC_APPEND_HISTORY_TIME` when configured. This policy is deliberately stronger than an existing exit-only or live-sharing preference; use the pane opt-out to retain those preferences. Changes to `HISTFILE`, disabled saving, a pushed history context, or re-enabled live sharing stop native journal routing for that context.
 
-The initial design has three tiers:
+A memory-only `fc -p` context does not write to the pane journal. `fc -P` returns to the original history context. This supports Zsh's existing private-history mechanism; it does not introduce a new privacy command or disable third-party history collectors. Terminal scrollback, command output and application-managed files remain outside shell-history ownership.
 
-```text
-bounded Zsh history list for the active pane
-    |
-    v
-bounded per-pane Zsh history file
-    |
-    v
-optional Atuin or derived SQLite index for richer search
-```
+## Pane restoration qualification
 
-The active Zsh process keeps only the pane's recent history in memory. `HISTSIZE` bounds this hot list and supplies immediate Up, Down, and ordinary incremental search. A shell does not load the files for other panes. The default bound should be selected with memory and recall measurements, remain configurable, and avoid treating a user's lifetime history as an editor working set.
+`tests/pane-history.py` drives real PTY shells through separate tokens, merge-on-exit, shared-then-pane recall, SIGKILL recovery, `exec`, nested shells, duplicate owners, retention, failed merges and opt-outs. Set `WSH_TEST_WAKTERM` to the actual `wakterm.sh` to test that only the native owner runs. The shared installed suite includes the self-contained cases.
 
-Zsh's native [`fc -p`](https://zsh.sourceforge.io/Doc/Release/Shell-Builtin-Commands.html) creates a new history context and `fc -P` restores the previous one. `SAVEHIST` bounds the corresponding pane file. The context can use `EXTENDED_HISTORY` and `INC_APPEND_HISTORY_TIME` so completed commands are appended with timing information during normal operation. Zsh may compact or rewrite the file when enforcing retention, so the contract is append-oriented rather than an indefinitely growing journal. It should not use `SHARE_HISTORY`, because immediate cross-pane import would defeat pane-local Up and Down recall. The exact option and locking combination will be verified against the bundled Zsh snapshot.
-
-The per-pane file is the durable authority for initial pane recall. Restarting or replacing the shell with the same token loads that pane's bounded history. This path requires no database, daemon, IPC request, or query on each key press.
-
-A database is optional and never sits on the Up-arrow path. Atuin can own full-text search, synchronization, and structured metadata. A later derived SQLite index is justified only if scanning retained pane files makes global search measurably slow or another provider needs the same index. An index can record pane, directory, project, host, exit status, and duration, but it is rebuilt from or reconciled with lifecycle records rather than becoming a second uncoordinated writer to the pane file.
-
-The user-facing behavior is:
-
-- Up and Down traverse commands entered in the current pane.
-- Ordinary incremental search uses the current pane's bounded in-memory list.
-- Explicit pane search can query the current pane's retained file.
-- Global search can scan retained pane files or delegate to an Atuin adapter.
-- Project, directory, status, and host filters require an Atuin adapter or another structured index because native Zsh history does not record all of that context.
-- Restarting or replacing the shell in the same pane reuses the token and history.
-
-This separates recall scope from search scope. Users can keep coherent pane-local editing without losing access to commands from other panes.
-
-The recall scopes are `shared`, `session`, and `pane`. `shared` retains conventional global-file behavior. `session` isolates one shell lifetime. `pane` follows the terminal token across shells in the logical pane.
-
-Private mode is a persistence policy rather than a fourth identity scope. Entering it pushes a fresh bounded Zsh history context that loads no durable entries, writes no history file, invokes no Atuin or indexing adapter, and is discarded when private mode ends. Commands remain available through Up and Down only while that private context is active. Default profiles and traces record timing and event type but not command text, and terminal metadata never receives the command line.
-
-Private mode promises absence from `wsh`-owned durable history and default diagnostics, not forensic erasure from Zsh process memory, terminal scrollback, command output, application logs, operating-system audit facilities, or independently installed integrations. Its test enters distinctive commands, exits normally and through signals, crashes the shell, searches every configured `wsh` history and index sink, inspects trace output, and verifies that returning to the original context does not merge private entries.
-
-Pane files require retention rather than precise close notification. `wsh` can update a last-used timestamp, enforce per-file and total storage bounds, remove expired empty or old files under a documented policy, and provide an explicit cleanup command. A terminal may send a close hint through later local IPC, but correctness must not depend on receiving one after a crash.
-
-## Pane restoration must demonstrate user-visible isolation
-
-The Wakterm test creates two panes with distinct sentinel commands, records their transient numeric IDs and logical tokens, saves the layout, and restores it. The baseline documents that restored numeric IDs differ and therefore select different history files. The intervention persists an opaque logical token with each pane and exports it as `WSH_PANE_TOKEN`.
-
-The test passes when Up and Down in each restored pane recall only that pane's bounded sentinel history, a newly created pane does not inherit either history, memory and file bounds hold, and closing or crashing Wakterm does not make correctness depend on a close event. The token must not affect agent identity, provider identity, routing, admission, return correlation, or authorization.
-
-The cheapest counterfactual is a roughly 10-line Zsh integration that applies `fc -p` directly from Wakterm's persisted token. Serialization and restoration assertions belong beside Wakterm's session-persistence tests, with an isolated mux restart case in `wakterm/tests`. Wakterm needs the stable token regardless. A `wsh` history feature is accepted only if bounded context selection, pruning, or lifecycle integration proves reusable across terminals beyond that small Wakterm-local script.
+Wakterm owns persistence and restoration of the logical token. Its token and shell-adapter commits still require terminal-side deployment and an end-to-end mux restart check with the matching Wsh build. The shell test recreates the same token; it does not itself restart Wakterm. Shell history remains separate from terminal scrollback restoration.
 
 ## Native command zones have one owner
 
@@ -216,7 +172,7 @@ The same local IPC could later support clone tokens, pane-close hints, metadata 
 |---|---|---|
 | Native lifecycle | Accepted: Wakterm skips its OSC 7 and OSC 133 reporters for Wsh and consumes the native sequences | Retain valid parser output, correct directory restoration, zero duplicate markers, zero prompt-time Wakterm processes, and the prompt-cycle latency gate |
 | Foreground jobs | Accepted owner-local fix: keep Wakterm's cached native-frontend identity while its fixture passes | Managed identity clears after exit or replacement, survives stop and continue, and cannot transfer to a new frontend |
-| Pane restore | Persist and export a globally unique `WSH_PANE_TOKEN` | Each restored pane recovers only its bounded command recall |
+| Pane restore | Persist and export `WAKTERM_PANE_TOKEN` | A restored pane recalls its own recent commands first, retains shared recall and recovers pending commands; qualify the deployed mux restart path |
 | Private history | Push a fresh memory-only history context and disable durable adapters | Sentinel commands remain available only during the private context and never enter `wsh` files, indexes, metadata, or default traces |
 | Metadata | Consume the versioned allowlist and explicit clears | Project-aware UI works without a full command line or arbitrary variables |
 | Terminal doctor | Capture one isolated lifecycle and compare only reproduced compatibility rules | Observed failures name their owner, inferred quirks state their confidence, and each recommendation disables one component reversibly |

@@ -140,13 +140,14 @@
  
      createoptiontable();
      /* sets emulation, LOGINSHELL, PRIVILEGED, ZLE, INTERACTIVE,
-@@ -1948,8 +1991,10 @@
+@@ -1948,8 +1991,11 @@
      init_bltinmods();
      init_builtins();
      run_init_scripts();
 +    wsh_doctor_finish();
      setupshin(runscript);
      init_misc(cmd, zsh_name);
++    wsh_pane_history_start();
 +    wsh_foreground_run();
  
      for (;;) {

@@ -36,9 +36,11 @@ Wsh preserves Zsh command-line parsing: `--` ends option parsing, ordinary posit
 
 ## History
 
-Interactive Wsh sessions save history in `~/.zsh_history` by default, with 10,000-entry limits for saved and in-memory history. Commands are appended as they are entered. Concurrent sessions save to the same file but do not automatically import each other's new commands into their current history navigation; a new session reads the saved history.
+Interactive Wsh sessions save history in `~/.zsh_history` by default, with 10,000-entry limits for saved and in-memory history. Without pane history, commands are appended as they are entered. Concurrent sessions save to the same file but do not automatically import each other's new commands into their current history navigation; a new session reads the saved history.
 
-Existing environment settings and system/user startup configuration can override these defaults. Set `HISTFILE`, `HISTSIZE` and `SAVEHIST` in `.zshrc` to choose another path or limits. `SAVEHIST=0`, an empty `HISTFILE`, or `unset HISTFILE` disables saving. To save only on normal exit, use `unsetopt INC_APPEND_HISTORY` and `setopt APPEND_HISTORY`. Explicit `SHARE_HISTORY` or `INC_APPEND_HISTORY_TIME` settings take precedence over Wsh's incremental-saving default. Oh My Zsh's sharing setting remains effective.
+Existing environment settings and system/user startup configuration can override these defaults. Set `HISTFILE`, `HISTSIZE` and `SAVEHIST` in `.zshrc` to choose another path or limits. `SAVEHIST=0`, an empty `HISTFILE`, or `unset HISTFILE` disables saving. To save only on normal exit, use `unsetopt INC_APPEND_HISTORY` and `setopt APPEND_HISTORY`. Explicit `SHARE_HISTORY` or `INC_APPEND_HISTORY_TIME` settings take precedence over Wsh's incremental-saving default. Oh My Zsh's sharing setting remains effective outside pane mode.
+
+With a valid `WAKTERM_PANE_TOKEN`, the outermost shell recalls that pane's commands first and merges new commands into shared history on exit. Pane mode disables live sharing and enables incremental saving to its own pending file. Interrupted sessions recover on the next same-pane start. Set `WAKTERM_SHELL_SKIP_PANE_HISTORY=1` to keep ordinary shared-file behavior. See [pane history](TERMINAL-INTEGRATION.md#pane-history-merges-on-exit) for storage, recovery and opt-outs.
 
 These defaults apply to interactive Wsh with startup files enabled. They do not change regular Zsh, noninteractive scripts, or `wsh -f`. Wsh does not create or edit `.zshrc`.
 

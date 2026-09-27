@@ -19,7 +19,7 @@ History substring search, autosuggestions, and syntax highlighting come from rep
 | Directory jumping | None | Loads directory jumping when the selected command is absent, upgrades exact recognized upstream runtime functions, and preserves modified implementations. Native builds generate a precompiled adapter from pinned Zsh-z with C data/query ownership; legacy builds retain the full plugin. Both install the completion source under its widget function name | Product default, build transformation, and compatibility policy |
 | Syntax highlighting | None | Defers clean loading until the first `precmd`, activates missing redraw hooks around an exact inactive copy, upgrades recognized upstream main parsers to C, and preserves modified main implementations and optional custom highlighters as described below | Wsh startup-integration fix |
 
-## The post-5.9 Zsh revision has three source patches and one test correction
+## Pinned Zsh source patches and test correction
 
 Pinned source: `zsh-users/zsh` commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`, tree `2c07cbc91c766336de8029e0da8e34723bbe09bf`.
 
@@ -31,7 +31,9 @@ Zsh's compiled-function writer rounded each program to a whole word and wrote th
 
 Five upstream tests added after 5.9 attempted to suppress interactive prompts with command-prefix `PS1=` assignments, but both stable 5.9.2 and the pinned revision emit prompt bytes for those invocations. The digest-pinned correction changes only the affected `Test/` expectations, excludes no tests, and does not enter compiled or installed source. The source-patched revision passed 75 scripts with 0 failures and 2 existing skips. Wsh disables only the revision's ZLE terminal query by default when no explicit environment or `.zshenv` policy exists because unanswered queries otherwise add a 500 ms wait. The retained [edge-Zsh result](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/edge-zsh-2026-09-03/report.md) records the original source-selection experiment, while the terminal-integration report records the later source divergence and complete retest.
 
-The separate [native-entrypoint prototype](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-entrypoint-2026-09-08/report.md) adds startup hooks to `Src/init.c` and replaces redirecting startup files with three setup adapters. Its final host build passed all 75 upstream scripts with zero failures and two existing skips, plus the retained Wsh contract checks. This experimental patch is retained with its source and binary identities under `benchmarks/`; it is not in the production source lock or release patch queue. It tests whether native startup ownership can remove compatibility glue while keeping the Rust manager and runtime unchanged.
+The selected native entrypoint is in the production source lock. It owns startup defaults and optional Wsh integration around Zsh's normal startup-file loading. The [original prototype](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/native-entrypoint-2026-09-08/report.md) retains the earlier comparison; the current lock and installed suite describe the shipped implementation.
+
+The pane-history patch routes automatic history saves through Wsh's native owner and merges its pending journal after Zsh's exit save. Startup integration claims ownership before terminal adapters load and activates it after shared history loads. Zsh's history parser, contexts, locks and retention remain authoritative. This is Wsh product policy, not an upstream defect. `tests/pane-history.py` covers lifecycle, recovery and opt-outs; the shared installed suite runs it.
 
 ## History substring search adds binding and ownership policy
 
