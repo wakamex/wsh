@@ -47,7 +47,7 @@
     }
   ],
   "native": {
-    "version": "0.4.0",
+    "version": "0.4.1",
     "linked_modules": true,
     "sources": [
       {
