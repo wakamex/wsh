@@ -52,7 +52,7 @@ wsh_doctor_start(char *program)
     if (!child) {
         int nullfd;
         close(channel[0]);
-        if (setpgid(0, 0) || fcntl(channel[1], F_SETFD, FD_CLOEXEC) < 0)
+        if (setsid() < 0 || fcntl(channel[1], F_SETFD, FD_CLOEXEC) < 0)
             _exit(1);
         nullfd = open("/dev/null", O_RDWR);
         if (nullfd < 0)
@@ -70,9 +70,9 @@ wsh_doctor_start(char *program)
         return -1;
     }
     close(channel[1]);
-    /* Either side may establish the group first. Cleanup also kills the direct
-     * child in case it exited or changed group before this call. */
-    (void)setpgid(child, child);
+    /* The child creates its own session and process group. Keeping the caller's
+     * controlling terminal would let interactive Zsh stop on SIGTTIN. Do not
+     * make the child a group leader here: that would make setsid() fail. */
     memset(&action, 0, sizeof(action));
     action.sa_handler = wsh_doctor_interrupted;
     sigemptyset(&action.sa_mask);

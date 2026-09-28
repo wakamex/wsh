@@ -1,0 +1,20 @@
+{
+  "baseline_source": "c8ec27971b43f31ba311a3922bad756ba39c89c4",
+  "baseline_binary_sha256": "b9e6614c86832c3fb09a117527676d53428dafadc7e620cc9b72f66560b06066",
+  "candidate_source_base": "d98b48d557482380e34af19d4865bab3bc68a1ac",
+  "candidate_status": "unsigned development artifact; source changes retained in evidence",
+  "candidate_binary_sha256": "fc2f7422ef3b86b054eff41f5fa6b9307d66dfe71a78731f804aa479e90a642e",
+  "candidate_manifest_sha256": "5b18f7fdb81fc60afdf01463c6343dd122b6d99446a7a4c1623df9b19d8a7728",
+  "doctor_source_sha256": "5fd46308620a2a001444162e7f268caf0a0793a69ced8933d9d362cea26c77a9",
+  "test_source_sha256": "e80fe5a6374248522e23804a697dbc50015a622556e5c94f0bf323006cc4aff7",
+  "checks": {
+    "baseline_reproduces": true,
+    "workaround_real_pty": true,
+    "host_four_cases": true,
+    "floor_four_cases": true,
+    "user_config_real_pty": true,
+    "upstream_suites": true,
+    "full_installed_suite": true
+  },
+  "evidence_sha256": "902a26fceae17f4d2757376bc31c86899ed156b08129d43b632035761106b8c9"
+}
