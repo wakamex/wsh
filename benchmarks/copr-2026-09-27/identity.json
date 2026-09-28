@@ -1,0 +1,28 @@
+{
+  "source_revision": "3f15fec0de1786ca7fe0d0136af1759f5a86ce8f",
+  "copr_build": 11043156,
+  "chroot": "fedora-44-x86_64",
+  "package": "wsh-0.4.0-2.fc44.x86_64",
+  "package_sha256": "65ca0b8b2a9a582901c5db6c13c9b8e469d902dbba3b981ee8116dd1d49c705c",
+  "package_signing_key_fingerprint": "69A9B67B68983B6F064E499E6A3CFDF5066D9E4E",
+  "installation_manifest_sha256": "a70d54eab2fbcea8b555a8c310126703a08a470330aa8cfc9528a8f28e296439",
+  "wsh_sha256": "c20cdc7386a4c52d39e5c2d65b83d39be4f9ce005c4761df63fccf74ce12ab11",
+  "helper_sha256": "ab1903ebbfca687153da49a7080fb313becfb1ebd6f7e25808d96cd5b97d90e1",
+  "ci_run": 36359921824,
+  "checks": {
+    "source_integrity": true,
+    "exact_commit_ci": true,
+    "copr_full_check_suite": true,
+    "signed_dnf_upgrade": true,
+    "fresh_dnf_install": true,
+    "authenticated_chsh": true,
+    "pam_login_and_job_control": true,
+    "post_reboot_login": true,
+    "selinux_enforcing": true,
+    "dnf_remove_registration_cleanup": true,
+    "independent_recovery": true
+  },
+  "installed_history_checks": 30,
+  "installed_pane_history_checks": 35,
+  "evidence_sha256": "e91b09df1bbc98825baada04f09b7fcc37f75842667214c85016d931d536d516"
+}
