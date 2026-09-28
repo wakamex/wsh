@@ -1,0 +1,26 @@
+{
+  "source_revision": "9edbaf9f72cf8966d8f9bd5cfafbc15863bd0e77",
+  "copr_build": 11043274,
+  "ci_run": 36365892944,
+  "ci_attempt": 1,
+  "package": "wsh-0.4.2-1.fc44.x86_64",
+  "package_sha256": "0cfda81733fe2ad8878348af5ef58611f476970dac4fa41ff5d8b16e4e55f1f6",
+  "wsh_sha256": "588f261eda52b5a464292aa31a48b9f06b8f800e578af4abf2436839bd74d859",
+  "helper_sha256": "0749a0d4573be4042aca0e24084b5916d5b5ffae39c32f18620a9ad743314ccd",
+  "installation_manifest_sha256": "0173e100882e66de579b3daa32af175596dfd03116507f032c586885487835dd",
+  "package_signing_key_fingerprint": "69A9B67B68983B6F064E499E6A3CFDF5066D9E4E",
+  "checks": {
+    "exact_commit_ci": true,
+    "source_integrity": true,
+    "copr_full_check_suite": true,
+    "signed_dnf_upgrade": true,
+    "fresh_dnf_install": true,
+    "version_output": true,
+    "doctor_terminal_four_cases": true,
+    "authenticated_chsh": true,
+    "fresh_pam_login_and_job_control": true,
+    "selinux_enforcing": true,
+    "removal_and_recovery": true
+  },
+  "evidence_sha256": "0baefb0ba4601d3e1ab35eeef5fb7d974509f19b897b96802c9b52613d4dd03a"
+}

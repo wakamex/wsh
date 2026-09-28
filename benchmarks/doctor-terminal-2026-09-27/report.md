@@ -25,4 +25,4 @@ The counterfactual was to run the existing executable through `setsid --wait wsh
 
 Run `python3 tests/doctor-terminal.py /path/to/wsh OUTPUT`. The accepted build was an unsigned development artifact from the glibc 2.28 SDK. [Identity](identity.json) records source and binary hashes. [Evidence](evidence.tar.gz) retains the baseline failure transcript, workaround output, fixed source and regression, host/floor results, installed manifest, exact build command and full build/test logs. `SHA256SUMS` covers retained inputs.
 
-This change has not been published to COPR. The `setsid --wait wsh --doctor` command is the workaround for installed `0.4.1`.
+Published in [COPR 0.4.2](../copr-0.4.2/report.md). The `setsid --wait wsh --doctor` command remains a workaround for installed `0.4.1`.
