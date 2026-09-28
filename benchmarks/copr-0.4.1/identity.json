@@ -1,0 +1,27 @@
+{
+  "source_revision": "c8ec27971b43f31ba311a3922bad756ba39c89c4",
+  "copr_build": 11043222,
+  "ci_run": 36362891555,
+  "ci_attempt": 2,
+  "package": "wsh-0.4.1-1.fc44.x86_64",
+  "package_sha256": "86fd39e920a94831d0d0487f9789ada495436e5125cf0f4b7f852adf8d78fb44",
+  "wsh_sha256": "b9e6614c86832c3fb09a117527676d53428dafadc7e620cc9b72f66560b06066",
+  "helper_sha256": "7e8a0aaa6d3d1b0f6b1ccfd9b6f35388fc9b0dbfeb3d6952897008ceb1fc9cf9",
+  "installation_manifest_sha256": "2e173ed552d726c768afcaa84ab2aeeaf240805ffd694823feae39d5f22f2f26",
+  "package_signing_key_fingerprint": "69A9B67B68983B6F064E499E6A3CFDF5066D9E4E",
+  "checks": {
+    "exact_commit_ci": true,
+    "source_integrity": true,
+    "copr_full_check_suite": true,
+    "signed_dnf_upgrade": true,
+    "fresh_dnf_install": true,
+    "version_output": true,
+    "authenticated_chsh": true,
+    "fresh_pam_login_and_job_control": true,
+    "history_30": true,
+    "pane_history_35": true,
+    "selinux_enforcing": true,
+    "removal_and_recovery": true
+  },
+  "evidence_sha256": "920e53a89092300089bc660250f44538622980c09b2ffb71f4ecdde2483deda5"
+}
