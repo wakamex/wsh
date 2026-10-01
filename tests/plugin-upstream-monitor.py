@@ -28,6 +28,17 @@ with tempfile.TemporaryDirectory() as tmp:
     result = module.inspect(rows, entries, Path(tmp), fetch)
     assert result[0]['status'] == 'known'
     assert module.inspect(rows, [], Path(tmp), fetch)[0]['status'] == 'changed'
+    history = [r for r in module.catalog_module.upstreams() if r['component'] == 'history' and 'ohmyzsh' in r['repository']]
+    standalone = next(e for e in entries if e['component'] == 'history' and e['version'] == 'pinned')
+    history_data = (root/standalone['files'][0]['source']).read_bytes()
+    history_record = dict(record, size=len(history_data), content=base64.b64encode(history_data).decode(), sha=hashlib.sha1(b'blob '+str(len(history_data)).encode()+b'\0'+history_data).hexdigest(), path=history[0]['paths'][0])
+    def fetch_history(endpoint):
+        return {'sha':'a'*40} if '/commits/' in endpoint else history_record
+    result = module.inspect(history, entries, Path(tmp), fetch_history)
+    assert result[0]['status'] == 'known' and result[0]['catalog_entry'] == dict(repository=standalone['repository'], version='pinned'), result
+    assert module.inspect(history, [e for e in entries if e is not standalone], Path(tmp), fetch_history)[0]['status'] == 'changed'
+    autosuggestion_bytes_as_history = dict(record, path=history[0]['paths'][0])
+    assert module.inspect(history, entries, Path(tmp), lambda e: {'sha':'a'*40} if '/commits/' in e else autosuggestion_bytes_as_history)[0]['status'] == 'changed'
     def fail(endpoint):
         raise OSError('offline fixture')
     assert module.inspect(rows, entries, Path(tmp), fail)[0]['status'] == 'error'
@@ -35,4 +46,4 @@ with tempfile.TemporaryDirectory() as tmp:
     record['path'] = 'different-file'
     assert module.inspect(rows, entries, Path(tmp), fetch)[0]['status'] == 'error'
     record['path'] = original
-print('PASS: monitor known/changed/error, response type, encoding, size, Git blob and path validation')
+print('PASS: monitor known/changed/error, cross-repository recognition, response type, encoding, size, Git blob and path validation')

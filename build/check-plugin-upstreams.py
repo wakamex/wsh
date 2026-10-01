@@ -65,8 +65,11 @@ def inspect(upstreams, entries, output, fetch=fetch_json):
                 (output/digest).write_bytes(data)
                 result['files'].append(dict(path=path, sha256=digest))
             expected = [r['sha256'] for r in result['files']]
-            matches = [e for e in entries if e['component'] == row['component'] and e['repository'] == row['repository'] and [f['upstream_path'] for f in e['files']] == row['paths']]
-            result['status'] = 'known' if any([f['sha256'] for f in e['files']] == expected for e in matches) else 'changed'
+            # Startup recognizes a component's bytes from any cataloged repository, so the monitor does too.
+            match = next((e for e in entries if e['component'] == row['component'] and [f['sha256'] for f in e['files']] == expected), None)
+            result['status'] = 'changed' if match is None else 'known'
+            if match:
+                result['catalog_entry'] = dict(repository=match['repository'], version=match['version'])
         except Exception as error:
             result.update(status='error', error=str(error))
         results.append(result)
