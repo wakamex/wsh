@@ -52,7 +52,7 @@ class Shell:
         os.write(self.fd, command.encode() + b'\n')
         self.ready()
 
-    def close(self, kill=False):
+    def close(self, kill=False, timeout=10):
         if self.pid is None:
             return
         try:
@@ -60,7 +60,7 @@ class Shell:
                 os.killpg(self.pid, signal.SIGKILL)
             else:
                 os.write(self.fd, b'exit\n')
-            deadline = time.monotonic() + 10
+            deadline = time.monotonic() + timeout
             while True:
                 child, status = os.waitpid(self.pid, os.WNOHANG)
                 if child:
@@ -118,6 +118,44 @@ with tempfile.TemporaryDirectory(prefix='wsh-history-') as directory:
         first.close(kill=True)
         if second:
             second.close(kill=True)
+
+    # A shell killed while saving leaves its lock behind. Incremental saves do not wait for a lock,
+    # so the exit save is the one that breaks a lock older than 10 seconds.
+    for kind in ('symlink', 'file'):
+        home = root / ('stale-lock-' + kind)
+        home.mkdir()
+        lock = home / '.zsh_history.LOCK'
+        if kind == 'symlink':
+            lock.symlink_to('/pid-1/host-stale')
+        else:
+            lock.touch()
+        old = time.time() - 300
+        os.utime(lock, (old, old), follow_symlinks=False)
+        shell = Shell(home, 'stale-lock-' + kind)
+        try:
+            shell.run(': WSH_HISTORY_AFTER_STALE_LOCK')
+            shell.close()
+            saved = (home / '.zsh_history').read_text() if (home / '.zsh_history').exists() else ''
+            check('stale ' + kind + ' lock broken', 'WSH_HISTORY_AFTER_STALE_LOCK' in saved and not os.path.lexists(lock))
+        finally:
+            shell.close(kill=True)
+
+    # A lock still inside its 10-second lifetime delays the exit save until it expires, but the
+    # randomized backoff must not sleep far beyond that expiry.
+    home = root / 'fresh-lock'
+    home.mkdir()
+    lock = home / '.zsh_history.LOCK'
+    shell = Shell(home, 'fresh-lock')
+    try:
+        lock.symlink_to('/pid-1/host-fresh')
+        started = time.monotonic()
+        shell.run(': WSH_HISTORY_AFTER_FRESH_LOCK')
+        shell.close(timeout=30)
+        elapsed = time.monotonic() - started
+        saved = (home / '.zsh_history').read_text()
+        check('fresh lock waits until expiry', 9 <= elapsed <= 12.5 and 'WSH_HISTORY_AFTER_FRESH_LOCK' in saved and not os.path.lexists(lock))
+    finally:
+        shell.close(kill=True)
 
     cases = [
         ('zshenv-disable', '.zshenv', 'SAVEHIST=0\n', {}, None),

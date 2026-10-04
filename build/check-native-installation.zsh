@@ -11,6 +11,7 @@ python3 $root/build/native_manifest.py verify $bundle
 python3 $root/tests/native-build-status.py $bundle
 python3 $root/tests/native-manifest.py $bundle
 python3 $root/tests/history-persistence.py $bundle/bin/wsh $checks/history-persistence
+python3 $root/tests/mail-check.py $bundle/bin/wsh $checks/mail-check
 python3 $root/tests/pane-history.py $bundle/bin/wsh $checks/pane-history
 python3 $root/tests/doctor-terminal.py $bundle/bin/wsh $checks/doctor-terminal
 python3 $root/native/test-highlight-roundtrip.py $bundle/bin/wsh $checks/highlight-roundtrip

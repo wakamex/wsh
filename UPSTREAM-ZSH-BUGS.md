@@ -36,3 +36,47 @@ The retained [terminal integration report](https://github.com/wakamex/wsh/blob/c
 The pinned compiled-function writer rounded program data to whole words and wrote the rounded size from a heap allocation, including up to three uninitialized bytes. Independent builds could produce different compiled-function bytes and include stale heap data.
 
 The retained [reproducibility report](https://github.com/wakamex/wsh/blob/c7af8c63bcecb7d276ab6ae92896b0e5f90a66c3/benchmarks/zcompile-reproducibility-2026-09-04/report.md) records the reproducer and passing zero-padding/reproducibility checks. The local patch is [cad0d67c-zcompile-padding.patch](build/zsh-patches/cad0d67c-zcompile-padding.patch). This is a confirmed local fix; this document does not establish its submission or upstream acceptance status.
+
+## Monotonic clock compared with file times
+
+Affected source: `zsh-users/zsh` commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`, and upstream `master` at `7708d466df`. The defects were introduced by upstream commit [`6bb792dba8`](https://github.com/zsh-users/zsh/commit/6bb792dba8) ("53257: use monotonic clock where appropriate"). Zsh 5.9 is not affected.
+
+That commit moved several timers to `zmonotime()`, which counts seconds since boot. Three of them are compared with file times, which count seconds since 1970, so every file time looks decades newer than the timer. An audit of every file-time comparison and monotonic clock read in master's `Src/` found these three; the remaining monotonic uses measure intervals, and the remaining file-time comparisons use `time()` or other file times.
+
+### Stale history locks are never broken
+
+`lockhistfile()` writes `HISTFILE.LOCK` while saving history. When it finds an existing lock, `checklocktime()` deletes the lock once it is more than 10 seconds old, which recovers from a shell killed while saving. Its `now` comes from `zmonotime()` and its `then` from the lock's `st_mtime`, so every lock appears more than 10 seconds in the future, `checklocktime()` fails with `EEXIST`, and the stale lock is never removed. Every later history save fails with `locking failed for HISTFILE: file exists` until the user deletes the lock by hand. Killing all shells at once, for example by restarting a terminal multiplexer service, makes this likely.
+
+Minimal reproducer with `HISTFILE=~/.zsh_history` and `INC_APPEND_HISTORY` in a real interactive shell:
+
+```sh
+ln -s /pid-1/host-stale ~/.zsh_history.LOCK
+touch -h -d '5 minutes ago' ~/.zsh_history.LOCK
+zsh -i    # then run any command and exit
+```
+
+Incremental saves try the lock once without waiting, so the save at exit is the one that checks the lock's age. Expected: the exit save removes the lock and saves the command, as in Zsh 5.9. Observed: the lock remains, the command is not saved, and every shell reports `locking failed`.
+
+### Lock backoff ignores the lock's expiry
+
+While a lock is younger than 10 seconds, `checklocktime()` sleeps through `zsleep_random(max_us, then + 10)`, which shortens a doubling random backoff so that it does not sleep past the deadline. `zsleep_random()` reads `zmonotime()`, and its other caller passes a monotonic deadline, but `then + 10` is a file time. The cap therefore never applies, and the exit save can sleep several seconds past the lock's expiry before breaking it.
+
+### Unread mail is announced at every check
+
+`lastmailcheck` is set from `zmonotime()` and compared with the mailbox's `st_mtime` to detect new mail, and with `st_atime` for `MAIL_WARNING`. Both comparisons are always true, so a nonempty unread mailbox prints `You have new mail.` at every mail check, every 60 seconds by default, instead of once after delivery. With `MAIL_WARNING`, an old read mailbox prints `The mail in FILE has been read.` at every check.
+
+Minimal reproducer:
+
+```sh
+print 'From sender\n\nbody' > ~/box
+touch -m -d '1 hour ago' ~/box; touch -a -d '61 minutes ago' ~/box
+MAIL=~/box MAILCHECK=1 zsh -f -i    # press Enter a few times, two seconds apart
+```
+
+Expected: no notice, as in Zsh 5.9, because the mail arrived before the shell started. Observed: `You have new mail.` after every check.
+
+### Fix and verification
+
+The local patch [cad0d67c-file-time-clock.patch](build/zsh-patches/cad0d67c-file-time-clock.patch) compares the lock age and mail times with `time(NULL)`, as Zsh 5.9 did, and converts the lock's expiry to a monotonic deadline before calling `zsleep_random()`. The mail check interval also uses wall-clock time again, so a clock change can make one check early or late.
+
+Real PTY login-session regressions cover each defect: the stale and fresh lock cases in [tests/history-persistence.py](tests/history-persistence.py) check symlink and regular-file locks and the exit wait, and [tests/mail-check.py](tests/mail-check.py) checks old unread mail, a new delivery announced exactly once, and old read mail with `MAIL_WARNING`. Upstream submission should explain the shared cause and add history and mail tests with aged files. No submission has been made.

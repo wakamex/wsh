@@ -1,0 +1,47 @@
+--- a/Src/hist.c
++++ b/Src/hist.c
+@@ -3147,7 +3147,8 @@
+ static int
+ checklocktime(char *lockfile, long *sleep_usp, time_t then)
+ {
+-    time_t now = zmonotime(NULL);
++    /* then is a file modification time, so compare it with wall-clock time. */
++    time_t now = time(NULL);
+ 
+     if (now + 10 < then) {
+ 	/* File is more than 10 seconds in the future? */
+@@ -3165,7 +3166,8 @@
+ 	 * Randomise to minimise clashes with shells exiting at the same
+ 	 * time.
+ 	 */
+-	(void)zsleep_random(*sleep_usp, then + 10);
++	/* zsleep_random() takes a monotonic deadline. */
++	(void)zsleep_random(*sleep_usp, zmonotime(NULL) + (then + 10 - now));
+ 	*sleep_usp <<= 1;
+     } else
+ 	unlink(lockfile);
+--- a/Src/init.c
++++ b/Src/init.c
+@@ -1326,7 +1326,7 @@
+ #endif
+ 
+     breaks = contflag = loops = ancestor_loops = 0;
+-    lastmailcheck = zmonotime(NULL);
++    lastmailcheck = time(NULL);
+     locallevel = sourcelevel = 0;
+     sfcontext = SFC_NONE;
+     trap_return = 0;
+--- a/Src/utils.c
++++ b/Src/utils.c
+@@ -1586,8 +1586,9 @@
+     if (errflag)
+ 	return;
+ 
+-    /* Check mail */
+-    currentmailcheck = zmonotime(NULL);
++    /* Check mail.  lastmailcheck is compared with mailbox times, so it uses
++     * wall-clock time. */
++    currentmailcheck = time(NULL);
+     if (mailcheck &&
+ 	(zlong) difftime(currentmailcheck, lastmailcheck) > mailcheck) {
+ 	char *mailfile;

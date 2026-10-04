@@ -3,7 +3,7 @@
   "id": "zsh-cad0d67c",
   "mode": "canonical-commit",
   "version": "5.9.999.3-test",
-  "output_name": "zsh-cad0d67c-wsh2",
+  "output_name": "zsh-cad0d67c-wsh3",
   "repository": "https://github.com/zsh-users/zsh",
   "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
   "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
@@ -26,6 +26,10 @@
     {
       "path": "build/zsh-patches/cad0d67c-highlight-none.patch",
       "sha256": "a92d1ddd2ad98a9ac1ffd51148a18aeeb6b95418397e5562e8c62a8043898c59"
+    },
+    {
+      "path": "build/zsh-patches/cad0d67c-file-time-clock.patch",
+      "sha256": "f9df523c5dd84060f947c91f583410656be8c0e69928212a1bb5157053a0ed09"
     }
   ],
   "test_patches": [

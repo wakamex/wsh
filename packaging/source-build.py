@@ -79,7 +79,7 @@ def main():
             shutil.copy2(bundle/'share/wsh/manifest.json', installed/'share/wsh/manifest.json')
             return
         subprocess.run([ROOT/'build/check-native-installation.zsh', bundle,
-                        OUT/'reference/zsh-cad0d67c-wsh2', OUT/'checks'], env=env, check=True)
+                        OUT/'reference/zsh-cad0d67c-wsh3', OUT/'checks'], env=env, check=True)
         print('PASS: source RPM final installed payload and complete native checks')
     else:
         raise SystemExit('expected verify, build, install, finalize or check')
