@@ -65,7 +65,7 @@ Large batches from new contributors can still go unanswered: a five-part crash-f
 
 ## Sending
 
-Mail goes out with [git send-email](https://git-scm.com/docs/git-send-email), packaged on Fedora as `git-email`, through `smtp.gmail.com` on port 587 with a Gmail app password. The app password is kept in a mode-600 Git credential store file used only for that SMTP host, and Git's `sendemail.confirm` stays at `always` so that each send is confirmed. An app password also grants IMAP access to the whole mailbox, so it is revoked from the Google account's app-password page when no longer needed.
+Mail goes out with [git send-email](https://git-scm.com/docs/git-send-email), packaged on Fedora as `git-email`, through `smtp.gmail.com` on port 587 with a Gmail app password. The app password is kept in a mode-600 Git credential store file used only for that SMTP host. Git's `sendemail.confirm` is `never`, so a send command transmits immediately; the approval below happens before the command runs. An app password also grants IMAP access to the whole mailbox, so it is revoked from the Google account's app-password page when no longer needed.
 
 Send each message only after the author explicitly approves that exact message:
 
