@@ -51,7 +51,11 @@ Check the result with `git am` on a clean `master` checkout: the commit must app
 
 Build `master` with the patch and run `make check`. Run it in a terminal or a pseudo-terminal. Since upstream commit `41ba309de`, interactive tests in five scripts print prompt bytes to stderr when the suite has no controlling terminal; the [bug record](UPSTREAM-ZSH-BUGS.md#interactive-tests-fail-without-a-controlling-terminal) describes this. Under a terminal the complete suite passes, so a report of failures without one would only distract from the patch.
 
-Before sending, a sealed review from the maintainers' perspective, given only the patch, the message, the affected upstream files, the commit that introduced the defect and the development guide, catches overstated claims and missing tests. [AOP](https://pypi.org/project/agent-orchestration-process/) runs such a review with `--profile sealed --no-web`. Verify each of its claims against a real build before acting on it.
+Verify every behavioral claim in the message against three builds: the latest release, unpatched `master` and patched `master`. Cover each path the defect reaches, not only the reported symptom; the history lock fix affected live locks as well as stale ones, which changed how the message described its impact. Find the releases that contain the commit introducing the defect with `git tag --contains COMMIT` and state them, since a regression in a release is more urgent than one only on `master`. Say what the new test does not cover.
+
+Before sending, a sealed review from the maintainers' perspective, given only the patch, the message, the affected upstream files, the commit that introduced the defect and the development guide, catches overstated claims and missing tests. [AOP](https://pypi.org/project/agent-orchestration-process/) runs such a review with `--profile sealed --no-web`. Review the exact message that will be sent, after every revision of its text, since a review of an earlier draft does not cover later wording. A sealed reviewer cannot build or run anything and may be wrong about the local setup, so verify each of its claims against a real build or the actual configuration before acting on it.
+
+Finally, apply the message with `git am` on a clean `master` checkout and run `git send-email --dry-run` to confirm the sender, recipient and subject.
 
 ## Several fixes
 
