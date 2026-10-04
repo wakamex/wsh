@@ -1,6 +1,6 @@
 # Confirmed Zsh bugs for potential upstreaming
 
-This document records local upstream candidates and their submission status. Record the affected source revision, minimal reproducer, expected and observed behavior, proposed fix and verification before considering submission.
+This document records local upstream candidates and their submission status. [UPSTREAM-ZSH-SUBMISSION.md](UPSTREAM-ZSH-SUBMISSION.md) describes how fixes are prepared and sent to zsh-workers. Record the affected source revision, minimal reproducer, expected and observed behavior, proposed fix and verification before considering submission.
 
 ## Submission order
 
