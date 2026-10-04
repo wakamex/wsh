@@ -2,6 +2,17 @@
 
 This document records local upstream candidates and their submission status. Record the affected source revision, minimal reproducer, expected and observed behavior, proposed fix and verification before considering submission.
 
+## Submission order
+
+Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, after the previous one receives a response. All six were confirmed unfixed on upstream `master` at `8cc5eade`.
+
+1. [Stale history locks](#stale-history-locks-are-never-broken), together with the [lock backoff deadline](#lock-backoff-ignores-the-locks-expiry): prepared against `master` with a `Test/W01history.ztst` case, not yet sent.
+2. [OSC 133 identifier offset](#osc-133-identifier-and-initial-osc-7-reporting), without the OSC 7 change, which follows from Wsh disabling the terminal query.
+3. [Compiled-function padding](#compiled-function-alignment-padding-contains-uninitialized-bytes).
+4. [Repeated mail notices](#unread-mail-is-announced-at-every-check), announced in the history lock message.
+5. [Neutral highlight metadata](#neutral-highlight-attributes-discard-ownership-metadata).
+6. [Prompt bytes in tests without a terminal](#interactive-tests-fail-without-a-controlling-terminal).
+
 ## Neutral highlight attributes discard ownership metadata
 
 Affected source: `zsh-users/zsh` commit `cad0d67c76e2be7371cf3526b79ea2581810d35a`. Confirmed using real ZLE on the native development installation before the local fix.
@@ -80,3 +91,13 @@ Expected: no notice, as in Zsh 5.9, because the mail arrived before the shell st
 The local patch [cad0d67c-file-time-clock.patch](build/zsh-patches/cad0d67c-file-time-clock.patch) compares the lock age and mail times with `time(NULL)`, as Zsh 5.9 did, and converts the lock's expiry to a monotonic deadline before calling `zsleep_random()`. The mail check interval also uses wall-clock time again, so a clock change can make one check early or late.
 
 Real PTY login-session regressions cover each defect: the stale and fresh lock cases in [tests/history-persistence.py](tests/history-persistence.py) check symlink and regular-file locks and the exit wait, and [tests/mail-check.py](tests/mail-check.py) checks old unread mail, a new delivery announced exactly once, and old read mail with `MAIL_WARNING`. Upstream submission should explain the shared cause and add history and mail tests with aged files. No submission has been made.
+
+## Interactive tests fail without a controlling terminal
+
+Affected source: upstream `master` at `8cc5eade`, since upstream commit [`41ba309de`](https://github.com/zsh-users/zsh/commit/41ba309de) ("54806: Null prompts in interactive tests to avoid unnecessary stderr"). The pinned revision has the same tests. Zsh 5.9 is not affected.
+
+That commit replaced explicit prompt suppression in interactive tests (`unsetopt PROMPT_SP`, empty `PROMPT`, `PS2`, `PS3`, `PS4`, `RPS1` and `RPS2`, and stderr redirection) with a `PS1=` prefix on the `zsh -fis` command. An empty `PS1` leaves `PROMPT_SP` enabled, so Zsh still writes its reverse-video `%` mark and padding before each prompt. With a controlling terminal those bytes go to `/dev/tty` and the tests pass. Without one, they go to stderr, and the affected tests in `A02alias`, `B06fc`, `D04parameter`, `K01nameref` and `W01history` fail their output comparison. Upstream has no CI, so the failure appears only where `make check` runs without a terminal, such as distribution package builders, CI and containers.
+
+Reproducer from a Zsh source tree: `setsid -w make check TESTNUM=A02 < /dev/null`. Expected: the script passes, as it does under a terminal. Observed: it fails with prompt bytes in its stderr.
+
+Wsh's [cad0d67c-prompt-fixture.patch](build/zsh-test-patches/cad0d67c-prompt-fixture.patch) corrects the affected expectations for its own builds and does not enter compiled source. An upstream fix should restore prompt suppression in the five scripts and be checked both with and without a terminal. No submission has been made.
