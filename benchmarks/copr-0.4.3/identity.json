@@ -1,0 +1,30 @@
+{
+  "source_revision": "b30c880550843ef4e07d3658e85227b88d553a37",
+  "copr_build": 11078840,
+  "ci_run": 37321122202,
+  "ci_attempt": 1,
+  "package": "wsh-0.4.3-1.fc44.x86_64",
+  "package_sha256": "43b627375ff3cc20b3eb82089b20d431f651a8cebb69eba53b1ecfa03fbaeddc",
+  "wsh_sha256": "d4a79f111b4f91358434ecb3090f0acd5b55135deff4b2450369466e8cd54a1c",
+  "helper_sha256": "ae0a62a76a020b473631e4b881de86bbc57ac5776032d1934bcb99020314d2e3",
+  "installation_manifest_sha256": "8158afec9035dca3c03efd0aaf985591453cbddd33a89f2b6db5944bec1cc225",
+  "srpm_sha256": "9595411ebd3408cacd56b876b2c64ab5cc14a1c7c581c3dec4f035acf4a3125d",
+  "package_signing_key_fingerprint": "69A9B67B68983B6F064E499E6A3CFDF5066D9E4E",
+  "checks": {
+    "exact_commit_ci": true,
+    "source_integrity": true,
+    "copr_full_check_suite": true,
+    "signed_dnf_upgrade": true,
+    "rpm_verify": true,
+    "history_persistence_installed": true,
+    "mail_check_installed": true,
+    "doctor_terminal_four_cases": true,
+    "fresh_dnf_install": true,
+    "version_output": true,
+    "authenticated_chsh": true,
+    "fresh_pam_login_and_job_control": true,
+    "selinux_enforcing": true,
+    "removal_and_recovery": true
+  },
+  "evidence_sha256": "176f36889abe4584108b64177681002b8eb2955dfd9b8657231ed01fd554561a"
+}

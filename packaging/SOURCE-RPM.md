@@ -36,7 +36,7 @@ The [Fedora review](FEDORA-REVIEW.md) records the policy checks and scoped rpmli
 
 ## COPR publication
 
-The `wakamex/wsh` project builds Fedora 44 x86-64 source RPMs with build networking disabled. COPR signs the resulting packages and hosts DNF metadata. The [repository qualification](../benchmarks/copr-0.4.2/report.md) records the exact source commit, build and package identities, signature checks and real installation/login results. This channel uses Fedora build dependencies and flags; the canonical GitHub artifact contract remains separate.
+The `wakamex/wsh` project builds Fedora 44 x86-64 source RPMs with build networking disabled. COPR signs the resulting packages and hosts DNF metadata. The [repository qualification](../benchmarks/copr-0.4.3/report.md) records the exact source commit, build and package identities, signature checks and real installation/login results. This channel uses Fedora build dependencies and flags; the canonical GitHub artifact contract remains separate.
 
 For every explicitly authorized COPR publication, bump the patch version in `VERSION`, refresh the native source lock and related version metadata, and reset the RPM release to `1`. Commit those changes together. Run the current-source and relevant installed checks, push the clean source commit to `main`, require `release-eligible / validate` to pass on that exact commit, and confirm remote `main` still matches. Generate a release-mode SRPM from that checkout with `packaging/build-source-rpm.py`. Use `--release 1`; subsequent updates advance the product version, for example `0.4.1-1.fc44` then `0.4.2-1.fc44`.
 
