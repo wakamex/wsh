@@ -6,7 +6,7 @@ This document records local upstream candidates and their submission status. [UP
 
 Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, after the previous one receives a response. All six were confirmed unfixed on upstream `master` at `8cc5eade`.
 
-1. [Stale history locks](#stale-history-locks-are-never-broken), together with the [lock backoff deadline](#lock-backoff-ignores-the-locks-expiry): prepared against `master` with a `Test/W01history.ztst` case, not yet sent.
+1. [Stale history locks](#stale-history-locks-are-never-broken), together with the [lock backoff deadline](#lock-backoff-ignores-the-locks-expiry): sent on 2026-10-04 as [zsh-workers 55194](https://zsh.org/workers/55194), with a `Test/W01history.ztst` case; awaiting review.
 2. [OSC 133 identifier offset](#osc-133-identifier-and-initial-osc-7-reporting), without the OSC 7 change, which follows from Wsh disabling the terminal query.
 3. [Compiled-function padding](#compiled-function-alignment-padding-contains-uninitialized-bytes).
 4. [Repeated mail notices](#unread-mail-is-announced-at-every-check), announced in the history lock message.
@@ -90,7 +90,7 @@ Expected: no notice, as in Zsh 5.9, because the mail arrived before the shell st
 
 The local patch [cad0d67c-file-time-clock.patch](build/zsh-patches/cad0d67c-file-time-clock.patch) compares the lock age and mail times with `time(NULL)`, as Zsh 5.9 did, and converts the lock's expiry to a monotonic deadline before calling `zsleep_random()`. The mail check interval also uses wall-clock time again, so a clock change can make one check early or late.
 
-Real PTY login-session regressions cover each defect: the stale and fresh lock cases in [tests/history-persistence.py](tests/history-persistence.py) check symlink and regular-file locks and the exit wait, and [tests/mail-check.py](tests/mail-check.py) checks old unread mail, a new delivery announced exactly once, and old read mail with `MAIL_WARNING`. Upstream submission should explain the shared cause and add history and mail tests with aged files. No submission has been made.
+Real PTY login-session regressions cover each defect: the stale and fresh lock cases in [tests/history-persistence.py](tests/history-persistence.py) check symlink and regular-file locks and the exit wait, and [tests/mail-check.py](tests/mail-check.py) checks old unread mail, a new delivery announced exactly once, and old read mail with `MAIL_WARNING`. The history lock and backoff fixes were sent as [zsh-workers 55194](https://zsh.org/workers/55194) with a `Test/W01history.ztst` regression for the age check. The mail fix follows separately, as that message announces.
 
 The backoff cap has no automated test. Assigning `RANDOM` seeds the `rand()` sequence that `zsleep_random()` uses, which makes the backoff repeatable. On glibc, `fc -R` with a fresh lock that is never released took 25.4 seconds in each of three runs with `RANDOM=7` and 16.5 seconds with `RANDOM=2` on a build with only the age fix, against 9.4 to 10.4 seconds with the cap for every seed. With `RANDOM=8`, one of three uncapped runs took 9.2 seconds, because lock ages are compared in whole seconds and the result depends on where the test starts within a second. A test bounding the wait at about 13 seconds would therefore never fail on correct code, but it would add about 10 seconds to `make check`, and it would detect the missing cap only for C libraries whose `rand()` sequence makes the chosen seed overshoot. The upstream message offers it as optional.
 
