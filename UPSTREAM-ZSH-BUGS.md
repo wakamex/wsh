@@ -92,6 +92,13 @@ The local patch [cad0d67c-file-time-clock.patch](build/zsh-patches/cad0d67c-file
 
 Real PTY login-session regressions cover each defect: the stale and fresh lock cases in [tests/history-persistence.py](tests/history-persistence.py) check symlink and regular-file locks and the exit wait, and [tests/mail-check.py](tests/mail-check.py) checks old unread mail, a new delivery announced exactly once, and old read mail with `MAIL_WARNING`. Upstream submission should explain the shared cause and add history and mail tests with aged files. No submission has been made.
 
+### Follow-up design ideas
+
+The fix restores consistent clocks at each affected comparison. Two upstream design changes would make this class of defect harder to reintroduce. They are proposals for the maintainers to judge, raised in their own threads after the fix is committed, following the [design-discussion conventions](UPSTREAM-ZSH-SUBMISSION.md#design-proposals).
+
+- Stale locks by owner. Each history lock already records its owner as `/pid-N/host-H`, but Zsh never reads it back. A lock whose owning process no longer exists on the same host could be broken at once, without waiting for it to age 10 seconds. A proposal must address owners on other hosts sharing the file over NFS and reused process IDs. This idea changes visible behavior, so it would be raised as a question.
+- A relative timeout for `zsleep_random()`. The function takes an absolute deadline on an unstated clock, which let 53257 leave a caller passing a wall-clock deadline. A remaining-time argument would make callers independent of the clock. The change is internal and also touches the `fcntl` locking path, so it would be offered only if a maintainer raises the design.
+
 ## Interactive tests fail without a controlling terminal
 
 Affected source: upstream `master` at `8cc5eade`, since upstream commit [`41ba309de`](https://github.com/zsh-users/zsh/commit/41ba309de) ("54806: Null prompts in interactive tests to avoid unnecessary stderr"). The pinned revision has the same tests. Zsh 5.9 is not affected.

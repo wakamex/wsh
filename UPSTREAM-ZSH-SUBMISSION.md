@@ -63,6 +63,14 @@ Patch series are common and are merged whole. Mikael Magnusson's six-part series
 
 Large batches from new contributors can still go unanswered: a five-part crash-fix series from a first-time poster (55170) had no replies after eleven days. Wsh's fixes are independent of each other, so each goes out as its own message, starting with the most damaging defect and following [the submission order](UPSTREAM-ZSH-BUGS.md#submission-order). A fix that a previous message announced waits until that thread receives a response.
 
+## Design proposals
+
+Keep a fix message about the fix. A redesign proposed in the same message invites a side discussion that can delay an otherwise uncontroversial patch.
+
+Raise design ideas in their own thread after the related fix is committed or reviewed. In 2026, such threads used question-shaped subjects ("should we use PCRE2_MATCH_INVALID_UTF ?", "Shouldn't readonly (-r) prevent type changes?"), `[RFC]` or `RFC PATCH:` prefixes, `PoC:` for an exploratory implementation, and topic tags such as `[Language Design]`. Lead with the consequence for users, then the proposal and the risks already considered, and offer to write the patch.
+
+When a side topic grows inside a patch thread, reply briefly and move it to a new thread, or rename the subject to `New topic (was: old subject)`, as six 2026 threads did, so the patch review stays focused.
+
 ## Sending
 
 Mail goes out with [git send-email](https://git-scm.com/docs/git-send-email), packaged on Fedora as `git-email`, through `smtp.gmail.com` on port 587 with a Gmail app password. The app password is kept in a mode-600 Git credential store file used only for that SMTP host. Git's `sendemail.confirm` is `never`, so a send command transmits immediately; the approval below happens before the command runs. An app password also grants IMAP access to the whole mailbox, so it is revoked from the Google account's app-password page when no longer needed.
