@@ -1,0 +1,22 @@
+--- a/Test/V08zpty.ztst
++++ b/Test/V08zpty.ztst
+@@ -26,12 +26,17 @@
+ 0:zpty with a process that does not set up the terminal: write via stdin
+ >a line of text
+ 
++  # Wait for each complete reply: a non-blocking read races the child on a
++  # loaded machine. The final non-blocking read still catches duplication.
++  local line
+   zpty loop 'while read; do echo hello; done'
+   zpty -w loop hi
+-  zpty -rt loop | tr -d $'\r'
++  zpty -r loop line $'*\n'
++  print -r -- ${${line//$'\r'}%$'\n'}
+   zpty -w loop hi
+   zpty -t loop
+-  zpty -rt loop | tr -d $'\r'
++  zpty -r loop line $'*\n'
++  print -r -- ${${line//$'\r'}%$'\n'}
+   zpty -rt loop
+   zpty -d loop
+ 0:zpty doesn't duplicate data

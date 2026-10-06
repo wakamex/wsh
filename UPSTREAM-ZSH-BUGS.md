@@ -13,6 +13,7 @@ Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, aft
 5. [Neutral highlight metadata](#neutral-highlight-attributes-discard-ownership-metadata).
 6. [Prompt bytes in tests without a terminal](#interactive-tests-fail-without-a-controlling-terminal).
 7. [Typed exit in terminal-query test output](#terminal-query-tests-can-capture-the-typed-exit).
+8. [Non-blocking reads in the zpty duplication test](#the-zpty-duplication-test-races-its-child).
 
 ## Neutral highlight attributes discard ownership metadata
 
@@ -119,3 +120,11 @@ Affected source: the pinned revision and upstream `master` at `8cc5eade`, in `Te
 The `termresp` helper starts an interactive Zsh in a pseudo-terminal, sends a canned terminal response, types `typeset -p -m .term.\*` and `exit`, and keeps the captured output after `grep -v '^ '`. That filter removes the typed commands only because ZLE normally redraws each one after a space and a carriage return. A Wsh build of the pinned source once captured `exit` without that leading space, so the test "wayst response to terminal queries (shorter colour sequences)" failed with an extra `exit` line before the expected `typeset` output. The same source passed the test in other builds that day, and 40 repeated runs under full CPU load did not reproduce it.
 
 Wsh's test-only [cad0d67c-termquery-display.patch](build/zsh-test-patches/cad0d67c-termquery-display.patch) also drops the exact typed command lines whether or not ZLE redraws them with the leading space. Replaying the failing output through the original filter keeps the `exit` line, and through the patched filter keeps only the result; the patched test passed 30 consecutive runs. The patch does not change compiled source. No submission has been made.
+
+## The zpty duplication test races its child
+
+Affected source: the pinned revision and upstream `master` at `8cc5eade`, in `Test/V08zpty.ztst`, since upstream commit [`4b4ebccaa`](https://github.com/zsh-users/zsh/commit/4b4ebccaa) ("54783: improve checkptycmd").
+
+The test "zpty doesn't duplicate data" writes `hi` to a child that answers `hello`, then reads each reply with `zpty -rt`, which returns at once with whatever has arrived. When the child answers late, a read returns nothing and the later reads shift, so the output differs from the expected two lines. A Wsh build failed this way while the host's load average was near 60. A standalone reproduction with the child delayed 0.2 or 1 second returned no lines at all with the original reads.
+
+Wsh's test-only [cad0d67c-zpty-read-wait.patch](build/zsh-test-patches/cad0d67c-zpty-read-wait.patch) waits for each complete reply with `zpty -r loop line $'*\n'` and keeps the final non-blocking read, which still fails if `zpty -t` duplicates pending output. The patched sequence produced the expected lines with the child delayed 0, 0.2 and 1 second, and the patched test passed 30 consecutive runs. No submission has been made.
