@@ -1,0 +1,14 @@
+--- a/Test/X06termquery.ztst
++++ b/Test/X06termquery.ztst
+@@ -16,7 +16,10 @@
+       zpty -n -w zsh "$1"
+       zpty -w zsh "typeset -p -m .term.\*"
+       zpty -w zsh 'exit'
+-      { zpty -r zsh } | tr -d '\015' | grep -v '^ '
++      # ZLE usually redraws the typed commands after a leading space, but not
++      # always; drop them whether or not it does.
++      { zpty -r zsh } | tr -d '\015' | grep -v '^ ' |
++        grep -v -x -F -e exit -e 'typeset -p -m .term.\*'
+       zpty -d
+     }
+   else

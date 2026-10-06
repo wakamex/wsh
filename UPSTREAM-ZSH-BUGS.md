@@ -12,6 +12,7 @@ Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, aft
 4. [Repeated mail notices](#unread-mail-is-announced-at-every-check), announced in the history lock message.
 5. [Neutral highlight metadata](#neutral-highlight-attributes-discard-ownership-metadata).
 6. [Prompt bytes in tests without a terminal](#interactive-tests-fail-without-a-controlling-terminal).
+7. [Typed exit in terminal-query test output](#terminal-query-tests-can-capture-the-typed-exit).
 
 ## Neutral highlight attributes discard ownership metadata
 
@@ -110,3 +111,11 @@ That commit replaced explicit prompt suppression in interactive tests (`unsetopt
 Reproducer from a Zsh source tree: `setsid -w make check TESTNUM=A02 < /dev/null`. Expected: the script passes, as it does under a terminal. Observed: it fails with prompt bytes in its stderr.
 
 Wsh's [cad0d67c-prompt-fixture.patch](build/zsh-test-patches/cad0d67c-prompt-fixture.patch) corrects the affected expectations for its own builds and does not enter compiled source. An upstream fix should restore prompt suppression in the five scripts and be checked both with and without a terminal. No submission has been made.
+
+## Terminal-query tests can capture the typed exit
+
+Affected source: the pinned revision and upstream `master` at `8cc5eade`, in `Test/X06termquery.ztst`.
+
+The `termresp` helper starts an interactive Zsh in a pseudo-terminal, sends a canned terminal response, types `typeset -p -m .term.\*` and `exit`, and keeps the captured output after `grep -v '^ '`. That filter removes the typed commands only because ZLE normally redraws each one after a space and a carriage return. A Wsh build of the pinned source once captured `exit` without that leading space, so the test "wayst response to terminal queries (shorter colour sequences)" failed with an extra `exit` line before the expected `typeset` output. The same source passed the test in other builds that day, and 40 repeated runs under full CPU load did not reproduce it.
+
+Wsh's test-only [cad0d67c-termquery-display.patch](build/zsh-test-patches/cad0d67c-termquery-display.patch) also drops the exact typed command lines whether or not ZLE redraws them with the leading space. Replaying the failing output through the original filter keeps the `exit` line, and through the patched filter keeps only the result; the patched test passed 30 consecutive runs. The patch does not change compiled source. No submission has been made.

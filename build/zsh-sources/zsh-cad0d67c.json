@@ -3,7 +3,7 @@
   "id": "zsh-cad0d67c",
   "mode": "canonical-commit",
   "version": "5.9.999.3-test",
-  "output_name": "zsh-cad0d67c-wsh3",
+  "output_name": "zsh-cad0d67c-wsh4",
   "repository": "https://github.com/zsh-users/zsh",
   "archive_name": "zsh-cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
   "archive_url": "https://github.com/zsh-users/zsh/archive/cad0d67c76e2be7371cf3526b79ea2581810d35a.tar.gz",
@@ -36,6 +36,10 @@
     {
       "path": "build/zsh-test-patches/cad0d67c-prompt-fixture.patch",
       "sha256": "e5f79c067b6cf470f2f9ee40d821eb1dc2c188efed00ab32d3a7e2d20483f4b7"
+    },
+    {
+      "path": "build/zsh-test-patches/cad0d67c-termquery-display.patch",
+      "sha256": "ef4a0366d318d4fb7f92b7c2ded4e3d9302e33691d7a15aae7c7192f05b21353"
     }
   ]
 }
