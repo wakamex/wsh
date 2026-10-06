@@ -32,6 +32,10 @@
       "sha256": "f9df523c5dd84060f947c91f583410656be8c0e69928212a1bb5157053a0ed09"
     },
     {
+      "path": "build/zsh-patches/cad0d67c-always-interrupt.patch",
+      "sha256": "165ffdf2549876c0a74b59914510913f243f5895451786f6edb1d5f07112b6d7"
+    },
+    {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
       "sha256": "bd2fc61e5cc6e129e7c811312d527b603be080f454f39f65c61bd44e11d95ce7"
     },

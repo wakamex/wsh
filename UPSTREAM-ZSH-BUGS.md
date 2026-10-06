@@ -14,6 +14,7 @@ Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, aft
 6. [Prompt bytes in tests without a terminal](#interactive-tests-fail-without-a-controlling-terminal).
 7. [Typed exit in terminal-query test output](#terminal-query-tests-can-capture-the-typed-exit).
 8. [Non-blocking reads in the zpty duplication test](#the-zpty-duplication-test-races-its-child).
+9. [Interrupts discarded in always blocks](#interrupts-during-an-always-block-are-discarded).
 
 ## Neutral highlight attributes discard ownership metadata
 
@@ -128,3 +129,15 @@ Affected source: the pinned revision and upstream `master` at `8cc5eade`, in `Te
 The test "zpty doesn't duplicate data" writes `hi` to a child that answers `hello`, then reads each reply with `zpty -rt`, which returns at once with whatever has arrived. When the child answers late, a read returns nothing and the later reads shift, so the output differs from the expected two lines. A Wsh build failed this way while the host's load average was near 60. A standalone reproduction with the child delayed 0.2 or 1 second returned no lines at all with the original reads.
 
 Wsh's test-only [cad0d67c-zpty-read-wait.patch](build/zsh-test-patches/cad0d67c-zpty-read-wait.patch) waits for each complete reply with `zpty -r loop line $'*\n'` and keeps the final non-blocking read, which still fails if `zpty -t` duplicates pending output. The patched sequence produced the expected lines with the child delayed 0, 0.2 and 1 second, and the patched test passed 30 consecutive runs. No submission has been made.
+
+## Interrupts during an always block are discarded
+
+Affected source: the pinned revision, upstream `master` at `8cc5eade`, and Zsh 5.9.
+
+The manual says of `TRY_BLOCK_INTERRUPT`: "Note that it is possible that an interrupt arrives during the execution of the `always` block; this interrupt is also propagated." `exectry()` in `Src/loop.c` saves an interrupt from the try block in `try_interrupt`, clears `errflag`, runs the `always` block and then restores the bit with `if (try_interrupt) errflag |= ERRFLAG_INT; else errflag &= ~ERRFLAG_INT;`. The `else` branch erases an interrupt that arrived while the `always` block ran.
+
+Reproducer, in an interactive shell: `zsh -fi -c '{ true } always { kill -INT $$ }; print survived'`. Expected: the interrupt ends the command list, as it does for `{ kill -INT $$; true } always { : }; print survived`. Observed on Zsh 5.9 and the pinned revision: `survived` is printed.
+
+Interactive users meet this through Ctrl-C: zsh-syntax-highlighting runs `always` blocks on every redraw, so a Ctrl-C that lands during a redraw was discarded, and the line editor kept waiting for the next key. A Wsh debug build recorded that sequence: an `always` block entered with no interrupt, the SIGINT handler setting `ERRFLAG_INT`, the `else` branch clearing it, and the editor waiting in `poll()` with `errflag` zero and the line unchanged.
+
+Wsh's [cad0d67c-always-interrupt.patch](build/zsh-patches/cad0d67c-always-interrupt.patch) removes the `else` branch. `errflag` was cleared before the `always` block, so an interrupt bit set afterwards arrived during it and now propagates; an interrupt from the try block is still dropped when the block sets `TRY_BLOCK_INTERRUPT=0`. [tests/interrupt-propagation.zsh](tests/interrupt-propagation.zsh) checks both cases, an interrupt in the try block and no interrupt; it fails on Zsh 5.9 and passes with the patch, and the upstream suite passes. No submission has been made.

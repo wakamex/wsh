@@ -1,0 +1,17 @@
+--- a/Src/loop.c
++++ b/Src/loop.c
+@@ -785,10 +785,12 @@
+ 	errflag |= ERRFLAG_ERROR;
+     else
+ 	errflag &= ~ERRFLAG_ERROR;
++    /*
++     * errflag was cleared before the always block, so an interrupt bit
++     * set now arrived while the block ran; it is propagated as well.
++     */
+     if (try_interrupt)
+ 	errflag |= ERRFLAG_INT;
+-    else
+-	errflag &= ~ERRFLAG_INT;
+     try_errflag = save_try_errflag;
+     try_interrupt = save_try_interrupt;
+     if (!retflag)
