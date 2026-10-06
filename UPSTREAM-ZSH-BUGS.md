@@ -16,6 +16,7 @@ Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, aft
 8. [Non-blocking reads in the zpty duplication test](#the-zpty-duplication-test-races-its-child).
 9. [Interrupts discarded in always blocks](#interrupts-during-an-always-block-are-discarded).
 10. [Line editor waiting despite a pending interrupt](#the-line-editor-waits-despite-a-pending-interrupt).
+11. [Interrupt break counts left behind by a finished loop](#an-interrupt-can-leave-a-break-count-after-every-loop-has-ended).
 
 ## Neutral highlight attributes discard ownership metadata
 
@@ -150,3 +151,15 @@ Affected source: the pinned revision and upstream `master` at `8cc5eade`.
 When the line editor watches file descriptors with `zle -F` or uses a key timeout, `raw_getbyte()` in `Src/Zle/zle_main.c` waits in `poll()`. It ends the wait for an interrupt only when `poll()` itself fails with `EINTR`. An interrupt recorded before the call, or delivered between the last check and the call, leaves the editor waiting for the next key with `ERRFLAG_INT` set. A Wsh build with a check before `poll()` still hung once with `errflag` equal to `ERRFLAG_INT` inside `poll()`, the remaining window between the check and the call.
 
 Wsh's [cad0d67c-zle-pending-interrupt.patch](build/zsh-patches/cad0d67c-zle-pending-interrupt.patch) blocks `SIGINT`, checks for a pending interrupt, and waits with `ppoll()`, which unblocks `SIGINT` atomically for the duration of the wait; `configure` detects `ppoll()`. Systems without it, the `select()` branch and the plain `read()` path check for a pending interrupt before waiting. The upstream suite passes. No submission has been made.
+
+## An interrupt can leave a break count after every loop has ended
+
+Affected source: the pinned revision, upstream `master` at `0eee9d1af`, and Zsh 5.9, which has the same loop code.
+
+On `SIGINT`, `zhandler()` in `Src/signals.c` sets `breaks = loops` so that every active loop ends. Each loop in `Src/loop.c` normally consumes one count as it ends, but some exits do not check `breaks`: for example, `execfor()` leaves through `break` when the word list is exhausted. An interrupt that arrives after an iteration's last check therefore leaves `breaks` one higher than the loops still running. Nothing at top level resets `breaks`, so `execlist()` then skips every command list, including `precmd` functions, widgets, `zle -F` handlers and the commands typed at the prompt, until the shell is restarted.
+
+Wsh met this through Ctrl-C at the prompt. zsh-syntax-highlighting runs `for` loops inside `always` blocks on every redraw, and in about 0.5% of Ctrl-C presses on a fully loaded machine the shell printed a new prompt, then ignored all input while calling an autosuggestion `zle -F` handler on a closed pipe in a busy loop, because the handler's body never ran to remove the watch. In the hung shell `breaks` was 1 and `loops` was 0. A debug build that recorded each interrupt and each loop exit leaving `breaks` greater than `loops` captured the sequence: the interrupt arrived inside a `for` loop with two loops active and set `breaks` to 2, the `for` loop ended with the interrupt flag set without consuming its count, and the enclosing `always` block and function carried the excess to top level.
+
+The window is a few instructions wide, so no deterministic shell reproducer exists; a widget running a million short `for` loops interrupted 300 times did not hit it on an idle machine.
+
+Wsh's [cad0d67c-loop-break-count.patch](build/zsh-patches/cad0d67c-loop-break-count.patch) clamps `breaks` to the remaining `loops` after each of the four loop exits in `Src/loop.c`, since a break count can never refer to more loops than are running. The upstream suite passes. No submission has been made.

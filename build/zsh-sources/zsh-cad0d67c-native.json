@@ -40,6 +40,10 @@
       "sha256": "165ffdf2549876c0a74b59914510913f243f5895451786f6edb1d5f07112b6d7"
     },
     {
+      "path": "build/zsh-patches/cad0d67c-loop-break-count.patch",
+      "sha256": "a9b3e04c899c97090e07ea9dd82657e6de1aa0571ea1a4bd3134459034d311b3"
+    },
+    {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
       "sha256": "bd2fc61e5cc6e129e7c811312d527b603be080f454f39f65c61bd44e11d95ce7"
     },

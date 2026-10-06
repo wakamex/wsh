@@ -1,0 +1,46 @@
+diff --git a/Src/loop.c b/Src/loop.c
+index 1eca30c..773d6f0 100644
+--- a/Src/loop.c
++++ b/Src/loop.c
+@@ -211,6 +211,14 @@ execfor(Estate state, int do_exec)
+     popheap();
+     cmdpop();
+     loops--;
++    /*
++     * An interrupt sets breaks to the number of active loops.  If it
++     * arrives after the last check of an iteration, the loop can end
++     * without consuming its count, and the excess would stop every
++     * later command list, even at top level.
++     */
++    if (breaks > loops)
++	breaks = loops;
+     simple_pline = old_simple_pline;
+     state->pc = end;
+     this_noerrexit = 1;
+@@ -339,6 +347,8 @@ execselect(Estate state, UNUSED(int do_exec))
+     popheap();
+     fclose(inp);
+     loops--;
++    if (breaks > loops)
++	breaks = loops;
+     simple_pline = old_simple_pline;
+     state->pc = end;
+     this_noerrexit = 1;
+@@ -494,6 +504,8 @@ execwhile(Estate state, UNUSED(int do_exec))
+     cmdpop();
+     popheap();
+     loops--;
++    if (breaks > loops)
++	breaks = loops;
+     state->pc = end;
+     this_noerrexit = 1;
+     return lastval;
+@@ -547,6 +559,8 @@ execrepeat(Estate state, UNUSED(int do_exec))
+     cmdpop();
+     popheap();
+     loops--;
++    if (breaks > loops)
++	breaks = loops;
+     simple_pline = old_simple_pline;
+     state->pc = end;
+     this_noerrexit = 1;
