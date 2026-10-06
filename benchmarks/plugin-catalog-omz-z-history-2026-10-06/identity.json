@@ -1,0 +1,14 @@
+{
+  "control_installation": "c667f8975198daa4ab203e511ea85a4b04ebec9e9f658c31d20c2db7165bf300",
+  "control_source": "a8dd32f570c5553f2da5d956f907e742c8640b2d",
+  "candidate_installation": "7cf9725d2a73f34c21fba977714247b593a0d12848630a3b970b8d581fe7b097",
+  "candidate_source": "55f95eaac368154005108e595079065da8b26420",
+  "upstream_repository": "https://github.com/ohmyzsh/ohmyzsh",
+  "upstream_path": "plugins/z/z.plugin.zsh",
+  "new_upstream_revisions": ["7e3231b", "2e7a247", "667fdbf", "048e166", "3f8ea81", "d50115a", "2d58417", "c24960c"],
+  "catalog_snapshots": 27,
+  "handoff_cases": 107,
+  "startup_gate_ms": 3,
+  "startup_paired_p95_ms": {"existing": 0.32, "minimal": 2.0},
+  "evidence_sha256": "73a222c0a6d5e459f45fb506d77f5533741c908ccc3f46fe8b535ed4957424bb"
+}

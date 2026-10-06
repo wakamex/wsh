@@ -1,0 +1,13 @@
+{
+  "source_revision": "55f95eaac368154005108e595079065da8b26420",
+  "reference_zsh": "zsh-cad0d67c-wsh4",
+  "installations": {
+    "89754bc0a4141669675b7dc77bdede250e3caf4d4f42459b887c94de9063d822": {"passed": 396, "runs": 400, "raw_output_retained": false},
+    "c16469348e5750a5a36fe6e4710875cf8abc8a2e10531ef6e6dec8a872745777": {"passed": 398, "runs": 400},
+    "1b79627eba8575a1c16028fd7bb79195174c8039b82b3f3f6d325ca6655a89fe": {"passed": 398, "runs": 400},
+    "8c95a1189fda43bb0d185a46d133133923fa1eb64993649b1e2c837bd22c1b5b": {"passed": 800, "runs": 800}
+  },
+  "published_installation": "7cf9725d2a73f34c21fba977714247b593a0d12848630a3b970b8d581fe7b097",
+  "load": "one CPUWeight=1 busy loop per CPU",
+  "evidence_sha256": "e0ddb46b76d5b9c1e4f3c810b70ac937f2f73c9b5ddf673038b6e40620290b81"
+}
