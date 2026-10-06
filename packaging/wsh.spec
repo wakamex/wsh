@@ -1,5 +1,5 @@
 # Version and release are fixed when preparing the source RPM.
-%{!?wsh_version:%global wsh_version 0.4.3}
+%{!?wsh_version:%global wsh_version 0.4.4}
 %{!?wsh_release:%global wsh_release 1}
 
 # Keep distro post-processing, then inventory the bytes it will package even
@@ -115,6 +115,9 @@ exit 0
 %{_mandir}/man1/wsh.1*
 
 %changelog
+* Tue Oct 06 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.4-1
+- Recognize the latest Oh My Zsh z plugin as an official copy.
+
 * Sun Oct 04 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.3-1
 - Recover history saving after a shell is killed while holding the history lock.
 
