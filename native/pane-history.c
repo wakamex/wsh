@@ -112,7 +112,8 @@ wsh_pane_merge_into(char *destination)
     ok = !errflag;
     pophiststack();
     histactive = saved_active;
-    errflag = saved_error;
+    /* Keep a user interrupt that arrived during the merge. */
+    errflag = saved_error | (errflag & ERRFLAG_INT);
     unlockhistfile(destination);
     return ok;
 }
@@ -180,7 +181,7 @@ wsh_pane_history_start(void)
     /* Refuse to add new work to a journal whose previous merge failed. */
     if (!wsh_pane_merge()) goto disabled;
     readhistfile(wsh_pane_file, 1, 0);
-    if (errflag) { errflag = saved_error; goto disabled; }
+    if (errflag) { errflag = saved_error | (errflag & ERRFLAG_INT); goto disabled; }
     opts[SHAREHISTORY] = 0;
     if (isset(INCAPPENDHISTORYTIME)) opts[INCAPPENDHISTORY] = 0;
     else opts[INCAPPENDHISTORY] = 1;

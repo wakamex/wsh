@@ -96,7 +96,7 @@
       },
       {
         "path": "native/pane-history.c",
-        "sha256": "82f9e1aa0aea44d884d87ed0bdadd7624135f640bbc91daed1362efc4397355a"
+        "sha256": "936987a7737b77b8114e4e741cd973cf4f2cad526bdac7a5c617173bafefa2c6"
       },
       {
         "path": "native/directory.c",
@@ -108,7 +108,7 @@
       },
       {
         "path": "native/highlight.c",
-        "sha256": "695db82ac9ab968b5d8a79b58724c75788a21e628d32a5156839948f158cef02"
+        "sha256": "2b60f464473ae65e8455f373921699347cef378e32f71c04d93650542a0c47e6"
       }
     ]
   }

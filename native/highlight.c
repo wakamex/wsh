@@ -213,7 +213,8 @@ static char *wsh_hl_expand(char *s) {
   noerrs = 1;
   filesub(&v, 0);
   noerrs = saved;
-  errflag = errors;
+  /* Keep a user interrupt that arrived during expansion. */
+  errflag = errors | (errflag & ERRFLAG_INT);
   untokenize(v);
   char *out = zhalloc(strlen(v) + 1), *q = out;
   int quote = 0;
