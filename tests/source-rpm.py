@@ -14,10 +14,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-srpm-') as directory:
     work = Path(directory)
     names = subprocess.check_output(['rpm','-qpl',srpm],text=True).splitlines()
     assert len(names) == 4 and all(Path(n).name == n for n in names), names
-    source = subprocess.Popen(['rpm2cpio', srpm], stdout=subprocess.PIPE)
-    subprocess.run(['cpio','-idm','--quiet'],stdin=source.stdout,cwd=work,check=True)
-    source.stdout.close()
-    assert source.wait() == 0
+    # cpio stops at its trailer, so a pipe would kill rpm2cpio while it writes the padding after it.
+    payload = subprocess.check_output(['rpm2cpio', srpm])
+    subprocess.run(['cpio','-idm','--quiet'],input=payload,cwd=work,check=True)
     spec = (work/'wsh.spec').read_text()
     assert '%build\n' in spec and 'source-build.py build' in spec
     assert '%check\n' in spec and 'source-build.py check' in spec
