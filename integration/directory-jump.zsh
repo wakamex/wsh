@@ -16,8 +16,13 @@ _wsh_directory_takeover() {
   _wsh_plugin_recognized directory $source || return 1
   # Query-local helpers are redefined on every upstream call; their source
   # metadata names the caller. Check the persistent public/lifecycle functions.
-  for function_name in _zshz_usage _zshz_realpath _zshz_precmd _zshz_chpwd _zshz_zle_completion_widget zsh-z_plugin_unload; do
+  for function_name in _zshz_usage _zshz_precmd _zshz_chpwd zsh-z_plugin_unload; do
     [[ ${functions_source[$function_name]:-} == $source ]] || return 1
+  done
+  # Versions before 2026-08 lack these helpers; when defined, they must come
+  # from the recognized file like the lifecycle functions above.
+  for function_name in _zshz_realpath _zshz_zle_completion_widget; do
+    (( ! ${+functions[$function_name]} )) || [[ ${functions_source[$function_name]:-} == $source ]] || return 1
   done
   source $reference/takeover.zsh || return 1
   WSH_DIRECTORY_JUMP_OWNER=wsh

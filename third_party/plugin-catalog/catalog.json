@@ -237,6 +237,118 @@
     },
     {
       "component": "directory",
+      "version": "omz-7e3231b",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "7e3231b846dec87fcf6537f6e45c9c1be9f718fe",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/2505040b6ea8bf135dbdd969d9389b3a42d39b01ab230f556fed39e4a5f641d8",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "2505040b6ea8bf135dbdd969d9389b3a42d39b01ab230f556fed39e4a5f641d8"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-2e7a247",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "2e7a247cab663fbc0aafdefa15bf10eb4dd64563",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/8be9f089d8bb596a2679f9127f37276a8c1aeba9b5047456923d49eb2af61156",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "8be9f089d8bb596a2679f9127f37276a8c1aeba9b5047456923d49eb2af61156"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-667fdbf",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "667fdbf7746acc90aa29b316ef711180e7917aa2",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/b4f39a17b43d7ab0a9f03ea535a4516644720a18b966d899605cb5da689c0397",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "b4f39a17b43d7ab0a9f03ea535a4516644720a18b966d899605cb5da689c0397"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-048e166",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "048e166c9ea6c70d383141d89054740ae8d59681",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/95ce15e589b4efc9d391a1ea5f2ad16dfafeb4e532b3f47c41636b45e2115699",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "95ce15e589b4efc9d391a1ea5f2ad16dfafeb4e532b3f47c41636b45e2115699"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-3f8ea81",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "3f8ea81b89cda583acea098c9b7353c295619d4d",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/5ebf2437fe35eed2a356281a4ba1826846cd126f04987b911887d8ac3451fd10",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "5ebf2437fe35eed2a356281a4ba1826846cd126f04987b911887d8ac3451fd10"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-d50115a",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "d50115afd60ea93369c1f3c32302b7482e7369d4",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/4c33c657d5396dad40f5041193ffde78e335521cc4d5bd1bea3112e4f58dd3f5",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "4c33c657d5396dad40f5041193ffde78e335521cc4d5bd1bea3112e4f58dd3f5"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-2d58417",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "2d5841740a7555fe10b4592673c4069713e66aba",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/304f445e60bc370b88a1719f0afb87a1aee36caf39eab685687b1d5aef7bf743",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "304f445e60bc370b88a1719f0afb87a1aee36caf39eab685687b1d5aef7bf743"
+        }
+      ]
+    },
+    {
+      "component": "directory",
+      "version": "omz-c24960c",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "c24960c32466523f6e765ba51e81739dd4ff9923",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/36e0fea8d85a69b2bffab088b7323e8484e4e11c919fd0807881f43c504c616a",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "36e0fea8d85a69b2bffab088b7323e8484e4e11c919fd0807881f43c504c616a"
+        }
+      ]
+    },
+    {
+      "component": "directory",
       "version": "omz-9112b53",
       "repository": "https://github.com/ohmyzsh/ohmyzsh",
       "revision": "9112b53fa8b5ab556c7c893aa8be8a247ac512a0",
