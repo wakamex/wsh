@@ -250,6 +250,20 @@
       ]
     },
     {
+      "component": "directory",
+      "version": "omz-d745fbf",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh",
+      "revision": "d745fbf3bd49a5038e089d7d343ca89db0cbaaff",
+      "handoff": "preserve-directory-lifecycle",
+      "files": [
+        {
+          "source": "third_party/plugin-catalog/snapshots/d42d6b1377423cf596ebc49405984ea7d81d5e9136d8892880f08a3d00ab7b17",
+          "upstream_path": "plugins/z/z.plugin.zsh",
+          "sha256": "d42d6b1377423cf596ebc49405984ea7d81d5e9136d8892880f08a3d00ab7b17"
+        }
+      ]
+    },
+    {
       "component": "git-prompt",
       "version": "omz-a7426f0",
       "repository": "https://github.com/ohmyzsh/ohmyzsh",
