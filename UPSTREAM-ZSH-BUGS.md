@@ -15,6 +15,7 @@ Each fix is sent to `zsh-workers@zsh.org` as its own message, one at a time, aft
 7. [Typed exit in terminal-query test output](#terminal-query-tests-can-capture-the-typed-exit).
 8. [Non-blocking reads in the zpty duplication test](#the-zpty-duplication-test-races-its-child).
 9. [Interrupts discarded in always blocks](#interrupts-during-an-always-block-are-discarded).
+10. [Line editor waiting despite a pending interrupt](#the-line-editor-waits-despite-a-pending-interrupt).
 
 ## Neutral highlight attributes discard ownership metadata
 
@@ -141,3 +142,11 @@ Reproducer, in an interactive shell: `zsh -fi -c '{ true } always { kill -INT $$
 Interactive users meet this through Ctrl-C: zsh-syntax-highlighting runs `always` blocks on every redraw, so a Ctrl-C that lands during a redraw was discarded, and the line editor kept waiting for the next key. A Wsh debug build recorded that sequence: an `always` block entered with no interrupt, the SIGINT handler setting `ERRFLAG_INT`, the `else` branch clearing it, and the editor waiting in `poll()` with `errflag` zero and the line unchanged.
 
 Wsh's [cad0d67c-always-interrupt.patch](build/zsh-patches/cad0d67c-always-interrupt.patch) removes the `else` branch. `errflag` was cleared before the `always` block, so an interrupt bit set afterwards arrived during it and now propagates; an interrupt from the try block is still dropped when the block sets `TRY_BLOCK_INTERRUPT=0`. [tests/interrupt-propagation.zsh](tests/interrupt-propagation.zsh) checks both cases, an interrupt in the try block and no interrupt; it fails on Zsh 5.9 and passes with the patch, and the upstream suite passes. No submission has been made.
+
+## The line editor waits despite a pending interrupt
+
+Affected source: the pinned revision and upstream `master` at `8cc5eade`.
+
+When the line editor watches file descriptors with `zle -F` or uses a key timeout, `raw_getbyte()` in `Src/Zle/zle_main.c` waits in `poll()`. It ends the wait for an interrupt only when `poll()` itself fails with `EINTR`. An interrupt recorded before the call, or delivered between the last check and the call, leaves the editor waiting for the next key with `ERRFLAG_INT` set. A Wsh build with a check before `poll()` still hung once with `errflag` equal to `ERRFLAG_INT` inside `poll()`, the remaining window between the check and the call.
+
+Wsh's [cad0d67c-zle-pending-interrupt.patch](build/zsh-patches/cad0d67c-zle-pending-interrupt.patch) blocks `SIGINT`, checks for a pending interrupt, and waits with `ppoll()`, which unblocks `SIGINT` atomically for the duration of the wait; `configure` detects `ppoll()`. Systems without it, the `select()` branch and the plain `read()` path check for a pending interrupt before waiting. The upstream suite passes. No submission has been made.

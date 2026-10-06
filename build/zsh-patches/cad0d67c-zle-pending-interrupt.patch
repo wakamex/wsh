@@ -1,0 +1,86 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -1259,7 +1259,7 @@
+ 
+ AC_CHECK_FUNCS(strftime strptime mktime timelocal \
+ 	       difftime gettimeofday clock_gettime \
+-	       select poll \
++	       select poll ppoll \
+ 	       readlink faccessx fchdir ftruncate \
+ 	       fstat lstat lchown fchown fchmod \
+ 	       fseeko ftello \
+--- a/Src/Zle/zle_main.c
++++ b/Src/Zle/zle_main.c
+@@ -585,9 +585,49 @@
+ 	    else
+ 		poll_timeout = -1;
+ 
++	    /*
++	     * poll() returns early only for a signal that arrives during
++	     * the call.  An interrupt recorded before the wait, such as one
++	     * delivered while a watched-fd handler ran, must end the read
++	     * now rather than at the next keystroke.
++	     */
++#  ifdef HAVE_PPOLL
++	    {
++		/*
++		 * Block SIGINT across the check and let ppoll() unblock it
++		 * atomically, so an interrupt cannot arrive between them.
++		 */
++		sigset_t waitmask;
++		struct timespec ts, *tsp = NULL;
++
++		winch_unblock();
++		waitmask = signal_block(signal_mask(SIGINT));
++		if (errflag & ERRFLAG_INT) {
++		    signal_setmask(waitmask);
++		    winch_block();
++		    selret = -1;
++		    errno = EINTR;
++		    break;
++		}
++		if (poll_timeout >= 0) {
++		    ts.tv_sec = poll_timeout / 1000;
++		    ts.tv_nsec = (poll_timeout % 1000) * 1000000L;
++		    tsp = &ts;
++		}
++		selret = ppoll(fds, errtry ? 1 : nfds, tsp, &waitmask);
++		signal_setmask(waitmask);
++		winch_block();
++	    }
++#  else
++	    if (errflag & ERRFLAG_INT) {
++		selret = -1;
++		errno = EINTR;
++		break;
++	    }
+ 	    winch_unblock();
+ 	    selret = poll(fds, errtry ? 1 : nfds, poll_timeout);
+ 	    winch_block();
++#  endif
+ # else
+ 	    int fdmax = SHTTY;
+ 	    struct timeval *tvptr;
+@@ -615,6 +655,11 @@
+ 	    else
+ 		tvptr = NULL;
+ 
++	    if (errflag & ERRFLAG_INT) {
++		selret = -1;
++		errno = EINTR;
++		break;
++	    }
+ 	    winch_unblock();
+ 	    selret = select(fdmax+1, (SELECT_ARG_2_T) & foofd,
+ 			    NULL, NULL, tvptr);
+@@ -847,6 +892,10 @@
+ #endif
+     }
+ 
++    if (errflag & ERRFLAG_INT) {
++	errno = EINTR;
++	return -1;
++    }
+     winch_unblock();
+     ret = read(SHTTY, cptr, 1);
+     winch_block();

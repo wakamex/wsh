@@ -32,6 +32,10 @@
       "sha256": "f9df523c5dd84060f947c91f583410656be8c0e69928212a1bb5157053a0ed09"
     },
     {
+      "path": "build/zsh-patches/cad0d67c-zle-pending-interrupt.patch",
+      "sha256": "03894d337bce7887b2f037d22714bd041e7063b8e6fe4ea28034b06bc382a29a"
+    },
+    {
       "path": "build/zsh-patches/cad0d67c-always-interrupt.patch",
       "sha256": "165ffdf2549876c0a74b59914510913f243f5895451786f6edb1d5f07112b6d7"
     }
