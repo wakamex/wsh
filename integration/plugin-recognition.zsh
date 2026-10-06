@@ -35,7 +35,12 @@ _wsh_plugin_recognized() {
   local component=$1 row reference handoff
   shift
   local -a references pairs
-  for row in "${(@f)_WSH_PLUGIN_REFERENCES[$component]}"; do
+  local -A candidate_stat=()
+  zmodload zsh/stat 2>/dev/null &&
+    zstat -H candidate_stat -- $1 2>/dev/null &&
+    [[ -n ${_WSH_PLUGIN_REFERENCES[$component:$candidate_stat[size]]-} ]] ||
+    { _wsh_plugin_git_recognized "$component" "$@"; return }
+  for row in "${(@f)_WSH_PLUGIN_REFERENCES[$component:$candidate_stat[size]]}"; do
     references=("${(@s:|:)row}")
     handoff=$references[1]
     shift references

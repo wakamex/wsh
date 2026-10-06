@@ -70,6 +70,8 @@ def upstreams():
 def install(destination):
     catalog = verify()
     destination.mkdir(parents=True, exist_ok=True)
+    # Rows are keyed by component and the byte size of the entry's first file,
+    # so startup compares bytes only against references of the same size.
     groups = {}
     for entry in catalog['entries']:
         refs = []
@@ -79,7 +81,8 @@ def install(destination):
             target.chmod(0o644)
             refs.append('plugin-catalog/' + target.name)
         row = '|'.join([entry['handoff'], *refs])
-        group = groups.setdefault(entry['component'], [])
+        key = entry['component'] + ':' + str((ROOT / entry['files'][0]['source']).stat().st_size)
+        group = groups.setdefault(key, [])
         if row not in group:
             group.append(row)
     lines = ['# Generated from verified upstream snapshots.', 'typeset -gA _WSH_PLUGIN_REFERENCES=(']
