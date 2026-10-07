@@ -116,7 +116,7 @@
       },
       {
         "path": "native/autosuggestions.c",
-        "sha256": "d276825b120b1296a08a30182ba41996e12b20de6f96d097e0c7a292e2ede930"
+        "sha256": "f756cfceb616ec8d05badb49d9ef8542a691fde38572ed8ea19bd8e423a8b5c2"
       },
       {
         "path": "native/highlight.c",

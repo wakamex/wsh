@@ -49,7 +49,13 @@ parts.append('''_zsh_autosuggest_start() {
 typeset -g ZSH_AUTOSUGGEST_USE_ASYNC=
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd _zsh_autosuggest_start
-_wsh_autosuggest_complete_finish() { builtin wsh-autosuggest-service cancel; }
+zmodload zsh/parameter
+_wsh_autosuggest_complete_finish() {
+  builtin wsh-autosuggest-service cancel
+  # A re-sourced zsh-autosuggestions replaces the controller's functions; give its binder the original widgets.
+  [[ ${functions_source[_zsh_autosuggest_start]-} == ${functions_source[_wsh_autosuggest_complete_finish]-} ]] ||
+    builtin wsh-autosuggest-service release
+}
 autoload -Uz add-zle-hook-widget
 add-zle-hook-widget line-finish _wsh_autosuggest_complete_finish
 add-zsh-hook zshexit _wsh_autosuggest_complete_finish

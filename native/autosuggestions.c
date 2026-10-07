@@ -289,6 +289,28 @@ static void wsh_sa_cancel_owned(void) {
     wsh_sa_response = NULL;
     wsh_sa_response_size = 0;
 }
+/* Restore every widget the controller still wraps and leave autosuggestions to a reloaded plugin. */
+static void wsh_sa_release_owned(void) {
+    wsh_sa_cancel_owned();
+    char **names = gethkparam("widgets"), **types = gethparam("widgets");
+    char *prefix = dupstring(wsh_sa_value("ZSH_AUTOSUGGEST_ORIGINAL_WIDGET_PREFIX"));
+    while (wsh_sa_bindings) {
+        struct wsh_sa_binding *b = wsh_sa_bindings;
+        char count[32];
+        snprintf(count, sizeof(count), "%u", b->count);
+        char *bound = zhtricat("user:_zsh_autosuggest_bound_", count, dyncat("_", b->name));
+        for (size_t i = 0; names && names[i]; ++i)
+            if (!strcmp(names[i], b->name) && !strcmp(types[i], bound))
+                wsh_sa_zle_call("-A", zhtricat(prefix, count, dyncat("-", b->name)), b->name);
+        wsh_sa_bindings = b->next;
+        zsfree(b->name);
+        zfree(b, sizeof(*b));
+    }
+    wsh_sa_shell_code("add-zsh-hook -d precmd _wsh_autosuggest_complete_finish; "
+                      "add-zsh-hook -d zshexit _wsh_autosuggest_complete_finish; "
+                      "add-zle-hook-widget -d line-finish _wsh_autosuggest_complete_finish; "
+                      "typeset -g WSH_AUTOSUGGESTIONS_OWNER=external-active");
+}
 static int wsh_sa_fetch_owned(void) {
     char *prefix = dupstring(wsh_sa_value("BUFFER"));
     if (!wsh_sa_exists("ZSH_AUTOSUGGEST_USE_ASYNC")) {
@@ -481,6 +503,8 @@ static int wsh_sa_service(char *name, char **args, Options options, int function
         result = wsh_sa_completion_owned(*args);
     else if (!strcmp(operation, "cancel"))
         wsh_sa_cancel_owned();
+    else if (!strcmp(operation, "release"))
+        wsh_sa_release_owned();
     else if (!strcmp(operation, "response") && *args)
         result = wsh_sa_response_owned(args);
     else if (!strcmp(operation, "collect") && *args) {
