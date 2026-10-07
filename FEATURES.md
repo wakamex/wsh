@@ -8,10 +8,18 @@ Prioritize reliable daily use and easier installation. Complete the immediate wo
 
 | Priority | Work | User benefit and next gate |
 | --- | --- | --- |
-| 1 | Improve setup without OMZ | Persistent history now defaults on with live sharing off, while preserving explicit user settings. Complete fresh-configuration checks for completion, bindings and prompts. Add concise setup guidance and doctor findings for demonstrated gaps, preserving existing configuration and users who alternate between Zsh and Wsh. Automatic completion initialization remains subject to a separate passing experiment. |
+| 1 | Make Oh My Zsh removable | Removing `source $ZSH/oh-my-zsh.sh` should change nothing a user relies on. Persistent history defaults on with live sharing off, and Up and Down search history in both terminal key modes. Next, ship the [general defaults](#defaults-replacing-oh-my-zsh) before user startup files, then add a doctor finding listing what removing Oh My Zsh would change, gated by a with-and-without comparison of options, bindings, completion styles, aliases and hooks. Preserve explicit user settings and users who alternate between Zsh and Wsh. |
 | 2 | Qualify pane-history restore | Wsh now uses `WAKTERM_PANE_TOKEN` for [pane-first recall](benchmarks/pane-history-2026-09-26/report.md) with shared fallback and merge-on-exit. Qualify the matching Wakterm/Wsh deployment across a real mux restart. Keep shell history local and terminal scrollback in Wakterm. A new private-mode product must separately prove exclusion from third-party collectors and diagnostics. |
 | 3 | Qualify another installation target | Let additional users install Wsh through their usual package tools. Select one distribution or architecture from actual user demand, then qualify its build, package transactions and login lifecycle independently. Fedora x86-64 remains the supported installation target. |
 | 4 | Compare Wakterm completion paths | Test whether application completion can become smaller or faster without losing behavior. Recapture the application inputs, then compare current and pruned static completion with direct application completion. Consider the existing mux only if those paths leave a measured problem. Preserve candidate correctness, cancellation, deadlines and fallback; a generic broker needs a second demonstrated consumer. |
+
+## Defaults replacing Oh My Zsh
+
+Oh My Zsh's core library sets these on every start; only its `plugins` entries are opt-in. Wsh adopts the general ones and leaves personal or surprising ones to user startup files.
+
+- Wsh defaults, applied before user startup files so user settings win: Home, End, Delete, Ctrl+Left, Ctrl+Right, Ctrl+Delete, Page Up, Page Down, Shift+Tab for reverse menu completion and Ctrl+X Ctrl+E to edit the command; menu selection with case-insensitive matching; coloured completion lists; completion in the middle of a word with the cursor moved to the end; `#` comments at the prompt; no terminal flow control; `!` expansion shown before it runs; skipping duplicate and space-prefixed commands in history.
+- Left to user files: `auto_cd`, the directory stack and its aliases, `...` and longer, the `ls`, `md` and `rd` aliases, the `grep` exclusions, `take`, history timestamps and `git-auto-fetch`.
+- Not adopted: live history sharing, which conflicts with pane-first recall; partial-word completion matching; `url-quote-magic` and `bracketed-paste-magic`, which slow pastes and conflict with autosuggestions; the completion cache; `.` and `..` as completions; `pushd_minus`; Oh My Zsh's Alt+L, Alt+M and Alt+W bindings; `gitfast`; and Oh My Zsh's own commands and prompt helpers.
 
 ## Ongoing maintenance
 
