@@ -26,6 +26,9 @@ for name in ('history-substring-search','autosuggestions','syntax-highlighting',
     results.append({'test':name,'command':[str(value) for value in command],'status':result.returncode})
     (OUT/'results.json').write_text(json.dumps(results,indent=2)+'\n')
     print(name,result.returncode,flush=True)
+    if result.returncode:
+        # CI keeps no output directory, so show why the test failed.
+        print((OUT/(name+'.log')).read_text(errors='replace')[-4000:],flush=True)
 if any(row['status'] for row in results):raise SystemExit(1)
 
 subprocess.run([str(ZSH), '-df', str(ROOT/'tests/plugin-recognition.zsh'), str(BUNDLE)], cwd=ROOT, check=True)
