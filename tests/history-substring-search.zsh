@@ -262,6 +262,9 @@ for variant in $variants; do
         assert_search wsh_match $'\eOA\eOA' 'print -r -- WSH_MATCH_OLDER' 2
         assert_search wsh_match $'\eOA\eOA\eOB' 'print -r -- WSH_MATCH_NEWER' 3
         assert_search WSH_NO_MATCH_UNIQUE $'\eOA' WSH_NO_MATCH_UNIQUE 4
+        # Without keypad-transmit mode, terminals send the normal-mode sequence.
+        [[ ${${(s:|:)state}[5]} == history-substring-search-up ]] || { print -u2 -r -- "normal-mode Up is not bound: $state"; exit 1; }
+        assert_search wsh_match $'\e[A\e[A' 'print -r -- WSH_MATCH_OLDER' 5
         ;;
       external-upstream|external-omz)
         [[ $state == wsh\|1\|${bundle}/share/wsh/defaults/native-history.zsh\|history-substring-search-up\|*\|0\|0\|* ]] || { print -u2 -r -- "unexpected recognized external state for ${variant}: $state"; exit 1; }
