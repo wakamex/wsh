@@ -1,3 +1,4 @@
+#include "wsh-build.h"
 #include "wsh-completion.c"
 #include "wsh-history.c"
 #include "wsh-autosuggestions.c"
@@ -119,6 +120,9 @@ wsh_setup(void)
     (void)addbuiltins("wsh", wsh_sa_builtins, 3);
     (void)addbuiltins("wsh", wsh_directory_builtins, 1);
     (void)addbuiltins("wsh", wsh_highlight_builtins, 1);
+    /* Identifies Wsh to startup files; unexported so a nested Zsh does not inherit it. */
+    setsparam("WSH_VERSION", ztrdup(WSH_VERSION));
+    wsh_unexport("WSH_VERSION");
     if (!exepath || isset(PRIVILEGED))
         return;
     wsh_root = ztrdup(exepath);

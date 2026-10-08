@@ -14,6 +14,7 @@ python3 $root/tests/history-persistence.py $bundle/bin/wsh $checks/history-persi
 python3 $root/tests/mail-check.py $bundle/bin/wsh $checks/mail-check
 zsh $root/tests/interrupt-propagation.zsh $bundle/bin/wsh
 python3 $root/tests/autosuggestions-reload.py $bundle/bin/wsh
+zsh $root/tests/wsh-version-parameter.zsh $bundle/bin/wsh
 python3 $root/tests/pane-history.py $bundle/bin/wsh $checks/pane-history
 python3 $root/tests/doctor-terminal.py $bundle/bin/wsh $checks/doctor-terminal
 python3 $root/native/test-highlight-roundtrip.py $bundle/bin/wsh $checks/highlight-roundtrip

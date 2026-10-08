@@ -29,7 +29,7 @@ If you use Zsh and Wsh interchangeably, you can leave your shared `.zshrc` uncha
 
 If you switch entirely to Wsh, set `WSH_THEME=wakamex` in `.zshrc`. If OMZ still loads, set `ZSH_THEME=""` before sourcing `oh-my-zsh.sh`. Removing OMZ is a separate choice; its other plugins and configuration can remain useful.
 
-The following conditional is an optional optimization for using both shells: it skips OMZ's theme when a Wsh theme is selected, while retaining the OMZ theme in regular Zsh. Put it after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
+The following conditional is an optional optimization for using both shells: it skips OMZ's theme when a Wsh theme is selected on the command line, while retaining the OMZ theme in regular Zsh. Put it after your existing `ZSH_THEME` assignment and before sourcing `oh-my-zsh.sh`:
 
 ```zsh
 if [[ -n ${WSH_THEME-} ]]; then
@@ -37,9 +37,18 @@ if [[ -n ${WSH_THEME-} ]]; then
 fi
 ```
 
-Regular Zsh continues to load your OMZ theme when `WSH_THEME` is unset. Wsh keeps the theme selection local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: the conditional would suppress your OMZ theme in regular Zsh too. Selection takes effect after `.zshrc`; changing it later does not switch the current prompt. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
+To select Wsh's prompt from the shared file itself, test `WSH_VERSION` instead. Wsh sets it to its version before any startup file runs and does not export it, so a regular Zsh started from Wsh does not see it:
 
-`WSH_THEME=wakamex wsh --doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the conditional above or clearing `WSH_THEME`. Use the conditional to avoid loading two themes in Wsh while keeping your OMZ theme in regular Zsh. Keep any plugin declarations needed by regular Zsh when following further cleanup advice.
+```zsh
+if [[ -n ${WSH_VERSION-} ]]; then
+  WSH_THEME="wakamex"
+  ZSH_THEME=""
+fi
+```
+
+Wsh keeps `WSH_THEME` local to its session so nested regular Zsh does not inherit it. Avoid unconditionally assigning or globally exporting `WSH_THEME` in a shared configuration: the first conditional would suppress your OMZ theme in regular Zsh too. Selection takes effect after `.zshrc`; changing it later does not switch the current prompt. If the selected definition is missing or invalid, Wsh reports the failure and leaves the prompt from user startup in place.
+
+`WSH_THEME=wakamex wsh --doctor` checks the same startup choice. If OMZ still has a theme configured alongside Wsh's prompt, doctor suggests the first conditional above or clearing `WSH_THEME`. Use the conditional to avoid loading two themes in Wsh while keeping your OMZ theme in regular Zsh. Keep any plugin declarations needed by regular Zsh when following further cleanup advice.
 
 ## Definition format
 
