@@ -1,5 +1,5 @@
 # Version and release are fixed when preparing the source RPM.
-%{!?wsh_version:%global wsh_version 0.4.5}
+%{!?wsh_version:%global wsh_version 0.4.6}
 %{!?wsh_release:%global wsh_release 1}
 
 # Keep distro post-processing, then inventory the bytes it will package even
@@ -115,6 +115,9 @@ exit 0
 %{_mandir}/man1/wsh.1*
 
 %changelog
+* Thu Oct 08 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.6-1
+- Keep Enter and Space working after re-sourcing a zshrc that loads zsh-autosuggestions.
+
 * Tue Oct 06 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.5-1
 - Recognize every zsh-z version Oh My Zsh has bundled since 2022.
 

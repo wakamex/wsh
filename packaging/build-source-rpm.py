@@ -85,7 +85,7 @@ def main():
     spec = '%global wsh_commit '+revision+'\n'+spec
     source = source_url+'#/'+source_archive.name if args.status == 'release' else source_archive.name
     spec = re.sub(r'^Source0:.*$', 'Source0:        '+source, spec, flags=re.M)
-    spec = spec.replace('%{!?wsh_version:%global wsh_version 0.4.5}', '%global wsh_version '+version)
+    spec = spec.replace('%{!?wsh_version:%global wsh_version 0.4.6}', '%global wsh_version '+version)
     spec = spec.replace('%{!?wsh_release:%global wsh_release 1}', '%global wsh_release '+args.release)
     spec = re.sub(r'^Source1:.*$', 'Source1:        '+lock['archive_url']+'#/'+lock['archive_name'], spec, flags=re.M)
     (specs/'wsh.spec').write_text(spec)
