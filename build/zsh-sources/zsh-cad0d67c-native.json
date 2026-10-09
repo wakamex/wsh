@@ -53,7 +53,7 @@
     },
     {
       "path": "build/zsh-patches/cad0d67c-pane-history.patch",
-      "sha256": "d4bc0218ad92498f882a8b75db137dde48d95e2c835407901859166c51c3169a"
+      "sha256": "b73b6aa9934efaacfa066af9dd573f7dc787525d025e3b5769c9050cea646d52"
     }
   ],
   "test_patches": [
@@ -108,7 +108,7 @@
       },
       {
         "path": "native/pane-history.c",
-        "sha256": "936987a7737b77b8114e4e741cd973cf4f2cad526bdac7a5c617173bafefa2c6"
+        "sha256": "8a6a74f4eeb9e541218931d35fa079c48fd594b9cd5a45d761d231976282ed6c"
       },
       {
         "path": "native/directory.c",

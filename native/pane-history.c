@@ -2,9 +2,12 @@
 void wsh_pane_history_prepare(void);
 void wsh_pane_history_start(void);
 void wsh_pane_history_exit(void);
-static char *wsh_pane_file, *wsh_pane_pending, *wsh_pane_shared, *wsh_pane_parameter;
+static char *wsh_pane_file, *wsh_pane_journal, *wsh_pane_pending, *wsh_pane_shared, *wsh_pane_parameter;
 static HashTable wsh_pane_context;
-static int wsh_pane_owner_fd = -1;
+static int wsh_pane_owner_fd = -1, wsh_pane_saving;
+/* Commands numbered after wsh_pane_first belong to this pane; those up to
+ * wsh_pane_journaled are in its journal. */
+static zlong wsh_pane_first, wsh_pane_journaled;
 
 static int
 wsh_pane_uuid(const char *s)
@@ -82,22 +85,55 @@ wsh_pane_open(char *path)
 }
 
 /* Keep HISTFILE visible and inheritable as the user's original shared path.
- * Only automatic writes in the owning history context go to the journal. */
+ * Only automatic writes in the owning history context are journaled. */
 static char *
 wsh_pane_history_target(void)
 {
     char *current = getsparam("HISTFILE");
-    if (wsh_pane_context && histtab == wsh_pane_context && wsh_pane_enabled() &&
+    if (!wsh_pane_saving && wsh_pane_context && histtab == wsh_pane_context && wsh_pane_enabled() &&
         savehistsiz > 0 && !nohistsave && current && *current &&
-        !strcmp(current, wsh_pane_parameter) && unset(SHAREHISTORY))
-        return wsh_pane_pending;
+        !strcmp(current, wsh_pane_parameter))
+        return wsh_pane_journal;
     return NULL;
+}
+
+/* Journal this pane's new commands, then save to the shared file as usual, so
+ * other shells see each command as soon as it runs. Zsh's writer skips entries
+ * marked old and marks what it writes, so commands journaled earlier but not
+ * yet in the shared file are hidden from the journal write, and the newly
+ * journaled ones are released for the shared write. */
+static void
+wsh_pane_history_save(char *fn, int err, int writeflags)
+{
+    zlong last = curhist - !!(histactive & HA_ACTIVE);
+    LinkList held = newlinklist();
+    LinkNode node;
+    Histent he;
+    wsh_pane_saving = 1;
+    for (he = gethistent(wsh_pane_first + 1, GETHIST_DOWNWARD);
+         he && he->histnum <= wsh_pane_journaled; he = down_histent(he))
+        if (!(he->node.flags & HIST_OLD)) {
+            he->node.flags |= HIST_OLD;
+            addlinknode(held, he);
+        }
+    savehistfile(wsh_pane_journal, 0, HFILE_APPEND | HFILE_SKIPOLD | HFILE_NO_REWRITE |
+                 (isset(HISTSAVENODUPS) ? HFILE_SKIPDUPS : 0));
+    for (he = gethistent(wsh_pane_journaled + 1, GETHIST_DOWNWARD);
+         he && he->histnum <= last; he = down_histent(he))
+        if ((he->node.flags & (HIST_OLD | HIST_READ)) == HIST_OLD) {
+            he->node.flags &= ~HIST_OLD;
+            wsh_pane_journaled = he->histnum;
+        }
+    for (node = firstnode(held); node; incnode(node))
+        ((Histent)getdata(node))->node.flags &= ~HIST_OLD;
+    savehistfile(fn, err, writeflags);
+    wsh_pane_saving = 0;
 }
 
 /* Each destination is locked across read/merge/rewrite. A crash between the
  * two destinations may replay entries; retaining pending data prevents loss. */
 static int
-wsh_pane_merge_into(char *destination)
+wsh_pane_merge_into(char *destination, char *journal)
 {
     int saved_error = errflag, saved_active = histactive, ok;
     struct stat st;
@@ -107,7 +143,7 @@ wsh_pane_merge_into(char *destination)
     histactive = 0;
     pushhiststack(NULL, savehistsiz, savehistsiz, -1);
     readhistfile(destination, 1, 0);
-    if (!errflag) readhistfile(wsh_pane_pending, 1, 0);
+    if (!errflag) readhistfile(journal, 1, 0);
     if (!errflag) savehistfile(destination, 1, 0);
     ok = !errflag;
     pophiststack();
@@ -118,17 +154,20 @@ wsh_pane_merge_into(char *destination)
     return ok;
 }
 
+/* The shared file already has journaled commands. A pending file comes from
+ * earlier versions, which published commands only on exit. */
 static int
-wsh_pane_merge(void)
+wsh_pane_merge(char *journal, int shared)
 {
     struct stat st;
-    if (stat(unmeta(wsh_pane_pending), &st)) return errno == ENOENT;
-    if (!st.st_size) return 1;
-    if (!wsh_pane_merge_into(wsh_pane_shared) || !wsh_pane_merge_into(wsh_pane_file)) {
-        zwarn("pane history merge incomplete; pending commands retained in %s", wsh_pane_pending);
+    if (stat(unmeta(journal), &st)) return errno == ENOENT;
+    if (!st.st_size) return unlink(unmeta(journal)) == 0;
+    if ((shared && !wsh_pane_merge_into(wsh_pane_shared, journal)) ||
+        !wsh_pane_merge_into(wsh_pane_file, journal)) {
+        zwarn("pane history merge incomplete; commands retained in %s", journal);
         return 0;
     }
-    return unlink(unmeta(wsh_pane_pending)) == 0;
+    return unlink(unmeta(journal)) == 0;
 }
 
 void
@@ -137,6 +176,7 @@ wsh_pane_history_start(void)
     char *shared = getsparam("HISTFILE"), *state, *directory, *lockpath, pid[32];
     int fd, saved_error = errflag;
     struct flock lock;
+    struct stat st;
     if (!getsparam("WSH_NATIVE_PANE_HISTORY")) return;
     if (!wsh_pane_enabled() || !shared || !*shared || savehistsiz <= 0 ||
         histsave_stack_pos || nohistsave) goto disabled;
@@ -159,6 +199,7 @@ wsh_pane_history_start(void)
     wsh_pane_file = bicat(state, ".zsh");
     zsfree(state);
     wsh_pane_pending = bicat(wsh_pane_file, ".pending");
+    wsh_pane_journal = bicat(wsh_pane_file, ".journal");
     lockpath = bicat(wsh_pane_file, ".owner");
     fd = wsh_pane_open(lockpath);
     zsfree(lockpath);
@@ -175,19 +216,25 @@ wsh_pane_history_start(void)
     fd = wsh_pane_open(wsh_pane_file);
     if (fd < 0) goto disabled;
     close(fd);
-    fd = wsh_pane_open(wsh_pane_pending);
+    fd = wsh_pane_open(wsh_pane_journal);
     if (fd < 0) goto disabled;
     close(fd);
+    /* An existing pending file passes the same ownership and symlink checks. */
+    if (!lstat(unmeta(wsh_pane_pending), &st)) {
+        fd = wsh_pane_open(wsh_pane_pending);
+        if (fd < 0) goto disabled;
+        close(fd);
+    }
     /* Refuse to add new work to a journal whose previous merge failed. */
-    if (!wsh_pane_merge()) goto disabled;
+    if (!wsh_pane_merge(wsh_pane_pending, 1) || !wsh_pane_merge(wsh_pane_journal, 0)) goto disabled;
     readhistfile(wsh_pane_file, 1, 0);
     if (errflag) { errflag = saved_error | (errflag & ERRFLAG_INT); goto disabled; }
-    opts[SHAREHISTORY] = 0;
-    if (isset(INCAPPENDHISTORYTIME)) opts[INCAPPENDHISTORY] = 0;
-    else opts[INCAPPENDHISTORY] = 1;
-    zsfree(lasthist.text);
-    memset(&lasthist, 0, sizeof(lasthist));
-    histfile_linect = 0;
+    /* Oh My Zsh turns on live sharing for every user, which would interleave
+     * other panes' commands into this pane's recall; a user's own choice stays. */
+    if (isset(SHAREHISTORY) && shfunctab->getnode(shfunctab, "omz_history"))
+        opts[SHAREHISTORY] = 0;
+    opts[INCAPPENDHISTORY] = unset(SHAREHISTORY) && unset(INCAPPENDHISTORYTIME);
+    wsh_pane_first = wsh_pane_journaled = curhist;
     wsh_pane_context = histtab;
     snprintf(pid, sizeof(pid), "%ld", (long)getpid());
     {
@@ -201,6 +248,7 @@ disabled:
     if (wsh_pane_owner_fd >= 0) { close(wsh_pane_owner_fd); wsh_pane_owner_fd = -1; }
     zsfree(wsh_pane_file); wsh_pane_file = NULL;
     zsfree(wsh_pane_pending); wsh_pane_pending = NULL;
+    zsfree(wsh_pane_journal); wsh_pane_journal = NULL;
     zsfree(wsh_pane_shared); wsh_pane_shared = NULL;
     zsfree(wsh_pane_parameter); wsh_pane_parameter = NULL;
 }
@@ -208,5 +256,5 @@ disabled:
 void
 wsh_pane_history_exit(void)
 {
-    if (wsh_pane_history_target()) (void)wsh_pane_merge();
+    if (wsh_pane_history_target()) (void)wsh_pane_merge(wsh_pane_journal, 0);
 }

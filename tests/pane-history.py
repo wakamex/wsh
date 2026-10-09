@@ -102,6 +102,7 @@ def launch(home, name, token, extra=None):
 
 TOKEN_A = '550e8400-e29b-41d4-a716-446655440000'
 TOKEN_B = '550e8400-e29b-41d4-a716-446655440001'
+TOKEN_C = '550e8400-e29b-41d4-a716-446655440002'
 with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
     root = Path(directory)
     home = root / 'normal'; home.mkdir()
@@ -112,11 +113,16 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
     try:
         a.run(': PANE_A_SENTINEL')
         b.run(': PANE_B_SENTINEL')
-        check('commands stay out of shared history while panes run', 'PANE_A_SENTINEL' not in contents(shared) and 'PANE_B_SENTINEL' not in contents(shared))
+        check('each command reaches shared history as it runs', 'PANE_A_SENTINEL' in contents(shared) and 'PANE_B_SENTINEL' in contents(shared))
+        c = launch(home, 'c', TOKEN_C)
+        try:
+            c.run('fc -ln 1 > c-history')
+            check('new pane sees running panes', 'PANE_A_SENTINEL' in contents(home / 'c-history') and 'PANE_B_SENTINEL' in contents(home / 'c-history'))
+        finally: c.close(kill=True)
         a.run('print -r -- "$WSH_NATIVE_PANE_HISTORY|$HISTFILE|$options[sharehistory]" > settings')
         check('native ownership and unchanged HISTFILE', (home / 'settings').read_text().strip() == f'1|{shared}|off')
         a.close()
-        check('exit merges current pane into shared history', 'PANE_A_SENTINEL' in contents(shared) and 'PANE_B_SENTINEL' not in contents(shared))
+        check('exit merges current pane into its pane file', 'PANE_A_SENTINEL' in contents(pane(home,TOKEN_A)) and contents(shared).count('PANE_A_SENTINEL') == 1)
         b.run('fc -ln 1 > b-history')
         check('open pane does not import another pane', 'PANE_A_SENTINEL' not in contents(home / 'b-history'))
         b.close()
@@ -130,11 +136,11 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
         check('shared history followed by pane history', history.rfind('PANE_A_SENTINEL') > history.rfind('PANE_B_SENTINEL') >= 0)
         a.run(': CRASH_SENTINEL')
         a.close(kill=True)
-        check('abrupt exit retains journal', 'CRASH_SENTINEL' in contents(Path(str(pane(home,TOKEN_A))+'.pending')))
+        check('abrupt exit retains journal', 'CRASH_SENTINEL' in contents(Path(str(pane(home,TOKEN_A))+'.journal')))
     finally: a.close(kill=True)
     a = launch(home, 'recover', TOKEN_A)
     try:
-        check('restart merges crashed commands', 'CRASH_SENTINEL' in contents(shared) and 'CRASH_SENTINEL' in contents(pane(home,TOKEN_A)))
+        check('restart merges crashed commands', contents(shared).count('CRASH_SENTINEL') == 1 and 'CRASH_SENTINEL' in contents(pane(home,TOKEN_A)))
         a.run('fc -ln 1 > recovered')
         check('restart recalls crashed commands', 'CRASH_SENTINEL' in contents(home / 'recovered'))
         a.run(': EXEC_SENTINEL')
@@ -199,14 +205,32 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
     home=root/'failure';home.mkdir()
     (home/'.zshrc').write_text('HISTFILE=$HOME/missing/history\n')
     a=launch(home,'merge-failure',TOKEN_A)
-    try:a.run(': RETRY_SENTINEL');a.close()
+    try:
+        for i in range(3):a.run(f': UNSAVED_{i}')
+        a.close()
     finally:a.close(kill=True)
-    check('failed shared merge retains pending commands', 'RETRY_SENTINEL' in contents(Path(str(pane(home,TOKEN_A))+'.pending')))
+    check('unwritable shared file keeps each command once in pane history', all(contents(pane(home,TOKEN_A)).count(f'UNSAVED_{i}') == 1 for i in range(3)))
     (home/'missing').mkdir()
     a=launch(home,'merge-retry',TOKEN_A)
+    try:a.run(': RETRY_SENTINEL');a.close()
+    finally:a.close(kill=True)
+    check('writable shared file receives later commands', 'RETRY_SENTINEL' in contents(home/'missing/history'))
+
+    home=root/'legacy';home.mkdir()
+    directory=pane(home,TOKEN_A).parent;directory.mkdir(parents=True);directory.chmod(0o700)
+    legacy=Path(str(pane(home,TOKEN_A))+'.pending');legacy.write_text(': 1700000000:0;: LEGACY_SENTINEL\n');legacy.chmod(0o600)
+    a=launch(home,'legacy',TOKEN_A)
     try:a.close()
     finally:a.close(kill=True)
-    check('later restart retries shared merge', 'RETRY_SENTINEL' in contents(home/'missing/history'))
+    check('earlier pending journal reaches shared and pane files', 'LEGACY_SENTINEL' in contents(home/'.zsh_history') and 'LEGACY_SENTINEL' in contents(pane(home,TOKEN_A)) and not legacy.exists())
+
+    home=root/'omz-sharing';home.mkdir()
+    (home/'.zshrc').write_text('omz_history() { :; }\nsetopt share_history\n')
+    a=launch(home,'omz-sharing',TOKEN_A)
+    try:
+        a.run('print -r -- "$options[sharehistory]" > sharing');a.close()
+        check('Oh My Zsh live sharing is turned off', (home/'sharing').read_text().strip() == 'off')
+    finally:a.close(kill=True)
 
     home=root/'bounded';home.mkdir()
     (home/'.zshrc').write_text('HISTSIZE=20\nSAVEHIST=5\nsetopt inc_append_history_time extended_history\n')
@@ -222,24 +246,29 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
     a=launch(home,'custom',TOKEN_A)
     try:
         a.run(': CUSTOM_OUTER_SENTINEL')
+        a.run('print -r -- "$options[sharehistory]" > sharing')
         a.run(shlex.quote(str(BINARY))+' -dil')
         a.run(': CUSTOM_NESTED_SENTINEL')
         a.run('exit')
         a.close()
         check('exported custom shared path survives nesting', 'CUSTOM_NESTED_SENTINEL' in contents(home/'custom-history') and 'CUSTOM_NESTED_SENTINEL' not in contents(pane(home,TOKEN_A)))
-        check('pane policy overrides initial live sharing', 'CUSTOM_OUTER_SENTINEL' in contents(pane(home,TOKEN_A)) and not (home/'.zsh_history').exists())
+        check('explicit live sharing keeps pane history', 'CUSTOM_OUTER_SENTINEL' in contents(pane(home,TOKEN_A)) and (home/'sharing').read_text().strip() == 'on' and not (home/'.zsh_history').exists())
     finally:a.close(kill=True)
 
     home=root/'symlink';home.mkdir()
     directory=pane(home,TOKEN_A).parent;directory.mkdir(parents=True)
     directory.chmod(0o700)
     victim=home/'victim';victim.write_text('unchanged\n')
-    Path(str(pane(home,TOKEN_A))+'.pending').symlink_to(victim)
-    a=launch(home,'symlink',TOKEN_A)
-    try:
-        a.run(': SYMLINK_SENTINEL');a.close()
-        check('symlink journal rejected without touching target', contents(victim)=='unchanged\n' and 'SYMLINK_SENTINEL' in contents(home/'.zsh_history'))
-    finally:a.close(kill=True)
+    for suffix in ('.pending', '.journal'):
+        link=Path(str(pane(home,TOKEN_A))+suffix)
+        link.unlink(missing_ok=True)
+        link.symlink_to(victim)
+        a=launch(home,'symlink'+suffix,TOKEN_A)
+        try:
+            a.run(': SYMLINK_SENTINEL'+suffix.replace('.','_'));a.close()
+            check('symlink '+suffix+' rejected without touching target', contents(victim)=='unchanged\n' and 'unchanged' not in contents(home/'.zsh_history') and 'SYMLINK_SENTINEL'+suffix.replace('.','_') in contents(home/'.zsh_history'))
+        finally:a.close(kill=True)
+        link.unlink()
 
     home=root/'unavailable';home.mkdir();(home/'state').write_text('not a directory')
     a=launch(home,'unavailable',TOKEN_A)
@@ -255,9 +284,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
         a=launch(home,'omz',TOKEN_A)
         try:
             a.run(': OMZ_PANE_SENTINEL')
-            check('OMZ pane holds commands until exit', 'OMZ_PANE_SENTINEL' not in contents(home/'.zsh_history'))
+            check('OMZ pane publishes commands as they run', 'OMZ_PANE_SENTINEL' in contents(home/'.zsh_history'))
             a.close()
-            check('OMZ pane merges on exit', 'OMZ_PANE_SENTINEL' in contents(home/'.zsh_history') and 'OMZ_PANE_SENTINEL' in contents(pane(home,TOKEN_A)))
+            check('OMZ pane merges on exit', contents(home/'.zsh_history').count('OMZ_PANE_SENTINEL') == 1 and 'OMZ_PANE_SENTINEL' in contents(pane(home,TOKEN_A)))
         finally:a.close(kill=True)
 
     adapter=os.environ.get('WSH_TEST_WAKTERM')

@@ -1,29 +1,28 @@
 --- a/Src/hist.c
 +++ b/Src/hist.c
-@@ -29,6 +29,8 @@
+@@ -29,6 +29,9 @@
  
  #include "zsh.mdh"
  #include "hist.pro"
 +
 +static char *wsh_pane_history_target(void);
++static void wsh_pane_history_save(char *fn, int err, int writeflags);
  
  /* Functions to call for getting/ungetting a character and for history
   * word control. */
-@@ -2929,6 +2931,13 @@
+@@ -2929,6 +2932,11 @@
      int extended_history = isset(EXTENDEDHISTORY);
      int ret;
  
-+    if (writeflags & HFILE_USE_OPTIONS) {
-+        char *pane_target = wsh_pane_history_target();
-+        if (pane_target && (!fn || !strcmp(fn, getsparam("HISTFILE")))) {
-+            fn = pane_target;
-+            writeflags |= HFILE_APPEND | HFILE_SKIPOLD;
-+        }
++    if (writeflags & HFILE_USE_OPTIONS && wsh_pane_history_target() &&
++        (!fn || !strcmp(fn, getsparam("HISTFILE")))) {
++        wsh_pane_history_save(fn, err, writeflags);
++        return;
 +    }
      if (!interact || savehistsiz <= 0 || !hist_ring
       || (!fn && !(fn = getsparam("HISTFILE"))))
  	return;
-@@ -3968,3 +3977,5 @@
+@@ -3968,3 +3976,5 @@
      } while (histsave_stack_pos >= pop_through);
      return 1;
  }
