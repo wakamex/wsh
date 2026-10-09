@@ -52,6 +52,8 @@ static void wsh_history_begin(void)
     Patprog compiled = patcompile(pattern, 0, NULL);
     LinkList keys = newlinklist();
     if (*buffer) for (Histent h=gethistent(addhistnum(curhist,-1,HIST_FOREIGN),GETHIST_UPWARD); h; h=up_histent(h)) {
+        /* Respect set-local-history, which hides other shells' commands. */
+        if (h->node.flags & hist_skip_flags) continue;
         if (compiled && !pattry(compiled,h->node.nam)) continue;
         zlong *key = zhalloc(sizeof(*key)); *key = h->histnum;
         addlinknode(keys,key);

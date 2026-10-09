@@ -104,7 +104,7 @@
       },
       {
         "path": "native/history.c",
-        "sha256": "4540b5f330f22efb366788e8ed470f2147fe06cac1b2e6ab8e557a7e77c93260"
+        "sha256": "ce698cf5ccb25682fc539cfabe12da77bce35bd8e67a4d9ab9fdabaa8c1233b6"
       },
       {
         "path": "native/pane-history.c",
