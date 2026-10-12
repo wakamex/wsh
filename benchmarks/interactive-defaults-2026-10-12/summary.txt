@@ -1,0 +1,8 @@
+before     empty          cpu median  18.970 ms  p95  20.916 ms  wall median   19.199 ms
+before     own-compinit   cpu median  34.666 ms  p95  38.123 ms  wall median   34.814 ms
+before     omz            cpu median  75.838 ms  p95  81.776 ms  wall median   69.535 ms
+before     no-completion  cpu median  18.788 ms  p95  21.140 ms  wall median   19.047 ms
+after      empty          cpu median  34.369 ms  p95  38.382 ms  wall median   34.701 ms
+after      own-compinit   cpu median  33.964 ms  p95  37.935 ms  wall median   34.232 ms
+after      omz            cpu median  75.027 ms  p95  79.297 ms  wall median   68.886 ms
+after      no-completion  cpu median  18.640 ms  p95  20.858 ms  wall median   18.913 ms
