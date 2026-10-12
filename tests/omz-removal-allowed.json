@@ -1,0 +1,142 @@
+[
+  {
+    "key": "option:autocd",
+    "reason": "Left to user startup files: setopt auto_cd"
+  },
+  {
+    "key": "option:autopushd",
+    "reason": "Left to user startup files: setopt auto_pushd"
+  },
+  {
+    "key": "option:pushdignoredups",
+    "reason": "Left to user startup files: setopt pushd_ignore_dups"
+  },
+  {
+    "key": "option:extendedhistory",
+    "reason": "Left to user startup files: setopt extended_history"
+  },
+  {
+    "key": "global-alias:...*",
+    "reason": "Left to user startup files: define ... and longer as ordinary aliases"
+  },
+  {
+    "key": "alias:l",
+    "reason": "Left to user startup files"
+  },
+  {
+    "key": "alias:la",
+    "reason": "Left to user startup files"
+  },
+  {
+    "key": "alias:ll",
+    "reason": "Left to user startup files"
+  },
+  {
+    "key": "alias:ls",
+    "reason": "Left to user startup files: coloured ls"
+  },
+  {
+    "key": "alias:grep",
+    "reason": "Left to user startup files: the grep exclusions"
+  },
+  {
+    "key": "option:sharehistory",
+    "reason": "Live sharing is off by default: setopt share_history keeps it"
+  },
+  {
+    "key": "option:incappendhistory",
+    "reason": "Wsh writes each command to the shared history file as it runs"
+  },
+  {
+    "key": "option:pushdminus",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:[1-9]",
+    "reason": "Not adopted: the directory-stack aliases"
+  },
+  {
+    "key": "alias:lsa",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:md",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:rd",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:_",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:history",
+    "reason": "Not adopted: Oh My Zsh's history wrapper"
+  },
+  {
+    "key": "alias:globurl",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "function:url-quote-magic",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "function:urlglobber",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "style:*url-quote-magic*",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "style::urlglobber *",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "widget:self-insert",
+    "reason": "Not adopted: url-quote-magic"
+  },
+  {
+    "key": "function:bracketed-paste-magic",
+    "reason": "Not adopted: bracketed-paste-magic"
+  },
+  {
+    "key": "widget:bracketed-paste",
+    "reason": "Not adopted: bracketed-paste-magic"
+  },
+  {
+    "key": "style:':completion:[*]' use-cache",
+    "reason": "Not adopted: the completion cache"
+  },
+  {
+    "key": "style:':completion:[*]' cache-path",
+    "reason": "Not adopted: the completion cache"
+  },
+  {
+    "key": "style:':completion:[*]' special-dirs",
+    "reason": "Not adopted: . and .. as completions"
+  },
+  {
+    "key": "* key:main:\"^[[]l\"*",
+    "reason": "Not adopted: Alt+L runs ls"
+  },
+  {
+    "key": "* key:main:\"^[[]m\"",
+    "reason": "Not adopted: Alt+M copies the previous word"
+  },
+  {
+    "key": "* key:main:\"^[[]w\"",
+    "reason": "Not adopted: Alt+W kills the region"
+  },
+  {
+    "key": "hook:precmd:_omz_async_request",
+    "reason": "Oh My Zsh's own commands and prompt helpers"
+  },
+  {
+    "key": "hook:precmd:omz_termsupport_cwd",
+    "reason": "Wsh reports the working directory to the terminal itself"
+  }
+]
