@@ -34,9 +34,24 @@ After testing your configuration and terminal behavior, use `chsh -s /usr/bin/ws
 
 Wsh preserves Zsh command-line parsing: `--` ends option parsing, ordinary positional arguments name shell scripts, and `-c`, `-s` and `-f` keep their Zsh meanings. See [PROFILING.md](PROFILING.md) for profile options and reports.
 
+## Interactive defaults
+
+An interactive Wsh session works without a framework or any startup file. Wsh applies these defaults before your startup files run, so anything you set in `.zshrc` replaces them:
+
+- Keys: Home, End, Delete, Ctrl+Left and Ctrl+Right to move by word, Ctrl+Delete to delete a word, Page Up and Page Down for history, Shift+Tab to move backwards through completions, and Ctrl+X Ctrl+E to edit the command in `$EDITOR`. They are bound in the emacs and vi keymaps. Space expands history references such as `!!` in place.
+- Words stop at punctuation, so Ctrl+W and Ctrl+Left treat `/usr/lib` as two words. Set `WORDCHARS` to change which characters belong to a word.
+- Completion: Tab opens a menu you can move through with the arrow keys, matching ignores case, lists are coloured from `LS_COLORS`, and completing in the middle of a word moves the cursor to its end.
+- History: repeated commands and commands that start with a space are not saved, and a history reference such as `!!` is shown for confirmation before it runs.
+- Prompt: `#` starts a comment, Ctrl+S and Ctrl+Q are ordinary keys instead of pausing output, prompts may contain `$(...)` substitutions, and the `fg`, `bg` and `reset_color` colour parameters are set.
+- Environment: `PAGER` is `less` when unset, and `LS_COLORS` comes from `dircolors` when the environment has none.
+
+Wsh sets up completion after your startup files when they did not, and applies any `compdef` calls they made earlier. If your startup files or Oh My Zsh run `compinit`, Wsh leaves that setup alone. Completion files in directories other users can write to are skipped. Set `WSH_DISABLE_COMPLETION=1` in `.zshrc` for a shell without completion.
+
+Scripts, `wsh -c` commands and shells started with `-f` get none of these defaults.
+
 ## History
 
-Interactive Wsh sessions save history in `~/.zsh_history` by default, with 10,000-entry limits for saved and in-memory history. Without pane history, commands are appended as they are entered. Concurrent sessions save to the same file but do not automatically import each other's new commands into their current history navigation; a new session reads the saved history.
+Interactive Wsh sessions save history in `~/.zsh_history` by default, keeping 10,000 saved entries and 50,000 in memory. The larger in-memory limit lets Wsh drop duplicate commands before unique ones when the file is trimmed. Without pane history, commands are appended as they are entered. Concurrent sessions save to the same file but do not automatically import each other's new commands into their current history navigation; a new session reads the saved history.
 
 Existing environment settings and system/user startup configuration can override these defaults. Set `HISTFILE`, `HISTSIZE` and `SAVEHIST` in `.zshrc` to choose another path or limits. `SAVEHIST=0`, an empty `HISTFILE`, or `unset HISTFILE` disables saving. To save only on normal exit, use `unsetopt INC_APPEND_HISTORY` and `setopt APPEND_HISTORY`. Explicit `SHARE_HISTORY` or `INC_APPEND_HISTORY_TIME` settings take precedence over Wsh's incremental-saving default. Oh My Zsh's sharing setting remains effective outside pane mode.
 

@@ -21,6 +21,8 @@ ALL=VARIANTS+['candidate-vi','candidate-z-first','custom-tab','existing']
 CONFIG=base.CONFIG
 CONFIG=CONFIG.replace('[[ $COMP_CASE == vi ]]','[[ $COMP_CASE == candidate-vi ]]')
 CONFIG+='''
+# The baseline is a shell without completion; Wsh initializes it otherwise.
+[[ $COMP_CASE == baseline ]] && WSH_DISABLE_COMPLETION=1
 if [[ $COMP_CASE == control-* ]]; then
  autoload -Uz compinit
  compinit -i -d "$HOME/dump"
@@ -62,7 +64,7 @@ def correctness():
         try:
             before=shell.state()
             if variant=='custom-tab':
-                value,_=shell.complete('x');assert value=='xCUSTOMTAB' and before[2]=='0';rows.append(dict(variant=variant,passed=True));continue
+                value,_=shell.complete('x');assert value=='xCUSTOMTAB' and before[2]=='1';rows.append(dict(variant=variant,passed=True));continue
             if variant=='baseline':
                 assert before[2]=='0';rows.append(dict(variant=variant,passed=True));continue
             if variant=='candidate-z-first':

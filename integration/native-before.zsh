@@ -11,3 +11,4 @@ fi
 if [[ -n ${WSH_PROFILE_FILE:-} && -r ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh ]]; then
   source ${WSH_BUNDLE_ROOT}/share/wsh/profile.zsh
 fi
+[[ -o interactive ]] && source ${WSH_BUNDLE_ROOT}/share/wsh/defaults.zsh

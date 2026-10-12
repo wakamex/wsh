@@ -102,7 +102,7 @@ wsh_history_defaults(void)
     if (!getenv("HISTFILE") && user_home && *user_home)
         setsparam("HISTFILE", tricat(user_home, "/", ".zsh_history"));
     if (!getenv("HISTSIZE"))
-        setiparam("HISTSIZE", 10000);
+        setiparam("HISTSIZE", 50000);
     if (!getenv("SAVEHIST"))
         setiparam("SAVEHIST", 10000);
     if (unset(INCAPPENDHISTORY) && unset(SHAREHISTORY) && unset(INCAPPENDHISTORYTIME)) {

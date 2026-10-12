@@ -55,19 +55,26 @@ _wsh_bind_history_substring_search() {
 
   local up=history-substring-search-up
   local down=history-substring-search-down
-  local sequence binding widget replacement
+  local sequence
   # Terminals send the terminfo sequences only in keypad-transmit mode, which Zsh leaves off.
   local -A desired_bindings=($'\e[A' $up $'\e[B' $down)
   [[ -n ${terminfo[kcuu1]:-} ]] && desired_bindings[$terminfo[kcuu1]]=$up
   [[ -n ${terminfo[kcud1]:-} ]] && desired_bindings[$terminfo[kcud1]]=$down
-  for sequence replacement in ${(kv)desired_bindings}; do
-    binding=$(bindkey -M main $sequence 2>/dev/null) || binding=
-    widget=${binding##* }
-    case $widget in
-      ''|undefined-key|up-line-or-history|down-line-or-history|up-history|down-history|up-line-or-beginning-search|down-line-or-beginning-search|history-substring-search-up|history-substring-search-down)
-        bindkey -M main $sequence $replacement
-        ;;
-    esac
+  # One subshell reports every binding; a lookup per key would start one each.
+  local keymap
+  local -i index=0
+  local -a sequences=(${(k)desired_bindings}) bindings
+  bindings=("${(@f)$(for keymap in main vicmd; do
+    for sequence in $sequences; do bindkey -M $keymap -- $sequence 2>/dev/null || print; done
+  done)}")
+  for keymap in main vicmd; do
+    for sequence in $sequences; do
+      case ${bindings[++index]##* } in
+        ''|undefined-key|up-line-or-history|down-line-or-history|up-history|down-history|up-line-or-beginning-search|down-line-or-beginning-search|history-substring-search-up|history-substring-search-down)
+          bindkey -M $keymap $sequence $desired_bindings[$sequence]
+          ;;
+      esac
+    done
   done
 }
 

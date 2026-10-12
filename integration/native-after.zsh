@@ -1,3 +1,4 @@
+source "$WSH_BUNDLE_ROOT/share/wsh/completion.zsh"
 source "$WSH_BUNDLE_ROOT/share/wsh/defaults/plugin-recognition.zsh"
 (( $+functions[_wsh_profile_event] )) && _wsh_profile_event directory-jump-start
 source "${WSH_BUNDLE_ROOT}/share/wsh/defaults/directory-jump.zsh"

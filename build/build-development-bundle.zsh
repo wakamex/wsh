@@ -108,6 +108,15 @@ if jq -e 'has("native")' "$zsh_source_lock" >/dev/null; then
   install -D -m 644 "${repository_root}/integration/native-history.zsh" "${stage}/share/wsh/defaults/native-history.zsh"
   install -D -m 644 "${repository_root}/integration/native-before.zsh" "${stage}/share/wsh/native-before.zsh"
   install -D -m 644 "${repository_root}/integration/native-after.zsh" "${stage}/share/wsh/native-after.zsh"
+  install -D -m 644 "${repository_root}/integration/defaults.zsh" "${stage}/share/wsh/defaults.zsh"
+  install -D -m 644 "${repository_root}/integration/completion.zsh" "${stage}/share/wsh/completion.zsh"
+  # The colors function's result, so startup assigns it without running the function.
+  "${stage}/bin/wsh" -fc 'autoload -Uz colors; colors
+    print -r -- "typeset -Ag color=(${(@q+kv)color}) colour=(${(@q+kv)colour})"
+    print -r -- "typeset -AHg fg=(${(@q+kv)fg}) fg_bold=(${(@q+kv)fg_bold}) fg_no_bold=(${(@q+kv)fg_no_bold})"
+    print -r -- "typeset -AHg bg=(${(@q+kv)bg}) bg_bold=(${(@q+kv)bg_bold}) bg_no_bold=(${(@q+kv)bg_no_bold})"
+    print -r -- "typeset -Hg reset_color=${(q+)reset_color} bold_color=${(q+)bold_color}"' > "${stage}/share/wsh/colors.zsh"
+  chmod 644 "${stage}/share/wsh/colors.zsh"
 
 fi
 install -D -m 644 "${repository_root}/schemas/theme.schema.json" "${stage}/share/wsh/schemas/theme.schema.json"

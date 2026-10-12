@@ -13,7 +13,7 @@
 
 ## Compatibility
 
-Use familiar Zsh commands, scripts, completions and Oh My Zsh configuration. Wsh bundles Zsh itself, so you keep its language, line editor and job control. Wsh's editing features also work with your existing prompt.
+Use familiar Zsh commands, scripts, completions and Oh My Zsh configuration. Wsh bundles Zsh itself, so you keep its language, line editor and job control. Wsh's editing features also work with your existing prompt. Without a framework, Wsh still sets up completion, the usual editing keys and history clean-up; its [interactive defaults](NATIVE-INSTALLATION.md#interactive-defaults) give way to anything you set in `.zshrc`.
 
 For supported plugins installed without modifications, Wsh can provide the same features more quickly while keeping supported settings. Plugins you have customized, or that Wsh cannot identify, continue to run as configured. Some features from newer plugin versions may not yet be available through Wsh; [component compatibility](VENDORED-COMPONENTS.md) records what is supported. Run `wsh --doctor` to find redundant setup and suggested cleanup. Doctor never edits your startup files.
 

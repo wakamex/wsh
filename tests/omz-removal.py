@@ -38,7 +38,7 @@ CAPTURE = r'''
   local -a w
   zstyle -L | while read -r v; do
     w=(${(z)${v#zstyle }})
-    [[ $w[1] == -e ]] && k="$w[1,3]" || k="$w[1,2]"
+    [[ $w[1] == -e ]] && k="$w[2,3]" || k="$w[1,2]"
     print -r -- "style:$k"$'\t'"$v"
   done
   for k in ${(ko)aliases}; do print -r -- "alias:$k"$'\t'"${(q)aliases[$k]}"; done
@@ -116,7 +116,8 @@ for keymap, last in (('emacs', ''), ('vi', 'bindkey -v\n')):
     with_omz, without = capture(keymap + '-with', True, last), capture(keymap + '-without', False, last)
     for key in sorted(with_omz.keys() | without.keys()):
         before, after = with_omz.get(key), without.get(key)
-        if before == after:
+        # A function counts as present whether it is loaded or still marked for autoload.
+        if before == after or key.startswith('function:') and None not in (before, after):
             continue
         label = f'{keymap} {key}' if key.startswith('key:') else key
         if any(row['key'] == label for row in differences):

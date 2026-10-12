@@ -138,5 +138,59 @@
   {
     "key": "hook:precmd:omz_termsupport_cwd",
     "reason": "Wsh reports the working directory to the terminal itself"
+  },
+  {
+    "key": "alias:-",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:egrep",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "alias:fgrep",
+    "reason": "Not adopted"
+  },
+  {
+    "key": "function:VCS_INFO_formats",
+    "reason": "Oh My Zsh's own commands and prompt helpers"
+  },
+  {
+    "key": "function:regexp-replace",
+    "reason": "Oh My Zsh's own commands and prompt helpers"
+  },
+  {
+    "key": "function:zrecompile",
+    "reason": "Oh My Zsh's own commands and prompt helpers"
+  },
+  {
+    "key": "hook:*:omz_termsupport_pre*",
+    "reason": "The terminal title is left to the terminal"
+  },
+  {
+    "key": "parameter:LESS",
+    "reason": "Left to user startup files: export LESS=-R. It also changes how Git and other programs page their output"
+  },
+  {
+    "key": "parameter:LSCOLORS",
+    "reason": "Not adopted: colours for BSD ls"
+  },
+  {
+    "key": "style:':completion:[*]:[*]:[*]:[*]:[*]' menu",
+    "reason": "Wsh sets the menu on ':completion:*', so the same style in a user file replaces it"
+  },
+  {
+    "key": "style:':completion:[*]' matcher-list",
+    "reason": "Not adopted: partial-word matching; case-insensitive matching stays",
+    "without": "zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'"
+  },
+  {
+    "key": "style:':completion:[*]' list-colors",
+    "reason": "Wsh reads LS_COLORS when a completion list is shown",
+    "without": "zstyle -e ':completion:*' list-colors 'reply=(${(s.:.)${LS_COLORS:-di=01;34:ln=01;36:so=01;35:pi=33:ex=01;32:bd=01;33:cd=01;33}})'"
+  },
+  {
+    "key": "widget:*zle-line-*",
+    "reason": "Wsh binds the key sequences of both terminal key modes instead of switching the terminal's mode"
   }
 ]

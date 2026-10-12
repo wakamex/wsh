@@ -265,7 +265,8 @@ for variant in $variants; do
       [[ $state == external-exact\|0.8.1-dev\|${exact_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "unexpected exact external state for ${variant}: $state"; exit 1; }
       ;;
     modified-inactive)
-      [[ $state == external-unknown\|0.8.1-dev\|${modified_source}/zsh-syntax-highlighting.zsh\|0\|0\|1\|1\|* ]] || { print -u2 -r -- "modified inactive implementation was not preserved: $state"; exit 1; }
+      # Wsh's defaults load ZLE before user startup files, so sourcing alone activates it.
+      [[ $state == external-unknown\|0.8.1-dev\|${modified_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "modified implementation sourced before ZLE was not preserved: $state"; exit 1; }
       ;;
     modified-ready)
       [[ $state == external-unknown\|0.8.1-dev\|${modified_source}/zsh-syntax-highlighting.zsh\|1\|1\|1\|1\|* ]] || { print -u2 -r -- "modified active implementation was not preserved: $state"; exit 1; }
@@ -282,7 +283,7 @@ for variant in $variants; do
   if [[ $variant == configured ]]; then
     [[ $state == *'|main,brackets|fg=blue|fg=red|fg=magenta|'* ]] || { print -u2 -r -- "configuration was not preserved: $state"; exit 1; }
   fi
-  if [[ $variant != disabled && $variant != modified-inactive ]]; then
+  if [[ $variant != disabled ]]; then
     buffer_state=$(report_buffer 'print "WSH_SYNTAX"' 1)
     [[ $buffer_state == 'print "WSH_SYNTAX"|'*fg=blue*fg=yellow* ]] || { print -u2 -r -- "valid command was not highlighted for ${variant}: $buffer_state"; exit 1; }
     buffer_state=$(report_buffer wsh_definitely_missing 2)

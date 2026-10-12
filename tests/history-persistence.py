@@ -96,7 +96,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-history-') as directory:
     try:
         first.run('print -r -- "$HISTFILE|$HISTSIZE|$SAVEHIST|$options[incappendhistory]|$options[sharehistory]" > settings')
         check('fresh defaults', (home / 'settings').read_text().strip() ==
-              f'{home}/.zsh_history|10000|10000|on|off')
+              f'{home}/.zsh_history|50000|10000|on|off')
         first.run(': WSH_HISTORY_BEFORE_SECOND')
         check('saved before exit', 'WSH_HISTORY_BEFORE_SECOND' in (home / '.zsh_history').read_text())
         second = Shell(home, 'second')
