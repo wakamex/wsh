@@ -20,6 +20,9 @@
 #define OUTPUT_LIMIT (4 * 1024 * 1024)
 #define TAG_LIMIT (1024 * 1024)
 #define TIMEOUT_NS UINT64_C(2000000000)
+/* A status this slow is usually re-hashing files whose stat data the index never saved. */
+#define REFRESH_NS UINT64_C(100000000)
+#define REFRESHED_LIMIT 16
 
 struct context {
     struct wsh_git_result *out;
@@ -542,6 +545,45 @@ done:
     if (ctx->out->error || ctx->out->cancelled || child < 0 || !reaped) { free(output); return NULL; }
     return output;
 }
+/* Indexes already refreshed, identified by their file metadata at the time. Git rewrites an index
+ * until it is a second newer than its files; the first refresh that leaves it unchanged ends the
+ * series, so the lock is taken a few times per index change rather than at every prompt. */
+static struct { dev_t dev; ino_t ino; off_t size; struct timespec mtime; } refreshed[REFRESHED_LIMIT];
+static size_t refreshed_next;
+static void refresh_index(const char *cwd, const char *git, const char *git_dir)
+{
+    extern char **environ;
+    char *index = join(git_dir, "index"), *lock = join(git_dir, "index.lock"), *path = command_path(cwd, git);
+    char *arguments[] = { (char *)git, "update-index", "-q", "--refresh", NULL };
+    struct stat st;
+    size_t i;
+    int nullfd = -1;
+    pid_t child;
+    /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so do it once here instead. */
+    if (!index || !lock || !path || getenv("GIT_INDEX_FILE") || !lstat(lock, &st) || errno != ENOENT) goto done;
+    if (stat(index, &st)) goto done;
+    for (i = 0; i < REFRESHED_LIMIT; ++i)
+        if (refreshed[i].dev == st.st_dev && refreshed[i].ino == st.st_ino && refreshed[i].size == st.st_size &&
+            refreshed[i].mtime.tv_sec == st.st_mtim.tv_sec && refreshed[i].mtime.tv_nsec == st.st_mtim.tv_nsec) goto done;
+    refreshed[refreshed_next].dev = st.st_dev; refreshed[refreshed_next].ino = st.st_ino;
+    refreshed[refreshed_next].size = st.st_size; refreshed[refreshed_next].mtime = st.st_mtim;
+    refreshed_next = (refreshed_next + 1) % REFRESHED_LIMIT;
+    nullfd = private_fd(open("/dev/null", O_RDWR | O_CLOEXEC));
+    if (nullfd < 0) goto done;
+    /* The intermediate child exits at once, so the refresh outlives no one and needs no reaping. */
+    child = fork();
+    if (!child) {
+        if (setsid() < 0 || chdir(cwd) || dup2(nullfd, STDIN_FILENO) < 0 || dup2(nullfd, STDOUT_FILENO) < 0 || dup2(nullfd, STDERR_FILENO) < 0) _exit(127);
+        if (fork()) _exit(0);
+        (void)nice(10);
+        execve(path, arguments, environ);
+        _exit(127);
+    }
+    if (child > 0) reap(child);
+done:
+    if (nullfd >= 0) close(nullfd);
+    free(index); free(lock); free(path);
+}
 int wsh_git_operation(const char *directory)
 {
         if (exists_in(directory, "rebase-merge", 1) || exists_in(directory, "rebase-apply", 1)) return 1;
@@ -584,6 +626,7 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
         }
         out->found = out->worktree = 1;
         out->operation = wsh_git_operation(id.git_dir);
+        if (out->process_ns >= REFRESH_NS && !out->operation) refresh_index(cwd, git, id.git_dir);
     }
     out->parsing_ns = now_ns() - parsing;
     free_identity(&id);

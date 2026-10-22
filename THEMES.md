@@ -25,6 +25,8 @@ WSH_THEME=/path/to/theme.toml wsh
 
 Run these commands in your terminal to try a theme for that Wsh session. You can customize layout and colors in a theme file without writing shell scripts. Selecting Robbyrussell or Agnoster through OMZ uses the OMZ version; select it through `WSH_THEME` to get Wsh's version and its measured performance benefits. The presentation table above describes which OMZ features the ports cover; the definition format below explains customization.
 
+Built-in themes read Git status without taking the repository's index lock, so they never make your own `git add` or `git commit` fail with `index.lock: File exists`. Without the lock, Git cannot save the file timestamps it rechecks, so a repository whose files were touched without changing, for example by a build or a checkout, would recheck them at every prompt. When a status takes 100 ms or more, Wsh refreshes the index once in the background with `git update-index -q --refresh`, skipping it while `index.lock` exists, during a rebase, merge, cherry-pick, revert or bisect, and when `GIT_INDEX_FILE` is set. In a 20,000-file repository with touched files, the first prompt took 230 ms and later prompts 17 ms.
+
 If you use Zsh and Wsh interchangeably, you can leave your shared `.zshrc` unchanged and select the Wsh theme on the command line as above. OMZ loads its existing theme, then Wsh installs the selected prompt. Any theme work and unrelated hooks from OMZ still run.
 
 If you switch entirely to Wsh, set `WSH_THEME=wakamex` in `.zshrc`. If OMZ still loads, set `ZSH_THEME=""` before sourcing `oh-my-zsh.sh`. Removing OMZ is a separate choice; its other plugins and configuration can remain useful.

@@ -39,3 +39,4 @@ python3 $root/native/test-directory-owner.py $bundle/bin/wsh installed $checks/d
 python3 $root/native/test-runtime-lifecycle.py $bundle/libexec/wsh/wsh-runtime $checks/runtime-lifecycle
 python3 $root/native/test-runtime-protocol.py $bundle/libexec/wsh/wsh-runtime $checks/runtime-protocol
 python3 $root/native/test-git-output.py $bundle/libexec/wsh/wsh-runtime $checks/git-output
+python3 $root/native/test-git-refresh.py $bundle/libexec/wsh/wsh-runtime $checks/git-refresh
