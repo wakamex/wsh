@@ -30,6 +30,7 @@ Oh My Zsh's core library sets these on every start; only its `plugins` entries a
 | Work | Required practice |
 | --- | --- |
 | Upstream Zsh updates | Evaluate newer upstream changes, refresh the pinned source deliberately and rerun upstream, compatibility and package checks. Keep local fixes and potential upstream submissions current in [upstream bug records](UPSTREAM-ZSH-BUGS.md). |
+| Upstream Git fix | The prompt's background index refresh in `native/git.c` works around `git status` creating `index.lock` on every run even when it writes nothing. When a Git release includes the [proposed fix](https://lore.kernel.org/git/20261022184420.3648771-1-mcosma@gmail.com/) and is common on supported targets, let the prompt's status take optional locks and remove the refresh. |
 | Upstream plugin changes | Review changes reported by the daily monitor and incorporate relevant behavior promptly. Preserve component-specific handoff behavior, settings and customizations. [Component compatibility](VENDORED-COMPONENTS.md) records support and possible feature lag. |
 | Compatibility and release regressions | Treat reproduced startup, editing, completion, prompt, restore and login failures as maintenance priorities. Test real consumers alongside local component contracts. Existing package and shell correctness gates remain required for releases. |
 | COPR updates | Publish explicitly selected, CI-qualified source commits and test signed-repository transactions before advertising packaging changes. Keep supported chroots and installation guidance current. |

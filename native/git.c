@@ -559,7 +559,10 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     size_t i;
     int nullfd = -1;
     pid_t child;
-    /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so do it once here instead. */
+    /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so do it once here instead.
+     * Workaround: status with locks allowed creates index.lock on every run even when it writes
+     * nothing. Remove this once a Git release locks only when there is something to write:
+     * https://lore.kernel.org/git/20261022184420.3648771-1-mcosma@gmail.com/ */
     if (!index || !lock || !path || getenv("GIT_INDEX_FILE") || !lstat(lock, &st) || errno != ENOENT) goto done;
     if (stat(index, &st)) goto done;
     for (i = 0; i < REFRESHED_LIMIT; ++i)
