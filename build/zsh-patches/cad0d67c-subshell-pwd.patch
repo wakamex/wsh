@@ -1,0 +1,12 @@
+--- a/Src/builtin.c
++++ b/Src/builtin.c
+@@ -1257,7 +1257,8 @@
+     fflush(stderr);
+     if (!quiet) {
+ 	callhookfunc("chpwd", NULL, 1, NULL);
+-	if (zle_load_state == 1)
++	/* A subshell's directory is not the terminal's. */
++	if (zle_load_state == 1 && !zsh_subshell)
+ 	    zleentry(ZLE_CMD_CHPWD);
+     }
+ 

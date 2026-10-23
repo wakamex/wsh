@@ -18,6 +18,7 @@ zsh $root/tests/wsh-version-parameter.zsh $bundle/bin/wsh
 python3 $root/tests/pane-history.py $bundle/bin/wsh $checks/pane-history
 python3 $root/tests/history-local-search.py $bundle/bin/wsh
 python3 $root/tests/interactive-defaults.py $bundle/bin/wsh $checks/interactive-defaults
+python3 $root/tests/directory-report.py $bundle/bin/wsh $checks/directory-report
 if [[ -n ${WSH_TEST_OMZ:-} ]]; then
   python3 $root/tests/omz-removal.py $bundle/bin/wsh $WSH_TEST_OMZ $checks/omz-removal
 fi

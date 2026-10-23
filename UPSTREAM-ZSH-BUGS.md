@@ -163,3 +163,15 @@ Wsh met this through Ctrl-C at the prompt. zsh-syntax-highlighting runs `for` lo
 The window is a few instructions wide, so no deterministic shell reproducer exists; a widget running a million short `for` loops interrupted 300 times did not hit it on an idle machine.
 
 Wsh's [cad0d67c-loop-break-count.patch](build/zsh-patches/cad0d67c-loop-break-count.patch) clamps `breaks` to the remaining `loops` after each of the four loop exits in `Src/loop.c`, since a break count can never refer to more loops than are running. With the patch the same test passed 800 of 800 runs, and the upstream suite passes. No submission has been made.
+
+## A cd inside a subshell reports the subshell's directory to the terminal
+
+Affected source: the pinned revision and upstream `master` at `0ae722e65`.
+
+After a `cd`, `cd_new_pwd()` in `Src/builtin.c` calls `zleentry(ZLE_CMD_CHPWD)`, which writes an OSC 7 directory report naming `$PWD` to the terminal. It does so in subshells too, so `(cd /tmp && true)` in an interactive shell tells the terminal the shell is in `/tmp` while it has not moved. The next prompt reports the right directory again, so an interactive shell is wrong only until its next prompt; a shell that runs one long command after startup, such as `wsh --run`, stays wrong for as long as the command runs, and a terminal that opens new panes in the reported directory opens them in the subshell's.
+
+Reproducer: at an interactive `zsh -f` prompt in a terminal that shows OSC 7 reports, run `(cd /tmp && :); sleep 5` from another directory. The terminal shows `/tmp` until the next prompt.
+
+Expected: a subshell's `cd` changes no report, since the terminal's shell is the parent.
+
+Wsh's [cad0d67c-subshell-pwd.patch](build/zsh-patches/cad0d67c-subshell-pwd.patch) skips the report when `zsh_subshell` is nonzero. `tests/directory-report.py` covers a subshell `cd` in a startup file under `wsh --run`, a subshell and a command substitution at an interactive prompt, and the shell's own `cd`, which is still reported; it fails without the patch and passes with it, and the installed suite passes. No submission has been made.

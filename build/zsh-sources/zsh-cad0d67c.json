@@ -42,6 +42,10 @@
     {
       "path": "build/zsh-patches/cad0d67c-loop-break-count.patch",
       "sha256": "a9b3e04c899c97090e07ea9dd82657e6de1aa0571ea1a4bd3134459034d311b3"
+    },
+    {
+      "path": "build/zsh-patches/cad0d67c-subshell-pwd.patch",
+      "sha256": "faabab35777950f4df31b2c18d1437151457544b718052fa5691a6550ead960b"
     }
   ],
   "test_patches": [

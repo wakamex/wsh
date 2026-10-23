@@ -46,6 +46,8 @@ wsh_foreground_run(void)
         lastval = 127;
         return;
     }
+    /* The command may run for days without a prompt, so report its directory before it starts. */
+    zleentry(ZLE_CMD_CHPWD);
     zleentry(ZLE_CMD_PREEXEC);
     execstring("() { builtin emulate -L zsh -o no_aliases; \"${_WSH_FOREGROUND_ARGV[@]}\"; }", 0, 0, "wsh-foreground");
     zleentry(ZLE_CMD_POSTEXEC);

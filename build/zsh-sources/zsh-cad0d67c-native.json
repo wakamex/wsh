@@ -44,6 +44,10 @@
       "sha256": "a9b3e04c899c97090e07ea9dd82657e6de1aa0571ea1a4bd3134459034d311b3"
     },
     {
+      "path": "build/zsh-patches/cad0d67c-subshell-pwd.patch",
+      "sha256": "faabab35777950f4df31b2c18d1437151457544b718052fa5691a6550ead960b"
+    },
+    {
       "path": "build/zsh-patches/cad0d67c-native-entrypoint.patch",
       "sha256": "bd2fc61e5cc6e129e7c811312d527b603be080f454f39f65c61bd44e11d95ce7"
     },
@@ -88,7 +92,7 @@
       },
       {
         "path": "native/foreground.c",
-        "sha256": "ad8084b38d4df1f4ca7ca327e80a5d3ab4abe97c25b69a014a53f220f75996ba"
+        "sha256": "e1c3d74f5aa297462be20ac703cc84df70dad919b260dc09020b81aeb2fa7ce8"
       },
       {
         "path": "native/profile.c",
