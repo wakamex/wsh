@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/prctl.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -578,7 +579,8 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     if (!child) {
         if (setsid() < 0 || chdir(cwd) || dup2(nullfd, STDIN_FILENO) < 0 || dup2(nullfd, STDOUT_FILENO) < 0 || dup2(nullfd, STDERR_FILENO) < 0) _exit(127);
         if (fork()) _exit(0);
-        (void)nice(10);
+        /* Lower priority is best effort; the refresh runs either way. */
+        if (setpriority(PRIO_PROCESS, 0, 10)) {}
         execve(path, arguments, environ);
         _exit(127);
     }
