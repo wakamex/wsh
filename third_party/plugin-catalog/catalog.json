@@ -236,6 +236,25 @@
       ]
     },
     {
+      "component": "syntax",
+      "version": "e6683f2",
+      "repository": "https://github.com/zsh-users/zsh-syntax-highlighting",
+      "revision": "e6683f20e5c38d3e5447f45845d04ddda75d0f23",
+      "handoff": "main-parser-with-preserved-lifecycle",
+      "files": [
+        {
+          "source": "third_party/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh",
+          "upstream_path": "zsh-syntax-highlighting.zsh",
+          "sha256": "156ebe9530eb991dcef54d476967e2ff4338d35dabaaff9e5462673a287cc63b"
+        },
+        {
+          "source": "third_party/zsh-syntax-highlighting/recognized/e6683f2/main-highlighter.zsh",
+          "upstream_path": "highlighters/main/main-highlighter.zsh",
+          "sha256": "1f59176bc1e5fd8ac8eaa85dd7a4cd2a95083ee7c689a430ff4a5e2e9eee0061"
+        }
+      ]
+    },
+    {
       "component": "directory",
       "version": "omz-7e3231b",
       "repository": "https://github.com/ohmyzsh/ohmyzsh",

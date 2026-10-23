@@ -63,7 +63,7 @@ The retained [autosuggestions result](https://github.com/wakamex/wsh/blob/c7af8c
 
 ## Syntax highlighting fixes Wsh startup timing
 
-Pinned source: `zsh-users/zsh-syntax-highlighting` commit `2fc57d63067c18b1100ecdbf684fa5baf49459d1`.
+Pinned source: `zsh-users/zsh-syntax-highlighting` commit `2fc57d63067c18b1100ecdbf684fa5baf49459d1`. Upstream commit `e6683f20e5c38d3e5447f45845d04ddda75d0f23` is also recognized: it only stops the main highlighter's path check from looping after `$PWD` is deleted, a loop Wsh's native main highlighter does not have.
 
 The upstream redraw-hook path defines its hook functions and installs them only when the ZLE option is active while the source file runs. Wsh currently loads the user's `.zshrc` from inside its bundled startup file so it can preserve native configuration while installing trusted Wsh integration afterward. In that nested path, an ordinary user declaration ran while ZLE was inactive. The unchanged upstream source defined its functions and pre-exec hook but installed neither redraw nor finish hook, leaving syntax highlighting silently inactive.
 

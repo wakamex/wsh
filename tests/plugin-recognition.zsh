@@ -29,4 +29,5 @@ PY
 local syntax=$WSH_BUNDLE_ROOT/share/wsh/defaults/zsh-syntax-highlighting
 _wsh_plugin_recognized syntax $syntax/zsh-syntax-highlighting.zsh $syntax/highlighters/main/known-main-highlighter.zsh
 ! _wsh_plugin_recognized syntax $syntax/zsh-syntax-highlighting.zsh $syntax/recognized/b2c910a/main-highlighter.zsh
+_wsh_plugin_recognized syntax $syntax/zsh-syntax-highlighting.zsh $syntax/recognized/e6683f2/main-highlighter.zsh
 print -r -- 'PASS: catalog arity, missing/empty/large files, paths, modification and mixed-version rejection'
