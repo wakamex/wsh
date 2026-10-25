@@ -1,5 +1,5 @@
 # Version and release are fixed when preparing the source RPM.
-%{!?wsh_version:%global wsh_version 0.4.7}
+%{!?wsh_version:%global wsh_version 0.4.8}
 %{!?wsh_release:%global wsh_release 1}
 
 # Keep distro post-processing, then inventory the bytes it will package even
@@ -115,6 +115,9 @@ exit 0
 %{_mandir}/man1/wsh.1*
 
 %changelog
+* Sun Oct 25 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.8-1
+- Keep pane history working under a symlinked state directory, such as /home on Fedora Atomic.
+
 * Fri Oct 23 2026 Mihai Cosma <wakamex@users.noreply.github.com> - 0.4.7-1
 - Work without a framework: set up completion, editing keys and history clean-up when startup files do not.
 
