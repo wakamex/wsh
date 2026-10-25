@@ -35,5 +35,9 @@ jobs:
           ref="$RUNNER_TEMP/build/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
           "$ref" --version
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
-            "$ref" -f build/debug/zpty-probe.zsh $shell || true
+            for mode in b nb; do
+              for echo_mode in noecho echo; do
+                gtimeout 25 "$ref" -f build/debug/zpty-probe.zsh $mode $echo_mode $shell || echo "  exited $? ($mode $echo_mode $shell)"
+              done
+            done
           done
