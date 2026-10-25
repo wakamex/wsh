@@ -50,7 +50,7 @@ helper.mkdir()
 log = out / 'refreshes.log'
 (helper / 'git').write_text(f'''#!/bin/sh
 case "$1" in
-  status) [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99; /usr/bin/sleep "${{WSH_TEST_STATUS_DELAY:-0}}" ;;
+  status) [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99; sleep "${{WSH_TEST_STATUS_DELAY:-0}}" ;;
   update-index) printf '%s\\n' "$PWD" >> {log} ;;
 esac
 exec /usr/bin/git "$@"

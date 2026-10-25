@@ -51,7 +51,7 @@ class Shell(base.Shell):
         env.update({k:v for k,v in os.environ.items() if k.endswith('SAN_OPTIONS')})
         self.pid,self.fd=pty.fork()
         if self.pid==0:
-            os.chdir(OUT);os.sched_setaffinity(0,{0});os.execve(BINARY,[str(BINARY),'-di'],env)
+            os.chdir(OUT);hasattr(os,'sched_setaffinity') and os.sched_setaffinity(0,{0});os.execve(BINARY,[str(BINARY),'-di'],env)
         self.wait(base.READY)
         assert b'failed' not in self.output and b'ERROR:' not in self.output, self.output
 if MODE=='correctness':

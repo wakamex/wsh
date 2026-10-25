@@ -3,6 +3,7 @@
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import time
 root=Path(__file__).resolve().parents[1]
@@ -17,6 +18,12 @@ bindkey '^Y' _pending
 '''
 if '--no-monitor' in sys.argv:namespace['CONFIG']+='\nunsetopt monitor\n'
 shell=namespace['Shell']('candidate','pending-cancel','custom')
+def process_stat(pid):
+ """The process's state line, or '' once it is gone; /proc where it exists, ps elsewhere."""
+ if Path('/proc/self').exists():
+  try:return Path('/proc',str(pid),'stat').read_text()
+  except FileNotFoundError:return ''
+ return subprocess.run(['ps','-o','pid=,stat=,pgid=,command=','-p',str(pid)],capture_output=True,text=True).stdout.strip()
 try:
  os.write(shell.fd,b'pending request')
  request=shell.home/'requests';end=time.monotonic()+5
@@ -25,12 +32,12 @@ try:
  offset=len(shell.output);os.write(shell.fd,b'\x19');shell.wait(b'\x1ePID:',offset)
  start=shell.output.index(b'\x1ePID:',offset)+5;shell.wait(b'\x1f',start)
  pid=int(shell.output[start:shell.output.index(b'|',start)])
- (namespace['OUT']/'before-cancel.json').write_text(json.dumps(dict(pid=pid,pgid=os.getpgid(pid),stat=Path('/proc',str(pid),'stat').read_text()),indent=2)+'\n')
+ (namespace['OUT']/'before-cancel.json').write_text(json.dumps(dict(pid=pid,pgid=os.getpgid(pid),stat=process_stat(pid)),indent=2)+'\n')
  offset=len(shell.output);os.write(shell.fd,b'\x03');shell.wait(namespace['base'].READY,offset)
  offset=len(shell.output);os.write(shell.fd,b'\x19');shell.wait(b'\x1ePID:|\x1f',offset)
  end=time.monotonic()+3
- while Path('/proc',str(pid)).exists():
-  assert time.monotonic()<end,('strategy child survived',pid,Path('/proc',str(pid),'stat').read_text());time.sleep(.01)
+ while process_stat(pid):
+  assert time.monotonic()<end,('strategy child survived',pid,process_stat(pid));time.sleep(.01)
  (namespace['OUT']/'lifecycle.json').write_text(json.dumps(dict(ctrl_c_prompt=True,fd_cleared=True,child_reaped=True,pid=pid),indent=2)+'\n')
  print('PASS: pending strategy cancellation, fd cleanup, child reaping and prompt return')
 finally:shell.close()
