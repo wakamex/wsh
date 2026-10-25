@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # Temporary macOS diagnosis: start a shell under zpty the way the suite does, type a
 # command, and report whether it ran. Usage: zpty-probe.zsh b|nb echo|noecho SHELL ARGS...
-zmodload zsh/zpty zsh/zselect zsh/datetime
+zmodload zsh/zpty zsh/zselect zsh/datetime || { print -u2 'probe: required modules did not load'; exit 2; }
 local mode=$1 echo_mode=$2; shift 2
 local -a shell_args=("$@")
 step() { print -u2 -r -- "  [$(( EPOCHREALTIME ))] $*"; }

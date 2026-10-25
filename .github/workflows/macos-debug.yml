@@ -34,6 +34,9 @@ jobs:
           bundle=$(ls -d "$RUNNER_TEMP"/build/wsh/bundles/*/ | head -1)
           ref="$RUNNER_TEMP/build/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
           "$ref" --version
+          # The artifact sits elsewhere than the build prefix, so point Zsh at its modules.
+          export MODULE_PATH=$(ls -d "$RUNNER_TEMP"/build/wsh/reference/zsh-cad0d67c-wsh4/lib/zsh/*/)
+          "$ref" -fc 'zmodload zsh/zpty zsh/datetime && print modules ok'
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
             for mode in b nb; do
               for echo_mode in noecho echo; do
