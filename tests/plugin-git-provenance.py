@@ -3,11 +3,14 @@
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
+# The reference Zsh the suite was given; Zsh's location differs between systems.
+ZSH = os.environ.get('WSH_REFERENCE_ZSH') or shutil.which('zsh')
 bundle, output = map(lambda p: Path(p).resolve(), sys.argv[1:])
 output.mkdir(parents=True, exist_ok=True)
 env = dict(os.environ, GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL='/dev/null', GIT_AUTHOR_NAME='Fixture', GIT_AUTHOR_EMAIL='fixture@example.invalid', GIT_COMMITTER_NAME='Fixture', GIT_COMMITTER_EMAIL='fixture@example.invalid')
@@ -24,7 +27,7 @@ source $WSH_BUNDLE_ROOT/share/wsh/defaults/plugin-recognition.zsh
 shift
 '''
     script += ('_wsh_plugin_recognized' if catalog else '_wsh_plugin_git_recognized') + ' "$@"\n'
-    result = subprocess.run(['/usr/bin/zsh', '-dfc', script, 'test', str(bundle), component, *map(str, paths)], env=env, capture_output=True, timeout=15)
+    result = subprocess.run([ZSH, '-dfc', script, 'test', str(bundle), component, *map(str, paths)], env=env, capture_output=True, timeout=15)
     assert (result.returncode == 0) == expected, (name, result.returncode, result.stderr.decode())
     rows.append(dict(case=name, accepted=expected, passed=True))
 

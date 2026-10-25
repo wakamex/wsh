@@ -234,10 +234,18 @@ report_buffer() {
   zpty -w -n $current_pty $input
   # Highlighting runs just before the shell redraws the line, so wait for the redrawn input
   # (escape sequences removed) instead of a fixed pause, reading the terminal meanwhile.
-  local -F settle=$(( EPOCHREALTIME + 3 ))
+  local -F settle=$(( EPOCHREALTIME + 3 )) quiet
+  local -i seen=0 length
   while (( EPOCHREALTIME < settle )); do
+    length=$#pty_output
     pty_read_available
-    [[ ${pty_output[offset+1,-1]//$'\e'\[[0-9;?]#[A-Za-z]/} == *$input* ]] && break
+    if (( seen )); then
+      # Then until 100 ms pass without output, so any later redraw has finished too.
+      (( $#pty_output > length )) && quiet=$(( EPOCHREALTIME + .1 ))
+      (( EPOCHREALTIME >= quiet )) && break
+    elif [[ ${pty_output[offset+1,-1]//$'\e'\[[0-9;?]#[A-Za-z]/} == *$input* ]]; then
+      seen=1 quiet=$(( EPOCHREALTIME + .1 ))
+    fi
     zselect -t 1 2>/dev/null || true
   done
   zpty -w -n $current_pty $'\x07'
