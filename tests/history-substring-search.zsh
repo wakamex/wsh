@@ -180,7 +180,8 @@ wait_for_lines() {
   done
   pty_read_available
   print -u2 -- "timeout waiting for ${expected} lines in ${file}"
-  print -u2 -r -- "terminal output: ${(qqq)pty_output[-2000,-1]}"
+  print -u2 -r -- "terminal output: ${(qqq)pty_output}"
+  print -u2 -r -- "state log: ${(qqq)$(<$child_state_log)}"
   return 1
 }
 
