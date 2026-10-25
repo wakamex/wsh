@@ -204,11 +204,11 @@ fi
 if [[ $preconfigure == true ]]; then
   ./Util/preconfig
 fi
-./configure \
-  --prefix="$output_dir" \
-  --enable-cap \
-  --enable-multibyte \
-  --enable-pcre
+# POSIX capabilities (libcap) exist only on Linux.
+configure_options=(--prefix="$output_dir")
+[[ $OSTYPE == linux* ]] && configure_options+=(--enable-cap)
+configure_options+=(--enable-multibyte --enable-pcre)
+./configure $configure_options
 if jq -e '.native.linked_modules == true' "$source_lock" >/dev/null; then
   # Keep dynamic loading for external modules while linking the bundled set.
   sed -i 's/ link=dynamic / link=static /' config.modules
