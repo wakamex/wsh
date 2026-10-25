@@ -121,6 +121,8 @@ run_interactive() {
     local exit_marker=user-zshexit
     [[ $mode == login ]] && exit_marker=zlogout
     while (( EPOCHREALTIME < exit_deadline )) && [[ $(<$child_log) != *$exit_marker* ]]; do
+      # Keep draining the terminal: a full pty buffer, small on macOS, blocks the shell's exit.
+      pty_read_available
       zselect -t 1 2>/dev/null || true
     done
   fi

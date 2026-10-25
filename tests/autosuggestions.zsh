@@ -178,6 +178,8 @@ wait_for_lines() {
   local -F deadline=$(( EPOCHREALTIME + 3 ))
   while (( EPOCHREALTIME < deadline )); do
     [[ -e $file && $(wc -l < $file) -ge $expected ]] && return 0
+    # Keep draining the terminal: a full pty buffer, small on macOS, blocks the shell's redraw.
+    pty_read_available
     zselect -t 1 2>/dev/null || true
   done
   print -u2 -- "timeout waiting for ${expected} lines in ${file}"

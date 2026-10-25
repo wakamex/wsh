@@ -179,6 +179,8 @@ zpty -w $pty "cd ${(q)scratch}/'recorded visit'"
 read_until $'\e]133;B\e\\'
 local -F deadline=$(( EPOCHREALTIME + 5 ))
 while (( EPOCHREALTIME < deadline )) && [[ $(<$home/jump-data) != *'/recorded visit|'* ]]; do
+  # Keep draining the terminal: a full pty buffer, small on macOS, blocks the shell's redraw.
+  while zpty -r -t $pty chunk 2>/dev/null; do output+=$chunk; done
   zselect -t 1 2>/dev/null || true
 done
 [[ $(<$home/jump-data) == *'/recorded visit|'* ]]

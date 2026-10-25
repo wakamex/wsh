@@ -138,6 +138,8 @@ wait_for_report() {
   local -F deadline=$(( EPOCHREALTIME + 3 ))
   while (( EPOCHREALTIME < deadline )); do
     [[ -f $current_report ]] && grep -F -- $expected $current_report >/dev/null && return 0
+    # Keep draining the terminal: a full pty buffer, small on macOS, blocks the shell's redraw.
+    read_available
     zselect -t 1 2>/dev/null || true
   done
   print -u2 -- "timeout waiting for report value: $expected"
@@ -148,6 +150,7 @@ wait_for_process_exit() {
   local pid=$1
   local -F deadline=$(( EPOCHREALTIME + 3 ))
   while (( EPOCHREALTIME < deadline )); do
+    read_available
     local state=$(process_state $pid)
     [[ -z $state ]] && return 0
     [[ $state == Z ]] && {
