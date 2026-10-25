@@ -183,6 +183,9 @@ while (( EPOCHREALTIME < deadline )) && [[ $(<$home/jump-data) != *'/recorded vi
   while zpty -r -t $pty chunk 2>/dev/null; do output+=$chunk; done
   zselect -t 1 2>/dev/null || true
 done
-[[ $(<$home/jump-data) == *'/recorded visit|'* ]]
+[[ $(<$home/jump-data) == *'/recorded visit|'* ]] || {
+  print -u2 -r -- "FAIL: visit not recorded: jump-data=${(qqq)$(<$home/jump-data)} output=${(qqq)output[-1500,-1]}"
+  exit 1
+}
 zpty -w $pty exit
 print -r -- 'PASS: real ZLE completion handles spaces and prompt hooks record directory visits'

@@ -230,7 +230,9 @@ report_state() {
 report_buffer() {
   local input=$1 line_number=$2
   zpty -w -n $current_pty $input
-  zselect -t 2 2>/dev/null || true
+  # Let highlighting settle, reading the terminal meanwhile so the shell never blocks on output.
+  local -F settle=$(( EPOCHREALTIME + .02 ))
+  while (( EPOCHREALTIME < settle )); do pty_read_available; zselect -t 1 2>/dev/null || true; done
   zpty -w -n $current_pty $'\x07'
   wait_for_lines $child_buffer_log $line_number
   sed -n "${line_number}p" $child_buffer_log
