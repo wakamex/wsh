@@ -4,7 +4,7 @@ name: macos-debug
 on:
   push:
     branches: [portable-hosts]
-    paths: [build/debug/**, .github/workflows/macos-debug.yml]
+    paths: [build/debug/**, tests/**, .github/workflows/macos-debug.yml]
 
 permissions:
   contents: read
