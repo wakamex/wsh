@@ -22,6 +22,12 @@ probe() {
   done
   local prompt=$#out
   step "prompt bytes $prompt"
+  if [[ $mode == subshell ]]; then
+    # As the suite's report helpers do: write from a command substitution first.
+    local ignored=$(zpty -w $name ''; print done)
+    step "subshell wrote: $ignored"
+    zselect -t 50
+  fi
   zpty -w $name 'print PROBE_$((6*7))'
   step written
   end=$(( EPOCHREALTIME + 4 ))
@@ -33,4 +39,4 @@ probe() {
   [[ $result == ran ]] || print -r -- "    output: ${(qqq)out[-600,-1]}"
   zpty -d $name 2>/dev/null
 }
-probe p1 "${mode:#nb}" $echo_mode
+probe p1 "${${mode:#nb}:#subshell}" $echo_mode

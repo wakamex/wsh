@@ -37,7 +37,7 @@ jobs:
           "$ref" --version
           "$ref" -fc 'zmodload zsh/zpty zsh/datetime && print modules ok'
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
-            for mode in b nb; do
+            for mode in b nb subshell; do
               for echo_mode in noecho echo; do
                 gtimeout 25 "$ref" -f build/debug/zpty-probe.zsh $mode $echo_mode $shell || echo "  exited $? ($mode $echo_mode $shell)"
               done
