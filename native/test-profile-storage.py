@@ -38,7 +38,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-profile-storage-') as directory:
     check('file-state-rejected', {'WSH_STATE_ROOT': str(blocked)}, 1)
     assert blocked.read_text() == 'leave this file alone'
     check('missing-home-rejected', {'HOME': ''}, 1)
-    check('unwritable-state-rejected', {'WSH_STATE_ROOT': '/proc/wsh-profile-no-write'}, 1)
+    check('unwritable-state-rejected', {'WSH_STATE_ROOT': '/dev/null/wsh-profile-no-write'}, 1)
     for command in ('exit 19', 'kill -TERM $$'):
         plain = subprocess.run([BINARY, '-dfc', command], env=env, capture_output=True, timeout=5)
         check('command-' + ('term' if 'TERM' in command else 'exit'), {'WSH_STATE_ROOT': str(root / 'status-state')}, plain.returncode, command)

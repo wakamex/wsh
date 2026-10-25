@@ -10,6 +10,17 @@ import subprocess
 import sys
 import time
 
+
+def exists(pid):
+    """Whether a process, including an unreaped one, still exists; works without /proc."""
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        pass
+    return True
+
 ROOT = Path(__file__).resolve().parents[1]
 BINARY = Path(sys.argv[1]).resolve(); OUT = Path(sys.argv[2]).resolve(); OUT.mkdir(parents=True)
 ENV = dict(os.environ, HOME=str(OUT), PATH='/usr/bin:/bin', LC_ALL='C.UTF-8')
@@ -114,8 +125,8 @@ for mode in ['signal','active-eof','parent-death']:
         else:runtime.p.stdin.close();runtime.wait()
         until=time.monotonic()+3
         watched=[group,descendant]+([helper] if mode=='parent-death' else [])
-        while any(Path(f'/proc/{pid}').exists() for pid in watched) and time.monotonic()<until:time.sleep(.005)
-        assert not any(Path(f'/proc/{pid}').exists() for pid in watched),watched
+        while any(exists(pid) for pid in watched) and time.monotonic()<until:time.sleep(.005)
+        assert not any(exists(pid) for pid in watched),watched
         elapsed=time.monotonic()-started;assert elapsed<3
         if parent:assert not parent.stderr.read()
         results.append(dict(case=mode,passed=True,cleanup_seconds=elapsed));persist()

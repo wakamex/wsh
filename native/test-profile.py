@@ -56,7 +56,8 @@ try:
     wait(READY)
     profiles = list((state / 'profiles').iterdir()); assert len(profiles) == 1
     profile = profiles[0]
-    assert os.readlink('/proc/' + str(pid) + '/exe') == str(BINARY)
+    if Path('/proc/self/exe').exists():
+        assert os.readlink('/proc/' + str(pid) + '/exe') == str(BINARY)
     deadline = time.monotonic() + 5
     while True:
         r = subprocess.run([BINARY, '--profile-report', profile], env=env, capture_output=True, timeout=3)

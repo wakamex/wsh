@@ -38,7 +38,7 @@ class Shell(base.Shell):
         env.update({k:v for k,v in os.environ.items() if k.endswith('SAN_OPTIONS')})
         self.started=time.monotonic_ns();self.pid,self.fd=pty.fork()
         if self.pid==0:
-            os.chdir(OUT/'work/fixture');os.sched_setaffinity(0,{0});os.execve(BUNDLE/'bin/wsh',[str(BUNDLE/'bin/wsh'),'-di'],env)
+            os.chdir(OUT/'work/fixture');hasattr(os,'sched_setaffinity') and os.sched_setaffinity(0,{0});os.execve(BUNDLE/'bin/wsh',[str(BUNDLE/'bin/wsh'),'-di'],env)
         self.wait(base.READY);self.startup_ms=(time.monotonic_ns()-self.started)/1e6
 
 def reset(variant):

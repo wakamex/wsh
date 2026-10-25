@@ -2,6 +2,7 @@
 """Run doctor with a real controlling terminal and verify child cleanup."""
 import json
 import os
+import subprocess
 from pathlib import Path
 import pty
 import select
@@ -17,10 +18,9 @@ results = []
 
 
 def alive(pid):
-    try:
-        return Path(f'/proc/{pid}/stat').read_text().split(') ', 1)[1].split()[0] != 'Z'
-    except FileNotFoundError:
-        return False
+    # ps reports the process state on Linux and macOS alike; Z is a zombie.
+    state = subprocess.run(['ps', '-o', 'stat=', '-p', str(pid)], capture_output=True, text=True).stdout.strip()
+    return bool(state) and not state.startswith('Z')
 
 
 with tempfile.TemporaryDirectory(prefix='wsh-doctor-terminal-') as directory:

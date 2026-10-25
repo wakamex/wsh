@@ -46,7 +46,7 @@ class Shell:
   env.update({k:v for k,v in os.environ.items() if k.endswith('SAN_OPTIONS')})
   self.pid,self.fd=pty.fork()
   if not self.pid:
-   os.chdir(home);os.sched_setaffinity(0,{0});os.execve(binary,[str(binary),'-di'],env)
+   os.chdir(home);hasattr(os,'sched_setaffinity') and os.sched_setaffinity(0,{0});os.execve(binary,[str(binary),'-di'],env)
   self.wait(b'\x1b]133;B',0)
  def wait(self,marker,offset):
   end=time.monotonic()+10

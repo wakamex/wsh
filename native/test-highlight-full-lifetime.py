@@ -36,8 +36,8 @@ try:
     for _ in range(3):
         assert select.select([process.stdout], [], [], 120)[0], 'redraw batch timed out'
         assert process.stdout.readline() == b'READY\n'
-        status = Path(f'/proc/{process.pid}/status').read_text()
-        rss.append(int(next(s for s in status.splitlines() if s.startswith('VmRSS:')).split()[1]))
+        # Resident size in KiB; ps reports it the same way on Linux and macOS.
+        rss.append(int(subprocess.check_output(['ps', '-o', 'rss=', '-p', str(process.pid)], text=True)))
         process.stdin.write(b'continue\n')
         process.stdin.flush()
     stdout, stderr = process.communicate(timeout=10)

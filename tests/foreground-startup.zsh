@@ -148,8 +148,8 @@ wait_for_process_exit() {
   local pid=$1
   local -F deadline=$(( EPOCHREALTIME + 3 ))
   while (( EPOCHREALTIME < deadline )); do
-    [[ ! -e /proc/$pid ]] && return 0
-    local state=$(sed -n 's/^[^)]*) \([^ ]\).*/\1/p' /proc/$pid/stat 2>/dev/null)
+    local state=$(process_state $pid)
+    [[ -z $state ]] && return 0
     [[ $state == Z ]] && {
       print -u2 -- "error: foreground process remained a zombie: $pid"
       return 1
@@ -160,9 +160,15 @@ wait_for_process_exit() {
   return 1
 }
 
+# ps reports state and process group on Linux and macOS alike.
+process_state() {
+  local state=$(ps -o stat= -p $1 2>/dev/null)
+  print -r -- ${${state## #}[1]}
+}
+
 process_group() {
-  local pid=$1
-  sed -n 's/^[^)]*) [^ ]* [^ ]* \([^ ]*\).*/\1/p' /proc/$pid/stat
+  local pgid=$(ps -o pgid= -p $1 2>/dev/null)
+  print -r -- ${pgid// /}
 }
 
 start_variant() {
@@ -284,12 +290,11 @@ assert_suspend_continue() {
   pty_output=
   zpty -w -n $current_pty $'\x1a'
   wait_for_prompt post-suspend-prompt
-  local state=$(sed -n 's/^[^)]*) \([^ ]\).*/\1/p' /proc/$pid/stat)
-  [[ $state == T ]]
+  [[ $(process_state $pid) == T ]]
   pty_output=
   zpty -w $current_pty fg
   wait_for_report $'signal\tcont'
-  [[ -e /proc/$pid && $(process_group $pid) == $pgrp ]]
+  [[ -n $(process_state $pid) && $(process_group $pid) == $pgrp ]]
   zpty -w -n $current_pty $'\x03'
   wait_for_prompt post-resume-interrupt-prompt
   wait_for_process_exit $pid
