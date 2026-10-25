@@ -38,10 +38,9 @@ jobs:
           "$ref" -fc 'zmodload zsh/zpty zsh/datetime && print modules ok'
           echo "== keys"
           python3 build/debug/keys-probe.py "${bundle}bin/wsh" "$RUNNER_TEMP/keys-probe" || true
-          for test in syntax-highlighting directory-jump; do
-            echo "== $test"
-            WSH_EXPECT_NATIVE_TERMINAL_PASS=1 WSH_REFERENCE_ZSH="$ref" "$ref" -df tests/$test.zsh "${bundle%/}" || true
-          done
+          echo "== directory-jump"
+          WSH_EXPECT_NATIVE_TERMINAL_PASS=1 WSH_REFERENCE_ZSH="$ref" "$ref" -dfx tests/directory-jump.zsh "${bundle%/}" 2> "$RUNNER_TEMP/jump-trace.txt"; echo "exit status $?"
+          tail -40 "$RUNNER_TEMP/jump-trace.txt" | cut -c1-300
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
             for mode in b nb subshell; do
               for echo_mode in noecho echo; do
