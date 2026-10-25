@@ -37,8 +37,10 @@ class Wsh < Formula
     %w[coreutils gnu-sed gnu-tar].each { |f| ENV.prepend_path "PATH", Formula[f].opt_libexec/"gnubin" }
     ENV["WSH_SOURCE_REVISION"] = "@REVISION@"
     ENV["WSH_OFFLINE"] = "1"
-    output = Utils.safe_popen_read("zsh", "./build/build-native-installation.zsh")
-    prefix.install Dir["#{output.lines.last.strip}/*"]
+    system "zsh", "./build/build-native-installation.zsh"
+    bundles = Dir["bundles/*/share/wsh/manifest.json"].map { |manifest| File.expand_path("../../..", manifest) }
+    odie "expected one built installation, found #{bundles.length}" if bundles.length != 1
+    prefix.install Dir["#{bundles.first}/*"]
   end
 
   def caveats
