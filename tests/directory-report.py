@@ -6,6 +6,7 @@ Usage: directory-report.py WSH OUTPUT
 A cd inside a subshell must not report the subshell's directory, and `wsh --run` reports its
 command's directory before the command starts.
 """
+import faulthandler
 import os
 from pathlib import Path
 import pty
@@ -20,6 +21,8 @@ import time
 wsh = Path(sys.argv[1]).absolute()
 output = Path(sys.argv[2]).resolve()
 output.mkdir(parents=True, exist_ok=True)
+# A hang prints every thread's stack and fails instead of stalling the suite.
+faulthandler.dump_traceback_later(120, exit=True)
 REPORT = re.compile(rb'\x1b\]7;file://[^/]*(/[^\x1b]*)\x1b\\')
 checks = 0
 
@@ -63,13 +66,22 @@ def reports(data):
     return [Path(os.fsdecode(path)) for path in REPORT.findall(bytes(data))]
 
 
+def reaped(pid, seconds):
+    end = time.monotonic() + seconds
+    while time.monotonic() < end:
+        if os.waitpid(pid, os.WNOHANG) != (0, 0):
+            return True
+        time.sleep(.05)
+    return False
+
+
 def stop(home, pid, fd, data):
     (home / 'transcript.bin').write_bytes(bytes(data))
-    try:
-        os.kill(pid, signal.SIGHUP)
-    except ProcessLookupError:
-        pass
-    os.waitpid(pid, 0)
+    # A shell that ignores the hangup is killed, so a stuck child cannot stall the suite.
+    os.kill(pid, signal.SIGHUP)
+    if not reaped(pid, 5):
+        os.kill(pid, signal.SIGKILL)
+        os.waitpid(pid, 0)
     os.close(fd)
 
 
