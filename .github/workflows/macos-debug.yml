@@ -39,6 +39,7 @@ jobs:
           echo "== keys"
           python3 build/debug/keys-probe.py "${bundle}bin/wsh" "$RUNNER_TEMP/keys-probe" || true
           echo "== directory-jump"
+          set +e
           WSH_EXPECT_NATIVE_TERMINAL_PASS=1 WSH_REFERENCE_ZSH="$ref" "$ref" -dfx tests/directory-jump.zsh "${bundle%/}" 2> "$RUNNER_TEMP/jump-trace.txt"; echo "exit status $?"
           tail -40 "$RUNNER_TEMP/jump-trace.txt" | cut -c1-300
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
