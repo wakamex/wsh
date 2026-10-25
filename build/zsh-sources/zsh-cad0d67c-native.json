@@ -70,6 +70,10 @@
       "sha256": "ef4a0366d318d4fb7f92b7c2ded4e3d9302e33691d7a15aae7c7192f05b21353"
     },
     {
+      "path": "build/zsh-test-patches/cad0d67c-termquery-order.patch",
+      "sha256": "c7b49440c45dc9fc866581f1d955ad355e633f434cac50567cb309ee65c82ab2"
+    },
+    {
       "path": "build/zsh-test-patches/cad0d67c-zpty-read-wait.patch",
       "sha256": "201fcc9d6afff1a93de67e2a20d7d64810ec7d76a4998c368d4d8f95a3aca48d"
     }

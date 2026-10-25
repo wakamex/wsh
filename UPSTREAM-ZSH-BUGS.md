@@ -175,3 +175,13 @@ Reproducer: at an interactive `zsh -f` prompt in a terminal that shows OSC 7 rep
 Expected: a subshell's `cd` changes no report, since the terminal's shell is the parent.
 
 Wsh's [cad0d67c-subshell-pwd.patch](build/zsh-patches/cad0d67c-subshell-pwd.patch) skips the report when `zsh_subshell` is nonzero. `tests/directory-report.py` covers a subshell `cd` in a startup file under `wsh --run`, a subshell and a command substitution at an interactive prompt, and the shell's own `cd`, which is still reported; it fails without the patch and passes with it, and the installed suite passes. No submission has been made.
+
+## The terminal-query test depends on parameter hash order
+
+Affected source: the pinned revision's `Test/X06termquery.ztst`. This is a test-harness defect, not a shell bug.
+
+Each case prints the `.term.*` parameters with `typeset -p -m` and compares them, in order, with the expected lines. `typeset -m` lists parameters in hash-table order, which changes when the parameter table grows, so a larger environment reorders the output. A Homebrew build on macOS fails the test with the right values in a different order.
+
+Reproducer: build the pinned Zsh and run `make check` with 300 extra exported variables; `X06termquery.ztst` fails, and 74 of 75 scripts pass.
+
+Wsh's test patch [cad0d67c-termquery-order.patch](build/zsh-test-patches/cad0d67c-termquery-order.patch) sorts the printed parameters and the expected lines, after which all 75 scripts pass in the same environment. No submission has been made.
