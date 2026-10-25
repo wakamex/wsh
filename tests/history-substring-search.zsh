@@ -178,7 +178,9 @@ wait_for_lines() {
     [[ -e $file && $(wc -l < $file) -ge $expected ]] && return 0
     zselect -t 1 2>/dev/null || true
   done
+  pty_read_available
   print -u2 -- "timeout waiting for ${expected} lines in ${file}"
+  print -u2 -r -- "terminal output: ${(qqq)pty_output[-2000,-1]}"
   return 1
 }
 

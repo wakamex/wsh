@@ -18,8 +18,14 @@ results = []
 
 
 def alive(pid):
-    # ps reports the process state on Linux and macOS alike; Z is a zombie.
-    state = subprocess.run(['ps', '-o', 'stat=', '-p', str(pid)], capture_output=True, text=True).stdout.strip()
+    # /proc where it exists, as in minimal Linux containers without ps; ps elsewhere. Z is a zombie.
+    if Path('/proc/self').exists():
+        try:
+            state = Path(f'/proc/{pid}/stat').read_text().split(') ', 1)[1].split()[0]
+        except FileNotFoundError:
+            return False
+    else:
+        state = subprocess.run(['ps', '-o', 'stat=', '-p', str(pid)], capture_output=True, text=True).stdout.strip()
     return bool(state) and not state.startswith('Z')
 
 

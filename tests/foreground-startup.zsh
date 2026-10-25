@@ -160,15 +160,24 @@ wait_for_process_exit() {
   return 1
 }
 
-# ps reports state and process group on Linux and macOS alike.
+# Process state and group from /proc where it exists, as in minimal Linux containers
+# without ps, and from ps elsewhere. An empty state means the process is gone.
 process_state() {
-  local state=$(ps -o stat= -p $1 2>/dev/null)
-  print -r -- ${${state## #}[1]}
+  if [[ -e /proc/self ]]; then
+    [[ -e /proc/$1 ]] && sed -n 's/^[^)]*) \([^ ]\).*/\1/p' /proc/$1/stat 2>/dev/null
+  else
+    local state=$(ps -o stat= -p $1 2>/dev/null)
+    print -r -- ${${state## #}[1]}
+  fi
 }
 
 process_group() {
-  local pgid=$(ps -o pgid= -p $1 2>/dev/null)
-  print -r -- ${pgid// /}
+  if [[ -e /proc/self ]]; then
+    sed -n 's/^[^)]*) [^ ]* [^ ]* \([^ ]*\).*/\1/p' /proc/$1/stat
+  else
+    local pgid=$(ps -o pgid= -p $1 2>/dev/null)
+    print -r -- ${pgid// /}
+  fi
 }
 
 start_variant() {
