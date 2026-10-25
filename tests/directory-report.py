@@ -66,22 +66,29 @@ def reports(data):
     return [Path(os.fsdecode(path)) for path in REPORT.findall(bytes(data))]
 
 
-def reaped(pid, seconds):
+def reaped(pid, fd, data, seconds):
+    """Wait for the child, reading its output: on macOS an exiting process waits until the
+    terminal's pending output is read, even after SIGKILL."""
     end = time.monotonic() + seconds
     while time.monotonic() < end:
         if os.waitpid(pid, os.WNOHANG) != (0, 0):
             return True
-        time.sleep(.05)
+        if select.select([fd], [], [], .05)[0]:
+            try:
+                data.extend(os.read(fd, 65536))
+            except OSError:
+                pass
     return False
 
 
 def stop(home, pid, fd, data):
-    (home / 'transcript.bin').write_bytes(bytes(data))
     # A shell that ignores the hangup is killed, so a stuck child cannot stall the suite.
     os.kill(pid, signal.SIGHUP)
-    if not reaped(pid, 5):
+    if not reaped(pid, fd, data, 5):
         os.kill(pid, signal.SIGKILL)
-        os.waitpid(pid, 0)
+        if not reaped(pid, fd, data, 10):
+            raise AssertionError('shell did not exit after SIGKILL')
+    (home / 'transcript.bin').write_bytes(bytes(data))
     os.close(fd)
 
 
