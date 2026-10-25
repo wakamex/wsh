@@ -1,12 +1,23 @@
 # Local Git references supply provenance for upstream versions outside the catalog.
 _wsh_plugin_git() {
-  GIT_TERMINAL_PROMPT=0 GIT_NO_LAZY_FETCH=1 command timeout --kill-after=0.1s 1s \
-    git --no-replace-objects --no-optional-locks "$@" 2>/dev/null
+  # Bound Git to 1 second in the shell itself: macOS has no timeout(1).
+  builtin setopt local_options no_monitor no_notify
+  zmodload zsh/zselect 2>/dev/null || return 1
+  local git_pid watchdog result
+  # The explicit <&0 keeps a piped request as Git's input in the background job.
+  GIT_TERMINAL_PROMPT=0 GIT_NO_LAZY_FETCH=1 command git --no-replace-objects --no-optional-locks "$@" <&0 2>/dev/null &
+  git_pid=$!
+  { zselect -t 100; builtin kill -KILL $git_pid } >/dev/null 2>&1 <&- &
+  watchdog=$!
+  wait $git_pid
+  result=$?
+  builtin kill $watchdog 2>/dev/null
+  return result
 }
 
 _wsh_plugin_git_recognized() {
   builtin emulate -L zsh -o no_aliases -o no_multibyte -o pipe_fail
-  (( $# >= 2 && $+commands[git] && $+commands[timeout] && $+commands[head] )) || return 1
+  (( $# >= 2 && $+commands[git] && $+commands[head] )) || return 1
   local component=$1 root config line key url remote row base response header content
   local upstream branch handoff relative_path source candidate fd count size index
   local -a files expected fields requests header_fields

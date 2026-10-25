@@ -14,6 +14,11 @@ ZSH = os.environ.get('WSH_REFERENCE_ZSH') or shutil.which('zsh')
 bundle, output = map(lambda p: Path(p).resolve(), sys.argv[1:])
 output.mkdir(parents=True, exist_ok=True)
 env = dict(os.environ, GIT_CONFIG_NOSYSTEM='1', GIT_CONFIG_GLOBAL='/dev/null', GIT_AUTHOR_NAME='Fixture', GIT_AUTHOR_EMAIL='fixture@example.invalid', GIT_COMMITTER_NAME='Fixture', GIT_COMMITTER_EMAIL='fixture@example.invalid')
+# Only the tools the check needs are on PATH, as on a stock macOS without GNU timeout(1).
+tools = Path(tempfile.mkdtemp(prefix='wsh-provenance-tools-', dir=output))
+for name in ('git', 'head'):
+    (tools / name).symlink_to(shutil.which(name))
+env['PATH'] = str(tools)
 rows = []
 
 
@@ -165,7 +170,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-git-provenance-') as tmp:
     commands = root/'commands'
     commands.mkdir()
     sleeper = commands/'git'
-    sleeper.write_text('#!/bin/sh\nexec /usr/bin/sleep 10\n')
+    sleeper.write_text('#!/bin/sh\nexec ' + shutil.which('sleep') + ' 10\n')
     sleeper.chmod(0o755)
     old_path = env['PATH']
     env['PATH'] = str(commands) + ':' + old_path
