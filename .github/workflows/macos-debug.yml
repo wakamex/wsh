@@ -26,16 +26,15 @@ jobs:
           name: macos-results
           run-id: ${{ steps.build.outputs.run }}
           github-token: ${{ github.token }}
-          path: ${{ runner.temp }}/build
+          # The build's own location, so the reference Zsh finds its modules.
+          path: ${{ runner.temp }}
       - name: Probe zpty-driven shells
         run: |
           brew install coreutils jq jansson pcre2 >/dev/null
-          chmod -R u+x "$RUNNER_TEMP/build"
-          bundle=$(ls -d "$RUNNER_TEMP"/build/wsh/bundles/*/ | head -1)
-          ref="$RUNNER_TEMP/build/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
+          chmod -R u+x "$RUNNER_TEMP/wsh"
+          bundle=$(ls -d "$RUNNER_TEMP"/wsh/bundles/*/ | head -1)
+          ref="$RUNNER_TEMP/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
           "$ref" --version
-          # The artifact sits elsewhere than the build prefix, so point Zsh at its modules.
-          export MODULE_PATH=$(ls -d "$RUNNER_TEMP"/build/wsh/reference/zsh-cad0d67c-wsh4/lib/zsh/*/)
           "$ref" -fc 'zmodload zsh/zpty zsh/datetime && print modules ok'
           for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
             for mode in b nb; do
