@@ -270,6 +270,23 @@ with tempfile.TemporaryDirectory(prefix='wsh-pane-') as directory:
         finally:a.close(kill=True)
         link.unlink()
 
+    # A symlinked parent, as /var is on macOS and /home on Fedora Atomic, still allows pane history.
+    real=root/'real-parent';real.mkdir();(root/'linked-parent').symlink_to(real)
+    home=root/'linked-parent'/'home';home.mkdir()
+    a=launch(home,'linked-parent',TOKEN_A)
+    try:
+        a.run(': LINKED_PARENT_SENTINEL');a.close()
+        check('symlinked parent directory keeps pane history', 'LINKED_PARENT_SENTINEL' in contents(pane(home,TOKEN_A)))
+    finally:a.close(kill=True)
+    # The pane directory itself must not be a symlink.
+    home=root/'linked-panes';home.mkdir();elsewhere=root/'linked-panes-target';elsewhere.mkdir(mode=0o700)
+    (home/'state/wsh/history').mkdir(parents=True);(home/'state/wsh/history/panes').symlink_to(elsewhere)
+    a=launch(home,'linked-panes',TOKEN_A)
+    try:
+        a.run(': LINKED_PANES_SENTINEL');a.close()
+        check('symlinked pane directory rejected', not any(elsewhere.iterdir()) and 'LINKED_PANES_SENTINEL' in contents(home/'.zsh_history'))
+    finally:a.close(kill=True)
+
     home=root/'unavailable';home.mkdir();(home/'state').write_text('not a directory')
     a=launch(home,'unavailable',TOKEN_A)
     try:

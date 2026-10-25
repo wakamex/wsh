@@ -59,8 +59,10 @@ wsh_pane_directory(char *path)
         if (*p && *p != '/') continue;
         char saved = *p;
         *p = 0;
+        /* Parents may be symlinks, as /var is on macOS and /home on Fedora Atomic;
+         * the final directory may not. */
         if ((mkdir(raw, 0700) && errno != EEXIST) ||
-            lstat(raw, &st) || !S_ISDIR(st.st_mode)) ok = 0;
+            (saved ? stat(raw, &st) : lstat(raw, &st)) || !S_ISDIR(st.st_mode)) ok = 0;
         *p = saved;
         if (!saved) break;
     }
