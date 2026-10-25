@@ -4,7 +4,8 @@ builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 # err_return ends the test at the first failing command; say which one.
 TRAPZERR() { print -u2 -r -- "FAIL: command failed at ${funcfiletrace[1]}" }
 readonly bundle=${1:A} omz=${2:-}
-readonly scratch=$(mktemp -d /var/tmp/wsh-directory-jump.XXXXXX)
+# Resolved, because directory jumping records physical paths and /var is a symlink on macOS.
+readonly scratch=${$(mktemp -d /var/tmp/wsh-directory-jump.XXXXXX):A}
 trap 'rm -rf -- $scratch' EXIT INT TERM
 readonly home=$scratch/home state=$scratch/state
 mkdir -p $home $scratch/bin "$scratch/project alpha" "$scratch/project beta" "$scratch/safe \$(touch owned)"
