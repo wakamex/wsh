@@ -115,6 +115,30 @@ jobs:
             ${{ runner.temp }}/wsh/checks.*/**/*.log
           if-no-files-found: warn
 
+  homebrew-macos:
+    name: Homebrew formula on macOS
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install and test the formula from a source archive of this commit
+        run: |
+          # The same archive the release attaches: git archive with a zero gzip timestamp.
+          version=$(cat VERSION)
+          archive="$RUNNER_TEMP/wsh-v$version-source.tar.gz"
+          python3 -c 'import gzip,subprocess,sys; sys.stdout.buffer.write(gzip.compress(subprocess.run(["git","archive","--format=tar","--prefix=wsh-"+sys.argv[1]+"/","HEAD"],capture_output=True,check=True).stdout,compresslevel=9,mtime=0))' "$version" > "$archive"
+          sha=$(shasum -a 256 "$archive" | cut -d' ' -f1)
+          brew tap-new --no-git wakamex/local
+          tap=$(brew --repository wakamex/local)
+          python3 packaging/homebrew/render-formula.py "file://$archive" "$sha" "$(git rev-parse HEAD)" "$tap/Formula/wsh.rb"
+          brew install --build-from-source --verbose wakamex/local/wsh
+          brew test wakamex/local/wsh
+          brew linkage wakamex/local/wsh
+
   source-contracts:
     name: Current source contracts
     runs-on: ubuntu-24.04
@@ -140,6 +164,7 @@ jobs:
       - source-rpm
       - ubuntu-host
       - macos-host
+      - homebrew-macos
       - source-contracts
     runs-on: ubuntu-24.04
     steps:
@@ -149,7 +174,8 @@ jobs:
           SOURCE_RPM_RESULT: ${{ needs.source-rpm.result }}
           UBUNTU_RESULT: ${{ needs.ubuntu-host.result }}
           MACOS_RESULT: ${{ needs.macos-host.result }}
+          HOMEBREW_RESULT: ${{ needs.homebrew-macos.result }}
           SOURCE_CONTRACTS_RESULT: ${{ needs.source-contracts.result }}
         run: |
           test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$UBUNTU_RESULT" = success
-          test "$MACOS_RESULT" = success && test "$SOURCE_CONTRACTS_RESULT" = success
+          test "$MACOS_RESULT" = success && test "$HOMEBREW_RESULT" = success && test "$SOURCE_CONTRACTS_RESULT" = success

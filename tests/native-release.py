@@ -16,6 +16,7 @@ with tempfile.TemporaryDirectory(prefix='wsh-release-stage-') as directory:
         target=work/worker;target.mkdir()
         shutil.copy2(package,target/package.name)
         shutil.copy2(manifest,target/'wsh.manifest.json')
+        (target/'wsh-v0.0.0-source.tar.gz').write_bytes(b'source archive fixture')
         outputs=[dict(name=p.name,sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sorted(target.iterdir())]
         (target/('build-record-'+worker+'.json')).write_text(json.dumps(dict(outputs=outputs)))
     def run(output):
@@ -29,4 +30,9 @@ with tempfile.TemporaryDirectory(prefix='wsh-release-stage-') as directory:
     assert run('bad-record').returncode!=0
     (work/'b/extra.rpm').write_bytes(b'additional package')
     assert run('extra').returncode!=0
-print('PASS: real RPM agreement, changed bytes, invalid record and extra product rejection')
+    (work/'b/extra.rpm').unlink()
+    source=work/'b/wsh-v0.0.0-source.tar.gz';source.write_bytes(b'different source')
+    assert run('altered-source').returncode!=0
+    source.unlink()
+    assert run('missing-source').returncode!=0
+print('PASS: real RPM agreement, changed bytes, invalid record, extra product and source archive rejection')

@@ -20,6 +20,7 @@ python3 $root/tests/history-local-search.py $bundle/bin/wsh
 python3 $root/tests/interactive-defaults.py $bundle/bin/wsh $checks/interactive-defaults
 python3 $root/tests/directory-report.py $bundle/bin/wsh $checks/directory-report
 python3 $root/tests/typeahead.py $checks/typeahead $bundle/bin/wsh
+python3 $root/tests/symlinked-executable.py $bundle/bin/wsh $checks/symlinked-executable
 if [[ -n ${WSH_TEST_OMZ:-} ]]; then
   python3 $root/tests/omz-removal.py $bundle/bin/wsh $WSH_TEST_OMZ $checks/omz-removal
 fi

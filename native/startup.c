@@ -125,7 +125,13 @@ wsh_setup(void)
     wsh_unexport("WSH_VERSION");
     if (!exepath || isset(PRIVILEGED))
         return;
-    wsh_root = ztrdup(exepath);
+    /* Resources sit beside the real executable. Linux reports it resolved; macOS reports the
+     * path it was started by, such as Homebrew's /opt/homebrew/bin/wsh symlink. */
+    {
+        char *resolved = realpath(unmeta(exepath), NULL);
+        wsh_root = ztrdup(resolved ? metafy(resolved, -1, META_HEAPDUP) : exepath);
+        free(resolved);
+    }
     slash = strrchr(wsh_root, '/');
     if (!slash)
         goto unavailable;

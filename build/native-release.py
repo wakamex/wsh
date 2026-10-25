@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Collect and compare the deterministic native package and its installation inventory."""
+import gzip
 import hashlib
 import json
 import os
@@ -23,6 +24,10 @@ def collect(tag,worker,output):
     assert manifest['status']=='release' and 'v'+manifest['version']==tag and manifest['source_revision']==revision
     shutil.copy2(bundles[0],output/('wsh-'+tag+'.manifest.json'))
     shutil.copy2(rpms[0],output/rpms[0].name)
+    # The tagged source, for channels that build on the user's machine such as the Homebrew tap.
+    # git archive and a zero gzip timestamp make it byte-identical across workers.
+    tar=subprocess.run(['git','archive','--format=tar','--prefix=wsh-'+tag[1:]+'/',revision],cwd=ROOT,capture_output=True,check=True).stdout
+    (output/('wsh-'+tag+'-source.tar.gz')).write_bytes(gzip.compress(tar,compresslevel=9,mtime=0))
     outputs=[dict(name=p.name,sha256=digest(p)) for p in sorted(output.iterdir())]
     record=dict(format_version=1,worker=worker,repository=os.environ.get('GITHUB_REPOSITORY','local'),source_revision=revision,release_id=tag,
                 workflow=dict(sha=os.environ.get('GITHUB_WORKFLOW_SHA',revision),ref=os.environ.get('GITHUB_WORKFLOW_REF','local'),run_id=os.environ.get('GITHUB_RUN_ID','local'),run_attempt=os.environ.get('GITHUB_RUN_ATTEMPT','local')),
@@ -30,9 +35,9 @@ def collect(tag,worker,output):
     (output/('build-record-'+worker+'.json')).write_text(json.dumps(record,indent=2)+'\n')
 def compare(left,right,output):
     left,right,output=map(Path,(left,right,output));output.mkdir()
-    names=lambda p: sorted(x.name for x in p.iterdir() if x.name.endswith(('.rpm','.manifest.json')))
+    names=lambda p: sorted(x.name for x in p.iterdir() if x.name.endswith(('.rpm','.manifest.json','-source.tar.gz')))
     files=names(left)
-    assert len(files)==2 and files==names(right) and sum(n.endswith('.rpm') for n in files)==1
+    assert len(files)==3 and files==names(right) and sum(n.endswith('.rpm') for n in files)==1 and sum(n.endswith('-source.tar.gz') for n in files)==1
     for name in files:
         assert (left/name).read_bytes()==(right/name).read_bytes(),name
         shutil.copy2(left/name,output/name)

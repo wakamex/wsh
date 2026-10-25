@@ -1,0 +1,60 @@
+# Rendered by packaging/homebrew/render-formula.py from the tagged Wsh source; do not edit.
+class Wsh < Formula
+  desc "Zsh with built-in autosuggestions, highlighting, history search and fast prompts"
+  homepage "https://github.com/wakamex/wsh"
+  url "@URL@"
+  sha256 "@SHA256@"
+  license all_of: ["MIT", "MIT-Modern-Variant", "ISC", "GPL-2.0-only", "BSD-3-Clause"]
+
+  depends_on "autoconf" => :build
+  depends_on "coreutils" => :build
+  depends_on "gnu-sed" => :build
+  depends_on "gnu-tar" => :build
+  depends_on "jq" => :build
+  depends_on "jansson"
+  depends_on "pcre2"
+
+  uses_from_macos "python" => :build
+  uses_from_macos "zsh" => :build
+  uses_from_macos "ncurses"
+  uses_from_macos "zlib"
+
+  on_linux do
+    depends_on "binutils" => :build
+    depends_on "libcap"
+  end
+
+  # The pinned upstream Zsh source that Wsh patches, verified again by the build.
+  resource "zsh-source" do
+    url "@ZSH_URL@"
+    sha256 "@ZSH_SHA256@"
+  end
+
+  def install
+    (buildpath/"build/cache").mkpath
+    cp resource("zsh-source").fetch, buildpath/"build/cache/@ZSH_ARCHIVE@"
+    # The build scripts use GNU coreutils, sed and tar options.
+    %w[coreutils gnu-sed gnu-tar].each { |f| ENV.prepend_path "PATH", Formula[f].opt_libexec/"gnubin" }
+    ENV["WSH_SOURCE_REVISION"] = "@REVISION@"
+    ENV["WSH_OFFLINE"] = "1"
+    output = Utils.safe_popen_read("zsh", "./build/build-native-installation.zsh")
+    prefix.install Dir["#{output.lines.last.strip}/*"]
+  end
+
+  def caveats
+    <<~EOS
+      To make Wsh your login shell, register it and then select it:
+        echo #{HOMEBREW_PREFIX}/bin/wsh | sudo tee -a /etc/shells
+        chsh -s #{HOMEBREW_PREFIX}/bin/wsh
+      Keep a terminal open until a new login works.
+    EOS
+  end
+
+  test do
+    assert_match "wsh #{version}", shell_output("#{bin}/wsh --wsh-version")
+    # Through Homebrew's bin symlink, the shell must still find its resources and defaults.
+    output = shell_output("#{HOMEBREW_PREFIX}/bin/wsh -ic 'print -r -- WSH:$WSH_VERSION:${+functions[compdef]}' 2>&1")
+    assert_match "WSH:#{version}:1", output
+    refute_match "integration unavailable", output
+  end
+end

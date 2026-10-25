@@ -80,7 +80,7 @@
     "sources": [
       {
         "path": "native/startup.c",
-        "sha256": "b468831be616f508f29b8ae4fb3c4f1076b40a6e0d0e586a4ba439086196bee8"
+        "sha256": "20eaf3970cc6a00ab6a9c4c7414b261dc5ccc477fed2e3420c3b286a9b8b897f"
       },
       {
         "path": "native/tools.c",
