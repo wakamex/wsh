@@ -31,8 +31,11 @@ jobs:
       - name: Probe zpty-driven shells
         run: |
           brew install coreutils jq jansson pcre2 >/dev/null
-          chmod -R u+x "$RUNNER_TEMP/wsh"
           bundle=$(ls -d "$RUNNER_TEMP"/wsh/bundles/*/ | head -1)
+          # Artifacts drop file modes: restore the installation's from its manifest, and make
+          # the reference Zsh's programs executable.
+          python3 -c 'import json,os,sys; r=sys.argv[1]; [os.chmod(os.path.join(r,f["path"]), f["mode"]) for f in json.load(open(os.path.join(r,"share/wsh/manifest.json")))["files"] if f["kind"] != "symlink"]' "$bundle"
+          chmod -R u+x "$RUNNER_TEMP/wsh/reference"
           ref="$RUNNER_TEMP/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
           "$ref" --version
           "$ref" -fc 'zmodload zsh/zpty zsh/datetime && print modules ok'
