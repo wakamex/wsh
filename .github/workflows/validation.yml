@@ -3,6 +3,7 @@ name: validation
 on:
   pull_request:
   workflow_call:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -58,6 +59,60 @@ jobs:
             ${{ runner.temp }}/source-rpm/rebuild/BUILD/**/.rpm-build/checks/**/*.log
             ${{ runner.temp }}/source-rpm/rebuild/BUILD/**/.rpm-build/checks/**/*.json
           include-hidden-files: true
+          if-no-files-found: warn
+
+  ubuntu-host:
+    name: Build and test on Ubuntu 24.04
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install build requirements from Ubuntu
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes autoconf gcc make patch jq curl git python3 zsh \
+            libncurses-dev libcap-dev libpcre2-dev libjansson-dev zlib1g-dev
+      - name: Build and test the installation with the host toolchain
+        env:
+          WSH_TEST_RPM: '0'
+          WSH_NATIVE_OUTPUT_ROOT: ${{ runner.temp }}/wsh
+        run: zsh ./build/test-native-installation.zsh
+
+  macos-host:
+    name: Build and test on macOS
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - name: Check out the exact source
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install build requirements from Homebrew
+        run: |
+          brew install autoconf coreutils gnu-sed gnu-tar jq jansson pcre2
+          prefix=$(brew --prefix)
+          # The build scripts use GNU coreutils, sed and tar options.
+          for tool in coreutils gnu-sed gnu-tar; do echo "$prefix/opt/$tool/libexec/gnubin" >> "$GITHUB_PATH"; done
+          echo "CPPFLAGS=-I$prefix/include" >> "$GITHUB_ENV"
+          echo "LDFLAGS=-L$prefix/lib" >> "$GITHUB_ENV"
+      - name: Build and test the installation with the host toolchain
+        env:
+          WSH_TEST_RPM: '0'
+          WSH_NATIVE_OUTPUT_ROOT: ${{ runner.temp }}/wsh
+        run: zsh ./build/test-native-installation.zsh
+      - name: Retain build logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: macos-results
+          path: |
+            ${{ runner.temp }}/wsh/build.log
+            ${{ runner.temp }}/wsh/checks.*/**/*.log
           if-no-files-found: warn
 
   source-contracts:

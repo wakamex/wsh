@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 #include "git.h"
+#include "portable.h"
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -8,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/prctl.h>
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -444,7 +444,7 @@ static int private_fd(int fd)
 }
 static int pipe_pair(int pair[2])
 {
-    if (pipe2(pair, O_CLOEXEC)) return -1;
+    if (wsh_pipe(pair, 0)) return -1;
     pair[0] = private_fd(pair[0]); pair[1] = private_fd(pair[1]);
     if (pair[0] < 0 || pair[1] < 0 || fcntl(pair[0], F_SETFL, O_NONBLOCK) < 0) return -1;
     return 0;
@@ -483,7 +483,7 @@ static unsigned char *git_output(const char *cwd, const char *git, size_t *lengt
     if (child < 0) { fail(ctx, "could not fork Git status"); goto done; }
     if (!child) {
         /* Only async-signal-safe operations after a fork from the runtime worker. */
-        if (setpgid(0, 0) || prctl(PR_SET_PDEATHSIG, (unsigned long)SIGKILL, 0UL, 0UL, 0UL) || getppid() != parent || chdir(cwd) ||
+        if (setpgid(0, 0) || wsh_parent_death_signal(SIGKILL) || getppid() != parent || chdir(cwd) ||
             dup2(pipefd[1], STDOUT_FILENO) < 0 || dup2(nullfd, STDERR_FILENO) < 0) child_error = errno ? errno : ECHILD;
         close(pipefd[0]); close(pipefd[1]); close(errorfd[0]); close(nullfd);
         if (!child_error) { execve(path, arguments, environment); child_error = errno; }
@@ -568,9 +568,9 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     if (stat(index, &st)) goto done;
     for (i = 0; i < REFRESHED_LIMIT; ++i)
         if (refreshed[i].dev == st.st_dev && refreshed[i].ino == st.st_ino && refreshed[i].size == st.st_size &&
-            refreshed[i].mtime.tv_sec == st.st_mtim.tv_sec && refreshed[i].mtime.tv_nsec == st.st_mtim.tv_nsec) goto done;
+            refreshed[i].mtime.tv_sec == WSH_MTIME(st).tv_sec && refreshed[i].mtime.tv_nsec == WSH_MTIME(st).tv_nsec) goto done;
     refreshed[refreshed_next].dev = st.st_dev; refreshed[refreshed_next].ino = st.st_ino;
-    refreshed[refreshed_next].size = st.st_size; refreshed[refreshed_next].mtime = st.st_mtim;
+    refreshed[refreshed_next].size = st.st_size; refreshed[refreshed_next].mtime = WSH_MTIME(st);
     refreshed_next = (refreshed_next + 1) % REFRESHED_LIMIT;
     nullfd = private_fd(open("/dev/null", O_RDWR | O_CLOEXEC));
     if (nullfd < 0) goto done;

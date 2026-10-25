@@ -10,7 +10,10 @@ readonly zsh_output_root=${WSH_ZSH_OUTPUT_ROOT:-${repository_root}/build/out}
 readonly output_root=${WSH_BUNDLE_OUTPUT_ROOT:-${repository_root}/bundles}
 readonly bundle_status=${WSH_BUNDLE_STATUS:-development}
 
-for command in cp find git head install jq ld mktemp mv python3 readelf rm sed sha256sum sort stat; do
+# readelf lists ELF library dependencies for the manifest; other hosts have no ELF files.
+required=(cp find git head install jq ld mktemp mv python3 rm sed sha256sum sort stat)
+[[ $OSTYPE == linux* ]] && required+=(readelf)
+for command in $required; do
   if (( ! $+commands[$command] )); then
     print -u2 -- "error: required command not found: ${command}"
     exit 1

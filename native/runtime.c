@@ -2,6 +2,7 @@
 #define _GNU_SOURCE
 #include "render.h"
 #include "runtime-trace.h"
+#include "portable.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -10,7 +11,6 @@
 #include <signal.h>
 #include <stdatomic.h>
 #include <stdio.h>
-#include <sys/prctl.h>
 #include <unistd.h>
 
 struct request {
@@ -21,6 +21,7 @@ struct request {
 struct worker {
     pthread_t thread;
     atomic_int cancel;
+    atomic_int done;
     struct request request;
     struct wsh_git_result git;
     uint64_t elapsed_ns;
@@ -104,6 +105,7 @@ static void *collect(void *data)
     uint64_t started = clock_ns(CLOCK_MONOTONIC);
     wsh_git_collect(w->request.cwd, "git", cancelled, w, &w->git);
     w->elapsed_ns = clock_ns(CLOCK_MONOTONIC) - started;
+    atomic_store_explicit(&w->done, 1, memory_order_release);
     while (write(w->notify_fd, "x", 1) < 0 && errno == EINTR) {
     }
     return NULL;
@@ -113,6 +115,7 @@ static void start_worker(struct runtime *r, struct request *request)
     struct worker *w = allocate(sizeof(*w));
     memset(w, 0, sizeof(*w));
     atomic_init(&w->cancel, 0);
+    atomic_init(&w->done, 0);
     w->request = *request;
     free(request);
     w->notify_fd = r->notifications[1];
@@ -247,22 +250,19 @@ static void stop_worker(struct runtime *r)
         return;
     struct worker *w = r->active;
     atomic_store_explicit(&w->cancel, 1, memory_order_release);
-    struct timespec deadline;
-    clock_gettime(CLOCK_REALTIME, &deadline);
-    deadline.tv_sec += 2;
-    deadline.tv_nsec += 500000000;
-    if (deadline.tv_nsec >= 1000000000) {
-        deadline.tv_sec++;
-        deadline.tv_nsec -= 1000000000;
+    /* pthread_timedjoin_np is Linux-only, so wait for the worker's finished flag instead. */
+    struct timespec now, pause = {0, 1000000};
+    clock_gettime(CLOCK_MONOTONIC, &now);
+    uint64_t deadline = (uint64_t)now.tv_sec * 1000000000u + (uint64_t)now.tv_nsec + 2500000000u;
+    while (!atomic_load_explicit(&w->done, memory_order_acquire)) {
+        clock_gettime(CLOCK_MONOTONIC, &now);
+        if ((uint64_t)now.tv_sec * 1000000000u + (uint64_t)now.tv_nsec >= deadline) {
+            fprintf(stderr, "error: Git worker did not stop within 2.5 seconds\n");
+            _Exit(1);
+        }
+        nanosleep(&pause, NULL);
     }
-    int result;
-    do
-        result = pthread_timedjoin_np(w->thread, NULL, &deadline);
-    while (result == EINTR);
-    if (result) {
-        fprintf(stderr, "error: Git worker did not stop within 2.5 seconds\n");
-        _Exit(1);
-    }
+    pthread_join(w->thread, NULL);
     free(w->request.cwd);
     wsh_git_free(&w->git);
     free(w);
@@ -430,7 +430,7 @@ static int serve(const struct wsh_theme *theme)
         return 1;
     }
     wsh_renderer_init(&r.renderer, theme);
-    if (pipe2(r.notifications, O_CLOEXEC | O_NONBLOCK)) {
+    if (wsh_pipe(r.notifications, 1)) {
         r.failed = 1;
         goto done;
     }
@@ -517,7 +517,7 @@ int main(int argc, char **argv)
     sigaction(SIGINT, &action, NULL);
     signal(SIGPIPE, SIG_IGN);
     pid_t parent = getppid();
-    if (prctl(PR_SET_PDEATHSIG, SIGTERM) || getppid() != parent)
+    if (wsh_parent_death_signal(SIGTERM) || getppid() != parent)
         return 1;
     int validate = argc == 3 && !strcmp(argv[1], "validate-theme"),
         serving = argc == 4 && !strcmp(argv[1], "serve") && !strcmp(argv[2], "--theme");
