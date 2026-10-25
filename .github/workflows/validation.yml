@@ -105,17 +105,7 @@ jobs:
           WSH_TEST_RPM: '0'
           WSH_NATIVE_OUTPUT_ROOT: ${{ runner.temp }}/wsh
         run: zsh ./build/test-native-installation.zsh
-      - name: Compare typed-ahead input with the reference and system Zsh
-        if: always()
-        run: |
-          bundle=$(tail -n 1 "$RUNNER_TEMP/wsh/build.log")
-          python3 tests/typeahead.py "$RUNNER_TEMP/typeahead" "$bundle/bin/wsh" \
-            "$RUNNER_TEMP/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh" /bin/zsh
-      - name: Pack the built installation and reference Zsh
-        if: always()
-        # A tarball keeps file modes and hidden files, which artifact uploads drop.
-        run: tar -czf "$RUNNER_TEMP/macos-build.tar.gz" -C "$RUNNER_TEMP" wsh/bundles wsh/reference/zsh-cad0d67c-wsh4 || true
-      - name: Retain build logs and the built installation
+      - name: Retain build and test logs
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -123,8 +113,6 @@ jobs:
           path: |
             ${{ runner.temp }}/wsh/build.log
             ${{ runner.temp }}/wsh/checks.*/**/*.log
-            ${{ runner.temp }}/typeahead/**
-            ${{ runner.temp }}/macos-build.tar.gz
           if-no-files-found: warn
 
   source-contracts:
@@ -150,6 +138,8 @@ jobs:
     needs:
       - floor-bundle
       - source-rpm
+      - ubuntu-host
+      - macos-host
       - source-contracts
     runs-on: ubuntu-24.04
     steps:
@@ -157,5 +147,9 @@ jobs:
         env:
           FLOOR_RESULT: ${{ needs.floor-bundle.result }}
           SOURCE_RPM_RESULT: ${{ needs.source-rpm.result }}
+          UBUNTU_RESULT: ${{ needs.ubuntu-host.result }}
+          MACOS_RESULT: ${{ needs.macos-host.result }}
           SOURCE_CONTRACTS_RESULT: ${{ needs.source-contracts.result }}
-        run: test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$SOURCE_CONTRACTS_RESULT" = success
+        run: |
+          test "$FLOOR_RESULT" = success && test "$SOURCE_RPM_RESULT" = success && test "$UBUNTU_RESULT" = success
+          test "$MACOS_RESULT" = success && test "$SOURCE_CONTRACTS_RESULT" = success

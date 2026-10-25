@@ -30,7 +30,7 @@ wsh -l
 
 After testing your configuration, use `chsh -s /usr/bin/wsh` if you want it as your login shell. Keep the existing session open until a separate login succeeds. Update with `sudo dnf upgrade wsh`. The [installation guide](NATIVE-INSTALLATION.md) covers account setup, direct RPMs and recovery.
 
-You can also [build from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation on Linux; RPM and Fedora are not required. Other distributions need compatible build dependencies and system libraries. Local builds are unsigned development artifacts.
+You can also [build from source](DEVELOPMENT.md#native-development-installation) and run the resulting installation on Linux or macOS; RPM and Fedora are not required. CI builds and tests it on Ubuntu 24.04 and macOS 15 with each system's own libraries; other distributions need compatible build dependencies. Local builds are unsigned development artifacts.
 
 ## Usage
 

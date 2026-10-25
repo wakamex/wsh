@@ -181,8 +181,7 @@ wait_for_lines() {
     zselect -t 1 2>/dev/null || true
   done
   print -u2 -- "timeout waiting for ${expected} lines in ${file}"
-  print -u2 -r -- "terminal output: ${(qqq)pty_output}"
-  print -u2 -r -- "state log: ${(qqq)$(<$child_state_log)}"
+  print -u2 -r -- "terminal output: ${(qqq)pty_output[-2000,-1]}"
   return 1
 }
 
