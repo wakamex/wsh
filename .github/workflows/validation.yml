@@ -105,7 +105,13 @@ jobs:
           WSH_TEST_RPM: '0'
           WSH_NATIVE_OUTPUT_ROOT: ${{ runner.temp }}/wsh
         run: zsh ./build/test-native-installation.zsh
-      - name: Retain build logs
+      - name: Compare typed-ahead input with the reference and system Zsh
+        if: always()
+        run: |
+          bundle=$(tail -n 1 "$RUNNER_TEMP/wsh/build.log")
+          python3 tests/typeahead.py "$RUNNER_TEMP/typeahead" "$bundle/bin/wsh" \
+            "$RUNNER_TEMP/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh" /bin/zsh
+      - name: Retain build logs and the built installation
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -113,6 +119,9 @@ jobs:
           path: |
             ${{ runner.temp }}/wsh/build.log
             ${{ runner.temp }}/wsh/checks.*/**/*.log
+            ${{ runner.temp }}/typeahead/**
+            ${{ runner.temp }}/wsh/bundles/
+            ${{ runner.temp }}/wsh/reference/zsh-cad0d67c-wsh4/
           if-no-files-found: warn
 
   source-contracts:
