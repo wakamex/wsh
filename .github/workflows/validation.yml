@@ -111,6 +111,10 @@ jobs:
           bundle=$(tail -n 1 "$RUNNER_TEMP/wsh/build.log")
           python3 tests/typeahead.py "$RUNNER_TEMP/typeahead" "$bundle/bin/wsh" \
             "$RUNNER_TEMP/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh" /bin/zsh
+      - name: Pack the built installation and reference Zsh
+        if: always()
+        # A tarball keeps file modes and hidden files, which artifact uploads drop.
+        run: tar -czf "$RUNNER_TEMP/macos-build.tar.gz" -C "$RUNNER_TEMP" wsh/bundles wsh/reference/zsh-cad0d67c-wsh4 || true
       - name: Retain build logs and the built installation
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -120,8 +124,7 @@ jobs:
             ${{ runner.temp }}/wsh/build.log
             ${{ runner.temp }}/wsh/checks.*/**/*.log
             ${{ runner.temp }}/typeahead/**
-            ${{ runner.temp }}/wsh/bundles/
-            ${{ runner.temp }}/wsh/reference/zsh-cad0d67c-wsh4/
+            ${{ runner.temp }}/macos-build.tar.gz
           if-no-files-found: warn
 
   source-contracts:
