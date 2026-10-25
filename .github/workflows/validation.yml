@@ -138,6 +138,16 @@ jobs:
           brew install --build-from-source --verbose wakamex/local/wsh
           brew test wakamex/local/wsh
           brew linkage wakamex/local/wsh
+      - name: Show the end of the Homebrew build logs
+        if: failure()
+        run: for f in ~/Library/Logs/Homebrew/wsh/*; do echo "== $f"; grep -aE "Test/|failed|FAIL|successful test scripts|was expecting|Error" "$f" | tail -40; done
+      - name: Retain the Homebrew build logs
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: homebrew-logs
+          path: ~/Library/Logs/Homebrew/wsh/
+          if-no-files-found: warn
 
   source-contracts:
     name: Current source contracts
