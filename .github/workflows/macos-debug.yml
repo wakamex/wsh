@@ -1,0 +1,39 @@
+# Temporary: diagnose macOS failures against a previous run's build without rebuilding.
+name: macos-debug
+
+on:
+  push:
+    branches: [portable-hosts]
+    paths: [build/debug/**, .github/workflows/macos-debug.yml]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  probe:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Read the build run
+        id: build
+        run: echo "run=$(cat build/debug/build-run)" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: macos-results
+          run-id: ${{ steps.build.outputs.run }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/build
+      - name: Probe zpty-driven shells
+        run: |
+          brew install coreutils jq jansson pcre2 >/dev/null
+          chmod -R u+x "$RUNNER_TEMP/build"
+          bundle=$(ls -d "$RUNNER_TEMP"/build/wsh/bundles/*/ | head -1)
+          ref="$RUNNER_TEMP/build/wsh/reference/zsh-cad0d67c-wsh4/bin/zsh"
+          "$ref" --version
+          for shell in "${bundle}bin/wsh -d" "${bundle}bin/wsh -d -f" "$ref -d -f -i" "/bin/zsh -d -f -i"; do
+            "$ref" -f build/debug/zpty-probe.zsh $shell || true
+          done
