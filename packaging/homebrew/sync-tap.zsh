@@ -27,6 +27,9 @@ python3 $root/packaging/homebrew/render-formula.py \
 print -r -- "Rendered Formula/wsh.rb for $tag (source SHA-256 $sha256)"
 [[ $push == --push ]] || { cat $work/wsh.rb; exit 0; }
 $gh repo clone $tap $work/tap -- --quiet
+# A temporary clone matches no directory-scoped identity, so use this checkout's.
+git -C $work/tap config user.name "$(git -C $root config user.name)"
+git -C $work/tap config user.email "$(git -C $root config user.email)"
 mkdir -p $work/tap/Formula
 cp $work/wsh.rb $work/tap/Formula/wsh.rb
 git -C $work/tap add Formula/wsh.rb

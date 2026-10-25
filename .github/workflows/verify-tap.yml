@@ -1,0 +1,27 @@
+name: verify-tap
+
+# Install a published version from the Homebrew tap on a clean macOS runner, after release.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Released version, such as 0.4.8
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  install:
+    name: Install wsh from wakamex/tap
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: Install from the tap and test
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          brew install wakamex/tap/wsh
+          brew test wakamex/tap/wsh
+          "$(brew --prefix)/bin/wsh" --wsh-version | grep -F "wsh $VERSION "
+          brew info wakamex/tap/wsh
