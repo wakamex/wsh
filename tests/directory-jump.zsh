@@ -1,6 +1,8 @@
 #!/usr/bin/env zsh
 builtin emulate -L zsh -o no_aliases -o err_return -o pipe_fail
 (( $# == 1 || $# == 2 )) || exit 2
+# err_return ends the test at the first failing command; say which one.
+TRAPZERR() { print -u2 -r -- "FAIL: command failed at ${funcfiletrace[1]}" }
 readonly bundle=${1:A} omz=${2:-}
 readonly scratch=$(mktemp -d /var/tmp/wsh-directory-jump.XXXXXX)
 trap 'rm -rf -- $scratch' EXIT INT TERM

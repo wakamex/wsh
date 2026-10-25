@@ -229,10 +229,17 @@ report_state() {
 
 report_buffer() {
   local input=$1 line_number=$2
+  setopt local_options extended_glob
+  local offset=$#pty_output
   zpty -w -n $current_pty $input
-  # Let highlighting settle, reading the terminal meanwhile so the shell never blocks on output.
-  local -F settle=$(( EPOCHREALTIME + .02 ))
-  while (( EPOCHREALTIME < settle )); do pty_read_available; zselect -t 1 2>/dev/null || true; done
+  # Highlighting runs just before the shell redraws the line, so wait for the redrawn input
+  # (escape sequences removed) instead of a fixed pause, reading the terminal meanwhile.
+  local -F settle=$(( EPOCHREALTIME + 3 ))
+  while (( EPOCHREALTIME < settle )); do
+    pty_read_available
+    [[ ${pty_output[offset+1,-1]//$'\e'\[[0-9;?]#[A-Za-z]/} == *$input* ]] && break
+    zselect -t 1 2>/dev/null || true
+  done
   zpty -w -n $current_pty $'\x07'
   wait_for_lines $child_buffer_log $line_number
   sed -n "${line_number}p" $child_buffer_log
