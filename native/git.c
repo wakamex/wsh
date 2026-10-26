@@ -30,6 +30,7 @@ struct context {
     int (*cancel)(void *);
     void *user;
     uint64_t deadline;
+    int timed_out;
 };
 struct identity { char *root, *git_dir, *common, *branch, *oid; };
 
@@ -76,6 +77,7 @@ static int stopped(struct context *ctx)
         return 1;
     }
     if (now_ns() >= ctx->deadline) {
+        ctx->timed_out = 1;
         fail(ctx, "Git request timed out");
         return 1;
     }
@@ -546,48 +548,149 @@ done:
     if (ctx->out->error || ctx->out->cancelled || child < 0 || !reaped) { free(output); return NULL; }
     return output;
 }
-/* Indexes already refreshed, identified by their file metadata at the time. Git rewrites an index
- * until it is a second newer than its files; the first refresh that leaves it unchanged ends the
- * series, so the lock is taken a few times per index change rather than at every prompt. */
-static struct { dev_t dev; ino_t ino; off_t size; struct timespec mtime; } refreshed[REFRESHED_LIMIT];
+/* Per repository: the index metadata when a refresh last started, and whether a fast status has
+ * been seen since. A slow status refreshes again unless the index is unchanged and nothing has
+ * been fast since, which means the last refresh did not help (the status is slow for another
+ * reason). Git rewrites an index until it is a second newer than its files, so a few refreshes
+ * can follow one change. */
+static struct refresh_memo { char *git_dir; dev_t dev; ino_t ino; off_t size; struct timespec mtime; int fast; } refreshed[REFRESHED_LIMIT];
 static size_t refreshed_next;
+static int same_file(const struct refresh_memo *memo, const struct stat *st)
+{
+    return memo->dev == st->st_dev && memo->ino == st->st_ino && memo->size == st->st_size &&
+        memo->mtime.tv_sec == WSH_MTIME(*st).tv_sec && memo->mtime.tv_nsec == WSH_MTIME(*st).tv_nsec;
+}
+static struct refresh_memo *memo_for(const char *git_dir)
+{
+    size_t i;
+    for (i = 0; i < REFRESHED_LIMIT; ++i)
+        if (refreshed[i].git_dir && !strcmp(refreshed[i].git_dir, git_dir)) return &refreshed[i];
+    return NULL;
+}
+static void note_fast_status(const char *git_dir)
+{
+    struct refresh_memo *memo = memo_for(git_dir);
+    if (memo) memo->fast = 1;
+}
+/* Copy with plain system calls, as the refresh child must after a fork from a threaded process. */
+static int copy_fd(int from, int to)
+{
+    char buffer[65536];
+    ssize_t count, written, offset;
+    for (;;) {
+        count = read(from, buffer, sizeof(buffer));
+        if (count == 0) return 0;
+        if (count < 0) { if (errno == EINTR) continue; return -1; }
+        for (offset = 0; offset < count; offset += written) {
+            written = write(to, buffer + offset, (size_t)(count - offset));
+            if (written < 0) { if (errno == EINTR) { written = 0; continue; } return -1; }
+        }
+    }
+}
+static int same_identity(const struct stat *a, const struct stat *b)
+{
+    return a->st_dev == b->st_dev && a->st_ino == b->st_ino && a->st_size == b->st_size &&
+        WSH_MTIME(*a).tv_sec == WSH_MTIME(*b).tv_sec && WSH_MTIME(*a).tv_nsec == WSH_MTIME(*b).tv_nsec;
+}
+/* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so refresh once here instead, and
+ * without holding index.lock while Git rehashes files: Git refreshes a private copy, and the copy
+ * replaces the index under index.lock only if the index is unchanged, so the lock is held for one
+ * file copy and a rename, and not at all when nothing was stale. Workaround: status with locks
+ * allowed creates index.lock on every run even when it writes nothing. Remove this once a Git
+ * release locks only when there is something to write:
+ * https://lore.kernel.org/git/20261022184420.3648771-1-mcosma@gmail.com/ */
 static void refresh_index(const char *cwd, const char *git, const char *git_dir)
 {
     extern char **environ;
     char *index = join(git_dir, "index"), *lock = join(git_dir, "index.lock"), *path = command_path(cwd, git);
+    char *copy_path = join(git_dir, "index.wsh-XXXXXX"), *index_variable = NULL, **environment = NULL;
     char *arguments[] = { (char *)git, "update-index", "-q", "--refresh", NULL };
-    struct stat st;
-    size_t i;
-    int nullfd = -1;
+    struct stat before, after, copied;
+    struct refresh_memo *memo;
+    size_t count = 0, i, used = 0;
+    int nullfd = -1, source = -1, private_copy = -1;
     pid_t child;
-    /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so do it once here instead.
-     * Workaround: status with locks allowed creates index.lock on every run even when it writes
-     * nothing. Remove this once a Git release locks only when there is something to write:
-     * https://lore.kernel.org/git/20261022184420.3648771-1-mcosma@gmail.com/ */
-    if (!index || !lock || !path || getenv("GIT_INDEX_FILE") || !lstat(lock, &st) || errno != ENOENT) goto done;
-    if (stat(index, &st)) goto done;
-    for (i = 0; i < REFRESHED_LIMIT; ++i)
-        if (refreshed[i].dev == st.st_dev && refreshed[i].ino == st.st_ino && refreshed[i].size == st.st_size &&
-            refreshed[i].mtime.tv_sec == WSH_MTIME(st).tv_sec && refreshed[i].mtime.tv_nsec == WSH_MTIME(st).tv_nsec) goto done;
-    refreshed[refreshed_next].dev = st.st_dev; refreshed[refreshed_next].ino = st.st_ino;
-    refreshed[refreshed_next].size = st.st_size; refreshed[refreshed_next].mtime = WSH_MTIME(st);
-    refreshed_next = (refreshed_next + 1) % REFRESHED_LIMIT;
+    DIR *directory;
+    struct dirent *entry;
+    if (!index || !lock || !path || !copy_path || getenv("GIT_INDEX_FILE") || !lstat(lock, &before) || errno != ENOENT) goto done;
+    if (stat(index, &before) || before.st_size <= 0 || before.st_size > (off_t)256 * 1024 * 1024) goto done;
+    memo = memo_for(git_dir);
+    if (memo && same_file(memo, &before) && !memo->fast) goto done;
+    if (!memo) {
+        memo = &refreshed[refreshed_next];
+        refreshed_next = (refreshed_next + 1) % REFRESHED_LIMIT;
+        free(memo->git_dir);
+        if (!(memo->git_dir = copy(git_dir))) goto done;
+    }
+    memo->dev = before.st_dev; memo->ino = before.st_ino; memo->size = before.st_size;
+    memo->mtime = WSH_MTIME(before); memo->fast = 0;
+    /* A split index refers to shared index files that a private copy would not keep consistent;
+     * stale private copies left by an interrupted refresh are removed. */
+    if (!(directory = opendir(git_dir))) goto done;
+    while ((entry = readdir(directory))) {
+        if (!strncmp(entry->d_name, "sharedindex.", 12)) { closedir(directory); goto done; }
+        if (!strncmp(entry->d_name, "index.wsh-", 10)) {
+            char *stale = join(git_dir, entry->d_name);
+            struct stat old;
+            if (stale && !lstat(stale, &old) && S_ISREG(old.st_mode) && time(NULL) - old.st_mtime > 600) unlink(stale);
+            free(stale);
+        }
+    }
+    closedir(directory);
+    source = open(index, O_RDONLY | O_CLOEXEC);
+    private_copy = mkstemp(copy_path);
+    if (source < 0 || private_copy < 0 || fcntl(private_copy, F_SETFD, FD_CLOEXEC) < 0 || copy_fd(source, private_copy) || fstat(private_copy, &copied) ||
+        stat(index, &after) || !same_identity(&before, &after) || copied.st_size != before.st_size) {
+        if (private_copy >= 0) unlink(copy_path);
+        goto done;
+    }
+    close(private_copy); private_copy = -1;
+    if (stat(copy_path, &copied)) goto done;
+    while (environ[count]) ++count;
+    index_variable = malloc(strlen(copy_path) + sizeof("GIT_INDEX_FILE="));
+    environment = allocate_zero(count + 2, sizeof(char *));
+    if (!index_variable || !environment) { unlink(copy_path); goto done; }
+    strcpy(index_variable, "GIT_INDEX_FILE="); strcat(index_variable, copy_path);
+    for (i = 0; i < count; ++i)
+        if (strncmp(environ[i], "GIT_INDEX_FILE=", 15)) environment[used++] = environ[i];
+    environment[used] = index_variable;
     nullfd = private_fd(open("/dev/null", O_RDWR | O_CLOEXEC));
-    if (nullfd < 0) goto done;
+    if (nullfd < 0) { unlink(copy_path); goto done; }
     /* The intermediate child exits at once, so the refresh outlives no one and needs no reaping. */
     child = fork();
     if (!child) {
+        struct stat refreshed_copy, current;
+        int status = 0, target;
+        pid_t refresher;
         if (setsid() < 0 || chdir(cwd) || dup2(nullfd, STDIN_FILENO) < 0 || dup2(nullfd, STDOUT_FILENO) < 0 || dup2(nullfd, STDERR_FILENO) < 0) _exit(127);
         if (fork()) _exit(0);
         /* Lower priority is best effort; the refresh runs either way. */
         if (setpriority(PRIO_PROCESS, 0, 10)) {}
-        execve(path, arguments, environ);
-        _exit(127);
+        refresher = fork();
+        if (!refresher) { execve(path, arguments, environment); _exit(127); }
+        while (refresher > 0 && waitpid(refresher, &status, 0) < 0 && errno == EINTR) {}
+        /* Install only a copy Git rewrote, over an index that no one has replaced meanwhile. */
+        if (refresher > 0 && WIFEXITED(status) && !WEXITSTATUS(status) && !stat(copy_path, &refreshed_copy) &&
+            !same_identity(&copied, &refreshed_copy) && (target = open(lock, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0666)) >= 0) {
+            int from = open(copy_path, O_RDONLY | O_CLOEXEC), installed = 0;
+            if (from >= 0 && !stat(index, &current) && same_identity(&before, &current) && !copy_fd(from, target) && !fsync(target)) {
+                close(target); target = -1;
+                installed = !rename(lock, index);
+            }
+            if (target >= 0) close(target);
+            if (from >= 0) close(from);
+            if (!installed) unlink(lock);
+        }
+        unlink(copy_path);
+        _exit(0);
     }
     if (child > 0) reap(child);
+    else unlink(copy_path);
 done:
     if (nullfd >= 0) close(nullfd);
-    free(index); free(lock); free(path);
+    if (source >= 0) close(source);
+    if (private_copy >= 0) close(private_copy);
+    free(index); free(lock); free(path); free(copy_path); free(index_variable); free(environment);
 }
 int wsh_git_operation(const char *directory)
 {
@@ -606,7 +709,7 @@ void wsh_git_free(struct wsh_git_result *result)
 int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), void *user, struct wsh_git_result *out)
 {
     uint64_t start = now_ns(), parsing;
-    struct context ctx = {out, cancel, user, start + TIMEOUT_NS};
+    struct context ctx = {out, cancel, user, start + TIMEOUT_NS, 0};
     struct identity id = {0};
     unsigned char *output;
     size_t length = 0;
@@ -616,7 +719,11 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
     out->discovery_ns = now_ns() - start;
     if (!found) return out->error || out->cancelled ? -1 : 0;
     output = git_output(cwd, git, &length, &ctx);
-    if (!output) { free_identity(&id); return -1; }
+    if (!output) {
+        /* A status past the deadline is the slowest case, so it refreshes too. */
+        if (ctx.timed_out && !out->cancelled && !wsh_git_operation(id.git_dir)) refresh_index(cwd, git, id.git_dir);
+        free_identity(&id); return -1;
+    }
     parsing = now_ns();
     if (parse_status(output, length, out)) fail(&ctx, "Git status output is not UTF-8");
     free(output);
@@ -631,7 +738,8 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
         }
         out->found = out->worktree = 1;
         out->operation = wsh_git_operation(id.git_dir);
-        if (out->process_ns >= REFRESH_NS && !out->operation) refresh_index(cwd, git, id.git_dir);
+        if (out->process_ns < REFRESH_NS) note_fast_status(id.git_dir);
+        else if (!out->operation) refresh_index(cwd, git, id.git_dir);
     }
     out->parsing_ns = now_ns() - parsing;
     free_identity(&id);

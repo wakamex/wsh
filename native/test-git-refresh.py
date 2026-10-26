@@ -48,10 +48,15 @@ def stale(repo):
 helper = out / 'bin'
 helper.mkdir()
 log = out / 'refreshes.log'
+delay_file = out / 'status-delay'
+# The status delay comes from a file when it exists, so a case can switch between slow and fast.
+# A refresh records which index Git is given and, while the marker exists, is still hashing.
 (helper / 'git').write_text(f'''#!/bin/sh
 case "$1" in
-  status) [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99; sleep "${{WSH_TEST_STATUS_DELAY:-0}}" ;;
-  update-index) printf '%s\\n' "$PWD" >> {log} ;;
+  status) [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99
+    delay=${{WSH_TEST_STATUS_DELAY:-0}}; [ -f {delay_file} ] && delay=$(cat {delay_file}); sleep "$delay" ;;
+  update-index) printf '%s\\n' "$PWD" >> {log}; printf '%s\\n' "${{GIT_INDEX_FILE:-}}" >> {log}.index
+    : > "$PWD/.git/hashing"; sleep "${{WSH_TEST_REFRESH_DELAY:-0}}"; /usr/bin/git "$@"; status=$?; rm -f "$PWD/.git/hashing"; exit $status ;;
 esac
 exec /usr/bin/git "$@"
 ''')
@@ -59,8 +64,8 @@ exec /usr/bin/git "$@"
 
 
 class Runtime:
-    def __init__(self, delay):
-        env = dict(os.environ, PATH=f'{helper}:/usr/bin:/bin', WSH_TEST_STATUS_DELAY=delay)
+    def __init__(self, delay, refresh_delay='0'):
+        env = dict(os.environ, PATH=f'{helper}:/usr/bin:/bin', WSH_TEST_STATUS_DELAY=delay, WSH_TEST_REFRESH_DELAY=refresh_delay)
         env.pop('GIT_INDEX_FILE', None)
         self.process = subprocess.Popen([runtime, 'serve', '--theme', root / 'themes/minimal.toml'], env=env,
                                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -87,7 +92,7 @@ class Runtime:
         self.process.stdin.write(json.dumps(message).encode() + b'\n')
         self.process.stdin.flush()
         response = self.read()
-        assert response['type'] == 'snapshot', response
+        assert response['type'] in ('snapshot', 'error'), response
         return response
 
     def close(self):
@@ -103,8 +108,8 @@ def settle(repo, expected):
     deadline = time.monotonic() + (5 if expected < 99 else 1)
     while refreshes(repo) < expected and time.monotonic() < deadline:
         time.sleep(.05)
-    # Let a running refresh finish and release its lock.
-    while (repo / '.git/index.lock').exists() and time.monotonic() < deadline:
+    # Let a running refresh finish hashing and release its lock.
+    while ((repo / '.git/hashing').exists() or (repo / '.git/index.lock').exists()) and time.monotonic() < deadline:
         time.sleep(.05)
     time.sleep(.2)
 
@@ -143,6 +148,72 @@ try:
     slow.refresh(rebasing)
     settle(rebasing, 1)
     check('no refresh during a rebase, merge or similar operation', refreshes(rebasing) == 0, refreshes(rebasing))
+finally:
+    slow.close()
+
+def touch(repo):
+    time.sleep(1.1)
+    for i in range(20):
+        os.utime(repo / f'file{i}')
+
+
+# A second batch of touched files is refreshed again once a refresh has helped.
+slow = Runtime('0.15')
+try:
+    repo = repository('again')
+    # Slow statuses until the refresh series ends, as in a shell that sat in the repository.
+    for _ in range(5):
+        slow.refresh(repo)
+        settle(repo, 99)
+    delay_file.write_text('0')
+    slow.refresh(repo)
+    touch(repo)
+    delay_file.write_text('0.15')
+    before = refreshes(repo)
+    slow.refresh(repo)
+    settle(repo, before + 1)
+    check('touched again after a fast status refreshes again', refreshes(repo) > before and stale(repo) == 0, (refreshes(repo), stale(repo)))
+finally:
+    slow.close()
+    delay_file.unlink(missing_ok=True)
+
+# Git hashes a private copy; index.lock is never held while it does, so a user's git add works.
+slow = Runtime('0.15', refresh_delay='0.5')
+try:
+    repo = repository('private')
+    slow.refresh(repo)
+    deadline = time.monotonic() + 5
+    while not (repo / '.git/hashing').exists() and time.monotonic() < deadline:
+        time.sleep(.005)
+    hashing = locked_seen = 0
+    adds = []
+    while (repo / '.git/hashing').exists() and time.monotonic() < deadline:
+        hashing += 1
+        locked_seen += (repo / '.git/index.lock').exists()
+        adds.append(subprocess.run(['/usr/bin/git', '-C', repo, 'add', 'file0'], capture_output=True).returncode)
+    settle(repo, 1)
+    given = Path(str(log) + '.index').read_text().splitlines()[-1]
+    check('refresh hashes a private copy of the index', given.startswith(str(repo / '.git/index.wsh-')), given)
+    check('index.lock is not held while Git hashes', hashing > 0 and locked_seen == 0, (hashing, locked_seen))
+    check("the user's git add succeeds during a refresh", adds and not any(adds), adds)
+    # The user's adds replaced the index meanwhile, so the copy was discarded instead of
+    # overwriting their change; the next slow status retries.
+    check('a copy is discarded when the index changed meanwhile', stale(repo) > 0, stale(repo))
+    slow.refresh(repo)
+    settle(repo, 2)
+    check('the next slow status installs a fresh refresh', stale(repo) == 0, stale(repo))
+    check('the private copy is removed', not list((repo / '.git').glob('index.wsh-*')), list((repo / '.git').glob('index.wsh-*')))
+finally:
+    slow.close()
+
+# A status past the collector's 2-second limit still starts the refresh.
+slow = Runtime('2.5')
+try:
+    repo = repository('timeout')
+    response = slow.refresh(repo)
+    check('the status times out', response['type'] == 'error' and 'timed out' in response.get('error', ''), response)
+    settle(repo, 1)
+    check('a timed-out status refreshes', refreshes(repo) == 1 and stale(repo) == 0, (refreshes(repo), stale(repo)))
 finally:
     slow.close()
 
