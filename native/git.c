@@ -596,9 +596,21 @@ static int same_identity(const struct stat *a, const struct stat *b)
  * repositories that stay stale. Writes use plain system calls, so the refresh child can call it. */
 static void refresh_note(const char *log, const char *git_dir, const char *event)
 {
-    int fd;
+    /* Wall-clock seconds and the writing process, formatted without stdio so the child can call it. */
+    char stamp[48], *end = stamp + sizeof(stamp), *p = end;
+    struct timespec now;
+    long long value;
+    int fd, digit;
     if (!log || !*log || (fd = open(log, O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0600)) < 0) return;
-    if (write(fd, git_dir, strlen(git_dir)) < 0 || write(fd, " ", 1) < 0 || write(fd, event, strlen(event)) < 0 || write(fd, "\n", 1) < 0) {}
+    if (clock_gettime(CLOCK_REALTIME, &now)) now.tv_sec = now.tv_nsec = 0;
+    *--p = ' ';
+    for (value = getpid(); p > stamp && (value || p == end - 1); value /= 10) *--p = (char)('0' + value % 10);
+    *--p = ' ';
+    for (digit = 0, value = now.tv_nsec / 1000000; digit < 3; ++digit, value /= 10) *--p = (char)('0' + value % 10);
+    *--p = '.';
+    for (value = now.tv_sec; p > stamp && (value || *p == '.'); value /= 10) *--p = (char)('0' + value % 10);
+    if (write(fd, p, (size_t)(end - p)) < 0 || write(fd, git_dir, strlen(git_dir)) < 0 || write(fd, " ", 1) < 0 ||
+        write(fd, event, strlen(event)) < 0 || write(fd, "\n", 1) < 0) {}
     close(fd);
 }
 /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so refresh once here instead, and
@@ -780,6 +792,11 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
         }
         out->found = out->worktree = 1;
         out->operation = wsh_git_operation(id.git_dir);
+        if (getenv("WSH_GIT_REFRESH_LOG")) {
+            char event[40];
+            snprintf(event, sizeof(event), "status %llu ms", (unsigned long long)(out->process_ns / 1000000));
+            refresh_note(getenv("WSH_GIT_REFRESH_LOG"), id.git_dir, event);
+        }
         if (out->process_ns < REFRESH_NS) note_fast_status(id.git_dir);
         else if (!out->operation) refresh_index(cwd, git, id.git_dir);
     }
