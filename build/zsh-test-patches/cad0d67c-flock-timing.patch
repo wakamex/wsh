@@ -1,0 +1,12 @@
+--- a/Test/V14system.ztst
++++ b/Test/V14system.ztst
+@@ -137,7 +137,8 @@
+     # must succeed 0.3 second after start.
+     if zsystem flock -t 0.4 -i 0.1 $tst_dir/file; then
+       elapsed=$[ $SECONDS - $start ]
+-      if [[ $elapsed -ge 0.2 && $elapsed -le 0.5 ]]; then
++      # A loaded runner can wake the waiter late; an early or hung wait still fails.
++      if [[ $elapsed -ge 0.2 && $elapsed -le 0.8 ]]; then
+         echo "elapsed time seems OK" 1>&2
+       else
+         echo "elapsed time $elapsed should be ~ 0.3 second" 1>&2

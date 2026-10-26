@@ -64,6 +64,10 @@
     {
       "path": "build/zsh-test-patches/cad0d67c-zpty-read-wait.patch",
       "sha256": "201fcc9d6afff1a93de67e2a20d7d64810ec7d76a4998c368d4d8f95a3aca48d"
+    },
+    {
+      "path": "build/zsh-test-patches/cad0d67c-flock-timing.patch",
+      "sha256": "398fbcc223cc25c73adcf33761eed3191550f088cff18a9929d4ca9b8a66004a"
     }
   ]
 }

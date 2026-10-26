@@ -185,3 +185,11 @@ Each case prints the `.term.*` parameters with `typeset -p -m` and compares them
 Reproducer: build the pinned Zsh and run `make check` with 300 extra exported variables; `X06termquery.ztst` fails, and 74 of 75 scripts pass.
 
 Wsh's test patch [cad0d67c-termquery-order.patch](build/zsh-test-patches/cad0d67c-termquery-order.patch) sorts the printed parameters and the expected lines, after which all 75 scripts pass in the same environment. No submission has been made.
+
+## The flock wait test's upper bound is too tight for loaded machines
+
+Affected source: the pinned revision's `Test/V14system.ztst`, case "zsystem flock successful wait test, fractional seconds". This is a test-harness defect, not a shell bug.
+
+The case holds a lock for about 0.25 seconds in the background, waits for it with `zsystem flock -t 0.4 -i 0.1`, and requires the wait to finish between 0.2 and 0.5 seconds. On loaded GitHub macOS runners the waiter woke at 0.503 and 0.523 seconds, failing the suite twice in two days while the lock itself behaved correctly.
+
+Wsh's test patch [cad0d67c-flock-timing.patch](build/zsh-test-patches/cad0d67c-flock-timing.patch) raises that case's upper bound to 0.8 seconds and keeps the lower bound, so an early return or a hung wait still fails. No submission has been made.
