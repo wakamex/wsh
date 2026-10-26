@@ -127,9 +127,9 @@ try:
         slow.refresh(repo)
         settle(repo, 99)
         counts.append(refreshes(repo))
-    # Git rewrites an index whose files changed within the same second as it, so a few refreshes
-    # can follow one another; the first one that writes nothing ends the series.
-    check('refreshes stop once the index is current', counts[-1] == counts[-4], counts)
+    # A status that stays slow over a current index retries after 2, then 4 seconds, and so on, so
+    # six prompts about a second apart start at most three more refreshes.
+    check('retries over a current index back off', counts[-1] - counts[0] <= 3, counts)
     check('no lock left behind', not (repo / '.git/index.lock').exists())
 
     locked = repository('locked')
@@ -150,6 +150,23 @@ try:
     check('no refresh during a rebase, merge or similar operation', refreshes(rebasing) == 0, refreshes(rebasing))
 finally:
     slow.close()
+
+def racy_unsmudged(repo):
+    """Entries Git trusts without rehashing although their file is not older than the index, to the
+    second as this Git compares. Git never writes such entries; each status would rehash them."""
+    index_second = int((repo / '.git/index').stat().st_mtime)
+    listing = subprocess.run(['git', '-C', repo, 'ls-files', '--debug'], capture_output=True, text=True, check=True).stdout
+    racy, name, mtime = 0, None, None
+    for line in listing.splitlines():
+        if not line.startswith(' '):
+            name = line
+        elif line.strip().startswith('mtime:'):
+            mtime = int(line.split(':')[1])
+        elif line.strip().startswith('size:'):
+            size = int(line.split(':')[1].split()[0])
+            racy += mtime >= index_second and size > 0
+    return racy
+
 
 def touch(repo):
     time.sleep(1.1)
@@ -203,6 +220,20 @@ try:
     settle(repo, 2)
     check('the next slow status installs a fresh refresh', stale(repo) == 0, stale(repo))
     check('the private copy is removed', not list((repo / '.git').glob('index.wsh-*')), list((repo / '.git').glob('index.wsh-*')))
+finally:
+    slow.close()
+
+# A refresh in the same second as the touch leaves no entry that is racy yet trusted.
+slow = Runtime('0.15')
+try:
+    repo = repository('same-second')
+    while time.time() % 1 > .2:
+        time.sleep(.01)
+    for i in range(20):
+        os.utime(repo / f'file{i}')
+    slow.refresh(repo)
+    settle(repo, 1)
+    check('a same-second refresh leaves no racy trusted entry', racy_unsmudged(repo) == 0, racy_unsmudged(repo))
 finally:
     slow.close()
 

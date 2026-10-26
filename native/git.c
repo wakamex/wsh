@@ -548,12 +548,12 @@ done:
     if (ctx->out->error || ctx->out->cancelled || child < 0 || !reaped) { free(output); return NULL; }
     return output;
 }
-/* Per repository: the index metadata when a refresh last started, and whether a fast status has
- * been seen since. A slow status refreshes again unless the index is unchanged and nothing has
- * been fast since, which means the last refresh did not help (the status is slow for another
- * reason). Git rewrites an index until it is a second newer than its files, so a few refreshes
- * can follow one change. */
-static struct refresh_memo { char *git_dir; dev_t dev; ino_t ino; off_t size; struct timespec mtime; int fast; } refreshed[REFRESHED_LIMIT];
+/* Per repository: the index metadata when a refresh last started, whether a fast status has been
+ * seen since, and when to try again. A slow status over an index unchanged since an attempt, with
+ * nothing fast since, retries after a delay that doubles from 2 seconds to 5 minutes: the attempt
+ * may not have helped (the status is slow for another reason) or may have failed. A refresh that
+ * finds nothing to write takes no lock, so a retry costs only background hashing. */
+static struct refresh_memo { char *git_dir; dev_t dev; ino_t ino; off_t size; struct timespec mtime; int fast; uint64_t retry_ns, delay_ns; } refreshed[REFRESHED_LIMIT];
 static size_t refreshed_next;
 static int same_file(const struct refresh_memo *memo, const struct stat *st)
 {
@@ -592,6 +592,15 @@ static int same_identity(const struct stat *a, const struct stat *b)
     return a->st_dev == b->st_dev && a->st_ino == b->st_ino && a->st_size == b->st_size &&
         WSH_MTIME(*a).tv_sec == WSH_MTIME(*b).tv_sec && WSH_MTIME(*a).tv_nsec == WSH_MTIME(*b).tv_nsec;
 }
+/* WSH_GIT_REFRESH_LOG names a file that records each refresh decision and outcome, for diagnosing
+ * repositories that stay stale. Writes use plain system calls, so the refresh child can call it. */
+static void refresh_note(const char *log, const char *git_dir, const char *event)
+{
+    int fd;
+    if (!log || !*log || (fd = open(log, O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0600)) < 0) return;
+    if (write(fd, git_dir, strlen(git_dir)) < 0 || write(fd, " ", 1) < 0 || write(fd, event, strlen(event)) < 0 || write(fd, "\n", 1) < 0) {}
+    close(fd);
+}
 /* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so refresh once here instead, and
  * without holding index.lock while Git rehashes files: Git refreshes a private copy, and the copy
  * replaces the index under index.lock only if the index is unchanged, so the lock is held for one
@@ -611,11 +620,17 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     int nullfd = -1, source = -1, private_copy = -1;
     pid_t child;
     DIR *directory;
+    const char *log = getenv("WSH_GIT_REFRESH_LOG");
     struct dirent *entry;
-    if (!index || !lock || !path || !copy_path || getenv("GIT_INDEX_FILE") || !lstat(lock, &before) || errno != ENOENT) goto done;
+    if (!index || !lock || !path || !copy_path || getenv("GIT_INDEX_FILE")) goto done;
+    if (!lstat(lock, &before) || errno != ENOENT) { refresh_note(log, git_dir, "skip lock-held"); goto done; }
     if (stat(index, &before) || before.st_size <= 0 || before.st_size > (off_t)256 * 1024 * 1024) goto done;
     memo = memo_for(git_dir);
-    if (memo && same_file(memo, &before) && !memo->fast) goto done;
+    uint64_t now = now_ns(), delay = UINT64_C(2000000000);
+    if (memo && same_file(memo, &before) && !memo->fast) {
+        if (now < memo->retry_ns) { refresh_note(log, git_dir, "skip retry-later"); goto done; }
+        delay = memo->delay_ns * 2 < UINT64_C(300000000000) ? memo->delay_ns * 2 : UINT64_C(300000000000);
+    }
     if (!memo) {
         memo = &refreshed[refreshed_next];
         refreshed_next = (refreshed_next + 1) % REFRESHED_LIMIT;
@@ -624,11 +639,12 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     }
     memo->dev = before.st_dev; memo->ino = before.st_ino; memo->size = before.st_size;
     memo->mtime = WSH_MTIME(before); memo->fast = 0;
+    memo->delay_ns = delay; memo->retry_ns = now + delay;
     /* A split index refers to shared index files that a private copy would not keep consistent;
      * stale private copies left by an interrupted refresh are removed. */
     if (!(directory = opendir(git_dir))) goto done;
     while ((entry = readdir(directory))) {
-        if (!strncmp(entry->d_name, "sharedindex.", 12)) { closedir(directory); goto done; }
+        if (!strncmp(entry->d_name, "sharedindex.", 12)) { closedir(directory); refresh_note(log, git_dir, "skip split-index"); goto done; }
         if (!strncmp(entry->d_name, "index.wsh-", 10)) {
             char *stale = join(git_dir, entry->d_name);
             struct stat old;
@@ -642,6 +658,7 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     if (source < 0 || private_copy < 0 || fcntl(private_copy, F_SETFD, FD_CLOEXEC) < 0 || copy_fd(source, private_copy) || fstat(private_copy, &copied) ||
         stat(index, &after) || !same_identity(&before, &after) || copied.st_size != before.st_size) {
         if (private_copy >= 0) unlink(copy_path);
+        refresh_note(log, git_dir, "skip copy-failed");
         goto done;
     }
     close(private_copy); private_copy = -1;
@@ -656,6 +673,7 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
     environment[used] = index_variable;
     nullfd = private_fd(open("/dev/null", O_RDWR | O_CLOEXEC));
     if (nullfd < 0) { unlink(copy_path); goto done; }
+    refresh_note(log, git_dir, "start");
     /* The intermediate child exits at once, so the refresh outlives no one and needs no reaping. */
     child = fork();
     if (!child) {
@@ -666,20 +684,44 @@ static void refresh_index(const char *cwd, const char *git, const char *git_dir)
         if (fork()) _exit(0);
         /* Lower priority is best effort; the refresh runs either way. */
         if (setpriority(PRIO_PROCESS, 0, 10)) {}
+        /* Git's read path compares an entry's time with the index's in whole seconds, so an index
+         * written in the same second as the touch that made the status slow leaves every touched
+         * entry racy and rechecked by each status. Starting Git in the next second avoids that
+         * without trusting anything Git would not. */
+        {
+            struct timespec now, pause;
+            if (!clock_gettime(CLOCK_REALTIME, &now)) {
+                pause.tv_sec = 0;
+                pause.tv_nsec = 1000000000L - now.tv_nsec + 20000000L;
+                if (pause.tv_nsec >= 1000000000L) { pause.tv_sec = 1; pause.tv_nsec -= 1000000000L; }
+                while (nanosleep(&pause, &pause) < 0 && errno == EINTR) {}
+            }
+        }
         refresher = fork();
         if (!refresher) { execve(path, arguments, environment); _exit(127); }
         while (refresher > 0 && waitpid(refresher, &status, 0) < 0 && errno == EINTR) {}
+        if (refresher <= 0 || !WIFEXITED(status) || WEXITSTATUS(status)) refresh_note(log, git_dir, "git-failed");
+        else if (!stat(copy_path, &refreshed_copy) && same_identity(&copied, &refreshed_copy)) refresh_note(log, git_dir, "nothing-to-write");
         /* Install only a copy Git rewrote, over an index that no one has replaced meanwhile. */
         if (refresher > 0 && WIFEXITED(status) && !WEXITSTATUS(status) && !stat(copy_path, &refreshed_copy) &&
             !same_identity(&copied, &refreshed_copy) && (target = open(lock, O_WRONLY | O_CREAT | O_EXCL | O_CLOEXEC, 0666)) >= 0) {
             int from = open(copy_path, O_RDONLY | O_CLOEXEC), installed = 0;
-            if (from >= 0 && !stat(index, &current) && same_identity(&before, &current) && !copy_fd(from, target) && !fsync(target)) {
+            /* The index keeps the timestamp Git gave the copy: Git trusts an entry only if its file is
+             * older than the index, so an install time in the same second as a touch would leave every
+             * touched entry racy and rehashed at each status. */
+            struct timespec times[2] = { { 0, UTIME_OMIT }, WSH_MTIME(refreshed_copy) };
+            if (from >= 0 && !stat(index, &current) && same_identity(&before, &current) && !copy_fd(from, target) &&
+                !futimens(target, times) && !fsync(target)) {
                 close(target); target = -1;
                 installed = !rename(lock, index);
             }
             if (target >= 0) close(target);
             if (from >= 0) close(from);
             if (!installed) unlink(lock);
+            refresh_note(log, git_dir, installed ? "installed" : "discarded index-changed");
+        } else if (refresher > 0 && WIFEXITED(status) && !WEXITSTATUS(status) && !stat(copy_path, &refreshed_copy) &&
+                   !same_identity(&copied, &refreshed_copy)) {
+            refresh_note(log, git_dir, "discarded lock-busy");
         }
         unlink(copy_path);
         _exit(0);
