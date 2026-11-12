@@ -221,7 +221,12 @@ if (( test_patch_count > 0 )); then
     patch --batch --forward --strip=1 < "$test_patch"
   done < <(jq -r '.test_patches[] | [.path, .sha256] | @tsv' "$source_lock")
 fi
-make check
+# WSH_ZSH_CHECK=0 skips Zsh's own suite, for package builds whose CI runs it on every commit.
+case ${WSH_ZSH_CHECK:-1} in
+  1) make check ;;
+  0) ;;
+  *) print -u2 -- 'error: WSH_ZSH_CHECK must be 0 or 1'; exit 1 ;;
+esac
 make install.bin install.modules install.fns DESTDIR="${work_dir}/dest"
 
 readonly staged_install="${work_dir}/dest${output_dir}"

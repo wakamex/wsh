@@ -39,6 +39,9 @@ class Wsh < Formula
     %w[coreutils gnu-sed gnu-tar].each { |f| ENV.prepend_path "PATH", Formula[f].opt_libexec/"gnubin" }
     ENV["WSH_SOURCE_REVISION"] = "@REVISION@"
     ENV["WSH_OFFLINE"] = "1"
+    # Zsh's own test suite has timing tests that can fail on a busy machine and would fail the
+    # install. CI runs it on macOS and Ubuntu for every commit; `brew test` checks the result.
+    ENV["WSH_ZSH_CHECK"] = "0"
     system "zsh", "./build/build-native-installation.zsh"
     bundles = Dir["bundles/*/share/wsh/manifest.json"].map { |manifest| File.expand_path("../../..", manifest) }
     odie "expected one built installation, found #{bundles.length}" if bundles.length != 1
