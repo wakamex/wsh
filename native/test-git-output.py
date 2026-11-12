@@ -9,7 +9,7 @@ for args in [['init','-q','-b','main'],['config','user.name','output-test'],['co
 subprocess.run(['git','-C',repo,'add','file'],check=True)
 subprocess.run(['git','-C',repo,'commit','-qm','seed'],check=True)
 for name,script in [('oversized','/usr/bin/git "$@" || exit\n/usr/bin/head -c 4194305 /dev/zero\n'),('invalid-utf8','/usr/bin/git "$@" || exit\nprintf "\\377"\n'),('nonzero','/usr/bin/git "$@" || exit\nexit 42\n'),('closed-output-slow','/usr/bin/git "$@" || exit\nexec 1>&-\nexec /usr/bin/sleep 30\n'), ('counter-max', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +9223372036854775807 -9223372036854775807\\n"\n'), ('counter-overflow', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +9223372036854775808 -9223372036854775808\\n"\n'), ('counter-u64-max', '/usr/bin/git "$@" || exit\nprintf "# branch.ab +18446744073709551615 -18446744073709551615\\n"\n')]:
-    case=out/name;case.mkdir();binary=case/'git';binary.write_text('#!/bin/sh\n[ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99\n'+script);binary.chmod(0o755)
+    case=out/name;case.mkdir();binary=case/'git';binary.write_text('#!/bin/sh\n[ "$1" = --version ] && { echo git version 2.56.0; exit; }\n[ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99\n'+script);binary.chmod(0o755)
     p=subprocess.Popen([runtime,'serve','--theme',root/'themes/minimal.toml'],env=dict(os.environ,PATH=str(case)+':/usr/bin:/bin'),stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     buffer=bytearray()
     def read():

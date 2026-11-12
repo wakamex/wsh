@@ -78,7 +78,7 @@ for name, path, value, expected in [
     finally: runtime.kill()
 
 helper = OUT / 'bin'; helper.mkdir()
-(helper / 'git').write_text('#!/bin/sh\n[ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99\nprintf "%s\\n" "$$" >> "$WSH_GIT_PID_FILE"\n/usr/bin/git "$@" || exit\nexec /usr/bin/sleep .03\n')
+(helper / 'git').write_text('#!/bin/sh\n[ "$1" = --version ] && { echo git version 2.56.0; exit; }\n[ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99\nprintf "%s\\n" "$$" >> "$WSH_GIT_PID_FILE"\n/usr/bin/git "$@" || exit\nexec /usr/bin/sleep .03\n')
 (helper / 'git').chmod(0o755)
 pids = OUT / 'pids'
 runtime = Runtime(dict(env, PATH=str(helper) + ':/usr/bin:/bin', WSH_GIT_PID_FILE=str(pids)))

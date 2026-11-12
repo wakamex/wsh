@@ -451,19 +451,36 @@ static int pipe_pair(int pair[2])
     if (pair[0] < 0 || pair[1] < 0 || fcntl(pair[0], F_SETFL, O_NONBLOCK) < 0) return -1;
     return 0;
 }
-static void kill_group(pid_t child)
+static void signal_group(pid_t child, int signal_number)
 {
-    if (kill(-child, SIGKILL)) (void)kill(child, SIGKILL);
+    if (kill(-child, signal_number)) (void)kill(child, signal_number);
 }
 static void reap(pid_t child)
 {
     while (waitpid(child, NULL, 0) < 0 && errno == EINTR) {}
 }
-static unsigned char *git_output(const char *cwd, const char *git, size_t *length, struct context *ctx)
+/* SIGTERM first: a status that may take index.lock removes it on SIGTERM, but a SIGKILL during its
+ * write would leave the lock behind and make the user's next git add fail. */
+static void stop_group(pid_t child)
+{
+    struct timespec pause = {0, 1000000};
+    pid_t waited;
+    int i;
+    signal_group(child, SIGTERM);
+    for (i = 0; i < 100; ++i) {
+        waited = waitpid(child, NULL, WNOHANG);
+        if (waited == child || (waited < 0 && errno != EINTR)) { signal_group(child, SIGKILL); return; }
+        (void)nanosleep(&pause, NULL);
+    }
+    signal_group(child, SIGKILL); reap(child);
+}
+/* Runs Git with GIT_OPTIONAL_LOCKS=0 unless optional_locks is set, in which case the caller's own
+ * GIT_OPTIONAL_LOCKS, if any, applies. */
+static unsigned char *git_output(const char *cwd, const char *path, char *const arguments[], int optional_locks,
+                                 size_t *length, struct context *ctx)
 {
     extern char **environ;
-    char *path = command_path(cwd, git), **environment = NULL;
-    char *arguments[] = { (char *)git, "status", "--porcelain=v2", "--branch", "--untracked-files=normal", "--ignore-submodules=dirty", NULL };
+    char **environment = NULL;
     size_t env_count = 0, env_used = 0, i, used = 0, capacity = 8192, error_used = 0;
     unsigned char *output = NULL, error_bytes[sizeof(int)];
     int pipefd[2] = {-1, -1}, errorfd[2] = {-1, -1}, nullfd = -1;
@@ -472,23 +489,22 @@ static unsigned char *git_output(const char *cwd, const char *git, size_t *lengt
     ssize_t count;
     struct timespec pause = {0, 100000};
     uint64_t started = now_ns();
-    if (!path) { fail(ctx, "could not locate Git status executable"); goto done; }
     while (environ[env_count]) ++env_count;
     environment = allocate_zero(env_count + 2, sizeof(char *)); output = allocate(capacity);
     if (!environment || !output) { fail(ctx, "could not allocate Git collector"); goto done; }
     for (i = 0; i < env_count; ++i)
-        if (strncmp(environ[i], "GIT_OPTIONAL_LOCKS=", 19)) environment[env_used++] = environ[i];
-    environment[env_used] = "GIT_OPTIONAL_LOCKS=0";
+        if (optional_locks || strncmp(environ[i], "GIT_OPTIONAL_LOCKS=", 19)) environment[env_used++] = environ[i];
+    if (!optional_locks) environment[env_used] = "GIT_OPTIONAL_LOCKS=0";
     nullfd = private_fd(open("/dev/null", O_WRONLY | O_CLOEXEC));
     if (nullfd < 0 || pipe_pair(pipefd) || pipe_pair(errorfd)) { fail(ctx, "could not open Git process descriptors"); goto done; }
     child = fork();
     if (child < 0) { fail(ctx, "could not fork Git status"); goto done; }
     if (!child) {
         /* Only async-signal-safe operations after a fork from the runtime worker. */
-        if (setpgid(0, 0) || wsh_parent_death_signal(SIGKILL) || getppid() != parent || chdir(cwd) ||
+        if (setpgid(0, 0) || wsh_parent_death_signal(SIGTERM) || getppid() != parent || chdir(cwd) ||
             dup2(pipefd[1], STDOUT_FILENO) < 0 || dup2(nullfd, STDERR_FILENO) < 0) child_error = errno ? errno : ECHILD;
         close(pipefd[0]); close(pipefd[1]); close(errorfd[0]); close(nullfd);
-        if (!child_error) { execve(path, arguments, environment); child_error = errno; }
+        if (!child_error) { execve(path, (char *const *)arguments, environment); child_error = errno; }
         do { count = write(errorfd[1], &child_error, sizeof(child_error)); } while (count < 0 && errno == EINTR);
         _exit(127);
     }
@@ -539,11 +555,12 @@ static unsigned char *git_output(const char *cwd, const char *git, size_t *lengt
     *length = used;
 done:
     if (child > 0 && (ctx->out->error || ctx->out->cancelled || !reaped)) {
-        kill_group(child); if (!reaped) reap(child);
+        if (reaped) signal_group(child, SIGKILL);
+        else stop_group(child);
     }
     for (i = 0; i < 2; ++i) { if (pipefd[i] >= 0) close(pipefd[i]); if (errorfd[i] >= 0) close(errorfd[i]); }
     if (nullfd >= 0) close(nullfd);
-    free(path); free(environment);
+    free(environment);
     if (ctx->out->child_processes) ctx->out->process_ns = now_ns() - started;
     if (ctx->out->error || ctx->out->cancelled || child < 0 || !reaped) { free(output); return NULL; }
     return output;
@@ -613,13 +630,13 @@ static void refresh_note(const char *log, const char *git_dir, const char *event
         write(fd, event, strlen(event)) < 0 || write(fd, "\n", 1) < 0) {}
     close(fd);
 }
-/* GIT_OPTIONAL_LOCKS=0 keeps status from saving its refresh, so refresh once here instead, and
- * without holding index.lock while Git rehashes files: Git refreshes a private copy, and the copy
- * replaces the index under index.lock only if the index is unchanged, so the lock is held for one
- * file copy and a rename, and not at all when nothing was stale. Workaround: status with locks
- * allowed creates index.lock on every run even when it writes nothing. Remove this once a Git
- * release locks only when there is something to write:
- * https://lore.kernel.org/git/20261022184420.3648771-1-mcosma@gmail.com/ */
+/* Before Git 2.98, status with locks allowed creates index.lock on every run even when it writes
+ * nothing, so the prompt's status runs with GIT_OPTIONAL_LOCKS=0 and cannot save its refresh.
+ * Refresh once here instead, without holding index.lock while Git rehashes files: Git refreshes a
+ * private copy, and the copy replaces the index under index.lock only if the index is unchanged,
+ * so the lock is held for one file copy and a rename, and not at all when nothing was stale. On
+ * Git 2.98 and later the status saves its own refresh, and this runs only when such a status was
+ * stopped before it could. */
 static void refresh_index(const char *cwd, const char *git, const char *git_dir)
 {
     extern char **environ;
@@ -746,6 +763,38 @@ done:
     if (private_copy >= 0) close(private_copy);
     free(index); free(lock); free(path); free(copy_path); free(index_variable); free(environment);
 }
+/* Git 2.98 and later take index.lock in status only to write an index with something new, and
+ * only for the write (https://github.com/git/git/commit/d17a7db82262f77c0d4e9b8d5a56cf8d71d6eb93),
+ * so the prompt's status may take it and save its own refresh. Checked once per Git executable;
+ * a Git whose version cannot be read is treated as older. */
+#define SAVING_MINOR 98
+static struct { char *path; dev_t dev; ino_t ino; off_t size; struct timespec mtime; int saves; } git_binary;
+static int status_saves_refresh(const char *cwd, const char *git, const char *path, struct context *ctx)
+{
+    char *arguments[] = { (char *)git, "--version", NULL }, text[64];
+    struct wsh_git_result scratch = {0};
+    struct context version = {&scratch, ctx->cancel, ctx->user, ctx->deadline, 0};
+    unsigned char *output;
+    unsigned major = 0, minor = 0;
+    size_t length = 0;
+    struct stat st;
+    if (stat(path, &st)) return 0;
+    if (git_binary.path && !strcmp(git_binary.path, path) && git_binary.dev == st.st_dev && git_binary.ino == st.st_ino &&
+        git_binary.size == st.st_size && git_binary.mtime.tv_sec == WSH_MTIME(st).tv_sec &&
+        git_binary.mtime.tv_nsec == WSH_MTIME(st).tv_nsec)
+        return git_binary.saves;
+    output = git_output(cwd, path, arguments, 0, &length, &version);
+    if (scratch.cancelled || version.timed_out) { free(output); wsh_git_free(&scratch); return 0; }
+    if (length >= sizeof(text)) length = sizeof(text) - 1;
+    if (output) memcpy(text, output, length);
+    text[output ? length : 0] = 0;
+    free(output); wsh_git_free(&scratch);
+    free(git_binary.path);
+    git_binary.path = copy(path); git_binary.dev = st.st_dev; git_binary.ino = st.st_ino; git_binary.size = st.st_size;
+    git_binary.mtime = WSH_MTIME(st);
+    git_binary.saves = sscanf(text, "git version %u.%u", &major, &minor) == 2 && (major > 2 || (major == 2 && minor >= SAVING_MINOR));
+    return git_binary.saves;
+}
 int wsh_git_operation(const char *directory)
 {
         if (exists_in(directory, "rebase-merge", 1) || exists_in(directory, "rebase-apply", 1)) return 1;
@@ -765,17 +814,26 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
     uint64_t start = now_ns(), parsing;
     struct context ctx = {out, cancel, user, start + TIMEOUT_NS, 0};
     struct identity id = {0};
+    char *arguments[] = { (char *)git, "status", "--porcelain=v2", "--branch", "--untracked-files=normal", "--ignore-submodules=dirty", NULL };
+    char *path;
     unsigned char *output;
     size_t length = 0;
-    int found;
+    int found, saves;
     memset(out, 0, sizeof(*out));
     found = discover(cwd, &id, &ctx);
     out->discovery_ns = now_ns() - start;
     if (!found) return out->error || out->cancelled ? -1 : 0;
-    output = git_output(cwd, git, &length, &ctx);
+    path = command_path(cwd, git);
+    if (!path) { fail(&ctx, "could not locate Git status executable"); free_identity(&id); return -1; }
+    saves = status_saves_refresh(cwd, git, path, &ctx);
+    output = git_output(cwd, path, arguments, saves, &length, &ctx);
+    free(path);
     if (!output) {
-        /* A status past the deadline is the slowest case, so it refreshes too. */
-        if (ctx.timed_out && !out->cancelled && !wsh_git_operation(id.git_dir)) refresh_index(cwd, git, id.git_dir);
+        /* A status past the deadline is the slowest case, so it refreshes too, as does a slow
+         * status that would have saved its own refresh had it not been stopped. */
+        if ((ctx.timed_out || (saves && out->cancelled && out->process_ns >= REFRESH_NS)) &&
+            !wsh_git_operation(id.git_dir))
+            refresh_index(cwd, git, id.git_dir);
         free_identity(&id); return -1;
     }
     parsing = now_ns();
@@ -793,12 +851,13 @@ int wsh_git_collect(const char *cwd, const char *git, int (*cancel)(void *), voi
         out->found = out->worktree = 1;
         out->operation = wsh_git_operation(id.git_dir);
         if (getenv("WSH_GIT_REFRESH_LOG")) {
-            char event[40];
-            snprintf(event, sizeof(event), "status %llu ms", (unsigned long long)(out->process_ns / 1000000));
+            char event[48];
+            snprintf(event, sizeof(event), "status %llu ms%s", (unsigned long long)(out->process_ns / 1000000),
+                     saves ? " saves-own-refresh" : "");
             refresh_note(getenv("WSH_GIT_REFRESH_LOG"), id.git_dir, event);
         }
-        if (out->process_ns < REFRESH_NS) note_fast_status(id.git_dir);
-        else if (!out->operation) refresh_index(cwd, git, id.git_dir);
+        if (!saves && out->process_ns < REFRESH_NS) note_fast_status(id.git_dir);
+        else if (!saves && !out->operation) refresh_index(cwd, git, id.git_dir);
     }
     out->parsing_ns = now_ns() - parsing;
     free_identity(&id);

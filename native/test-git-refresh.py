@@ -49,11 +49,16 @@ helper = out / 'bin'
 helper.mkdir()
 log = out / 'refreshes.log'
 delay_file = out / 'status-delay'
+version_file, versions, term_file = out / 'version', out / 'versions.log', out / 'terminated.log'
 # The status delay comes from a file when it exists, so a case can switch between slow and fast.
 # A refresh records which index Git is given and, while the marker exists, is still hashing.
+# While the version file exists, Git reports that version and its status must run with optional
+# locks allowed; while the termination log exists, a status records a SIGTERM.
 (helper / 'git').write_text(f'''#!/bin/sh
 case "$1" in
-  status) [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99
+  --version) echo >> {versions}; [ -f {version_file} ] && exec cat {version_file}; echo git version 2.56.0; exit ;;
+  status) if [ -f {version_file} ]; then [ -z "${{GIT_OPTIONAL_LOCKS+set}}" ] || exit 99; else [ "$GIT_OPTIONAL_LOCKS" = 0 ] || exit 99; fi
+    [ -f {term_file} ] && trap 'echo term >> {term_file}; exit 143' TERM
     delay=${{WSH_TEST_STATUS_DELAY:-0}}; [ -f {delay_file} ] && delay=$(cat {delay_file}); sleep "$delay" ;;
   update-index) printf '%s\\n' "$PWD" >> {log}; printf '%s\\n' "${{GIT_INDEX_FILE:-}}" >> {log}.index
     : > "$PWD/.git/hashing"; sleep "${{WSH_TEST_REFRESH_DELAY:-0}}"; /usr/bin/git "$@"; status=$?; rm -f "$PWD/.git/hashing"; exit $status ;;
@@ -85,13 +90,18 @@ class Runtime:
         self.buffer[:] = rest
         return json.loads(line)
 
-    def refresh(self, repo):
+    def send(self, repo):
         self.id += 1
         message = dict(type='refresh', version=1, id=self.id, generation=self.id, cwd_hex=os.fsencode(repo).hex(), exit_status=0,
                        duration_ms=None, privileged=False, reset_transient=False)
         self.process.stdin.write(json.dumps(message).encode() + b'\n')
         self.process.stdin.flush()
-        response = self.read()
+        return self.id
+
+    def refresh(self, repo):
+        wanted = self.send(repo)
+        while (response := self.read()).get('id') != wanted:
+            pass
         assert response['type'] in ('snapshot', 'error'), response
         return response
 
@@ -247,6 +257,58 @@ try:
     check('a timed-out status refreshes', refreshes(repo) == 1 and stale(repo) == 0, (refreshes(repo), stale(repo)))
 finally:
     slow.close()
+
+# Git 2.98 and later save their own refresh, so the prompt's status runs with optional locks
+# allowed and Wsh starts no refresh of its own.
+version_file.write_text('git version 2.98.0\n')
+versions.unlink(missing_ok=True)
+saving = Runtime('0.15')
+try:
+    repo = repository('saving')
+    saving.refresh(repo)
+    settle(repo, 1)
+    check('a slow status on Git 2.98 saves its own refresh', stale(repo) == 0, stale(repo))
+    for _ in range(3):
+        saving.refresh(repo)
+    settle(repo, 1)
+    check('Git 2.98 needs no background refresh', refreshes(repo) == 0, refreshes(repo))
+    check('the Git version is read once per executable', len(versions.read_text().splitlines()) == 1, versions.read_text())
+    # Without the version file the wrapper reports a Git older than 2.98.
+    version_file.unlink()
+    os.utime(helper / 'git')
+    touch(repo)
+    saving.refresh(repo)
+    settle(repo, 1)
+    check('a changed Git executable is checked again', len(versions.read_text().splitlines()) == 2 and refreshes(repo) == 1,
+          (versions.read_text(), refreshes(repo)))
+finally:
+    saving.close()
+
+# A slow status stopped before it could save its refresh falls back to the background refresh.
+version_file.write_text('git version 2.98.0\n')
+saving = Runtime('0.6')
+try:
+    repo = repository('saving-cancelled')
+    saving.send(repo)
+    time.sleep(.3)
+    saving.refresh(repo)
+    settle(repo, 1)
+    check('a stopped slow status on Git 2.98 refreshes in the background', refreshes(repo) == 1, refreshes(repo))
+finally:
+    saving.close()
+
+# A status past the deadline gets SIGTERM, which lets Git remove an index.lock it holds.
+term_file.write_text('')
+saving = Runtime('2.5')
+try:
+    repo = repository('saving-timeout')
+    response = saving.refresh(repo)
+    check('a status past the deadline is terminated with SIGTERM', response['type'] == 'error' and term_file.read_text() == 'term\n',
+          (response, term_file.read_text()))
+finally:
+    saving.close()
+    term_file.unlink()
+    version_file.unlink()
 
 fast = Runtime('0')
 try:
