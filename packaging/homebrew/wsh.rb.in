@@ -32,7 +32,9 @@ class Wsh < Formula
 
   def install
     (buildpath/"build/cache").mkpath
-    cp resource("zsh-source").fetch, buildpath/"build/cache/@ZSH_ARCHIVE@"
+    # Homebrew downloads and verifies resources before the build starts; fetching again here, in
+    # the build process, fails with a NameError in some Homebrew releases.
+    cp resource("zsh-source").cached_download, buildpath/"build/cache/@ZSH_ARCHIVE@"
     # The build scripts use GNU coreutils, sed and tar options.
     %w[coreutils gnu-sed gnu-tar].each { |f| ENV.prepend_path "PATH", Formula[f].opt_libexec/"gnubin" }
     ENV["WSH_SOURCE_REVISION"] = "@REVISION@"
