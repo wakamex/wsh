@@ -19,7 +19,7 @@ For supported plugins installed without modifications, Wsh can provide the same 
 
 ## Install
 
-On Fedora 44 x86-64, enable the [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/) and install:
+On Fedora 44 or 45 x86-64, enable the [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/) and install:
 
 ```sh
 sudo dnf copr enable wakamex/wsh

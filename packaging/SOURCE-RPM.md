@@ -36,14 +36,14 @@ The [Fedora review](FEDORA-REVIEW.md) records the policy checks and scoped rpmli
 
 ## COPR publication
 
-The `wakamex/wsh` project builds Fedora 44 x86-64 source RPMs with build networking disabled. COPR signs the resulting packages and hosts DNF metadata. The [repository qualification](../benchmarks/copr-0.4.8/report.md) records the exact source commit, build and package identities, signature checks and real installation/login results. This channel uses Fedora build dependencies and flags; the canonical GitHub artifact contract remains separate.
+The `wakamex/wsh` project builds each source RPM for Fedora 44 and 45 x86-64 with build networking disabled. COPR signs the resulting packages and hosts DNF metadata. The [repository qualification](../benchmarks/copr-0.4.8/report.md) records the exact source commit, build and package identities, signature checks and real installation/login results. This channel uses Fedora build dependencies and flags; the canonical GitHub artifact contract remains separate.
 
 COPR publishes only tagged versions, after the GitHub Release. A release authorized by the user bumps the patch version in `VERSION`, refreshes the native source lock and related version metadata, and keeps the RPM release at `1`, committed together with `release-notes/vX.Y.Z.md`. Run the current-source and relevant installed checks, push the clean commit to `main`, require `release-eligible / validate` to pass on that exact commit, then push the annotated `vX.Y.Z` tag so that `publish.yml` creates the GitHub Release. Build a release-mode SRPM from the tagged commit with `packaging/build-source-rpm.py --release 1 --status release`, after confirming that `git describe --exact-match --tags` there prints `vX.Y.Z`, and check it with `tests/source-rpm.py` before submission. Each release advances the product version, for example `0.4.2-1.fc44` then `0.4.3-1.fc44`.
 
 Submit the resulting single SRPM with:
 
 ```sh
-copr-cli build wakamex/wsh /path/to/wsh-VERSION-RELEASE.src.rpm --chroot fedora-44-x86_64 --enable-net off --nowait
+copr-cli build wakamex/wsh /path/to/wsh-VERSION-RELEASE.src.rpm --chroot fedora-44-x86_64 --chroot fedora-45-x86_64 --enable-net off --nowait
 copr-cli status BUILD_ID
 ```
 

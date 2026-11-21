@@ -4,7 +4,7 @@ Wsh installs as an x86-64 Fedora RPM. The package owns `/usr/bin/wsh`, its `/bin
 
 ## Installation and account shell
 
-On Fedora 44 x86-64, install from the [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/):
+On Fedora 44 or 45 x86-64, install from the [COPR repository](https://copr.fedorainfracloud.org/coprs/wakamex/wsh/):
 
 ```sh
 sudo dnf copr enable wakamex/wsh
